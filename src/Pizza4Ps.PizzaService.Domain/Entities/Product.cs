@@ -5,14 +5,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StructureCodeSolution.Domain.Entities.Product
+namespace Pizza4Ps.PizzaService.Domain.Entities
 {
     public class Product : EntityAuditBase<Guid>
     {
         public string Name { get; set; }
         public decimal Price { get; set; }
         public string Description { get; set; }
-
+        public Guid CategoryId { get; set; }
+        public virtual Category Category { get; set; }
         private Product()
         {
 

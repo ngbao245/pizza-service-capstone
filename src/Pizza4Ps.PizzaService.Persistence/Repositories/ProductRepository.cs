@@ -1,5 +1,5 @@
-﻿using StructureCodeSolution.Domain.Abstractions.Repositories;
-using StructureCodeSolution.Domain.Entities.Product;
+﻿using Pizza4Ps.PizzaService.Domain.Entities;
+using StructureCodeSolution.Domain.Abstractions.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;

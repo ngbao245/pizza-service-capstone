@@ -1,5 +1,5 @@
-﻿using StructureCodeSolution.Domain.Abstractions.Repositories.RepositoryBase;
-using StructureCodeSolution.Domain.Entities.Product;
+﻿using Pizza4Ps.PizzaService.Domain.Entities;
+using StructureCodeSolution.Domain.Abstractions.Repositories.RepositoryBase;
 
 namespace StructureCodeSolution.Domain.Abstractions.Repositories
 {

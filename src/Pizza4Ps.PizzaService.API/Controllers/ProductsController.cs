@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Pizza4Ps.PizzaService.API.Constants;
 using Pizza4Ps.PizzaService.API.Models;

@@ -24,5 +24,7 @@ namespace StructureCodeSolution.Persistence.Constants
         internal const string AppUserTokens = nameof(AppUserTokens); // IdentityUserToken
 
         internal const string Product = nameof(Product);
+        internal const string Category = nameof(Category);
+
     }
 }

@@ -1,12 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using StructureCodeSolution.Domain.Entities.Product;
+using Pizza4Ps.PizzaService.Domain.Entities;
 using StructureCodeSolution.Persistence.Constants;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace StructureCodeSolution.Persistence.Configurations
 {
@@ -26,6 +21,11 @@ namespace StructureCodeSolution.Persistence.Configurations
             builder
                 .Property(m => m.Price)
                 .HasColumnType("decimal(18, 2)");  // Xác định kiểu cột là decimal với độ chính xác và thang đo.
+
+            builder.HasOne(x => x.Category)
+                .WithMany(x => x.Products)
+                .HasForeignKey(x => x.Category.Id)
+                .IsRequired();
 
         }
     }

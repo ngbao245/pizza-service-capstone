@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using StructureCodeSolution.Domain.Entities.Product;
+using Pizza4Ps.PizzaService.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;

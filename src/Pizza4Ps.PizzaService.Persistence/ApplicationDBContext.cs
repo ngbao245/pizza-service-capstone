@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Pizza4Ps.PizzaService.Domain.Entities;
 using StructureCodeSolution.Domain.Entities.Identity;
-using StructureCodeSolution.Domain.Entities.Product;
 
 namespace StructureCodeSolution.Persistence
 {
