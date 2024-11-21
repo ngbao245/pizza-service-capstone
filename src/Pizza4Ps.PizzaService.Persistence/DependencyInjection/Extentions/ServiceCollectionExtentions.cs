@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Pizza4Ps.PizzaService.Persistence.Intercepter;
 using StructureCodeSolution.Domain.Abstractions;
 using StructureCodeSolution.Domain.Abstractions.Repositories.RepositoryBase;
 using System;
@@ -24,12 +25,14 @@ namespace StructureCodeSolution.Persistence.DependencyInjection.Extentions
                 //    services.BuildServiceProvider().GetRequiredService<IOptionsMonitor<PasswordValidatorOptions>>();
                 //var auditableInterceptor = provider.GetService<UpdateAuditableEntitiesInterceptor>();
                 var configuration = provider.GetRequiredService<IConfiguration>();
+                // Lấy AuditSaveChangesInterceptor từ DI container
+                var auditSaveChangesInterceptor = provider.GetRequiredService<AuditSaveChangesInterceptor>();
                 builder
                     .UseSqlServer(
                     connectionString: configuration.GetConnectionString("MyDbContext"),
                     sqlServerOptionsAction: optionsBuilder
-                        => optionsBuilder.MigrationsAssembly(typeof(ApplicationDBContext).Assembly.GetName().Name));
-                //.AddInterceptors(audit)
+                        => optionsBuilder.MigrationsAssembly(typeof(ApplicationDBContext).Assembly.GetName().Name))
+                .AddInterceptors(auditSaveChangesInterceptor);
             });
         }
         public static IServiceCollection AddRepositoryAssembly(this IServiceCollection services)
@@ -47,6 +50,7 @@ namespace StructureCodeSolution.Persistence.DependencyInjection.Extentions
         public static void AddInterceptorPersistence(this IServiceCollection services)
         {
             services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddTransient<AuditSaveChangesInterceptor>();
         }
 
     }
