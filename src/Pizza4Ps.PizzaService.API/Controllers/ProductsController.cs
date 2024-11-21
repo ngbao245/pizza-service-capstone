@@ -28,6 +28,7 @@ namespace Pizza4Ps.PizzaService.API.Controllers
                 StatusCode = StatusCodes.Status201Created
             });
         }
+
         [HttpGet]
         public async Task<IActionResult> GetProductAsync([FromBody] CreateProductCommand command)
         {

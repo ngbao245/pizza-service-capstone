@@ -24,7 +24,7 @@ namespace StructureCodeSolution.Persistence.Configurations
 
             builder.HasOne(x => x.Category)
                 .WithMany(x => x.Products)
-                .HasForeignKey(x => x.Category.Id)
+                .HasForeignKey(x => x.CategoryId)
                 .IsRequired();
 
         }

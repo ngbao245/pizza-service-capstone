@@ -4,6 +4,7 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
 {
     public class Category : EntityBase<Guid>
     {
+        public string Name { get; set; }
         public virtual ICollection<Product> Products { get; set; }
     }
 }

@@ -19,6 +19,6 @@ namespace StructureCodeSolution.Persistence
         public DbSet<AppUser> AppUsers { get; set; }
         public DbSet<AppRole> AppRoles { get; set; }
         public DbSet<Product> Products { get; set; }
-
+        public DbSet<Category> Categories { get; set; }
     }
 }
