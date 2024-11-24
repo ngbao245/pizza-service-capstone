@@ -13,9 +13,9 @@ namespace Pizza4Ps.PizzaService.Persistence.Seed
     {
         public void Configure(EntityTypeBuilder<Product> builder)
         {
-            builder.HasData(
+            //builder.HasData(
 
-            );
+            //);
         }
     }
 }
