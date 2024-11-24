@@ -2,7 +2,7 @@
 
 namespace Pizza4Ps.PizzaService.Domain.Entities
 {
-    public class SchedualConfig : EntityAuditBase<Guid>
+    public class StaffScheduleLog : EntityAuditBase<Guid>
     {
     }
 }
