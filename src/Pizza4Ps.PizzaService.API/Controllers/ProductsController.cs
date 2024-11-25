@@ -27,7 +27,7 @@ namespace Pizza4Ps.PizzaService.API.Controllers
             var result = await _sender.Send(command);
             return Ok(new ApiResponse<Guid>
             {
-                Data = result,
+                Result = result,
                 Message = MESSSAGE.CREATED_SUCCESS,
                 StatusCode = StatusCodes.Status201Created
             });
@@ -39,7 +39,7 @@ namespace Pizza4Ps.PizzaService.API.Controllers
             var result = await _sender.Send(command);
             return Ok(new ApiResponse<Guid>
             {
-                Data = result,
+                Result = result,
                 Message = MESSSAGE.CREATED_SUCCESS,
                 StatusCode = StatusCodes.Status201Created
             });

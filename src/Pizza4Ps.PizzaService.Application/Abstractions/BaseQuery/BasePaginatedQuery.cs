@@ -11,7 +11,7 @@ namespace Pizza4Ps.PizzaService.Application.Abstractions.BaseQuery
     {
         public int TakeCount { get; set; } = 20;
         public int SkipCount { get; set; } = 0;
-        public string SortBy { get; set; } = "";
-        public string SortOrder { get; set; }
+        public string SortBy { get; set; } = "CreatedDate";
+        public string SortOrder { get; set; } = "Desc";
     }
 }
