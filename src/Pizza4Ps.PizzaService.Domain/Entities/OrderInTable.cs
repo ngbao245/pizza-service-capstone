@@ -9,8 +9,6 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
 {
     public class OrderInTable : EntityAuditBase<Guid>
     {
-        public Guid TableId { get; set; }
-        public Guid OrderId { get; set; }
         public virtual ICollection<Table> Tables { get; set; }
         public virtual ICollection<Order> Orders { get; set; }
 
@@ -21,8 +19,6 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         public OrderInTable(Guid id, Guid tableId, Guid orderId)
         {
             Id = id;
-            TableId = tableId;
-            OrderId = orderId;
         }
     }
 }

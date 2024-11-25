@@ -11,8 +11,10 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         public Guid TableforBookingId { get; set; }
         public Guid ZoneId { get; set; }
         public virtual Zone Zone { get; set; }
+        
         public virtual ICollection<Booking> Bookings { get; set; }
         public virtual ICollection<OrderInTable> OrdersInTable { get; set; }
+        
         public virtual TableforBooking TableforBooking { get; set; }
 
         private Table()
