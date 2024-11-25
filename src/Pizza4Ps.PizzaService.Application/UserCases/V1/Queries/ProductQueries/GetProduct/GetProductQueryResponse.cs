@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Queries.GetProduct
+namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Queries.ProductQueries.GetProduct
 {
     public class GetProductQueryResponse
     {

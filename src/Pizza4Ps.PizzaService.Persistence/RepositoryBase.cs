@@ -45,7 +45,7 @@ namespace StructureCodeSolution.Persistence
         public IQueryable<TEntity> GetAsTrackingAsync(Expression<Func<TEntity, bool>>? predicate = null,
             params Expression<Func<TEntity, object>>[]? includeProperties)
         {
-            IQueryable<TEntity> items = _dbContext.Set<TEntity>().AsNoTracking(); // Importance Always include AsNoTracking for Query Side
+            IQueryable<TEntity> items = _dbContext.Set<TEntity>().AsTracking(); // Importance Always include AsNoTracking for Query Side
             if (predicate is not null)
                 items = items.Where(predicate);
             if (includeProperties != null)
@@ -70,5 +70,13 @@ namespace StructureCodeSolution.Persistence
 
         public void Update(TEntity entity)
             => _dbContext.Update(entity);
+
+        public async Task<long> CountAsync(Expression<Func<TEntity, bool>>? predicate = null)
+        {
+            IQueryable<TEntity> items = _dbContext.Set<TEntity>().AsNoTracking(); // Importance Always include AsNoTracking for Query Side
+            if (predicate is not null)
+                items = items.Where(predicate);
+            return await items.CountAsync();
+        }
     }
 }

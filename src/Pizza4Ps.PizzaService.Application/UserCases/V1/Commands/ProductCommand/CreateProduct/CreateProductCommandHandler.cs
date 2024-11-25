@@ -3,7 +3,7 @@ using MediatR;
 using Pizza4Ps.PizzaService.Domain.Entities;
 using Pizza4Ps.PizzaService.Domain.Services;
 
-namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Commands.CreateProduct
+namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Commands.ProductCommand.CreateProduct
 {
     public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand, Guid>
     {
