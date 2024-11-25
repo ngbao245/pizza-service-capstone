@@ -1,8 +1,8 @@
 ﻿namespace Pizza4Ps.PizzaService.Domain.Enums
 {
-    public class ProductTypeEnum
+    public class PaymentTypeEnum
     {
-        public enum ProductType
+        public enum PaymentType
         {
         }
     }
