@@ -8,9 +8,6 @@
 
   <ItemGroup>
     <Folder Include="DependencyInjection\Options\" />
-    <Folder Include="UserCases\V1\Commands\ProductCommand\HardDeleteProduct\" />
-    <Folder Include="UserCases\V1\Commands\ProductCommand\SoftDeleteProduct\" />
-    <Folder Include="UserCases\V1\Commands\ProductCommand\UpdateProduct\" />
     <Folder Include="Validators\" />
   </ItemGroup>
 

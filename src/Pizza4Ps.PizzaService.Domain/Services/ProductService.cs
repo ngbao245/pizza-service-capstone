@@ -16,20 +16,31 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             _unitOfWork = unitOfWork;
             _productRepository = productRepository;
         }
+        
         public async Task<Guid> CreateProductAsync(Product product)
         {
-            //var product = await _productRepository.GetAll().ToListAsync();
-
-            //if (product == null)
-            //{
-            //    throw new Exception();
-            //}
             var productEntity = new Product(product.Id, product.Name, product.Price, product.Description, product.CategoryId);
             _productRepository.Add(productEntity);
             await _unitOfWork.SaveChangeAsync();
             return productEntity.Id;
         }
-
+        public async Task<Guid> UpdateProductAsync(Guid id, string name, decimal price, string description, Guid categoryId)
+        {
+            var entity = await _productRepository.GetByIdAsync(id);
+            entity.UpdateProduct(name, price, description, categoryId);
+            await _unitOfWork.SaveChangeAsync();
+            return entity.Id;
+        }
+        public async Task HardDeleteProductAsync(Guid id)
+        {
+            await _productRepository.HardDeleteAsync(id);
+        }
+        public async Task SoftDeleteProductAsync(Guid id)
+        {
+            var entity = await _productRepository.GetByIdAsync(id);
+            _productRepository.SoftDelete(entity);
+            await _unitOfWork.SaveChangeAsync();
+        }
 
     }
 }
