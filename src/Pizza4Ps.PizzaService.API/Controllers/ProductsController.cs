@@ -2,12 +2,11 @@
 using Microsoft.AspNetCore.Mvc;
 using Pizza4Ps.PizzaService.API.Constants;
 using Pizza4Ps.PizzaService.API.Models;
-using Pizza4Ps.PizzaService.Application.Models;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.Commands.ProductCommand.CreateProduct;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.Commands.ProductCommand.HardDeleteProduct;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.Commands.ProductCommand.SoftDeleteProduct;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.Commands.ProductCommand.UpdateProduct;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.Queries.ProductQueries.GetProduct;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.ProductUserCases.Commands.CreateProduct;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.ProductUserCases.Commands.HardDeleteProduct;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.ProductUserCases.Commands.SoftDeleteProduct;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.ProductUserCases.Commands.UpdateProduct;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.ProductUserCases.Queries.GetProduct;
 using Pizza4Ps.PizzaService.Persistence.Helpers;
 
 namespace Pizza4Ps.PizzaService.API.Controllers
@@ -28,7 +27,6 @@ namespace Pizza4Ps.PizzaService.API.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateProductAsync([FromBody] CreateProductCommand command)
         {
-            var userId = _httpContextAccessor.HttpContext.GetCurrentUserId();
             var result = await _sender.Send(command);
             return Ok(new ApiResponse
             {

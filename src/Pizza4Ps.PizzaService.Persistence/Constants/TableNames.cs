@@ -25,6 +25,8 @@ namespace StructureCodeSolution.Persistence.Constants
 
         internal const string Product = nameof(Product);
         internal const string Category = nameof(Category);
+        internal const string Order = nameof(Order);
+        internal const string OrderItem = nameof(OrderItem);
 
     }
 }

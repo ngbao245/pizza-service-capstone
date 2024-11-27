@@ -5,7 +5,7 @@ using Pizza4Ps.PizzaService.Application.Models;
 using StructureCodeSolution.Domain.Abstractions.Repositories;
 using System.Linq.Dynamic.Core;
 
-namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Queries.ProductQueries.GetProduct
+namespace Pizza4Ps.PizzaService.Application.UserCases.V1.ProductUserCases.Queries.GetProduct
 {
     public class GetProductQueryHandler : IRequestHandler<GetProductQuery, PaginatedResult<GetProductQueryResponse>>
     {

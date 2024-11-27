@@ -1,13 +1,7 @@
 ﻿using MediatR;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.Commands.ProductCommand.SoftDeleteProduct;
 using Pizza4Ps.PizzaService.Domain.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Commands.ProductCommand.UpdateProduct
+namespace Pizza4Ps.PizzaService.Application.UserCases.V1.ProductUserCases.Commands.UpdateProduct
 {
     public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand>
     {

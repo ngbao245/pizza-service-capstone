@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Pizza4Ps.PizzaService.Domain.Entities;
+using Pizza4Ps.PizzaService.Domain.Exceptions;
 using StructureCodeSolution.Domain.Abstractions;
 using StructureCodeSolution.Domain.Abstractions.Repositories;
 
@@ -19,6 +20,8 @@ namespace Pizza4Ps.PizzaService.Domain.Services
         
         public async Task<Guid> CreateProductAsync(Product product)
         {
+            var existedEntity = _productRepository.GetByIdAsync(product.Id);
+            if (existedEntity == null) throw new BusinessException("Invalid name");
             var productEntity = new Product(product.Id, product.Name, product.Price, product.Description, product.CategoryId);
             _productRepository.Add(productEntity);
             await _unitOfWork.SaveChangeAsync();

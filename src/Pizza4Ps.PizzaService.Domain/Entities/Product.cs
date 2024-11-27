@@ -1,4 +1,5 @@
-﻿using StructureCodeSolution.Domain.Abstractions;
+﻿using Pizza4Ps.PizzaService.Domain.Exceptions;
+using StructureCodeSolution.Domain.Abstractions;
 
 namespace Pizza4Ps.PizzaService.Domain.Entities
 {
@@ -17,7 +18,7 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         public Product(Guid id, string name, decimal price, string description, Guid categoryId)
         {
             Id = id;
-            Name = name;
+            Name = SetName(name);
             Price = price;
             Description = description;
             CategoryId = categoryId;
@@ -28,6 +29,11 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
             Price = price;
             Description = description;
             CategoryId = categoryId;
+        }
+        private string SetName(string name)
+        {
+            if (Name == null) throw new ValidationException("Invalid name");
+            return name;
         }
     }
 }

@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Commands.ProductCommand.HardDeleteProduct
+namespace Pizza4Ps.PizzaService.Application.UserCases.V1.ProductUserCases.Commands.HardDeleteProduct
 {
     public class HardDeleteProductCommand : BaseCommand<Guid>, IRequest
     {
