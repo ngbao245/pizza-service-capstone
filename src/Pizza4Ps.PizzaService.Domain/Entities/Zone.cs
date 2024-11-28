@@ -1,30 +1,28 @@
 ﻿using Pizza4Ps.PizzaService.Domain.Enums;
 using StructureCodeSolution.Domain.Abstractions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Pizza4Ps.PizzaService.Domain.Entities
 {
     public class Zone : EntityAuditBase<Guid>
     {
-        public string ZoneName { get; set; }
-        public int ZoneCapacity { get; set; }
-        public ZoneTypeEnum ZoneTypeEnum { get; set; }
-        public virtual ICollection<Table> Tables { get; set; }
-        public virtual ICollection<StaffSchedule> StaffSchedules {  get; set; }
-        public virtual ICollection<StaffScheduleLog> StaffScheduleLogs {get; set; }
-        
-        private Zone() { }
+        public string Name { get; set; }
+        public int? Capacity { get; set; }
+        public string? Description { get; set; }
+        public ZoneTypeEnum Status { get; set; } = ZoneTypeEnum.Available;
 
-        public Zone(Guid id ,string zoneName, int zoneCapacity, ZoneTypeEnum zoneTypeEnum)
+        public virtual ICollection<Table> Tables { get; set; }
+        public virtual ICollection<StaffZone> StaffZones { get; set; }
+
+        private Zone()
         {
-            Id = id;
-            ZoneName = zoneName;
-            ZoneCapacity = zoneCapacity;
-            ZoneTypeEnum = zoneTypeEnum;
+        }
+
+        public Zone(string name, int? capacity, string? description, ZoneTypeEnum status)
+        {
+            Name = name;
+            Capacity = capacity;
+            Description = description;
+            Status = status;
         }
     }
 }

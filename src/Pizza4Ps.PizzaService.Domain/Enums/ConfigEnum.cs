@@ -12,6 +12,5 @@ namespace Pizza4Ps.PizzaService.Domain.Enums
         EndShift1 = 2,
         StartShift2 = 3,
         EndShift2 = 4,
-
     }
 }
