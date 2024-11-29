@@ -5,7 +5,7 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
     public class Customer : EntityAuditBase<Guid>
     {
         public string FullName { get; set; }
-        public int PhoneNumber { get; set; }
+        public int Phone { get; set; }
 
         public virtual ICollection<Booking> Bookings { get; set; }
 
@@ -13,11 +13,10 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         {
         }
 
-        public Customer(Guid id, string fullName, int phoneNumber)
+        public Customer(string fullName, int phone)
         {
-            Id = id;
             FullName = fullName;
-            PhoneNumber = phoneNumber;
+            Phone = phone;
         }
     }
 }

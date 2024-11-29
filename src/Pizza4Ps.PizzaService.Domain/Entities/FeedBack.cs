@@ -1,15 +1,24 @@
 ﻿using StructureCodeSolution.Domain.Abstractions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Pizza4Ps.PizzaService.Domain.Entities
 {
     public class FeedBack : EntityAuditBase<Guid>
     {
-        public string Description { get; set; }
-        
+        public int Rating { get; set; }
+        public string? Comments { get; set; }
+        public Guid OrderId { get; set; }
+
+        public virtual Order Order { get; set; }
+
+        public FeedBack()
+        {
+        }
+
+        public FeedBack(int rating, string comments, Guid orderId)
+        {
+            Rating = rating;
+            Comments = comments;
+            OrderId = orderId;
+        }
     }
 }

@@ -5,28 +5,25 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
     public class Booking : EntityAuditBase<Guid>
     {
         public DateTime BookingDate { get; set; }
-        public int NumberOfGuests { get; set; }
-        public Guid CustomerId {  get; set; }
-        public Guid TableforBookingId { get; set; }
-        public Guid RestaurantId { get; set; }
+        public int GuestCount { get; set; }
+        public string Status { get; set; }
+        public Guid CustomerId { get; set; }
+        public Guid TableBookingId { get; set; }
 
         public virtual Customer Customer { get; set; }
-        public virtual TableforBooking TableforBooking { get; set; }
-        public virtual Restaurant Restaurant { get; set; }
+        public virtual ICollection<TableBooking> TableBookings { get; set; }
 
         private Booking()
         {
         }
 
-        public Booking(Guid id, DateTime bookingDate, int numberOfGuests, Guid customerId, Guid tableforBookingId, Guid restaurantId)
+        public Booking(DateTime bookingDate, int guestCount, string status, Guid customerId, Guid tableBookingId)
         {
-            Id = id;
             BookingDate = bookingDate;
-            NumberOfGuests = numberOfGuests;
+            GuestCount = guestCount;
+            Status = status;
             CustomerId = customerId;
-            TableforBookingId = tableforBookingId;
-            RestaurantId = restaurantId;
+            TableBookingId = tableBookingId;
         }
     }
 }
-    

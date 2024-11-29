@@ -5,30 +5,26 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
 {
     public class Table : EntityAuditBase<Guid>
     {
-        public string TableNumber { get; set; }
-        public TableTypeEnum TableStatus { get; set; }
-        public int SeatingCapacity { get; set; }
-        public Guid TableforBookingId { get; set; }
+        public int TableNumber { get; set; }
+        public int Capacity { get; set; }
+
+        public TableTypeEnum Status { get; set; } = TableTypeEnum.Available;
         public Guid ZoneId { get; set; }
+
         public virtual Zone Zone { get; set; }
-        
-        public virtual ICollection<Booking> Bookings { get; set; }
+        public virtual ICollection<TableBooking> TableBookings { get; set; }
         public virtual ICollection<OrderInTable> OrdersInTable { get; set; }
-        
-        public virtual TableforBooking TableforBooking { get; set; }
 
         private Table()
         {
         }
 
-        public Table(Guid id, string tableNumber, TableTypeEnum tablestatus, int seatingCapacity, Guid zoneId, Zone zone, Guid tableforBookingId)
+        public Table(int tableNumber, int capacity, TableTypeEnum status, Guid zoneId)
         {
-            Id = id;
             TableNumber = tableNumber;
-            TableStatus = tablestatus;
-            SeatingCapacity = seatingCapacity;
+            Capacity = capacity;
+            Status = status;
             ZoneId = zoneId;
-            TableforBookingId = tableforBookingId;
         }
     }
 }

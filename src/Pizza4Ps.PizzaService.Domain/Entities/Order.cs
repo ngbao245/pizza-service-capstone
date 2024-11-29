@@ -5,20 +5,23 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
 {
     public class Order : EntityAuditBase<Guid>
     {
-        public virtual ICollection<OrderItem> Items { get; set; }
-        public Guid PaymentTypeId { get; set; }
-        public Guid FeedbackId { get; set; }
+        public string? Status { get; set; }
+        public Guid OrderInTableId { get; set; }
 
-        public virtual PaymentType PaymentType { get; set; }
-        public virtual FeedBack FeedBack { get; set; }
+        public virtual OrderInTable OrderInTable { get; set; }
+        public virtual ICollection<OrderItem> OrderItems { get; set; }
+        public virtual ICollection<FeedBack> FeedBacks { get; set; }
+        public virtual ICollection<Payment> Payments { get; set; }
+        public virtual ICollection<OrderVoucher> OrderVouchers { get; set; }
 
-        private Order() { }
-
-        public Order(Guid id , Guid paymentTypeId, Guid feedbackId)
+        private Order()
         {
-            Id = id;
-            PaymentTypeId = paymentTypeId;
-            FeedbackId = feedbackId;
+        }
+
+        public Order(string? status, Guid orderInTableId)
+        {
+            Status = status;
+            OrderInTableId = orderInTableId;
         }
     }
 }

@@ -4,16 +4,16 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
 {
     public class OrderItem : EntityAuditBase<Guid>
     {
-        public int OrderNumber { get; set; }
-        public virtual ICollection<OrderItemTopping> Toppings { get; set; }
-        public Guid MenuItemId { get; set; }
+        public string Name { get; set; }
+        public int Quantity { get; set; }
+        public decimal Price { get; set; }
+        public Guid OrderId { get; set; }
+        public Guid ProductId { get; set; }
+
+        public virtual Order Order { get; set; }
+        public virtual Product Product { get; set; }
+        public virtual ICollection<OptionItemOrderItem> OptionItemOrderItems { get; set; }
         
-        public virtual MenuItem MenuItem { get; set; }
         private OrderItem() { }
-        public OrderItem(Guid id, int orderNumber, Guid menuitemid) {   
-            Id = id;
-            OrderNumber = orderNumber;
-            MenuItemId = menuitemid;
-        }
     }
 }
