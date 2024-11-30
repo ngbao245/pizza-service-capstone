@@ -9,7 +9,7 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
 
         public virtual OrderInTable OrderInTable { get; set; }
         public virtual ICollection<OrderItem> OrderItems { get; set; }
-        public virtual ICollection<FeedBack> FeedBacks { get; set; }
+        public virtual ICollection<Feedback> Feedbacks { get; set; }
         public virtual ICollection<Payment> Payments { get; set; }
         public virtual ICollection<OrderVoucher> OrderVouchers { get; set; }
 
