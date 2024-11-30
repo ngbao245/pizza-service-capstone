@@ -1,11 +1,6 @@
-﻿using StructureCodeSolution.Domain.Abstractions.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Pizza4Ps.PizzaService.Domain.Abstractions.Entities;
 
-namespace StructureCodeSolution.Domain.Abstractions
+namespace Pizza4Ps.PizzaService.Domain.Abstractions
 {
     public abstract class EntityAuditBase<TKey> : EntityBase<TKey>, IEntityAuditBase<TKey>
     {

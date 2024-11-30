@@ -1,11 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
-using Pizza4Ps.PizzaService.Persistence.Helpers;
-using StructureCodeSolution.Domain.Abstractions;
-using StructureCodeSolution.Domain.Abstractions.Repositories.RepositoryBase;
+﻿using Microsoft.EntityFrameworkCore;
+using Pizza4Ps.PizzaService.Domain.Abstractions;
+using Pizza4Ps.PizzaService.Domain.Abstractions.Repositories.RepositoryBase;
 using System.Linq.Expressions;
 
-namespace StructureCodeSolution.Persistence
+namespace Pizza4Ps.PizzaService.Persistence
 {
     public class RepositoryBase<TEntity, TKey> : IRepositoryBase<TEntity, TKey>, IDisposable
         where TEntity : EntityBase<TKey>

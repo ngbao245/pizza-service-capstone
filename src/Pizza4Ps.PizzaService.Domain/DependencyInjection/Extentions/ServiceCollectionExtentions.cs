@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using StructureCodeSolution.Domain;
 
 namespace Pizza4Ps.PizzaService.Domain.DependencyInjection.Extentions
 {

@@ -2,17 +2,11 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using Pizza4Ps.PizzaService.Persistence.Intercepter;
-using StructureCodeSolution.Domain.Abstractions;
-using StructureCodeSolution.Domain.Abstractions.Repositories.RepositoryBase;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Pizza4Ps.PizzaService.Domain.Abstractions.Repositories.RepositoryBase;
+using Pizza4Ps.PizzaService.Domain.Abstractions;
 
-namespace StructureCodeSolution.Persistence.DependencyInjection.Extentions
+namespace Pizza4Ps.PizzaService.Persistence.DependencyInjection.Extentions
 {
     public static class ServiceCollectionExtentions
     {

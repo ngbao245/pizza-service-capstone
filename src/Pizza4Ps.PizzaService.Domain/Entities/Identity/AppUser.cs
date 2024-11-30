@@ -1,12 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using StructureCodeSolution.Domain.Abstractions.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Pizza4Ps.PizzaService.Domain.Abstractions.Entities;
 
-namespace StructureCodeSolution.Domain.Entities.Identity
+namespace Pizza4Ps.PizzaService.Domain.Entities.Identity
 {
     public class AppUser : IdentityUser<Guid>, IAuditable
     {

@@ -1,12 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Pizza4Ps.PizzaService.Domain.Entities;
-using StructureCodeSolution.Persistence.Constants;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Pizza4Ps.PizzaService.Persistence.Constants;
 
 namespace Pizza4Ps.PizzaService.Persistence.Configurations
 {

@@ -2,9 +2,9 @@
 using Microsoft.EntityFrameworkCore;
 using Pizza4Ps.PizzaService.Domain.Entities;
 using Pizza4Ps.PizzaService.Persistence.Intercepter;
-using StructureCodeSolution.Domain.Entities.Identity;
+using Pizza4Ps.PizzaService.Domain.Entities.Identity;
 
-namespace StructureCodeSolution.Persistence
+namespace Pizza4Ps.PizzaService.Persistence
 {
     public sealed class ApplicationDBContext : IdentityDbContext<AppUser, AppRole, Guid>
     {

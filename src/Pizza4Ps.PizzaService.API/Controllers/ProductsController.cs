@@ -7,7 +7,6 @@ using Pizza4Ps.PizzaService.Application.UserCases.V1.ProductUserCases.Commands.H
 using Pizza4Ps.PizzaService.Application.UserCases.V1.ProductUserCases.Commands.SoftDeleteProduct;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.ProductUserCases.Commands.UpdateProduct;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.ProductUserCases.Queries.GetProduct;
-using Pizza4Ps.PizzaService.Persistence.Helpers;
 
 namespace Pizza4Ps.PizzaService.API.Controllers
 {
