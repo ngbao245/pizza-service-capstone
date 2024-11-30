@@ -1,7 +1,4 @@
-﻿using MediatR;
-using Pizza4Ps.PizzaService.Application.Models;
-
-namespace Pizza4Ps.PizzaService.Application.Abstractions.BaseQuery
+﻿namespace Pizza4Ps.PizzaService.Application.Abstractions.BaseQuery
 {
     public abstract class BasePaginatedQuery
     {

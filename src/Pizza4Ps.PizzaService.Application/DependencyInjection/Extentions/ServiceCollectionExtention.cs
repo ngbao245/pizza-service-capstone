@@ -1,8 +1,7 @@
-﻿using MediatR;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
-namespace StructureCodeSolution.Application.DependencyInjection.Extentions
+namespace Pizza4Ps.PizzaService.Application.DependencyInjection.Extentions
 {
     public static class ServiceCollectionExtention
     {

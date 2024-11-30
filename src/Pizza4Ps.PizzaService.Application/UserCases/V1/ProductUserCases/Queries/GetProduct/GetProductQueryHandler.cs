@@ -2,7 +2,7 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Pizza4Ps.PizzaService.Application.Models;
-using StructureCodeSolution.Domain.Abstractions.Repositories;
+using Pizza4Ps.PizzaService.Domain.Abstractions.Repositories;
 using System.Linq.Dynamic.Core;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.ProductUserCases.Queries.GetProduct

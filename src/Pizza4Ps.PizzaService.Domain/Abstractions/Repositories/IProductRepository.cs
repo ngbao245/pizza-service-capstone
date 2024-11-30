@@ -1,7 +1,7 @@
 ﻿using Pizza4Ps.PizzaService.Domain.Entities;
-using StructureCodeSolution.Domain.Abstractions.Repositories.RepositoryBase;
+using Pizza4Ps.PizzaService.Domain.Abstractions.Repositories.RepositoryBase;
 
-namespace StructureCodeSolution.Domain.Abstractions.Repositories
+namespace Pizza4Ps.PizzaService.Domain.Abstractions.Repositories
 {
     public interface IProductRepository : IRepositoryBase<Product, Guid>
     {

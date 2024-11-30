@@ -1,8 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Pizza4Ps.PizzaService.Domain.Entities;
+﻿using Pizza4Ps.PizzaService.Domain.Entities;
 using Pizza4Ps.PizzaService.Domain.Exceptions;
-using StructureCodeSolution.Domain.Abstractions;
-using StructureCodeSolution.Domain.Abstractions.Repositories;
+using Pizza4Ps.PizzaService.Domain.Abstractions;
+using Pizza4Ps.PizzaService.Domain.Abstractions.Repositories;
 
 namespace Pizza4Ps.PizzaService.Domain.Services
 {

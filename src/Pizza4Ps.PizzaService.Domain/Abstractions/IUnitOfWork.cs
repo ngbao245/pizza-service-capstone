@@ -1,11 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace StructureCodeSolution.Domain.Abstractions
+namespace Pizza4Ps.PizzaService.Domain.Abstractions
 {
     public interface IUnitOfWork : IAsyncDisposable
     {

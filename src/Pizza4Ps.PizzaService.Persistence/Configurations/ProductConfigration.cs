@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Pizza4Ps.PizzaService.Domain.Entities;
-using StructureCodeSolution.Persistence.Constants;
+using Pizza4Ps.PizzaService.Persistence.Constants;
 
-namespace StructureCodeSolution.Persistence.Configurations
+namespace Pizza4Ps.PizzaService.Persistence.Configurations
 {
     internal class ProductConfigration : IEntityTypeConfiguration<Product>
     {
