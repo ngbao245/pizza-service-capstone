@@ -9,7 +9,7 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         public Guid OrderId { get; set; }
 
         public virtual Order Order { get; set; }
-
+        
         public Feedback()
         {
         }
