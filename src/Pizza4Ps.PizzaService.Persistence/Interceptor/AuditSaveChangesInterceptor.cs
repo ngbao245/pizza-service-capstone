@@ -1,13 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using Pizza4Ps.PizzaService.Domain.Abstractions.Entities;
 using Pizza4Ps.PizzaService.Persistence.Helpers;
-using StructureCodeSolution.Domain.Abstractions.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Pizza4Ps.PizzaService.Persistence.Intercepter
 {

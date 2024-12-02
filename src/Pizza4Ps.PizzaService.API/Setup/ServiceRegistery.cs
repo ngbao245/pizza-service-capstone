@@ -1,6 +1,6 @@
 ﻿using Pizza4Ps.PizzaService.API.DependencyInjection.Extentions;
-using Pizza4Ps.PizzaService.Domain.DependencyInjection.Extentions;
 using Pizza4Ps.PizzaService.Application.DependencyInjection.Extentions;
+using Pizza4Ps.PizzaService.Domain.DependencyInjection.Extentions;
 using Pizza4Ps.PizzaService.Persistence.DependencyInjection.Extentions;
 
 namespace Pizza4Ps.PizzaService.API.Setup

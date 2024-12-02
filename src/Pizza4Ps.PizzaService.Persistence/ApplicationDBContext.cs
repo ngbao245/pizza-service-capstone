@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Pizza4Ps.PizzaService.Domain.Abstractions.Entities;
 using Pizza4Ps.PizzaService.Domain.Entities;
+using Pizza4Ps.PizzaService.Domain.Entities.Identity;
 using Pizza4Ps.PizzaService.Persistence.Intercepter;
-using StructureCodeSolution.Domain.Abstractions.Entities;
-using StructureCodeSolution.Domain.Entities.Identity;
 using System.Linq.Expressions;
 
 namespace Pizza4Ps.PizzaService.Persistence
