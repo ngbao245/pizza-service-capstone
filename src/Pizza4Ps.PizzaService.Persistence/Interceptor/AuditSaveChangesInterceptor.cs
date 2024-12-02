@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Pizza4Ps.PizzaService.Persistence.Helpers;
+using StructureCodeSolution.Domain.Abstractions.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,19 +34,19 @@ namespace Pizza4Ps.PizzaService.Persistence.Intercepter
             {
                 if (entry.State == EntityState.Added)
                 {
-                    if (entry.Property("CreatedDate") != null)
-                        entry.Property("CreatedDate").CurrentValue = DateTimeOffset.UtcNow;
+                    if (entry.Property(nameof(IDateTracking.CreatedDate)) != null)
+                        entry.Property(nameof(IDateTracking.CreatedDate)).CurrentValue = DateTimeOffset.UtcNow;
 
-                    if (entry.Property("CreatedBy") != null)
-                        entry.Property("CreatedBy").CurrentValue = userId != null ? userId : null;
+                    if (entry.Property(nameof(IUserTracking.CreatedBy)) != null)
+                        entry.Property(nameof(IUserTracking.CreatedBy)).CurrentValue = userId != null ? userId : null;
                 }
-                else if (entry.State == EntityState.Modified && entry.Property("IsDeleted").IsModified == false)
+                else if (entry.State == EntityState.Modified && entry.Property(nameof(ISoftDelete.IsDeleted)).IsModified == false)
                 {
-                    if (entry.Property("ModifiedDate") != null)
-                        entry.Property("ModifiedDate").CurrentValue = DateTimeOffset.UtcNow;
+                    if (entry.Property(nameof(IDateTracking.ModifiedDate)) != null)
+                        entry.Property(nameof(IDateTracking.ModifiedDate)).CurrentValue = DateTimeOffset.UtcNow;
 
-                    if (entry.Property("ModifiedBy") != null)
-                        entry.Property("ModifiedBy").CurrentValue = userId != null ? userId : null;
+                    if (entry.Property(nameof(IUserTracking.ModifiedBy)) != null)
+                        entry.Property(nameof(IUserTracking.ModifiedBy)).CurrentValue = userId != null ? userId : null;
                 }
                 else if (entry.State == EntityState.Modified && entry.Property("IsDeleted").IsModified == true && (bool) entry.Property("IsDeleted").CurrentValue == true)
                 {

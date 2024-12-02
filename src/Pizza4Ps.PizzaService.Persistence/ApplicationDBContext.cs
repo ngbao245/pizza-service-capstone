@@ -2,7 +2,9 @@
 using Microsoft.EntityFrameworkCore;
 using Pizza4Ps.PizzaService.Domain.Entities;
 using Pizza4Ps.PizzaService.Persistence.Intercepter;
+using StructureCodeSolution.Domain.Abstractions.Entities;
 using StructureCodeSolution.Domain.Entities.Identity;
+using System.Linq.Expressions;
 
 namespace StructureCodeSolution.Persistence
 {
@@ -16,10 +18,28 @@ namespace StructureCodeSolution.Persistence
             _auditInterceptor = auditInterceptor;
         }
 
-        protected override void OnModelCreating(ModelBuilder builder) 
-            => builder.ApplyConfigurationsFromAssembly(AssemblyReference.Assembly);
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            var softDeleteEntities = typeof(ISoftDelete).Assembly.GetTypes()
+                .Where(type => typeof(ISoftDelete).IsAssignableFrom(type)
+                && type.IsClass
+                && type.IsAbstract);
+            foreach (var softDeleteEntity in softDeleteEntities)
+            {
+                builder.Entity(softDeleteEntity).HasQueryFilter(GenerateQueryFilterLambda(softDeleteEntity));
+            }
+            builder.ApplyConfigurationsFromAssembly(AssemblyReference.Assembly);
+        }
 
-
+        private LambdaExpression? GenerateQueryFilterLambda (Type type)
+        {
+            var parameter = Expression.Parameter(type, "w");
+            var falseConstantValue = Expression.Constant(false);
+            var propertyAccess = Expression.PropertyOrField(parameter, nameof(ISoftDelete.IsDeleted));
+            var equalExpression = Expression.Equal(propertyAccess, falseConstantValue);
+            var lambda = Expression.Lambda(equalExpression, parameter);
+            return lambda;
+        }
         public DbSet<AppUser> AppUsers { get; set; }
         public DbSet<AppRole> AppRoles { get; set; }
         public DbSet<Product> Products { get; set; }
