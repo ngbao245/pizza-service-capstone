@@ -6,7 +6,7 @@ using StructureCodeSolution.Domain.Abstractions.Entities;
 using StructureCodeSolution.Domain.Entities.Identity;
 using System.Linq.Expressions;
 
-namespace StructureCodeSolution.Persistence
+namespace Pizza4Ps.PizzaService.Persistence
 {
     public sealed class ApplicationDBContext : IdentityDbContext<AppUser, AppRole, Guid>
     {

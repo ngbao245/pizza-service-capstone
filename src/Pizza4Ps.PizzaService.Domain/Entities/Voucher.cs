@@ -1,5 +1,5 @@
 ﻿using Pizza4Ps.PizzaService.Domain.Enums;
-using StructureCodeSolution.Domain.Abstractions;
+using Pizza4Ps.PizzaService.Domain.Abstractions;
 
 namespace Pizza4Ps.PizzaService.Domain.Entities
 {

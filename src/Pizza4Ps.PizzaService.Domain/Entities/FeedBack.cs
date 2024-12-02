@@ -1,20 +1,20 @@
-﻿using StructureCodeSolution.Domain.Abstractions;
+﻿using Pizza4Ps.PizzaService.Domain.Abstractions;
 
 namespace Pizza4Ps.PizzaService.Domain.Entities
 {
-    public class FeedBack : EntityAuditBase<Guid>
+    public class Feedback : EntityAuditBase<Guid>
     {
         public int Rating { get; set; }
         public string? Comments { get; set; }
         public Guid OrderId { get; set; }
 
         public virtual Order Order { get; set; }
-
-        public FeedBack()
+        
+        public Feedback()
         {
         }
 
-        public FeedBack(int rating, string comments, Guid orderId)
+        public Feedback(int rating, string comments, Guid orderId)
         {
             Rating = rating;
             Comments = comments;

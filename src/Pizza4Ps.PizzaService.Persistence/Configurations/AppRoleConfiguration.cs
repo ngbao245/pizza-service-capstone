@@ -1,14 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using StructureCodeSolution.Domain.Entities.Identity;
-using StructureCodeSolution.Persistence.Constants;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Pizza4Ps.PizzaService.Domain.Entities.Identity;
+using Pizza4Ps.PizzaService.Persistence.Constants;
 
-namespace StructureCodeSolution.Persistence.Configurations
+namespace Pizza4Ps.PizzaService.Persistence.Persistence.Configurations
 {
     internal class AppRoleConfiguration : IEntityTypeConfiguration<AppRole>
     {

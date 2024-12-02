@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Pizza4Ps.PizzaService.Persistence.Helpers;
 using StructureCodeSolution.Domain.Abstractions.Entities;
 using System;

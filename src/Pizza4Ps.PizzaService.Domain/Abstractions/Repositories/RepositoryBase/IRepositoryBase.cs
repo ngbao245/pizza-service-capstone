@@ -1,12 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq.Expressions;
 
-namespace StructureCodeSolution.Domain.Abstractions.Repositories.RepositoryBase
+namespace Pizza4Ps.PizzaService.Domain.Abstractions.Repositories.RepositoryBase
 {
     public interface IRepositoryBase<TEntity, in TKey> where TEntity : class
     {
