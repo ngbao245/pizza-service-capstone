@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Pizza4Ps.PizzaService.Persistence.Constants;
 
-namespace Pizza4Ps.PizzaService.Persistence.Configurations
+namespace Pizza4Ps.PizzaService.Persistence.Configurations.Identity
 {
     internal sealed class AppUserRoleConfiguration : IEntityTypeConfiguration<IdentityUserRole<Guid>>
     {

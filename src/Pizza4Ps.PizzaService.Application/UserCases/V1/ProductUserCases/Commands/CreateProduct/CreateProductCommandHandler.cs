@@ -18,8 +18,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.ProductUserCases.Comman
         }
         public async Task<Guid> Handle(CreateProductCommand request, CancellationToken cancellationToken)
         {
-            var product = _mapper.Map<Product>(request);
-            var result = await _productService.CreateProductAsync(product);
+            var result = await _productService.CreateProductAsync(request.Name, request.Price, request.Description, request.CategoryId);
             return result;
         }
     }

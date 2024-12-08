@@ -12,8 +12,8 @@ namespace Pizza4Ps.PizzaService.Domain.Abstractions.Repositories.RepositoryBase
         void Add(TEntity entity);
         void Update(TEntity entity);
         void SoftDelete(TEntity entity);
-        Task HardDeleteAsync(TKey id);
-        Task RestoreAsync(TKey id);
+        void HardDelete(TEntity entity);
+        void Restore(TEntity entity);
         void RemoveMultiple(List<TEntity> entities);
     }
 }

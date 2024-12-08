@@ -3,7 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using Pizza4Ps.PizzaService.Domain.Abstractions.Entities;
 using Pizza4Ps.PizzaService.Domain.Entities;
 using Pizza4Ps.PizzaService.Domain.Entities.Identity;
+using Pizza4Ps.PizzaService.Persistence.Configurations;
 using Pizza4Ps.PizzaService.Persistence.Intercepter;
+using Pizza4Ps.PizzaService.Persistence.Repositories;
 using System.Linq.Expressions;
 
 namespace Pizza4Ps.PizzaService.Persistence
@@ -18,18 +20,19 @@ namespace Pizza4Ps.PizzaService.Persistence
             _auditInterceptor = auditInterceptor;
         }
 
-        //protected override void OnModelCreating(ModelBuilder builder)
-        //{
-        //    var softDeleteEntities = typeof(ISoftDelete).Assembly.GetTypes()
-        //        .Where(type => typeof(ISoftDelete).IsAssignableFrom(type)
-        //        && type.IsClass
-        //        && type.IsAbstract);
-        //    foreach (var softDeleteEntity in softDeleteEntities)
-        //    {
-        //        builder.Entity(softDeleteEntity).HasQueryFilter(GenerateQueryFilterLambda(softDeleteEntity));
-        //    }
-        //    builder.ApplyConfigurationsFromAssembly(AssemblyReference.Assembly);
-        //}
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            var softDeleteEntities = typeof(ISoftDelete).Assembly.GetTypes()
+                .Where(type => typeof(ISoftDelete).IsAssignableFrom(type)
+                && type.IsClass
+                && !type.IsAbstract);
+            foreach (var softDeleteEntity in softDeleteEntities)
+            {
+                builder.Entity(softDeleteEntity).HasQueryFilter(GenerateQueryFilterLambda(softDeleteEntity));
+            }
+            builder.ApplyConfigurationsFromAssembly(AssemblyReference.Assembly);
+        }
 
         private LambdaExpression? GenerateQueryFilterLambda(Type type)
         {
@@ -40,6 +43,8 @@ namespace Pizza4Ps.PizzaService.Persistence
             var lambda = Expression.Lambda(equalExpression, parameter);
             return lambda;
         }
+
+        #region Configuration DbSet
         public DbSet<AppUser> AppUsers { get; set; }
         public DbSet<AppRole> AppRoles { get; set; }
         public DbSet<Booking> Bookings { get; set; }
@@ -64,5 +69,6 @@ namespace Pizza4Ps.PizzaService.Persistence
         public DbSet<TableBooking> TableBookings { get; set; }
         public DbSet<Voucher> Vouchers { get; set; }
         public DbSet<Zone> Zones { get; set; }
+        #endregion
     }
 }

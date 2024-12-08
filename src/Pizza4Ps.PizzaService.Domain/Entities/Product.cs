@@ -36,7 +36,7 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         }
         private string SetName(string name)
         {
-            if (Name == null) throw new ValidationException("Invalid name");
+        //    if (Name == null) throw new ValidationException("Invalid name");
             return name;
         }
     }

@@ -30,7 +30,7 @@ namespace Pizza4Ps.PizzaService.Persistence.Configurations
             builder.HasMany(x => x.Feedbacks)
                 .WithOne(x => x.Order)
                 .HasForeignKey(x => x.OrderId)
-                .OnDelete(DeleteBehavior.SetNull);
+                .IsRequired(false);
 
             builder.HasMany(x => x.Payments)
                 .WithOne(x => x.Order)
