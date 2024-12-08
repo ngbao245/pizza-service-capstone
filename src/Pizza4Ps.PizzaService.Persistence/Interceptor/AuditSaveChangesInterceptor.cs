@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Pizza4Ps.PizzaService.Domain.Abstractions.Entities;
+using Pizza4Ps.PizzaService.Persistence.Constants;
 using Pizza4Ps.PizzaService.Persistence.Helpers;
 
 namespace Pizza4Ps.PizzaService.Persistence.Intercepter
@@ -39,21 +40,23 @@ namespace Pizza4Ps.PizzaService.Persistence.Intercepter
                 if (entry.Entity is IUserTracking userTracking)
                 {
                     if (entry.State == EntityState.Added)
-                        userTracking.CreatedBy = userId;
+                        userTracking.CreatedBy = USER_TRACKING.UNDEFINED;
                     else if (entry.State == EntityState.Modified && !entry.Property(nameof(ISoftDelete.IsDeleted)).IsModified)
-                        userTracking.ModifiedBy = userId;
+                        userTracking.ModifiedBy = USER_TRACKING.UNDEFINED;
                 }
 
-                if (entry.Entity is ISoftDelete softDelete && entry.State == EntityState.Modified && entry.Property(nameof(ISoftDelete.IsDeleted)).IsModified)
+                if (entry.Entity is ISoftDelete softDelete
+                    && entry.State == EntityState.Modified
+                    && entry.Property(nameof(ISoftDelete.IsDeleted)).IsModified)
                 {
-                    var isDeleted = (bool) entry.Property(nameof(ISoftDelete.IsDeleted)).CurrentValue;
-                    softDelete.DeletedAt = isDeleted ? now : (DateTimeOffset?)null;
-                    softDelete.DeletedBy = isDeleted ? userId : null;
+                    var isDeleted = entry.Property(nameof(ISoftDelete.IsDeleted)).CurrentValue as bool?;
+                    if (isDeleted.HasValue && isDeleted.Value)
+                    {
+                        softDelete.DeletedAt = now;
+                        softDelete.DeletedBy = USER_TRACKING.UNDEFINED;
+                    }
                 }
             }
-
-
-            // Gọi base logic
             return await base.SavingChangesAsync(eventData, result, cancellationToken);
         }
     }

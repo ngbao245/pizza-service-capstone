@@ -2,11 +2,11 @@
 using Microsoft.AspNetCore.Mvc;
 using Pizza4Ps.PizzaService.API.Constants;
 using Pizza4Ps.PizzaService.API.Models;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.ProductUserCases.Commands.CreateProduct;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.ProductUserCases.Commands.HardDeleteProduct;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.ProductUserCases.Commands.SoftDeleteProduct;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.ProductUserCases.Commands.UpdateProduct;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.ProductUserCases.Queries.GetProduct;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Commands.Product.CreateProduct;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Commands.Product.HardDeleteProduct;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Commands.Product.SoftDeleteProduct;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Commands.Product.UpdateProduct;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Queries.Product.GetProduct;
 
 namespace Pizza4Ps.PizzaService.API.Controllers
 {

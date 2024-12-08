@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Pizza4Ps.PizzaService.Domain.Abstractions;
+using Pizza4Ps.PizzaService.Domain.Exceptions;
+using Pizza4Ps.PizzaService.Persistence.Constants;
 
 namespace Pizza4Ps.PizzaService.Persistence
 {
@@ -16,6 +18,15 @@ namespace Pizza4Ps.PizzaService.Persistence
             => _context;
 
         public async Task SaveChangeAsync(CancellationToken cancellationToken = default)
-            => await _context.SaveChangesAsync();
+        {
+            try
+            {
+                await _context.SaveChangesAsync(cancellationToken);
+            }
+            catch
+            {
+                throw new ServerException(SAVECHANGE_ERROR.SAVE_FAILED);
+            }
+        }
     }
 }

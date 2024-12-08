@@ -11,8 +11,8 @@ namespace Pizza4Ps.PizzaService.Domain.Abstractions.Repositories.RepositoryBase
         Task<long> CountAsync(Expression<Func<TEntity, bool>>? predicate = null);
         void Add(TEntity entity);
         void Update(TEntity entity);
-        void SoftDelete(TEntity entity);
-        void HardDelete(TEntity entity);
+        void SetIsDeleted(TEntity entity);
+        void Remove(TEntity entity);
         void Restore(TEntity entity);
         void RemoveMultiple(List<TEntity> entities);
     }

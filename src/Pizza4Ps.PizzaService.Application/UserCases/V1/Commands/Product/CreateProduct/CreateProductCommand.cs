@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Pizza4Ps.PizzaService.Application.UserCases.V1.ProductUserCases.Commands.CreateProduct
+namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Commands.Product.CreateProduct
 {
     public class CreateProductCommand : IRequest<Guid>
     {

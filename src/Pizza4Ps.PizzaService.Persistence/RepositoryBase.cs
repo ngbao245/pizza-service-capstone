@@ -22,9 +22,6 @@ namespace Pizza4Ps.PizzaService.Persistence
         public void Add(TEntity entity)
             => _dbContext.Add(entity);
 
-        public void Delete(TEntity entity)
-            => _dbContext.Set<TEntity>().Remove(entity);
-
 
 
         public IQueryable<TEntity> GetAsNoTrackingAsync(Expression<Func<TEntity, bool>>? predicate = null,
@@ -74,39 +71,27 @@ namespace Pizza4Ps.PizzaService.Persistence
             return await items.CountAsync();
         }
 
-        public void SoftDelete(TEntity entity)
+        public void SetIsDeleted(TEntity entity)
         {
-            if (entity is not ISoftDelete )
+            if (entity is not ISoftDelete softDeleteEntity)
             {
-                throw new BusinessException("This function is not implement");
+                throw new NotImplementedException();
             }
-            var entityType = typeof(TEntity);
-            // Lấy thông tin người dùng hiện tại
-            // Tìm thuộc tính IsDeleted
-            var isDeletedProperty = entityType.GetProperty("IsDeleted");
-            if (isDeletedProperty != null && isDeletedProperty.PropertyType == typeof(bool))
-            {
-                isDeletedProperty.SetValue(entity, true);
-            }
+            softDeleteEntity.IsDeleted = true;
             _dbContext.Set<TEntity>().Update(entity);
         }
 
         public void Restore(TEntity entity)
         {
-            if (entity is not ISoftDelete)
+            if (entity is not ISoftDelete softDeleteEntity)
             {
-                throw new BusinessException("This function is not implement");
+                throw new NotImplementedException();
             }
-            var entityType = typeof(TEntity);
-            var isDeletedProperty = entityType.GetProperty("IsDeleted");
-            if (isDeletedProperty != null && isDeletedProperty.PropertyType == typeof(bool))
-            {
-                isDeletedProperty.SetValue(entity, false);
-            }
+            softDeleteEntity.Undo();
             _dbContext.Set<TEntity>().Update(entity);
         }
 
-        public void HardDelete(TEntity entity)
+        public void Remove(TEntity entity)
         {
             _dbContext.Set<TEntity>().Remove(entity);
         }

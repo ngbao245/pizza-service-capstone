@@ -2,7 +2,7 @@
 using Pizza4Ps.PizzaService.Application.Abstractions.BaseQuery;
 using Pizza4Ps.PizzaService.Application.Models;
 
-namespace Pizza4Ps.PizzaService.Application.UserCases.V1.ProductUserCases.Queries.GetProduct
+namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Queries.Product.GetProduct
 {
     public class GetProductQuery : BasePaginatedQuery, IRequest<PaginatedResult<GetProductQueryResponse>>
     {
