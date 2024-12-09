@@ -50,7 +50,7 @@ namespace Pizza4Ps.PizzaService.API.Controllers
             });
         }
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetSingleByIdAsync([FromQuery] Guid id)
+        public async Task<IActionResult> GetSingleByIdAsync([FromRoute] Guid id)
         {
             var result = await _sender.Send(new GetProductByIdQuery { Id = id});
             return Ok(new ApiResponse
