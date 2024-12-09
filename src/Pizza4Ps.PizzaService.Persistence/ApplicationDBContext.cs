@@ -23,14 +23,14 @@ namespace Pizza4Ps.PizzaService.Persistence
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            var softDeleteEntities = typeof(ISoftDelete).Assembly.GetTypes()
-                .Where(type => typeof(ISoftDelete).IsAssignableFrom(type)
-                && type.IsClass
-                && !type.IsAbstract);
-            foreach (var softDeleteEntity in softDeleteEntities)
-            {
-                builder.Entity(softDeleteEntity).HasQueryFilter(GenerateQueryFilterLambda(softDeleteEntity));
-            }
+            //var softDeleteEntities = typeof(ISoftDelete).Assembly.GetTypes()
+            //    .Where(type => typeof(ISoftDelete).IsAssignableFrom(type)
+            //    && type.IsClass
+            //    && !type.IsAbstract);
+            //foreach (var softDeleteEntity in softDeleteEntities)
+            //{
+            //    builder.Entity(softDeleteEntity).HasQueryFilter(GenerateQueryFilterLambda(softDeleteEntity));
+            //}
             builder.ApplyConfigurationsFromAssembly(AssemblyReference.Assembly);
         }
 

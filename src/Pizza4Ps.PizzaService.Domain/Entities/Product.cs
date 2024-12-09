@@ -3,7 +3,7 @@ using Pizza4Ps.PizzaService.Domain.Abstractions;
 
 namespace Pizza4Ps.PizzaService.Domain.Entities
 {
-    public class Product : EntityBase<Guid>
+    public class Product : EntityAuditBase<Guid>
     {
         public string Name { get; set; }
         public decimal Price { get; set; }

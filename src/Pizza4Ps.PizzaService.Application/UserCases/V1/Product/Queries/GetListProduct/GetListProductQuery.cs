@@ -6,6 +6,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Product.Queries.GetProd
 {
     public class GetListProductQuery : BasePaginatedQuery, IRequest<GetListProductQueryResponse>
     {
+        public bool IsDeleted { get; set; } = false;
         public string? Name { get; set; }
         public decimal? Price { get; set; }
         public string? Description { get; set; }
