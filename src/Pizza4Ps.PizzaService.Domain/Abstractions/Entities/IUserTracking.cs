@@ -2,7 +2,7 @@
 {
     public interface IUserTracking
     {
-        Guid? CreatedBy { get; set; }
-        Guid? ModifiedBy { get; set; }
+        string? CreatedBy { get; set; }
+        string? ModifiedBy { get; set; }
     }
 }

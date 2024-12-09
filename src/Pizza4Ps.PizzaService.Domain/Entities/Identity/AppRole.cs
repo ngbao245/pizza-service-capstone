@@ -12,10 +12,10 @@ namespace Pizza4Ps.PizzaService.Domain.Entities.Identity
 
         public DateTimeOffset CreatedDate { get; set; }
         public DateTimeOffset? ModifiedDate { get; set; }
-        public Guid? CreatedBy { get; set; }
-        public Guid? ModifiedBy { get; set; }
+        public string? CreatedBy { get; set; }
+        public string? ModifiedBy { get; set; }
         public bool IsDeleted { get; set; }
         public DateTimeOffset? DeletedAt { get; set; }
-        public Guid? DeletedBy { get; set; }
+        public string? DeletedBy { get; set; }
     }
 }

@@ -1,12 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Pizza4Ps.PizzaService.Domain.Abstractions;
 using Pizza4Ps.PizzaService.Domain.Abstractions.Repositories;
+using Pizza4Ps.PizzaService.Domain.Abstractions.Services;
+using Pizza4Ps.PizzaService.Domain.Constants;
 using Pizza4Ps.PizzaService.Domain.Entities;
 using Pizza4Ps.PizzaService.Domain.Exceptions;
 
 namespace Pizza4Ps.PizzaService.Domain.Services
 {
-    public class ProductService
+    public class ProductService : IProductService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IProductRepository _productRepository;
@@ -18,32 +20,45 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             _productRepository = productRepository;
         }
         
-        public async Task<Guid> CreateProductAsync(string name, decimal price, string description, Guid categoryId)
+        public async Task<Guid> CreateAsync(string name, decimal price, string description, Guid categoryId)
         {
-            var productEntity = new Product(Guid.NewGuid(), name, price, description, categoryId);
-            _productRepository.Add(productEntity);
+            var entity = new Product(Guid.NewGuid(), name, price, description, categoryId);
+            _productRepository.Add(entity);
             await _unitOfWork.SaveChangeAsync();
-            return productEntity.Id;
+            return entity.Id;
         }
-        public async Task<Guid> UpdateProductAsync(Guid id, string name, decimal price, string description, Guid categoryId)
+        public async Task<Guid> UpdateAsync(Guid id, string name, decimal price, string description, Guid categoryId)
         {
-            var entity = await _productRepository.GetByIdAsync(id);
+            var entity = await _productRepository.GetSingleByIdAsync(id);
             entity.UpdateProduct(name, price, description, categoryId);
             await _unitOfWork.SaveChangeAsync();
             return entity.Id;
         }
-        public async Task HardDeleteProductAsync(Guid id)
+        public async Task RestoreAsync(List<Guid> ids)
         {
-            var entity = await _productRepository.GetAsTrackingAsync(x => x.Id == id).IgnoreQueryFilters().FirstOrDefaultAsync();
-            if (entity == null) throw new NotFoundException("Entity not found");
-            _productRepository.HardDelete(entity);
+            var entities = await _productRepository.GetListAsTracking(x => ids.Contains(x.Id)).IgnoreQueryFilters().ToListAsync();
+            if (entities == null) throw new ServerException(ServerErrorConstant.NOT_FOUND);
+            foreach (var entity in entities)
+            {
+                _productRepository.Restore(entity);
+            }
             await _unitOfWork.SaveChangeAsync();
         }
-        public async Task SoftDeleteProductAsync(Guid id)
+        public async Task DeleteAsync(List<Guid> ids, bool IsHardDeleted = false)
         {
-            var entity = await _productRepository.GetByIdAsync(id);
-            if (entity == null) throw new NotFoundException("Entity not found");
-            _productRepository.SoftDelete(entity);
+            var entities = await _productRepository.GetListAsTracking(x => ids.Contains(x.Id)).IgnoreQueryFilters().ToListAsync();
+            if (entities == null) throw new ServerException(ServerErrorConstant.NOT_FOUND);
+            foreach (var entity in entities) 
+            {
+                if (IsHardDeleted)
+                {
+                    _productRepository.HardDelete(entity);
+                }
+                else
+                {
+                    _productRepository.SoftDelete(entity);
+                }
+            }
             await _unitOfWork.SaveChangeAsync();
         }
 

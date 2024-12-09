@@ -22,12 +22,9 @@ namespace Pizza4Ps.PizzaService.Persistence
         public void Add(TEntity entity)
             => _dbContext.Add(entity);
 
-        public void Delete(TEntity entity)
-            => _dbContext.Set<TEntity>().Remove(entity);
 
-
-
-        public IQueryable<TEntity> GetAsNoTrackingAsync(Expression<Func<TEntity, bool>>? predicate = null,
+        //Get
+        public IQueryable<TEntity> GetListAsNoTracking(Expression<Func<TEntity, bool>>? predicate = null,
             params Expression<Func<TEntity, object>>[]? includeProperties)
         {
             IQueryable<TEntity> items = _dbContext.Set<TEntity>().AsNoTracking(); // Importance Always include AsNoTracking for Query Side
@@ -39,7 +36,8 @@ namespace Pizza4Ps.PizzaService.Persistence
             return items;
         }
 
-        public IQueryable<TEntity> GetAsTrackingAsync(Expression<Func<TEntity, bool>>? predicate = null,
+        //Update, Delete
+        public IQueryable<TEntity> GetListAsTracking(Expression<Func<TEntity, bool>>? predicate = null,
             params Expression<Func<TEntity, object>>[]? includeProperties)
         {
             IQueryable<TEntity> items = _dbContext.Set<TEntity>().AsTracking(); // Importance Always include AsNoTracking for Query Side
@@ -51,17 +49,14 @@ namespace Pizza4Ps.PizzaService.Persistence
             return items;
         }
 
-        public async Task<TEntity> GetByIdAsync(TKey id, CancellationToken cancellationToken = default, params Expression<Func<TEntity, object>>[] includeProperties)
-            => await GetAsTrackingAsync(null, includeProperties)
+        public async Task<TEntity> GetSingleByIdAsync(TKey id, CancellationToken cancellationToken = default, params Expression<Func<TEntity, object>>[] includeProperties)
+            => await GetListAsTracking(null, includeProperties)
             .SingleOrDefaultAsync(x => x.Id.Equals(id), cancellationToken);
 
 
         public async Task<TEntity> GetSingleAsync(Expression<Func<TEntity, bool>>? predicate = null, CancellationToken cancellationToken = default, params Expression<Func<TEntity, object>>[] includeProperties)
-            => await GetAsTrackingAsync(null, includeProperties)
+            => await GetListAsTracking(null, includeProperties)
             .SingleOrDefaultAsync(predicate, cancellationToken);
-
-        public void RemoveMultiple(List<TEntity> entities)
-            => _dbContext.RemoveRange(entities);
 
         public void Update(TEntity entity)
             => _dbContext.Update(entity);
@@ -76,33 +71,21 @@ namespace Pizza4Ps.PizzaService.Persistence
 
         public void SoftDelete(TEntity entity)
         {
-            if (entity is not ISoftDelete )
+            if (entity is not ISoftDelete softDeleteEntity)
             {
-                throw new BusinessException("This function is not implement");
+                throw new NotImplementedException();
             }
-            var entityType = typeof(TEntity);
-            // Lấy thông tin người dùng hiện tại
-            // Tìm thuộc tính IsDeleted
-            var isDeletedProperty = entityType.GetProperty("IsDeleted");
-            if (isDeletedProperty != null && isDeletedProperty.PropertyType == typeof(bool))
-            {
-                isDeletedProperty.SetValue(entity, true);
-            }
+            softDeleteEntity.IsDeleted = true;
             _dbContext.Set<TEntity>().Update(entity);
         }
 
         public void Restore(TEntity entity)
         {
-            if (entity is not ISoftDelete)
+            if (entity is not ISoftDelete softDeleteEntity)
             {
-                throw new BusinessException("This function is not implement");
+                throw new NotImplementedException();
             }
-            var entityType = typeof(TEntity);
-            var isDeletedProperty = entityType.GetProperty("IsDeleted");
-            if (isDeletedProperty != null && isDeletedProperty.PropertyType == typeof(bool))
-            {
-                isDeletedProperty.SetValue(entity, false);
-            }
+            softDeleteEntity.Undo();
             _dbContext.Set<TEntity>().Update(entity);
         }
 

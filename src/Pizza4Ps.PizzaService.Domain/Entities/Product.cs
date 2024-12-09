@@ -29,7 +29,7 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
 
         public void UpdateProduct(string name, decimal price, string description, Guid categoryId)
         {
-            Name = name;
+            Name = SetName(name);
             Price = price;
             Description = description;
             CategoryId = categoryId;
