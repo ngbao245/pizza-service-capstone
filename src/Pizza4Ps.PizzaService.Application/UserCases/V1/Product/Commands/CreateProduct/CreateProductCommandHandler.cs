@@ -26,10 +26,5 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Product.Commands.Create
                 Id = result
             };
         }
-        //public async Task<Guid> Handle(CreateProductCommand request, CancellationToken cancellationToken)
-        //{
-        //    var result = await _productService.CreateAsync(request.Name, request.Price, request.Description, request.CategoryId);
-        //    return result;
-        //}
     }
 }

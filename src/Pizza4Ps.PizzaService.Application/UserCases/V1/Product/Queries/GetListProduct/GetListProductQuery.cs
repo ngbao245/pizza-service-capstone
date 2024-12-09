@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using Pizza4Ps.PizzaService.Application.Abstractions.BaseQuery;
-using Pizza4Ps.PizzaService.Application.Models;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Product.Queries.GetProduct
 {

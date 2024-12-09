@@ -22,22 +22,17 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Product.Queries.GetProd
 
         public async Task<GetListProductQueryResponse> Handle(GetListProductQuery request, CancellationToken cancellationToken)
         {
-            var entities = await _productRepository.GetListAsNoTracking(x => x.IsDeleted == request.IsDeleted
-                && request.Description == null || x.Description.Contains(request.Description)
-                && request.Price == null || x.Price == request.Price).ToListAsync();
-            var test = await _productRepository.GetListAsNoTracking(
-                x => request.Name == null || x.Name.Contains(request.Name)
-                && request.Description == null || x.Description.Contains(request.Description)
-                && request.Price == null || x.Price == request.Price)
-                .Where(x => x.IsDeleted == request.IsDeleted)
+            var query = _productRepository.GetListAsNoTracking().IgnoreQueryFilters()
+                .Where(
+                    x => (request.Name == null || x.Name.Contains(request.Name))
+                    && (request.Description == null || x.Description.Contains(request.Description))
+                    && (request.Price == null || x.Price == request.Price)
+                    && (x.IsDeleted == request.IsDeleted))
                 .OrderBy(request.SortBy)
-                .Skip(request.SkipCount).Take(request.TakeCount)
-                .ToListAsync();
+                .Skip(request.SkipCount).Take(request.TakeCount);
+            var entities = await query.ToListAsync();
             var result = _mapper.Map<List<ProductDto>>(entities);
-            var totalCount = await _productRepository.CountAsync(
-                x => request.Name == null || x.Name.Contains(request.Name)
-                && request.Description == null || x.Description.Contains(request.Description)
-                && request.Price == null || x.Price == request.Price);
+            var totalCount = await query.CountAsync();
             return new GetListProductQueryResponse(result, totalCount);
         }
     }

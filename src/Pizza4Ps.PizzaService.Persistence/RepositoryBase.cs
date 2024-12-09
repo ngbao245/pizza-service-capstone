@@ -23,7 +23,7 @@ namespace Pizza4Ps.PizzaService.Persistence
             => _dbContext.Add(entity);
 
 
-
+        //Get
         public IQueryable<TEntity> GetListAsNoTracking(Expression<Func<TEntity, bool>>? predicate = null,
             params Expression<Func<TEntity, object>>[]? includeProperties)
         {
@@ -36,6 +36,7 @@ namespace Pizza4Ps.PizzaService.Persistence
             return items;
         }
 
+        //Update, Delete
         public IQueryable<TEntity> GetListAsTracking(Expression<Func<TEntity, bool>>? predicate = null,
             params Expression<Func<TEntity, object>>[]? includeProperties)
         {

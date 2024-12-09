@@ -1,6 +1,6 @@
 ﻿namespace Pizza4Ps.PizzaService.Application.Abstractions.Commands
 {
-    public class BaseDeleteCommand<Key>
+    public class BaseDeleteCommand
     {
         public bool isHardDelete { get; set; } = false;
     }

@@ -1,4 +1,5 @@
 ﻿using Pizza4Ps.PizzaService.Domain.Abstractions;
+using System.Diagnostics;
 
 namespace Pizza4Ps.PizzaService.Domain.Entities
 {
@@ -14,6 +15,11 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         }
 
         public Category(string name, string description)
+        {
+            Name = name;
+            Description = description;
+        }
+        public void UpdateCategory(string name, string description)
         {
             Name = name;
             Description = description;
