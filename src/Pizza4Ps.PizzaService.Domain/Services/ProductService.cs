@@ -22,30 +22,43 @@ namespace Pizza4Ps.PizzaService.Domain.Services
         
         public async Task<Guid> CreateAsync(string name, decimal price, string description, Guid categoryId)
         {
-            var productEntity = new Product(Guid.NewGuid(), name, price, description, categoryId);
-            _productRepository.Add(productEntity);
+            var entity = new Product(Guid.NewGuid(), name, price, description, categoryId);
+            _productRepository.Add(entity);
             await _unitOfWork.SaveChangeAsync();
-            return productEntity.Id;
+            return entity.Id;
         }
         public async Task<Guid> UpdateAsync(Guid id, string name, decimal price, string description, Guid categoryId)
         {
-            var entity = await _productRepository.GetByIdAsync(id);
+            var entity = await _productRepository.GetSingleByIdAsync(id);
             entity.UpdateProduct(name, price, description, categoryId);
             await _unitOfWork.SaveChangeAsync();
             return entity.Id;
         }
-        public async Task RemoveAsync(Guid id)
+        public async Task RestoreAsync(List<Guid> ids)
         {
-            var entity = await _productRepository.GetAsTrackingAsync(x => x.Id == id).IgnoreQueryFilters().FirstOrDefaultAsync();
-            if (entity == null) throw new ServerException(ServerErrorConstant.NOT_FOUND);
-            _productRepository.Remove(entity);
+            var entities = await _productRepository.GetListAsTracking(x => ids.Contains(x.Id)).IgnoreQueryFilters().ToListAsync();
+            if (entities == null) throw new ServerException(ServerErrorConstant.NOT_FOUND);
+            foreach (var entity in entities)
+            {
+                _productRepository.Restore(entity);
+            }
             await _unitOfWork.SaveChangeAsync();
         }
-        public async Task SetIsDeleteAsync(Guid id)
+        public async Task DeleteAsync(List<Guid> ids, bool IsHardDeleted = false)
         {
-            var entity = await _productRepository.GetByIdAsync(id);
-            if (entity == null) throw new ServerException(ServerErrorConstant.NOT_FOUND);
-            _productRepository.SetIsDeleted(entity);
+            var entities = await _productRepository.GetListAsTracking(x => ids.Contains(x.Id)).IgnoreQueryFilters().ToListAsync();
+            if (entities == null) throw new ServerException(ServerErrorConstant.NOT_FOUND);
+            foreach (var entity in entities) 
+            {
+                if (IsHardDeleted)
+                {
+                    _productRepository.HardDelete(entity);
+                }
+                else
+                {
+                    _productRepository.SoftDelete(entity);
+                }
+            }
             await _unitOfWork.SaveChangeAsync();
         }
 

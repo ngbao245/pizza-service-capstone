@@ -7,12 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="UserCases\V1\Commands\Category\Queries\**" />
-    <EmbeddedResource Remove="UserCases\V1\Commands\Category\Queries\**" />
-    <None Remove="UserCases\V1\Commands\Category\Queries\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="DependencyInjection\Options\" />
     <Folder Include="Validators\" />
   </ItemGroup>

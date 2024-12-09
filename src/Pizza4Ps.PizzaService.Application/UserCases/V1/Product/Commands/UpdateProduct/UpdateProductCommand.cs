@@ -1,9 +1,10 @@
 ﻿using MediatR;
 using Pizza4Ps.PizzaService.Application.Abstractions.BaseCommand;
+using Pizza4Ps.PizzaService.Application.Abstractions.Commands;
 
-namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Commands.Product.UpdateProduct
+namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Product.Commands.UpdateProduct
 {
-    public class UpdateProductCommand : BaseCommand<Guid>, IRequest
+    public class UpdateProductCommand : BaseUpdateCommand<Guid>, IRequest<UpdateProductCommandResponse>
     {
         public string Name { get; set; }
         public decimal Price { get; set; }

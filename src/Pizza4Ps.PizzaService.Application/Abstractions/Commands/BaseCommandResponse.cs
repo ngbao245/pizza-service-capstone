@@ -1,6 +1,6 @@
 ﻿namespace Pizza4Ps.PizzaService.Application.Abstractions.BaseCommand
 {
-    public class BaseCommand<Key>
+    public class BaseCommandResponse<Key>
     {
         public Key Id { get; set; }
     }

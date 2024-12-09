@@ -4,7 +4,7 @@
     {
         Task<Guid> CreateAsync(string name, decimal price, string description, Guid categoryId);
         Task<Guid> UpdateAsync(Guid id, string name, decimal price, string description, Guid categoryId);
-        Task RemoveAsync(Guid id);
-        Task SetIsDeleteAsync(Guid id);
+        Task DeleteAsync(List<Guid> ids, bool IsHardDeleted = false);
+        Task RestoreAsync(List<Guid> ids);
     }
 }

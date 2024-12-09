@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Commands.Category.Commands.CreateCategory
+namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Category.Commands.CreateCategory
 {
     public class CreateCategoryCommandHandler : IRequestHandler<CreateCategoryCommand, Guid>
     {

@@ -24,7 +24,7 @@ namespace Pizza4Ps.PizzaService.Persistence
 
 
 
-        public IQueryable<TEntity> GetAsNoTrackingAsync(Expression<Func<TEntity, bool>>? predicate = null,
+        public IQueryable<TEntity> GetListAsNoTracking(Expression<Func<TEntity, bool>>? predicate = null,
             params Expression<Func<TEntity, object>>[]? includeProperties)
         {
             IQueryable<TEntity> items = _dbContext.Set<TEntity>().AsNoTracking(); // Importance Always include AsNoTracking for Query Side
@@ -36,7 +36,7 @@ namespace Pizza4Ps.PizzaService.Persistence
             return items;
         }
 
-        public IQueryable<TEntity> GetAsTrackingAsync(Expression<Func<TEntity, bool>>? predicate = null,
+        public IQueryable<TEntity> GetListAsTracking(Expression<Func<TEntity, bool>>? predicate = null,
             params Expression<Func<TEntity, object>>[]? includeProperties)
         {
             IQueryable<TEntity> items = _dbContext.Set<TEntity>().AsTracking(); // Importance Always include AsNoTracking for Query Side
@@ -48,17 +48,14 @@ namespace Pizza4Ps.PizzaService.Persistence
             return items;
         }
 
-        public async Task<TEntity> GetByIdAsync(TKey id, CancellationToken cancellationToken = default, params Expression<Func<TEntity, object>>[] includeProperties)
-            => await GetAsTrackingAsync(null, includeProperties)
+        public async Task<TEntity> GetSingleByIdAsync(TKey id, CancellationToken cancellationToken = default, params Expression<Func<TEntity, object>>[] includeProperties)
+            => await GetListAsTracking(null, includeProperties)
             .SingleOrDefaultAsync(x => x.Id.Equals(id), cancellationToken);
 
 
         public async Task<TEntity> GetSingleAsync(Expression<Func<TEntity, bool>>? predicate = null, CancellationToken cancellationToken = default, params Expression<Func<TEntity, object>>[] includeProperties)
-            => await GetAsTrackingAsync(null, includeProperties)
+            => await GetListAsTracking(null, includeProperties)
             .SingleOrDefaultAsync(predicate, cancellationToken);
-
-        public void RemoveMultiple(List<TEntity> entities)
-            => _dbContext.RemoveRange(entities);
 
         public void Update(TEntity entity)
             => _dbContext.Update(entity);
@@ -71,7 +68,7 @@ namespace Pizza4Ps.PizzaService.Persistence
             return await items.CountAsync();
         }
 
-        public void SetIsDeleted(TEntity entity)
+        public void SoftDelete(TEntity entity)
         {
             if (entity is not ISoftDelete softDeleteEntity)
             {
@@ -91,7 +88,7 @@ namespace Pizza4Ps.PizzaService.Persistence
             _dbContext.Set<TEntity>().Update(entity);
         }
 
-        public void Remove(TEntity entity)
+        public void HardDelete(TEntity entity)
         {
             _dbContext.Set<TEntity>().Remove(entity);
         }

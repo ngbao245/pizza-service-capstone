@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.Commands.Product.CreateProduct;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.Queries.Product.GetProduct;
+using Pizza4Ps.PizzaService.Application.DTOs;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Product.Commands.CreateProduct;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Product.Queries.GetProduct;
 using Pizza4Ps.PizzaService.Domain.Entities;
 
 namespace Pizza4Ps.PizzaService.Application.Mappers
@@ -9,8 +10,7 @@ namespace Pizza4Ps.PizzaService.Application.Mappers
     {
         public ProductProfile()
         {
-            CreateMap<CreateProductCommand, Product>().ReverseMap();
-            CreateMap<GetProductQueryResponse, Product>().ReverseMap();
+            CreateMap<ProductDto, Product>().ReverseMap();
         }
     }
 }
