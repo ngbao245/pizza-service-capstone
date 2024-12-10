@@ -21,5 +21,12 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
             DiscountType = discountType;
             ExpiryDate = expiryDate;
         }
+
+        public void UpdateVoucher(string code, DiscountTypeEnum discountType, DateTime? expiryDate)
+        {
+            Code = code;
+            DiscountType = discountType;
+            ExpiryDate = expiryDate;
+        }
     }
 }

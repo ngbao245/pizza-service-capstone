@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using Pizza4Ps.PizzaService.Domain.Abstractions.Services;
-using Pizza4Ps.PizzaService.Domain.Services;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Product.Commands.HardDeleteProduct
 {
