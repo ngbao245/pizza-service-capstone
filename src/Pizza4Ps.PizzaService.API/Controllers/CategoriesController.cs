@@ -81,7 +81,7 @@ namespace Pizza4Ps.PizzaService.API.Controllers
             await _sender.Send(new RestoreCategoryCommand { Ids = ids });
             return Ok(new ApiResponse
             {
-                Message = MESSAGE.DELETED_SUCCESS,
+                Message = MESSAGE.RESTORE_SUCCESS,
                 StatusCode = StatusCodes.Status200OK
             });
         }
