@@ -2,19 +2,17 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Pizza4Ps.PizzaService.Application.DTOs;
-using Pizza4Ps.PizzaService.Application.Models;
 using Pizza4Ps.PizzaService.Domain.Abstractions.Repositories;
 using System.Linq.Dynamic.Core;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Product.Queries.GetProduct
 {
-    public class GetListProductQueryHandler : IRequestHandler<GetListProductQuery, GetListProductQueryResponse>
+	public class GetListProductQueryHandler : IRequestHandler<GetListProductQuery, GetListProductQueryResponse>
     {
         private readonly IMapper _mapper;
         private readonly IProductRepository _productRepository;
 
-        public GetListProductQueryHandler(IMapper mapper
-            , IProductRepository productRepository)
+        public GetListProductQueryHandler(IMapper mapper, IProductRepository productRepository)
         {
             _mapper = mapper;
             _productRepository = productRepository;

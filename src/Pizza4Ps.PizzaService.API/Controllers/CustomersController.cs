@@ -6,6 +6,8 @@ using Pizza4Ps.PizzaService.Application.UserCases.V1.Customer.Commands.CreateCus
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Customer.Commands.DeleteCustomer;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Customer.Commands.RestoreCustomer;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Customer.Commands.UpdateCustomer;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Customer.Queries.GetCustomerById;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Customer.Queries.GetListCustomer;
 using Pizza4Ps.PizzaService.Domain.Exceptions;
 
 namespace Pizza4Ps.PizzaService.API.Controllers
@@ -35,28 +37,29 @@ namespace Pizza4Ps.PizzaService.API.Controllers
 			});
 		}
 
-		//[HttpGet]
-		//public async Task<IActionResult> GetListAsync([FromQuery] GetListProductQuery query)
-		//{
-		//    var result = await _sender.Send(query);
-		//    return Ok(new ApiResponse
-		//    {
-		//        Result = result,
-		//        Message = MESSAGE.GET_SUCCESS,
-		//        StatusCode = StatusCodes.Status200OK
-		//    });
-		//}
-		//[HttpGet("{id}")]
-		//public async Task<IActionResult> GetSingleByIdAsync([FromRoute] Guid id)
-		//{
-		//    var result = await _sender.Send(new GetProductByIdQuery { Id = id });
-		//    return Ok(new ApiResponse
-		//    {
-		//        Result = result,
-		//        Message = MESSAGE.GET_SUCCESS,
-		//        StatusCode = StatusCodes.Status200OK
-		//    });
-		//}
+		[HttpGet]
+		public async Task<IActionResult> GetListAsync([FromQuery] GetListCustomerQuery query)
+		{
+			var result = await _sender.Send(query);
+			return Ok(new ApiResponse
+			{
+				Result = result,
+				Message = MESSAGE.GET_SUCCESS,
+				StatusCode = StatusCodes.Status200OK
+			});
+		}
+
+		[HttpGet("{id}")]
+		public async Task<IActionResult> GetSingleByIdAsync([FromRoute] Guid id)
+		{
+			var result = await _sender.Send(new GetCustomerByIdQuery { Id = id });
+			return Ok(new ApiResponse
+			{
+				Result = result,
+				Message = MESSAGE.GET_SUCCESS,
+				StatusCode = StatusCodes.Status200OK
+			});
+		}
 
 		[HttpPut("{id}")]
 		public async Task<IActionResult> UpdateAsync([FromRoute] Guid id, [FromBody] UpdateCustomerCommand command)

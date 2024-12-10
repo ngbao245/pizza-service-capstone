@@ -10,8 +10,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Product.Queries.GetProd
         private readonly IMapper _mapper;
         private readonly IProductRepository _productRepository;
 
-        public GetProductByIdQueryHandler(IMapper mapper
-            , IProductRepository productRepository)
+        public GetProductByIdQueryHandler(IMapper mapper, IProductRepository productRepository)
         {
             _mapper = mapper;
             _productRepository = productRepository;
