@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Pizza4Ps.PizzaService.API.Constants;
 using Pizza4Ps.PizzaService.API.Models;
-using Pizza4Ps.PizzaService.Application.Abstractions.Queries;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Product.Commands.CreateProduct;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Product.Commands.HardDeleteProduct;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Product.Commands.SoftDeleteProduct;
@@ -13,7 +12,7 @@ using Pizza4Ps.PizzaService.Domain.Exceptions;
 
 namespace Pizza4Ps.PizzaService.API.Controllers
 {
-    [Route("api/products")]
+	[Route("api/products")]
     [ApiController]
     public class ProductsController : ControllerBase
     {

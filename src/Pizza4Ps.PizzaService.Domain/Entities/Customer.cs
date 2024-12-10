@@ -1,4 +1,5 @@
-﻿using Pizza4Ps.PizzaService.Domain.Abstractions;
+﻿using System.Xml.Linq;
+using Pizza4Ps.PizzaService.Domain.Abstractions;
 
 namespace Pizza4Ps.PizzaService.Domain.Entities
 {
@@ -18,5 +19,11 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
             FullName = fullName;
             Phone = phone;
         }
-    }
+
+		public void UpdateCustomer(string fullName, string phone)
+		{
+			FullName = fullName;
+			Phone = phone;
+		}
+	}
 }
