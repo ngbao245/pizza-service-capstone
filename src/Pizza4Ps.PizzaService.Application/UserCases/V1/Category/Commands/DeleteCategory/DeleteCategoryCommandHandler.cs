@@ -11,6 +11,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Category.Commands.Delet
         {
             _categoryService = categoryService;
         }
+
         public async Task Handle(DeleteCategoryCommand request, CancellationToken cancellationToken)
         {
             await _categoryService.DeleteAsync(request.Ids, request.isHardDelete);

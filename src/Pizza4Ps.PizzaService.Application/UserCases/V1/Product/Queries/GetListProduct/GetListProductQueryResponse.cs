@@ -1,5 +1,4 @@
-﻿using Azure;
-using Pizza4Ps.PizzaService.Application.DTOs;
+﻿using Pizza4Ps.PizzaService.Application.DTOs;
 using Pizza4Ps.PizzaService.Application.Models;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Product.Queries.GetProduct

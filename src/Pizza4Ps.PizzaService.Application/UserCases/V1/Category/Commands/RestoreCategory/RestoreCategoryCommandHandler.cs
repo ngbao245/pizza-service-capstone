@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using Pizza4Ps.PizzaService.Domain.Abstractions.Services;
-using Pizza4Ps.PizzaService.Domain.Services;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Category.Commands.RestoreCategory
 {
@@ -12,6 +11,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Category.Commands.Resto
         {
             _categoryService = categoryService;
         }
+
         public async Task Handle(RestoreCategoryCommand request, CancellationToken cancellationToken)
         {
             await _categoryService.RestoreAsync(request.Ids);

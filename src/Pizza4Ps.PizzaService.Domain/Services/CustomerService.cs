@@ -8,37 +8,38 @@ using Pizza4Ps.PizzaService.Domain.Exceptions;
 
 namespace Pizza4Ps.PizzaService.Domain.Services
 {
-	public class CategoryService : ICategoryService
+	public class CustomerService : ICustomerService
 	{
 		private readonly IUnitOfWork _unitOfWork;
-		private readonly ICategoryRepository _categoryRepository;
+		private readonly ICustomerRepository _customerRepository;
 
-		public CategoryService(IUnitOfWork unitOfWork, ICategoryRepository categoryRepository)
+		public CustomerService(IUnitOfWork unitOfWork, ICustomerRepository customerRepository)
 		{
 			_unitOfWork = unitOfWork;
-			_categoryRepository = categoryRepository;
+			_customerRepository = customerRepository;
 		}
-		public async Task<Guid> CreateAsync(string name, string description)
+
+		public async Task<Guid> CreateAsync(string fullName, string phone)
 		{
-			var entity = new Category(name, description);
-			_categoryRepository.Add(entity);
+			var entity = new Customer(fullName, phone);
+			_customerRepository.Add(entity);
 			await _unitOfWork.SaveChangeAsync();
 			return entity.Id;
 		}
 
 		public async Task DeleteAsync(List<Guid> ids, bool IsHardDeleted = false)
 		{
-			var entities = await _categoryRepository.GetListAsTracking(x => ids.Contains(x.Id)).IgnoreQueryFilters().ToListAsync();
+			var entities = await _customerRepository.GetListAsTracking(x => ids.Contains(x.Id)).IgnoreQueryFilters().ToListAsync();
 			if (entities == null) throw new ServerException(ServerErrorConstant.NOT_FOUND);
 			foreach (var entity in entities)
 			{
 				if (IsHardDeleted)
 				{
-					_categoryRepository.HardDelete(entity);
+					_customerRepository.HardDelete(entity);
 				}
 				else
 				{
-					_categoryRepository.SoftDelete(entity);
+					_customerRepository.SoftDelete(entity);
 				}
 			}
 			await _unitOfWork.SaveChangeAsync();
@@ -46,19 +47,19 @@ namespace Pizza4Ps.PizzaService.Domain.Services
 
 		public async Task RestoreAsync(List<Guid> ids)
 		{
-			var entities = await _categoryRepository.GetListAsTracking(x => ids.Contains(x.Id)).IgnoreQueryFilters().ToListAsync();
+			var entities = await _customerRepository.GetListAsTracking(x => ids.Contains(x.Id)).IgnoreQueryFilters().ToListAsync();
 			if (entities == null) throw new ServerException(ServerErrorConstant.NOT_FOUND);
 			foreach (var entity in entities)
 			{
-				_categoryRepository.Restore(entity);
+				_customerRepository.Restore(entity);
 			}
 			await _unitOfWork.SaveChangeAsync();
 		}
 
-		public async Task<Guid> UpdateAsync(Guid id, string name, string description)
+		public async Task<Guid> UpdateAsync(Guid id, string fullName, string phone)
 		{
-			var entity = await _categoryRepository.GetSingleByIdAsync(id);
-			entity.UpdateCategory(name, description);
+			var entity = await _customerRepository.GetSingleByIdAsync(id);
+			entity.UpdateCustomer(fullName, phone);
 			await _unitOfWork.SaveChangeAsync();
 			return entity.Id;
 		}

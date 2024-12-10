@@ -1,11 +1,9 @@
 ﻿using MediatR;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.Product.Commands.Create;
 using Pizza4Ps.PizzaService.Domain.Abstractions.Services;
-using Pizza4Ps.PizzaService.Domain.Services;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Category.Commands.CreateCategory
 {
-    public class CreateCategoryCommandHandler : IRequestHandler<CreateCategoryCommand, CreateCategoryCommandResponse>
+	public class CreateCategoryCommandHandler : IRequestHandler<CreateCategoryCommand, CreateCategoryCommandResponse>
     {
         private readonly ICategoryService _categoryService;
 
@@ -13,6 +11,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Category.Commands.Creat
         {
             _categoryService = categoryService;
         }
+
         public async Task<CreateCategoryCommandResponse> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
         {
             var result = await _categoryService.CreateAsync(request.Name, request.Description);
