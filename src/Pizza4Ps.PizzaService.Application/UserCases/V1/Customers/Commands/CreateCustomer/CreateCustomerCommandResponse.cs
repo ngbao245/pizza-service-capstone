@@ -1,8 +1,7 @@
-﻿using Pizza4Ps.PizzaService.Application.Abstractions.BaseCommand;
-
-namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Customers.Commands.CreateCustomer
+﻿namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Customers.Commands.CreateCustomer
 {
-    public class CreateCustomerCommandResponse : BaseCommandResponse<Guid>
+    public class CreateCustomerCommandResponse
     {
+        public Guid Id { get; set; }
     }
 }

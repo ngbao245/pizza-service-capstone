@@ -1,8 +1,7 @@
-﻿using Pizza4Ps.PizzaService.Application.Abstractions.BaseCommand;
-
-namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Commands.UpdateProduct
+﻿namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Commands.UpdateProduct
 {
-    public class UpdateProductCommandResponse : BaseCommandResponse<Guid>
+    public class UpdateProductCommandResponse
     {
+        public Guid Id { get; set; }
     }
 }

@@ -54,12 +54,12 @@ namespace Pizza4Ps.PizzaService.Persistence
             return items;
         }
 
-        public async Task<TEntity> GetSingleByIdAsync(TKey id, CancellationToken cancellationToken = default, string includeProperties = "")
+        public async Task<TEntity> GetSingleByIdAsync(TKey id, string includeProperties = "", CancellationToken cancellationToken = default)
             => await GetListAsTracking(null, includeProperties)
             .SingleOrDefaultAsync(x => x.Id.Equals(id), cancellationToken);
 
 
-        public async Task<TEntity> GetSingleAsync(Expression<Func<TEntity, bool>>? predicate = null, CancellationToken cancellationToken = default, string includeProperties = "")
+        public async Task<TEntity> GetSingleAsync(Expression<Func<TEntity, bool>>? predicate = null, string includeProperties = "", CancellationToken cancellationToken = default)
             => await GetListAsTracking(null, includeProperties)
             .SingleOrDefaultAsync(predicate, cancellationToken);
 

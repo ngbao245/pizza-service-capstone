@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Pizza4Ps.PizzaService.API.Constants;
 using Pizza4Ps.PizzaService.API.Models;
+using Pizza4Ps.PizzaService.Application.DTOs.Categories;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Categories.Commands.CreateCategory;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Categories.Commands.DeleteCategory;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Categories.Commands.RestoreCategory;
@@ -19,13 +20,13 @@ namespace Pizza4Ps.PizzaService.API.Controllers
             _sender = sender;
         }
         [HttpPost]
-        public async Task<IActionResult> CreateAsync([FromBody] CreateCategoryCommand command)
+        public async Task<IActionResult> CreateAsync([FromBody] CreateCategoryDto request)
         {
-            var result = await _sender.Send(command);
+            var result = await _sender.Send(new CreateCategoryCommand { CreateCategoryDto = request});
             return Ok(new ApiResponse
             {
                 Result = result,
-                Message = MESSAGE.CREATED_SUCCESS,
+                Message = Message.CREATED_SUCCESS,
                 StatusCode = StatusCodes.Status201Created
             });
         }
@@ -71,7 +72,7 @@ namespace Pizza4Ps.PizzaService.API.Controllers
             await _sender.Send(new RestoreCategoryCommand { Ids = ids });
             return Ok(new ApiResponse
             {
-                Message = MESSAGE.RESTORE_SUCCESS,
+                Message = Message.RESTORE_SUCCESS,
                 StatusCode = StatusCodes.Status200OK
             });
         }
@@ -82,7 +83,7 @@ namespace Pizza4Ps.PizzaService.API.Controllers
             await _sender.Send(new DeleteCategoryCommand { Ids = ids, isHardDelete = isHardDeleted });
             return Ok(new ApiResponse
             {
-                Message = MESSAGE.DELETED_SUCCESS,
+                Message = Message.DELETED_SUCCESS,
                 StatusCode = StatusCodes.Status200OK
             });
         }

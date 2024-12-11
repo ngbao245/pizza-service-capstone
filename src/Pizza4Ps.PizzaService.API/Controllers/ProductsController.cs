@@ -2,13 +2,13 @@
 using Microsoft.AspNetCore.Mvc;
 using Pizza4Ps.PizzaService.API.Constants;
 using Pizza4Ps.PizzaService.API.Models;
+using Pizza4Ps.PizzaService.Application.DTOs.Products;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Commands.CreateProduct;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Commands.DeleteProduct;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Commands.RestoreProduct;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Commands.UpdateProduct;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Queries.GetListProduct;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Queries.GetProductById;
-using Pizza4Ps.PizzaService.Domain.Exceptions;
 
 namespace Pizza4Ps.PizzaService.API.Controllers
 {
@@ -26,28 +26,41 @@ namespace Pizza4Ps.PizzaService.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateAsync([FromBody] CreateProductCommand command)
+        public async Task<IActionResult> CreateAsync([FromBody] CreateProductDto request)
         {
-            var result = await _sender.Send(command);
+            var result = await _sender.Send(new CreateProductCommand { CreateProductDto = request});
             return Ok(new ApiResponse
             {
                 Result = result,
-                Message = MESSAGE.CREATED_SUCCESS,
+                Message = Message.CREATED_SUCCESS,
                 StatusCode = StatusCodes.Status201Created
             });
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetListAsync([FromQuery] GetListProductQuery query)
+        [HttpGet("ignore-filter")]
+        public async Task<IActionResult> GetListIgnoreQueryFilterAsync([FromQuery] GetListProductIgnoreQueryFilterDto query)
         {
-            var result = await _sender.Send(query);
+            var result = await _sender.Send(new GetListProductIgnoreQueryFilterQuery { GetListProductIgnoreQueryFilterDto = query });
             return Ok(new ApiResponse
             {
                 Result = result,
-                Message = MESSAGE.GET_SUCCESS,
+                Message = Message.GET_SUCCESS,
                 StatusCode = StatusCodes.Status200OK
             });
         }
+
+        [HttpGet()]
+        public async Task<IActionResult> GetListAsync([FromQuery] GetListProductDto query)
+        {
+            var result = await _sender.Send(new GetListProductQuery { GetListProductDto = query});
+            return Ok(new ApiResponse
+            {
+                Result = result,
+                Message = Message.GET_SUCCESS,
+                StatusCode = StatusCodes.Status200OK
+            });
+        }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetSingleByIdAsync([FromRoute] Guid id)
         {
@@ -55,19 +68,18 @@ namespace Pizza4Ps.PizzaService.API.Controllers
             return Ok(new ApiResponse
             {
                 Result = result,
-                Message = MESSAGE.GET_SUCCESS,
+                Message = Message.GET_SUCCESS,
                 StatusCode = StatusCodes.Status200OK
             });
         }
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAsync([FromRoute] Guid id, [FromBody] UpdateProductCommand command)
+        public async Task<IActionResult> UpdateAsync([FromRoute] Guid id, [FromBody] UpdateProductDto request)
         {
-            command.Id = id;
-            var result = await _sender.Send(command);
+            var result = await _sender.Send(new UpdateProductCommand { Id = id, UpdateProductDto = request});
             return Ok(new ApiResponse
             {
                 Result = result,
-                Message = MESSAGE.UPDATED_SUCCESS,
+                Message = Message.UPDATED_SUCCESS,
                 StatusCode = StatusCodes.Status200OK
             });
         }
@@ -78,7 +90,7 @@ namespace Pizza4Ps.PizzaService.API.Controllers
             await _sender.Send(new RestoreProductCommand { Ids = ids});
             return Ok(new ApiResponse
             {
-                Message = MESSAGE.RESTORE_SUCCESS,
+                Message = Message.RESTORE_SUCCESS,
                 StatusCode = StatusCodes.Status200OK
             });
         }
@@ -89,7 +101,7 @@ namespace Pizza4Ps.PizzaService.API.Controllers
             await _sender.Send(new DeleteProductCommand { Ids = ids, isHardDelete = isHardDeleted });
             return Ok(new ApiResponse
             {
-                Message = MESSAGE.DELETED_SUCCESS,
+                Message = Message.DELETED_SUCCESS,
                 StatusCode = StatusCodes.Status200OK
             });
         }

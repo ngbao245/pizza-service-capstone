@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
-using Pizza4Ps.PizzaService.Application.DTOs;
+using Pizza4Ps.PizzaService.Application.DTOs.Products;
 using Pizza4Ps.PizzaService.Domain.Abstractions.Repositories;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Queries.GetProductById
@@ -17,11 +17,11 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Queries.GetPro
         }
         public async Task<GetProductByIdQueryResponse> Handle(GetProductByIdQuery request, CancellationToken cancellationToken)
         {
-            var entity = await _productRepository.GetSingleByIdAsync(request.Id);
+            var entity = await _productRepository.GetSingleByIdAsync(request.Id, request.includeProperties);
             var result = _mapper.Map<ProductDto>(entity);
             return new GetProductByIdQueryResponse
             {
-                product = result
+                Product = result
             };
         }
     }

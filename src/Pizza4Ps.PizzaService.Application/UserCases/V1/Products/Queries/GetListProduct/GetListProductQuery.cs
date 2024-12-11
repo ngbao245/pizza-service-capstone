@@ -1,13 +1,10 @@
 ﻿using MediatR;
-using Pizza4Ps.PizzaService.Application.Abstractions.BaseQuery;
+using Pizza4Ps.PizzaService.Application.DTOs.Products;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Queries.GetListProduct
 {
-    public class GetListProductQuery : BasePaginatedQuery, IRequest<GetListProductQueryResponse>
+    public class GetListProductQuery : IRequest<GetListProductQueryResponse>
     {
-        public bool IsDeleted { get; set; } = false;
-        public string? Name { get; set; }
-        public decimal? Price { get; set; }
-        public string? Description { get; set; }
+        public GetListProductDto GetListProductDto {  get; set; }
     }
 }

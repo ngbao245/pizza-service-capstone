@@ -1,8 +1,9 @@
-﻿using Pizza4Ps.PizzaService.Domain.Entities;
+﻿using Pizza4Ps.PizzaService.Application.DTOs.Categories;
+using Pizza4Ps.PizzaService.Domain.Entities;
 
-namespace Pizza4Ps.PizzaService.Application.DTOs
+namespace Pizza4Ps.PizzaService.Application.DTOs.Products
 {
-	public class ProductDto
+    public class ProductDto
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
@@ -11,7 +12,5 @@ namespace Pizza4Ps.PizzaService.Application.DTOs
         public Guid CategoryId { get; set; }
 
         public virtual CategoryDto Category { get; set; }
-        public virtual ICollection<OrderItem> OrderItems { get; set; }
-        public virtual ICollection<ProductOption> ProductOptions { get; set; }
     }
 }

@@ -14,13 +14,13 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         public virtual ICollection<OrderItem> OrderItems { get; set; }
         public virtual ICollection<ProductOption> ProductOptions { get; set; }
 
-        private Product()
+        public Product()
         {
         }
 
         public Product(Guid id, string name, decimal price, string description, Guid categoryId)
         {
-            Id = id;
+            Id = Id;
             Name = SetName(name);
             Price = price;
             Description = description;

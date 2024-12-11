@@ -1,11 +1,11 @@
-﻿namespace Pizza4Ps.PizzaService.Application.Models
+﻿namespace Pizza4Ps.PizzaService.Application.Abstractions
 {
-    public class PaginatedResult<T>
+    public class PaginatedResultDto<T>
     {
         public List<T> Items { get; }
         public long TotalCount { get; }
 
-        public PaginatedResult(List<T> items, long totalCount)
+        public PaginatedResultDto(List<T> items, long totalCount)
         {
             Items = items;
             TotalCount = totalCount;

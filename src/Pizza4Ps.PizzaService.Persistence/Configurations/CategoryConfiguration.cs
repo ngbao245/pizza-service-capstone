@@ -19,12 +19,6 @@ namespace Pizza4Ps.PizzaService.Persistence.Configurations
 
             builder.Property(x => x.Description)
                 .HasMaxLength(500);
-
-            builder.HasMany(x => x.Products)
-                .WithOne(x => x.Category)
-                .HasForeignKey(x => x.CategoryId)
-                .IsRequired()
-                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

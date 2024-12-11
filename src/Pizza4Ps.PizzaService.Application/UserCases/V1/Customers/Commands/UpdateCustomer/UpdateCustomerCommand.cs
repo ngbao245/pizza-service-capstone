@@ -1,10 +1,10 @@
 ﻿using MediatR;
-using Pizza4Ps.PizzaService.Application.Abstractions.Commands;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Customers.Commands.UpdateCustomer
 {
-    public class UpdateCustomerCommand : BaseUpdateCommand<Guid>, IRequest<UpdateCustomerCommandResponse>
+    public class UpdateCustomerCommand : IRequest<UpdateCustomerCommandResponse>
     {
+        public Guid Id { get; set; }    
         public string FullName { get; set; }
         public string Phone { get; set; }
     }

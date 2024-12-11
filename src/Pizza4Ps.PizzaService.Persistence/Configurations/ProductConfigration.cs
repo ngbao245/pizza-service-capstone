@@ -26,7 +26,7 @@ namespace Pizza4Ps.PizzaService.Persistence.Configurations
                 .IsRequired();
 
             builder.HasOne(x => x.Category)
-                .WithMany(x => x.Products)
+                .WithMany()
                 .HasForeignKey(x => x.CategoryId)
                 .IsRequired();
 

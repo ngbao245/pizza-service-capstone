@@ -1,6 +1,6 @@
-﻿namespace Pizza4Ps.PizzaService.Application.Abstractions.BaseQuery
+﻿namespace Pizza4Ps.PizzaService.Application.Abstractions
 {
-    public abstract class BasePaginatedQuery
+    public abstract class PaginatedRequestDto
     {
         public int TakeCount { get; set; } = 20;
         public int SkipCount { get; set; } = 0;

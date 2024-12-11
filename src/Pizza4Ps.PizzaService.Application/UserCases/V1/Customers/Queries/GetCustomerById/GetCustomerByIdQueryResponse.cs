@@ -1,4 +1,4 @@
-﻿using Pizza4Ps.PizzaService.Application.DTOs;
+﻿using Pizza4Ps.PizzaService.Application.DTOs.Customers;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Customers.Queries.GetCustomerById
 {

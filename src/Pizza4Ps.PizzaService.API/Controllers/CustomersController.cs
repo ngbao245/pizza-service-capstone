@@ -8,7 +8,6 @@ using Pizza4Ps.PizzaService.Application.UserCases.V1.Customers.Commands.RestoreC
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Customers.Commands.UpdateCustomer;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Customers.Queries.GetCustomerById;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Customers.Queries.GetListCustomer;
-using Pizza4Ps.PizzaService.Domain.Exceptions;
 
 namespace Pizza4Ps.PizzaService.API.Controllers
 {
@@ -32,7 +31,7 @@ namespace Pizza4Ps.PizzaService.API.Controllers
 			return Ok(new ApiResponse
 			{
 				Result = result,
-				Message = MESSAGE.CREATED_SUCCESS,
+				Message = Message.CREATED_SUCCESS,
 				StatusCode = StatusCodes.Status201Created
 			});
 		}
@@ -44,7 +43,7 @@ namespace Pizza4Ps.PizzaService.API.Controllers
 			return Ok(new ApiResponse
 			{
 				Result = result,
-				Message = MESSAGE.GET_SUCCESS,
+				Message = Message.GET_SUCCESS,
 				StatusCode = StatusCodes.Status200OK
 			});
 		}
@@ -56,7 +55,7 @@ namespace Pizza4Ps.PizzaService.API.Controllers
 			return Ok(new ApiResponse
 			{
 				Result = result,
-				Message = MESSAGE.GET_SUCCESS,
+				Message = Message.GET_SUCCESS,
 				StatusCode = StatusCodes.Status200OK
 			});
 		}
@@ -69,7 +68,7 @@ namespace Pizza4Ps.PizzaService.API.Controllers
 			return Ok(new ApiResponse
 			{
 				Result = result,
-				Message = MESSAGE.UPDATED_SUCCESS,
+				Message = Message.UPDATED_SUCCESS,
 				StatusCode = StatusCodes.Status200OK
 			});
 		}
@@ -80,7 +79,7 @@ namespace Pizza4Ps.PizzaService.API.Controllers
 			await _sender.Send(new RestoreCustomerCommand { Ids = ids });
 			return Ok(new ApiResponse
 			{
-				Message = MESSAGE.RESTORE_SUCCESS,
+				Message = Message.RESTORE_SUCCESS,
 				StatusCode = StatusCodes.Status200OK
 			});
 		}
@@ -91,7 +90,7 @@ namespace Pizza4Ps.PizzaService.API.Controllers
 			await _sender.Send(new DeleteCustomerCommand { Ids = ids, isHardDelete = isHardDeleted });
 			return Ok(new ApiResponse
 			{
-				Message = MESSAGE.DELETED_SUCCESS,
+				Message = Message.DELETED_SUCCESS,
 				StatusCode = StatusCodes.Status200OK
 			});
 		}
