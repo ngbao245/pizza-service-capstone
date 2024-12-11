@@ -10,7 +10,7 @@ namespace Pizza4Ps.PizzaService.Application.DTOs
         public string Description { get; set; }
         public Guid CategoryId { get; set; }
 
-        public virtual Category Category { get; set; }
+        public virtual CategoryDto Category { get; set; }
         public virtual ICollection<OrderItem> OrderItems { get; set; }
         public virtual ICollection<ProductOption> ProductOptions { get; set; }
     }

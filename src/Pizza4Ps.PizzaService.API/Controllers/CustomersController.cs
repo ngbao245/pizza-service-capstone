@@ -2,17 +2,17 @@
 using Microsoft.AspNetCore.Mvc;
 using Pizza4Ps.PizzaService.API.Constants;
 using Pizza4Ps.PizzaService.API.Models;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.Customer.Commands.CreateCustomer;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.Customer.Commands.DeleteCustomer;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.Customer.Commands.RestoreCustomer;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.Customer.Commands.UpdateCustomer;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.Customer.Queries.GetCustomerById;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.Customer.Queries.GetListCustomer;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Customers.Commands.CreateCustomer;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Customers.Commands.DeleteCustomer;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Customers.Commands.RestoreCustomer;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Customers.Commands.UpdateCustomer;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Customers.Queries.GetCustomerById;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Customers.Queries.GetListCustomer;
 using Pizza4Ps.PizzaService.Domain.Exceptions;
 
 namespace Pizza4Ps.PizzaService.API.Controllers
 {
-	[Route("api/customers")]
+    [Route("api/customers")]
 	[ApiController]
 	public class CustomersController : ControllerBase
 	{
@@ -64,11 +64,8 @@ namespace Pizza4Ps.PizzaService.API.Controllers
 		[HttpPut("{id}")]
 		public async Task<IActionResult> UpdateAsync([FromRoute] Guid id, [FromBody] UpdateCustomerCommand command)
 		{
-			if (id != command.Id)
-			{
-				throw new ValidationException(MESSAGE.ID_URL_ERROR);
-			}
-			var result = await _sender.Send(command);
+            command.Id = id;
+            var result = await _sender.Send(command);
 			return Ok(new ApiResponse
 			{
 				Result = result,

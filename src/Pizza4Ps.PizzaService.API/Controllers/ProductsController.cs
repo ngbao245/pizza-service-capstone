@@ -2,17 +2,17 @@
 using Microsoft.AspNetCore.Mvc;
 using Pizza4Ps.PizzaService.API.Constants;
 using Pizza4Ps.PizzaService.API.Models;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.Product.Commands.CreateProduct;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.Product.Commands.HardDeleteProduct;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.Product.Commands.SoftDeleteProduct;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.Product.Commands.UpdateProduct;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.Product.Queries.GetProduct;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.Product.Queries.GetProductById;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Commands.CreateProduct;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Commands.DeleteProduct;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Commands.RestoreProduct;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Commands.UpdateProduct;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Queries.GetListProduct;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Queries.GetProductById;
 using Pizza4Ps.PizzaService.Domain.Exceptions;
 
 namespace Pizza4Ps.PizzaService.API.Controllers
 {
-	[Route("api/products")]
+    [Route("api/products")]
     [ApiController]
     public class ProductsController : ControllerBase
     {
@@ -62,10 +62,7 @@ namespace Pizza4Ps.PizzaService.API.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateAsync([FromRoute] Guid id, [FromBody] UpdateProductCommand command)
         {
-            if (id != command.Id) 
-            {
-                throw new ValidationException(MESSAGE.ID_URL_ERROR);
-            }
+            command.Id = id;
             var result = await _sender.Send(command);
             return Ok(new ApiResponse
             {

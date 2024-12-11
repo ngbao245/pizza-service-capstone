@@ -1,17 +1,10 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Pizza4Ps.PizzaService.API.Constants;
 using Pizza4Ps.PizzaService.API.Models;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.Category.Commands.CreateCategory;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.Category.Commands.DeleteCategory;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.Category.Commands.RestoreCategory;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.Product.Commands.CreateProduct;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.Product.Commands.HardDeleteProduct;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.Product.Commands.SoftDeleteProduct;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.Product.Commands.UpdateProduct;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.Product.Queries.GetProduct;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.Product.Queries.GetProductById;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Categories.Commands.CreateCategory;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Categories.Commands.DeleteCategory;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Categories.Commands.RestoreCategory;
 
 namespace Pizza4Ps.PizzaService.API.Controllers
 {
@@ -62,10 +55,7 @@ namespace Pizza4Ps.PizzaService.API.Controllers
         //[HttpPut("{id}")]
         //public async Task<IActionResult> UpdateAsync([FromRoute] Guid id, [FromBody] UpdateProductCommand command)
         //{
-        //    if (id != command.Id)
-        //    {
-        //        throw new ValidationException(MESSAGE.ID_URL_ERROR);
-        //    }
+        //    command.Id = id;            command.Id = id;
         //    var result = await _sender.Send(command);
         //    return Ok(new ApiResponse
         //    {
