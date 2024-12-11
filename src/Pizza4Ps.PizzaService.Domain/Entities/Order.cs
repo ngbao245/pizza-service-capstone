@@ -26,5 +26,13 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
 			Status = status;
 			OrderInTableId = orderInTableId;
 		}
+
+		public void UpdateOrder(DateTimeOffset startTime, DateTimeOffset endTime, string? status, Guid orderInTableId)
+		{
+			StartTime = startTime;
+			EndTime = endTime;
+			Status = status;
+			OrderInTableId = orderInTableId;
+		}
 	}
 }
