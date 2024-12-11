@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Pizza4Ps.PizzaService.API.Constants;
 using Pizza4Ps.PizzaService.API.Models;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Product.Commands.CreateProduct;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.Product.Commands.HardDeleteProduct;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.Product.Commands.SoftDeleteProduct;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Product.Commands.DeleteProduct;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Product.Commands.RestoreProduct;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Product.Commands.UpdateProduct;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Product.Queries.GetProduct;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Product.Queries.GetProductById;
@@ -48,6 +48,7 @@ namespace Pizza4Ps.PizzaService.API.Controllers
                 StatusCode = StatusCodes.Status200OK
             });
         }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetSingleByIdAsync([FromRoute] Guid id)
         {
@@ -59,6 +60,7 @@ namespace Pizza4Ps.PizzaService.API.Controllers
                 StatusCode = StatusCodes.Status200OK
             });
         }
+
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateAsync([FromRoute] Guid id, [FromBody] UpdateProductCommand command)
         {

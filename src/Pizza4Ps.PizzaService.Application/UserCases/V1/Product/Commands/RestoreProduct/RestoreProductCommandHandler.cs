@@ -1,10 +1,9 @@
 ﻿using MediatR;
 using Pizza4Ps.PizzaService.Domain.Abstractions.Services;
-using Pizza4Ps.PizzaService.Domain.Services;
 
-namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Product.Commands.SoftDeleteProduct
+namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Product.Commands.RestoreProduct
 {
-    public class RestoreProductCommandHandler : IRequestHandler<RestoreProductCommand>
+	public class RestoreProductCommandHandler : IRequestHandler<RestoreProductCommand>
     {
         private readonly IProductService _productService;
 
