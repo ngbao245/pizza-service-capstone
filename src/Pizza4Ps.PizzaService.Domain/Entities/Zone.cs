@@ -25,5 +25,13 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
             Description = description;
             Status = status;
         }
-    }
+
+		public void UpdateZone(string name, int? capacity, string? description, ZoneTypeEnum status)
+		{
+			Name = name;
+			Capacity = capacity;
+			Description = description;
+			Status = status;
+		}
+	}
 }

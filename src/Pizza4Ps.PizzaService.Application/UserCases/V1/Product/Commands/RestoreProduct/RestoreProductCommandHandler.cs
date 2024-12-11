@@ -11,6 +11,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Product.Commands.Restor
         {
             _productService = productService;
         }
+
         public async Task Handle(RestoreProductCommand request, CancellationToken cancellationToken)
         {
             await _productService.RestoreAsync(request.Ids);

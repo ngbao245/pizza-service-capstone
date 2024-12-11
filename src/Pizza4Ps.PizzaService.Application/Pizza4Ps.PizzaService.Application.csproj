@@ -14,6 +14,7 @@
     <Folder Include="UserCases\V1\Voucher\Commands\UpdateVoucher\" />
     <Folder Include="UserCases\V1\Voucher\Commands\RestoreVoucher\" />
     <Folder Include="UserCases\V1\Voucher\Queries\" />
+    <Folder Include="UserCases\V1\Zone\Queries\" />
     <Folder Include="Validators\" />
   </ItemGroup>
 
