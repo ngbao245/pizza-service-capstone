@@ -10,6 +10,10 @@
     <Folder Include="DependencyInjection\Options\" />
     <Folder Include="UserCases\V1\Option\Queries\" />
     <Folder Include="UserCases\V1\Staff\Queries\" />
+    <Folder Include="UserCases\V1\Voucher\Commands\DeleteVoucher\" />
+    <Folder Include="UserCases\V1\Voucher\Commands\UpdateVoucher\" />
+    <Folder Include="UserCases\V1\Voucher\Commands\RestoreVoucher\" />
+    <Folder Include="UserCases\V1\Voucher\Queries\" />
     <Folder Include="Validators\" />
   </ItemGroup>
 
