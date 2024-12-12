@@ -19,6 +19,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
 			_unitOfWork = unitOfWork;
 			_categoryRepository = categoryRepository;
 		}
+
 		public async Task<Guid> CreateAsync(string name, string description)
 		{
 			var entity = new Category(Guid.NewGuid(), name, description);

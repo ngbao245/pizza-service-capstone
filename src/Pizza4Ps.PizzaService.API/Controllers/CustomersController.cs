@@ -11,7 +11,7 @@ using Pizza4Ps.PizzaService.Application.UserCases.V1.Customers.Queries.GetListCu
 
 namespace Pizza4Ps.PizzaService.API.Controllers
 {
-    [Route("api/customers")]
+	[Route("api/customers")]
 	[ApiController]
 	public class CustomersController : ControllerBase
 	{
@@ -64,7 +64,7 @@ namespace Pizza4Ps.PizzaService.API.Controllers
 		public async Task<IActionResult> UpdateAsync([FromRoute] Guid id, [FromBody] UpdateCustomerCommand command)
 		{
             command.Id = id;
-            var result = await _sender.Send(command);
+			var result = await _sender.Send(command);
 			return Ok(new ApiResponse
 			{
 				Result = result,

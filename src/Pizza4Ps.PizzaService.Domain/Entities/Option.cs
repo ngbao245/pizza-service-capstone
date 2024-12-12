@@ -19,5 +19,11 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
             Name = name;
             Description = description;
         }
-    }
+
+		public void UpdateOption(string name, string description)
+		{
+			Name = name;
+			Description = description;
+		}
+	}
 }

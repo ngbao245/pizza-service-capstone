@@ -1,28 +1,36 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <Folder Include="DependencyInjection\Options\" />
-    <Folder Include="Models\" />
-    <Folder Include="Validators\" />
-  </ItemGroup>
+	<ItemGroup>
+		<Folder Include="DependencyInjection\Options\" />
+		<Folder Include="UserCases\V1\Option\Queries\" />
+		<Folder Include="UserCases\V1\Order\Queries\" />
+		<Folder Include="UserCases\V1\Staff\Queries\" />
+		<Folder Include="UserCases\V1\Voucher\Commands\DeleteVoucher\" />
+		<Folder Include="UserCases\V1\Voucher\Commands\UpdateVoucher\" />
+		<Folder Include="UserCases\V1\Voucher\Commands\RestoreVoucher\" />
+		<Folder Include="UserCases\V1\Voucher\Queries\" />
+		<Folder Include="UserCases\V1\Zone\Queries\" />
+		<Folder Include="Models\" />
+		<Folder Include="Validators\" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="13.0.1" />
-    <PackageReference Include="FluentValidation" Version="11.10.0" />
-    <PackageReference Include="MediatR" Version="12.4.0" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="AutoMapper" Version="13.0.1" />
+		<PackageReference Include="FluentValidation" Version="11.10.0" />
+		<PackageReference Include="MediatR" Version="12.4.0" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Pizza4Ps.PizzaService.Application.Contract\Pizza4Ps.PizzaService.Application.Contract.csproj" />
-    <ProjectReference Include="..\Pizza4Ps.PizzaService.Domain\Pizza4Ps.PizzaService.Domain.csproj" />
-    <ProjectReference Include="..\Pizza4Ps.PizzaService.Infrastructure\Pizza4Ps.PizzaService.Infrastructure.csproj" />
-    <ProjectReference Include="..\Pizza4Ps.PizzaService.Persistence\Pizza4Ps.PizzaService.Persistence.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Pizza4Ps.PizzaService.Application.Contract\Pizza4Ps.PizzaService.Application.Contract.csproj" />
+		<ProjectReference Include="..\Pizza4Ps.PizzaService.Domain\Pizza4Ps.PizzaService.Domain.csproj" />
+		<ProjectReference Include="..\Pizza4Ps.PizzaService.Infrastructure\Pizza4Ps.PizzaService.Infrastructure.csproj" />
+		<ProjectReference Include="..\Pizza4Ps.PizzaService.Persistence\Pizza4Ps.PizzaService.Persistence.csproj" />
+	</ItemGroup>
 
 </Project>

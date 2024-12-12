@@ -12,7 +12,7 @@ using Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Queries.GetProduct
 
 namespace Pizza4Ps.PizzaService.API.Controllers
 {
-    [Route("api/products")]
+	[Route("api/products")]
     [ApiController]
     public class ProductsController : ControllerBase
     {
@@ -72,6 +72,7 @@ namespace Pizza4Ps.PizzaService.API.Controllers
                 StatusCode = StatusCodes.Status200OK
             });
         }
+
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateAsync([FromRoute] Guid id, [FromBody] UpdateProductDto request)
         {

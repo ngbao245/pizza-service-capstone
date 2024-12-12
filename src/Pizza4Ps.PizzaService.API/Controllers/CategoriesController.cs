@@ -9,11 +9,11 @@ using Pizza4Ps.PizzaService.Application.UserCases.V1.Categories.Commands.Restore
 
 namespace Pizza4Ps.PizzaService.API.Controllers
 {
-    [Route("api/categories")]
-    [ApiController]
-    public class CategoriesController : ControllerBase
-    {
-        private readonly ISender _sender;
+	[Route("api/categories")]
+	[ApiController]
+	public class CategoriesController : ControllerBase
+	{
+		private readonly ISender _sender;
 
         public CategoriesController(ISender sender)
         {

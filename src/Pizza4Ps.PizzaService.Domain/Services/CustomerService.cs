@@ -10,7 +10,7 @@ using Pizza4Ps.PizzaService.Domain.Services.ServiceBase;
 namespace Pizza4Ps.PizzaService.Domain.Services
 {
     public class CustomerService : DomainService, ICustomerService
-    {
+	{
 		private readonly IUnitOfWork _unitOfWork;
 		private readonly ICustomerRepository _customerRepository;
 
