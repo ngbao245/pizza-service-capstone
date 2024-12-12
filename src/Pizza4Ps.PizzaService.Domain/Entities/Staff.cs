@@ -12,9 +12,6 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         public StaffTypeEnum.StaffType StaffType { get; set; }
         public StaffTypeEnum.StaffStatus Status { get; set; }
 
-        public virtual ICollection<StaffZone> StaffZones { get; set; }
-        public virtual ICollection<StaffSchedule> StaffSchedules { get; set; }
-
         public Staff()
         {
         }

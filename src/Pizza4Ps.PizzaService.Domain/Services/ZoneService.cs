@@ -21,7 +21,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
 			_zoneRepository = zoneRepository;
 		}
 
-		public async Task<Guid> CreateAsync(string name, int? capacity, string? description, ZoneTypeEnum status)
+		public async Task<Guid> CreateAsync(string name, int capacity, string? description, ZoneTypeEnum status)
 		{
 			var entity = new Zone(name, capacity, description, status);
 			_zoneRepository.Add(entity);
@@ -58,7 +58,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
 			await _unitOfWork.SaveChangeAsync();
 		}
 
-		public async Task<Guid> UpdateAsync(Guid id, string name, int? capacity, string? description, ZoneTypeEnum status)
+		public async Task<Guid> UpdateAsync(Guid id, string name, int capacity, string description, ZoneTypeEnum status)
 		{
 			var entity = await _zoneRepository.GetSingleByIdAsync(id);
 			entity.UpdateZone(name, capacity, description, status);
