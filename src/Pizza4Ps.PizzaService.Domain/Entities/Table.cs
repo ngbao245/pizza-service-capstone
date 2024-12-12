@@ -26,5 +26,14 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
             Status = status;
             ZoneId = zoneId;
         }
+
+        internal void UpdateTable(Guid id, int tableNumber, int capacity, TableTypeEnum status, Guid zoneId)
+        {
+            Id = id;
+            TableNumber = tableNumber;
+            Capacity = capacity;
+            Status = status;
+            ZoneId = zoneId;
+        }
     }
 }
