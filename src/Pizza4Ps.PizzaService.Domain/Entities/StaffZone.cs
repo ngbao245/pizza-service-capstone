@@ -2,33 +2,30 @@
 
 namespace Pizza4Ps.PizzaService.Domain.Entities
 {
-    public class StaffZone : EntityAuditBase<Guid>
-    {
-        public Guid StaffId { get; set; }
-        public Guid ZoneId { get; set; }
+	public class StaffZone : EntityAuditBase<Guid>
+	{
+		public DateOnly WorkDate { get; set; }
+		public TimeOnly ShiftStart { get; set; }
+		public TimeOnly ShiftEnd { get; set; }
+		public string Note { get; set; }
+		public Guid StaffId { get; set; }
+		public Guid ZoneId { get; set; }
 
-        public virtual Staff Staff { get; set; }
-        public virtual Zone Zone { get; set; }
+		public virtual Staff Staff { get; set; }
+		public virtual Zone Zone { get; set; }
 
+		public StaffZone()
+		{
+		}
 
-        public DateOnly WorkDate { get; set; }
-        public TimeOnly ShiftStart { get; set; }
-        public TimeOnly ShiftEnd { get; set; }
-        public string Note { get; set; }
-
-
-        public StaffZone()
-        {
-        }
-
-        public StaffZone(Guid staffId, Guid zoneId, DateOnly workDate, TimeOnly shiftStart, TimeOnly shiftEnd, string note)
-        {
-            StaffId = staffId;
-            ZoneId = zoneId;
-            WorkDate = workDate;
-            ShiftStart = shiftStart;
-            ShiftEnd = shiftEnd;
-            Note = note;
-        }
-    }
+		public StaffZone(DateOnly workDate, TimeOnly shiftStart, TimeOnly shiftEnd, string note, Guid staffId, Guid zoneId)
+		{
+			WorkDate = workDate;
+			ShiftStart = shiftStart;
+			ShiftEnd = shiftEnd;
+			Note = note;
+			StaffId = staffId;
+			ZoneId = zoneId;
+		}
+	}
 }
