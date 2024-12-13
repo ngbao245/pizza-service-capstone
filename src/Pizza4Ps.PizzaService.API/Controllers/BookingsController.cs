@@ -2,32 +2,29 @@
 using Microsoft.AspNetCore.Mvc;
 using Pizza4Ps.PizzaService.API.Constants;
 using Pizza4Ps.PizzaService.API.Models;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.Staff.Commands.DeleteStaff;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.Staff.Commands.RestoreStaff;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.Staff.Commands.UpdateStaff;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.Tables.Commands.CreateTable;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.Tables.Commands.DeleteTable;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.Tables.Commands.RestoreTable;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.Tables.Commands.UpdateTable;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Booking.Commands.CreateBooking;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Booking.Commands.DeleteBooking;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Booking.Commands.RestoreBooking;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Booking.Commands.UpdateBooking;
 using Pizza4Ps.PizzaService.Domain.Exceptions;
 
 namespace Pizza4Ps.PizzaService.API.Controllers
 {
-    [Route("api/tables")]
+    [Route("api/bookings")]
     [ApiController]
-    public class TablesController : ControllerBase
+    public class BookingsController : ControllerBase
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ISender _sender;
 
-        public TablesController(IHttpContextAccessor httpContextAccessor, ISender sender)
+        public BookingsController(IHttpContextAccessor httpContextAccessor, ISender sender)
         {
             _httpContextAccessor = httpContextAccessor;
             _sender = sender;
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateAsync([FromBody] CreateTableCommand command)
+        public async Task<IActionResult> CreateAsync([FromBody] CreateBookingCommand command)
         {
             var result = await _sender.Send(command);
             return Ok(new ApiResponse
@@ -39,7 +36,7 @@ namespace Pizza4Ps.PizzaService.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAsync([FromRoute] Guid id, [FromBody] UpdateTableCommand command)
+        public async Task<IActionResult> UpdateAsync([FromRoute] Guid id, [FromBody] UpdateBookingCommand command)
         {
             if (id != command.Id)
             {
@@ -57,7 +54,7 @@ namespace Pizza4Ps.PizzaService.API.Controllers
         [HttpPut("restore")]
         public async Task<IActionResult> RestoreManyAsync(List<Guid> ids)
         {
-            await _sender.Send(new RestoreTableCommand { Ids = ids });
+            await _sender.Send(new RestoreBookingCommand { Ids = ids });
             return Ok(new ApiResponse
             {
                 Message = Message.RESTORE_SUCCESS,
@@ -68,7 +65,7 @@ namespace Pizza4Ps.PizzaService.API.Controllers
         [HttpDelete()]
         public async Task<IActionResult> DeleteManyAsync(List<Guid> ids, bool isHardDeleted = false)
         {
-            await _sender.Send(new DeleteTableCommand { Ids = ids, isHardDelete = isHardDeleted });
+            await _sender.Send(new DeleteBookingCommand { Ids = ids, isHardDelete = isHardDeleted });
             return Ok(new ApiResponse
             {
                 Message = Message.DELETED_SUCCESS,

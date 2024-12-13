@@ -17,7 +17,17 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         {
         }
 
-        public Booking(DateTime bookingDate, int guestCount, string status, Guid customerId, Guid tableBookingId)
+        public Booking(Guid id, DateTime bookingDate, int guestCount, string status, Guid customerId, Guid tableBookingId)
+        {
+            Id = id;
+            BookingDate = bookingDate;
+            GuestCount = guestCount;
+            Status = status;
+            CustomerId = customerId;
+            TableBookingId = tableBookingId;
+        }
+
+        public void UpdateBooking(DateTime bookingDate, int guestCount, string status, Guid customerId, Guid tableBookingId)
         {
             BookingDate = bookingDate;
             GuestCount = guestCount;
