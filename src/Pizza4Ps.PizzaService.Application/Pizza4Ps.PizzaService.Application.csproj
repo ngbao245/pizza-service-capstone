@@ -13,7 +13,6 @@
 		<Folder Include="UserCases\V1\Staff\Queries\" />
 		<Folder Include="UserCases\V1\Tables\Queries\" />
 		<Folder Include="UserCases\V1\Voucher\Queries\" />
-		<Folder Include="UserCases\V1\Zone\Queries\" />
 		<Folder Include="Models\" />
 		<Folder Include="Validators\" />
 	</ItemGroup>

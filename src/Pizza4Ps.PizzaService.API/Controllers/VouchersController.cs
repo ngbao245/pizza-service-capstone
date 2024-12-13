@@ -2,47 +2,43 @@
 using Microsoft.AspNetCore.Mvc;
 using Pizza4Ps.PizzaService.API.Constants;
 using Pizza4Ps.PizzaService.API.Models;
+using Pizza4Ps.PizzaService.Application.DTOs.Vouchers;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Voucher.Commands.CreateVoucher;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Voucher.Commands.DeleteVoucher;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Voucher.Commands.RestoreVoucher;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Voucher.Commands.UpdateVoucher;
-using Pizza4Ps.PizzaService.Domain.Exceptions;
 
 namespace Pizza4Ps.PizzaService.API.Controllers
 {
     [Route("api/vouchers")]
-	[ApiController]
-	public class VouchersController : ControllerBase
-	{
-		private readonly IHttpContextAccessor _httpContextAccessor;
-		private readonly ISender _sender;
+    [ApiController]
+    public class VouchersController : ControllerBase
+    {
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly ISender _sender;
 
-		public VouchersController(IHttpContextAccessor httpContextAccessor, ISender sender)
-		{
-			_httpContextAccessor = httpContextAccessor;
-			_sender = sender;
-		}
+        public VouchersController(IHttpContextAccessor httpContextAccessor, ISender sender)
+        {
+            _httpContextAccessor = httpContextAccessor;
+            _sender = sender;
+        }
 
-		[HttpPost]
-		public async Task<IActionResult> CreateAsync([FromBody] CreateVoucherCommand command)
-		{
-			var result = await _sender.Send(command);
-			return Ok(new ApiResponse
-			{
-				Result = result,
-				Message = Message.CREATED_SUCCESS,
-				StatusCode = StatusCodes.Status201Created
-			});
-		}
+        [HttpPost]
+        public async Task<IActionResult> CreateAsync([FromBody] CreateVoucherDto request)
+        {
+            var result = await _sender.Send(new CreateVoucherCommand { CreateVoucherDto = request });
+            return Ok(new ApiResponse
+            {
+                Result = result,
+                Message = Message.CREATED_SUCCESS,
+                StatusCode = StatusCodes.Status201Created
+            });
+        }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAsync([FromRoute] Guid id, [FromBody] UpdateVoucherCommand command)
+        public async Task<IActionResult> UpdateAsync([FromRoute] Guid id, [FromBody] UpdateVoucherDto request)
         {
-            if (id != command.Id)
-            {
-                throw new ValidationException(Message.ID_URL_ERROR);
-            }
-            var result = await _sender.Send(command);
+            var result = await _sender.Send(new UpdateVoucherCommand { Id = id, UpdateVoucherDto = request });
             return Ok(new ApiResponse
             {
                 Result = result,
