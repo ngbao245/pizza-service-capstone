@@ -14,8 +14,9 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         {
         }
 
-        public Feedback(int rating, string comments, Guid orderId)
+        public Feedback(Guid id,int rating, string comments, Guid orderId)
         {
+            Id = id;
             Rating = rating;
             Comments = comments;
             OrderId = orderId;

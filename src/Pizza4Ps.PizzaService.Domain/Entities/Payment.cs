@@ -16,8 +16,9 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         {
         }
 
-        public Payment(decimal amount, PaymentMethodEnum paymentMethod, string? status, Guid orderId)
+        public Payment(Guid id,decimal amount, PaymentMethodEnum paymentMethod, string? status, Guid orderId)
         {
+            Id = id;
             Amount = amount;
             PaymentMethod = paymentMethod;
             Status = status;

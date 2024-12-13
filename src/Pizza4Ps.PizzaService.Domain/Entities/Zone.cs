@@ -18,8 +18,9 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         {
         }
 
-        public Zone(string name, int? capacity, string? description, ZoneTypeEnum status)
+        public Zone(Guid id,string name, int? capacity, string? description, ZoneTypeEnum status)
         {
+            Id = id;
             Name = name;
             Capacity = capacity;
             Description = description;

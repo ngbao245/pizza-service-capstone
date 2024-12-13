@@ -19,8 +19,9 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         {
         }
 
-        public Table(int tableNumber, int capacity, TableTypeEnum status, Guid zoneId)
+        public Table(Guid id ,int tableNumber, int capacity, TableTypeEnum status, Guid zoneId)
         {
+            Id = id;
             TableNumber = tableNumber;
             Capacity = capacity;
             Status = status;

@@ -14,8 +14,9 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         {
         }
 
-        public OrderInTable(string? status, Guid tableId)
+        public OrderInTable(Guid id,string? status, Guid tableId)
         {
+            Id = id;
             Status = status;
             TableId = tableId;
         }

@@ -19,8 +19,9 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         {
         }
 
-        public Staff(string code, string name, string phone, string email, StaffTypeEnum.StaffType staffType, StaffTypeEnum.StaffStatus status)
+        public Staff(Guid id,string code, string name, string phone, string email, StaffTypeEnum.StaffType staffType, StaffTypeEnum.StaffStatus status)
         {
+            Id = id;
             Code = code;
             Name = name;
             Phone = phone;

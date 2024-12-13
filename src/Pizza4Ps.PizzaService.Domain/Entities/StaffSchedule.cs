@@ -19,8 +19,9 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         {
         }
 
-        public StaffSchedule(DateTimeOffset schedualDate, TimeSpan shiftStart, TimeSpan shiftEnd, ConfigEnum status, Guid staffId, Guid zoneId)
+        public StaffSchedule(Guid id,DateTimeOffset schedualDate, TimeSpan shiftStart, TimeSpan shiftEnd, ConfigEnum status, Guid staffId, Guid zoneId)
         {
+            Id = id;
             SchedualDate = schedualDate;
             ShiftStart = shiftStart;
             ShiftEnd = shiftEnd;

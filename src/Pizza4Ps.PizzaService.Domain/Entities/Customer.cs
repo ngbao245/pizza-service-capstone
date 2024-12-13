@@ -14,8 +14,9 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         {
         }
 
-        public Customer(string fullName, string phone)
+        public Customer(Guid id,string fullName, string phone)
         {
+            Id = id;
             FullName = fullName;
             Phone = phone;
         }

@@ -15,8 +15,9 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         {
         }
 
-        public OptionItem(string name, decimal additionalPrice, Guid optionId)
+        public OptionItem(Guid id, string name, decimal additionalPrice, Guid optionId)
         {
+            Id = id;
             Name = name;
             AdditionalPrice = additionalPrice;
             OptionId = optionId;

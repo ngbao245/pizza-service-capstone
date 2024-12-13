@@ -18,8 +18,9 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         {
         }
 
-        public OrderItem(string name, int quantity, decimal price, Guid orderId, Guid productId)
-        {
+        public OrderItem(Guid id,string name, int quantity, decimal price, Guid orderId, Guid productId)
+        {   
+            Id = id;
             Name = name;
             Quantity = quantity;
             Price = price;

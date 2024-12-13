@@ -19,8 +19,9 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
 		{
 		}
 
-		public Order(DateTimeOffset startTime, DateTimeOffset endTime, string? status, Guid orderInTableId)
+		public Order(Guid id,DateTimeOffset startTime, DateTimeOffset endTime, string? status, Guid orderInTableId)
 		{
+			Id = id;
 			StartTime = startTime;
 			EndTime = endTime;
 			Status = status;

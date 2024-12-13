@@ -15,8 +15,9 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         {
         }
 
-        public Voucher(string code, DiscountTypeEnum discountType, DateTime? expiryDate)
+        public Voucher(Guid id ,string code, DiscountTypeEnum discountType, DateTime? expiryDate)
         {
+            Id = id;
             Code = code;
             DiscountType = discountType;
             ExpiryDate = expiryDate;

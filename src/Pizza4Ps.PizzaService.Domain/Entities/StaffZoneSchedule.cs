@@ -26,8 +26,9 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         {
         }
 
-        public StaffZoneSchedule(Guid staffId, Guid zoneId, DateOnly dayOfWeek, TimeOnly shiftStart, TimeOnly shiftEnd, string note)
+        public StaffZoneSchedule(Guid id,Guid staffId, Guid zoneId, DateOnly dayOfWeek, TimeOnly shiftStart, TimeOnly shiftEnd, string note)
         {
+            Id = id;
             StaffId = staffId;
             ZoneId = zoneId;
             DayofWeek = dayOfWeek;

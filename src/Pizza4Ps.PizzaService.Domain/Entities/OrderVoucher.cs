@@ -14,8 +14,9 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         {
         }
 
-        public OrderVoucher(Guid orderId, Guid voucherId)
+        public OrderVoucher(Guid id,Guid orderId, Guid voucherId)
         {
+            OrderId = id;
             OrderId = orderId;
             VoucherId = voucherId;
         }

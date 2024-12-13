@@ -14,8 +14,9 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         {
         }
 
-        public Option(string name, string description)
+        public Option(Guid id,string name, string description)
         {
+            Id = id;
             Name = name;
             Description = description;
         }
