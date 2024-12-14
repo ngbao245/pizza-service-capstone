@@ -7,6 +7,9 @@ using Pizza4Ps.PizzaService.Application.UserCases.V1.Order.Commands.CreateOrder;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Order.Commands.DeleteOrder;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Order.Commands.RestoreOrder;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Order.Commands.UpdateOrder;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Order.Queries.GetListOrder;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Order.Queries.GetListOrderIgnoreQueryFilter;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Order.Queries.GetOrderById;
 
 namespace Pizza4Ps.PizzaService.API.Controllers
 {
@@ -35,29 +38,41 @@ namespace Pizza4Ps.PizzaService.API.Controllers
             });
         }
 
-        //[HttpGet]
-        //public async Task<IActionResult> GetListAsync([FromQuery] GetListProductQuery query)
-        //{
-        //	var result = await _sender.Send(query);
-        //	return Ok(new ApiResponse
-        //	{
-        //		Result = result,
-        //		Message = MESSAGE.GET_SUCCESS,
-        //		StatusCode = StatusCodes.Status200OK
-        //	});
-        //}
+        [HttpGet("ignore-filter")]
+        public async Task<IActionResult> GetListIgnoreQueryFilterAsync([FromQuery] GetListOrderIgnoreQueryFilterDto query)
+        {
+            var result = await _sender.Send(new GetListOrderIgnoreQueryFilterQuery { GetListOrderIgnoreQueryFilterDto = query });
+            return Ok(new ApiResponse
+            {
+                Result = result,
+                Message = Message.GET_SUCCESS,
+                StatusCode = StatusCodes.Status200OK
+            });
+        }
 
-        //[HttpGet("{id}")]
-        //public async Task<IActionResult> GetSingleByIdAsync([FromRoute] Guid id)
-        //{
-        //	var result = await _sender.Send(new GetProductByIdQuery { Id = id });
-        //	return Ok(new ApiResponse
-        //	{
-        //		Result = result,
-        //		Message = MESSAGE.GET_SUCCESS,
-        //		StatusCode = StatusCodes.Status200OK
-        //	});
-        //}
+        [HttpGet()]
+        public async Task<IActionResult> GetListAsync([FromQuery] GetListOrderDto query)
+        {
+            var result = await _sender.Send(new GetListOrderQuery { GetListOrderDto = query });
+            return Ok(new ApiResponse
+            {
+                Result = result,
+                Message = Message.GET_SUCCESS,
+                StatusCode = StatusCodes.Status200OK
+            });
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetSingleByIdAsync([FromRoute] Guid id)
+        {
+            var result = await _sender.Send(new GetOrderByIdQuery { Id = id });
+            return Ok(new ApiResponse
+            {
+                Result = result,
+                Message = Message.GET_SUCCESS,
+                StatusCode = StatusCodes.Status200OK
+            });
+        }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateAsync([FromRoute] Guid id, [FromBody] UpdateOrderDto request)

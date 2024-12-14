@@ -7,6 +7,9 @@ using Pizza4Ps.PizzaService.Application.UserCases.V1.Voucher.Commands.CreateVouc
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Voucher.Commands.DeleteVoucher;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Voucher.Commands.RestoreVoucher;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Voucher.Commands.UpdateVoucher;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Voucher.Queries.GetListVoucherIgnoreQueryFilter;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Voucher.Queries.GetListVoucher;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Voucher.Queries.GetVoucherById;
 
 namespace Pizza4Ps.PizzaService.API.Controllers
 {
@@ -32,6 +35,42 @@ namespace Pizza4Ps.PizzaService.API.Controllers
                 Result = result,
                 Message = Message.CREATED_SUCCESS,
                 StatusCode = StatusCodes.Status201Created
+            });
+        }
+
+        [HttpGet("ignore-filter")]
+        public async Task<IActionResult> GetListIgnoreQueryFilterAsync([FromQuery] GetListVoucherIgnoreQueryFilterDto query)
+        {
+            var result = await _sender.Send(new GetListVoucherIgnoreQueryFilterQuery { GetListVoucherIgnoreQueryFilterDto = query });
+            return Ok(new ApiResponse
+            {
+                Result = result,
+                Message = Message.GET_SUCCESS,
+                StatusCode = StatusCodes.Status200OK
+            });
+        }
+
+        [HttpGet()]
+        public async Task<IActionResult> GetListAsync([FromQuery] GetListVoucherDto query)
+        {
+            var result = await _sender.Send(new GetListVoucherQuery { GetListVoucherDto = query });
+            return Ok(new ApiResponse
+            {
+                Result = result,
+                Message = Message.GET_SUCCESS,
+                StatusCode = StatusCodes.Status200OK
+            });
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetSingleByIdAsync([FromRoute] Guid id)
+        {
+            var result = await _sender.Send(new GetVoucherByIdQuery { Id = id });
+            return Ok(new ApiResponse
+            {
+                Result = result,
+                Message = Message.GET_SUCCESS,
+                StatusCode = StatusCodes.Status200OK
             });
         }
 

@@ -9,6 +9,7 @@ using Pizza4Ps.PizzaService.Application.UserCases.V1.Customers.Commands.RestoreC
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Customers.Commands.UpdateCustomer;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Customers.Queries.GetCustomerById;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Customers.Queries.GetListCustomer;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Customers.Queries.GetListCustomerIgnoreQueryFilter;
 
 namespace Pizza4Ps.PizzaService.API.Controllers
 {
@@ -37,10 +38,22 @@ namespace Pizza4Ps.PizzaService.API.Controllers
             });
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetListAsync([FromQuery] GetListCustomerQuery query)
+        [HttpGet("ignore-filter")]
+        public async Task<IActionResult> GetListIgnoreQueryFilterAsync([FromQuery] GetListCustomerIgnoreQueryFilterDto query)
         {
-            var result = await _sender.Send(query);
+            var result = await _sender.Send(new GetListCustomerIgnoreQueryFilterQuery { GetListCustomerIgnoreQueryFilterDto = query });
+            return Ok(new ApiResponse
+            {
+                Result = result,
+                Message = Message.GET_SUCCESS,
+                StatusCode = StatusCodes.Status200OK
+            });
+        }
+
+        [HttpGet()]
+        public async Task<IActionResult> GetListAsync([FromQuery] GetListCustomerDto query)
+        {
+            var result = await _sender.Send(new GetListCustomerQuery { GetListCustomerDto = query });
             return Ok(new ApiResponse
             {
                 Result = result,
