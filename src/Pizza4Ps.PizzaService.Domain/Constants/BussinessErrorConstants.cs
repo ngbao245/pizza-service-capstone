@@ -7,6 +7,11 @@
 			public const string PRODUCT_NOT_FOUND = "Món ăn không tìm thấy";
 		}
 
+		public class PaymentErrorConstant
+	{
+			public const string PAYMENT_NOT_FOUND = "Payment không tìm thấy";
+		}
+
 		public class CustomerErrorConstant
 		{
 			public const string CUSTOMER_NOT_FOUND = "Khách hàng không tìm thấy";
