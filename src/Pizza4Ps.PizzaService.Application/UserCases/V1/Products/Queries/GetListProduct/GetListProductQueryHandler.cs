@@ -1,11 +1,11 @@
-﻿using AutoMapper;
+﻿using System.Linq.Dynamic.Core;
+using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Pizza4Ps.PizzaService.Application.DTOs.Products;
 using Pizza4Ps.PizzaService.Domain.Abstractions.Repositories;
 using Pizza4Ps.PizzaService.Domain.Constants;
 using Pizza4Ps.PizzaService.Domain.Exceptions;
-using System.Linq.Dynamic.Core;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Queries.GetListProduct
 {
@@ -25,8 +25,8 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Queries.GetLis
 			var query = _productRepository.GetListAsNoTracking(
 				x => (request.GetListProductDto.Name == null || x.Name.Contains(request.GetListProductDto.Name))
 				&& (request.GetListProductDto.Description == null || x.Description.Contains(request.GetListProductDto.Description))
-				&& (request.GetListProductDto.Price == null || x.Price == request.GetListProductDto.Price)
-				, includeProperties: request.GetListProductDto.includeProperties);
+				&& (request.GetListProductDto.Price == null || x.Price == request.GetListProductDto.Price),
+				includeProperties: request.GetListProductDto.includeProperties);
 			var entities = await query
 				.OrderBy(request.GetListProductDto.SortBy)
 				.Skip(request.GetListProductDto.SkipCount).Take(request.GetListProductDto.TakeCount).ToListAsync();

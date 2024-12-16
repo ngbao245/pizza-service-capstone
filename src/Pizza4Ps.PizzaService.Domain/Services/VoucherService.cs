@@ -23,7 +23,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
 
         public async Task<Guid> CreateAsync(string code, DiscountTypeEnum discountType, DateTime expiryDate)
         {
-            var entity = new Voucher(code, discountType, expiryDate);
+            var entity = new Voucher(Guid.NewGuid(), code, discountType, expiryDate);
             _voucherRepository.Add(entity);
             await _unitOfWork.SaveChangeAsync();
             return entity.Id;

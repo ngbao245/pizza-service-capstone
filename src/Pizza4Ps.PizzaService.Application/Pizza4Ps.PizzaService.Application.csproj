@@ -8,13 +8,8 @@
 
 	<ItemGroup>
 		<Folder Include="DependencyInjection\Options\" />
-		<Folder Include="UserCases\V1\Option\Queries\" />
-		<Folder Include="UserCases\V1\Order\Queries\" />
-		<Folder Include="UserCases\V1\Staff\Queries\" />
-		<Folder Include="UserCases\V1\Voucher\Commands\DeleteVoucher\" />
-		<Folder Include="UserCases\V1\Voucher\Commands\UpdateVoucher\" />
-		<Folder Include="UserCases\V1\Voucher\Commands\RestoreVoucher\" />
-		<Folder Include="UserCases\V1\Voucher\Queries\" />
+		<Folder Include="UserCases\V1\OrderVouchers\Queries\" />
+		<Folder Include="UserCases\V1\Tables\Queries\" />
 		<Folder Include="Models\" />
 		<Folder Include="Validators\" />
 	</ItemGroup>
