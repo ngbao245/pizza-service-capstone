@@ -59,7 +59,7 @@ namespace Pizza4Ps.PizzaService.API.Setup
         private static void RegisterApiServices(IServiceCollection services)
         {
             services.AddSwaggerAuthUI();
-            services.AddServicePizzaClient();
+            //services.AddServicePizzaClient();
         }
 
         private static void RegisterInfrastructureServices(IServiceCollection services)
