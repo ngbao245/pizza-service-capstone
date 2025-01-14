@@ -26,6 +26,14 @@ namespace Pizza4Ps.PizzaService.API.Controllers
 			_sender = sender;
 		}
 
+		/// <summary>
+		/// Tạo món ăn
+		/// </summary>
+		/// <remarks>
+		/// - Thông tin
+		/// - CategoryId là id của category
+		/// </remarks>
+		/// <returns></returns>
 		[HttpPost]
 		public async Task<IActionResult> CreateAsync([FromBody] CreateProductDto request)
 		{

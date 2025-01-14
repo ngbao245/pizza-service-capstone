@@ -27,6 +27,13 @@ namespace Pizza4Ps.PizzaService.API.Controllers
             _sender = sender;
         }
 
+        /// <summary>
+        /// Tạo Options
+        /// </summary>
+        /// <remarks>
+        /// - Tạo options (options là những cái như: gia vị, Món ăn kèm pizza, món ăn kèm mì ý, món ăn kèm...)
+        /// </remarks>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> CreateAsync([FromBody] CreateOptionDto request)
         {

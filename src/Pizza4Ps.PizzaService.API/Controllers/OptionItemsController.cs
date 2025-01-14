@@ -26,7 +26,14 @@ namespace Pizza4Ps.PizzaService.API.Controllers
 			_sender = sender;
 		}
 
-		[HttpPost]
+        /// <summary>
+        /// Tạo Chi tiết cho từng options
+        /// </summary>
+        /// <remarks>
+        /// - Gia vị món ăn: nhiều cay, ít cay, nhiều ngọt, ít ngọt
+        /// </remarks>
+        /// <returns></returns>
+        [HttpPost]
 		public async Task<IActionResult> CreateAsync([FromBody] CreateOptionItemDto request)
 		{
 			var result = await _sender.Send(new CreateOptionItemCommand { CreateOptionItemDto = request });

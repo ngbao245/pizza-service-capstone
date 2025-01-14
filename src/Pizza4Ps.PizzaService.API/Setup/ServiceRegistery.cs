@@ -1,6 +1,7 @@
 ﻿using Pizza4Ps.PizzaService.API.DependencyInjection.Extentions;
 using Pizza4Ps.PizzaService.Application.DependencyInjection.Extentions;
 using Pizza4Ps.PizzaService.Domain.DependencyInjection.Extentions;
+using Pizza4Ps.PizzaService.Infrastructure.DependencyInjection.Extentions;
 using Pizza4Ps.PizzaService.Persistence.DependencyInjection.Extentions;
 
 namespace Pizza4Ps.PizzaService.API.Setup
@@ -59,11 +60,15 @@ namespace Pizza4Ps.PizzaService.API.Setup
         private static void RegisterApiServices(IServiceCollection services)
         {
             services.AddSwaggerAuthUI();
-            //services.AddServicePizzaClient();
         }
 
         private static void RegisterInfrastructureServices(IServiceCollection services)
         {
+            services.AddHangfireServices();
+            services.AddBackgroundJobServices();
+            services.AddExternalServices();
+            services.AddHttpClientSendApiService();
+            //services.AddTokenTenantService();
         }
     }
 }
