@@ -1,10 +1,11 @@
 ﻿using AutoMapper;
 using MediatR;
+using Pizza4Ps.PizzaService.Application.Abstractions;
 using Pizza4Ps.PizzaService.Domain.Abstractions.Services;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.OrderVouchers.Commands.CreateOrderVoucher
 {
-	public class CreateOrderVoucherCommandHandler : IRequestHandler<CreateOrderVoucherCommand, CreateOrderVoucherCommandResponse>
+	public class CreateOrderVoucherCommandHandler : IRequestHandler<CreateOrderVoucherCommand, ResultDto<Guid>>
 	{
 		private readonly IMapper _mapper;
 		private readonly IOrderVoucherService _orderVoucherService;
@@ -15,13 +16,13 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.OrderVouchers.Commands.
 			_orderVoucherService = orderVoucherService;
 		}
 
-		public async Task<CreateOrderVoucherCommandResponse> Handle(CreateOrderVoucherCommand request, CancellationToken cancellationToken)
+		public async Task<ResultDto<Guid>> Handle(CreateOrderVoucherCommand request, CancellationToken cancellationToken)
 		{
 			var result = await _orderVoucherService.CreateAsync(
-				request.CreateOrderVoucherDto.OrderId,
-				request.CreateOrderVoucherDto.VoucherId);
-			return new CreateOrderVoucherCommandResponse
-			{
+				request.OrderId,
+				request.VoucherId);
+			return new ResultDto<Guid>
+            {
 				Id = result
 			};
 		}

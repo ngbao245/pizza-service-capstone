@@ -1,10 +1,11 @@
 ﻿using AutoMapper;
 using MediatR;
+using Pizza4Ps.PizzaService.Application.Abstractions;
 using Pizza4Ps.PizzaService.Domain.Abstractions.Services;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.TableBookings.Commands.CreateTableBooking
 {
-	public class CreateTableBookingCommandHandler : IRequestHandler<CreateTableBookingCommand, CreateTableBookingCommandResponse>
+	public class CreateTableBookingCommandHandler : IRequestHandler<CreateTableBookingCommand, ResultDto<Guid>>
 	{
 		private readonly IMapper _mapper;
 		private readonly ITableBookingService _tableBookingService;
@@ -15,14 +16,14 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.TableBookings.Commands.
 			_tableBookingService = tableBookingService;
 		}
 
-		public async Task<CreateTableBookingCommandResponse> Handle(CreateTableBookingCommand request, CancellationToken cancellationToken)
+		public async Task<ResultDto<Guid>> Handle(CreateTableBookingCommand request, CancellationToken cancellationToken)
 		{
 			var result = await _tableBookingService.CreateAsync(
-						   request.CreateTableBookingDto.OnholdTime,
-						   request.CreateTableBookingDto.TableId,
-						   request.CreateTableBookingDto.BookingId);
-			return new CreateTableBookingCommandResponse
-			{
+						   request.OnholdTime,
+						   request.TableId,
+						   request.BookingId);
+			return new ResultDto<Guid>
+            {
 				Id = result
 			};
 		}

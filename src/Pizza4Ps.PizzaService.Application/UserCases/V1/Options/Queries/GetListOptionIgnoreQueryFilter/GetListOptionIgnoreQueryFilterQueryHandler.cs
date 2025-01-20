@@ -1,13 +1,14 @@
 ﻿using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Pizza4Ps.PizzaService.Application.DTOs.Options;
+using Pizza4Ps.PizzaService.Application.Abstractions;
+using Pizza4Ps.PizzaService.Application.DTOs;
 using Pizza4Ps.PizzaService.Domain.Abstractions.Repositories;
 using System.Linq.Dynamic.Core;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Options.Queries.GetListOptionIgnoreQueryFilter
 {
-	public class GetListOptionIgnoreQueryFilterQueryHandler : IRequestHandler<GetListOptionIgnoreQueryFilterQuery, GetListOptionIgnoreQueryFilterQueryResponse>
+    public class GetListOptionIgnoreQueryFilterQueryHandler : IRequestHandler<GetListOptionIgnoreQueryFilterQuery, PaginatedResultDto<OptionDto>>
 	{
 		private readonly IMapper _mapper;
 		private readonly IOptionRepository _optionRepository;
@@ -18,19 +19,19 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Options.Queries.GetList
 			_optionRepository = optionRepository;
 		}
 
-		public async Task<GetListOptionIgnoreQueryFilterQueryResponse> Handle(GetListOptionIgnoreQueryFilterQuery request, CancellationToken cancellationToken)
+		public async Task<PaginatedResultDto<OptionDto>> Handle(GetListOptionIgnoreQueryFilterQuery request, CancellationToken cancellationToken)
 		{
-			var query = _optionRepository.GetListAsNoTracking(includeProperties: request.GetListOptionIgnoreQueryFilterDto.includeProperties).IgnoreQueryFilters()
+			var query = _optionRepository.GetListAsNoTracking(includeProperties: request.IncludeProperties).IgnoreQueryFilters()
 				.Where(
-					x => (request.GetListOptionIgnoreQueryFilterDto.Name == null || x.Name.Contains(request.GetListOptionIgnoreQueryFilterDto.Name))
-					&& (request.GetListOptionIgnoreQueryFilterDto.Description == null || x.Description.Contains(request.GetListOptionIgnoreQueryFilterDto.Description))
-					&& x.IsDeleted == request.GetListOptionIgnoreQueryFilterDto.IsDeleted);
+					x => (request.Name == null || x.Name.Contains(request.Name))
+					&& (request.Description == null || x.Description.Contains(request.Description))
+					&& x.IsDeleted == request.IsDeleted);
 			var entities = await query
-				.OrderBy(request.GetListOptionIgnoreQueryFilterDto.SortBy)
-				.Skip(request.GetListOptionIgnoreQueryFilterDto.SkipCount).Take(request.GetListOptionIgnoreQueryFilterDto.TakeCount).ToListAsync();
+				.OrderBy(request.SortBy)
+				.Skip(request.SkipCount).Take(request.TakeCount).ToListAsync();
 			var result = _mapper.Map<List<OptionDto>>(entities);
 			var totalCount = await query.CountAsync();
-			return new GetListOptionIgnoreQueryFilterQueryResponse(result, totalCount);
+			return new PaginatedResultDto<OptionDto>(result, totalCount);
 		}
 	}
 }

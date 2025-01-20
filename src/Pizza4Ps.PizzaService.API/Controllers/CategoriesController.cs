@@ -2,14 +2,13 @@
 using Microsoft.AspNetCore.Mvc;
 using Pizza4Ps.PizzaService.API.Constants;
 using Pizza4Ps.PizzaService.API.Models;
-using Pizza4Ps.PizzaService.Application.DTOs.Categories;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.Categories.Queries.GetCategoryById;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.Categories.Queries.GetListCategory;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.Categories.Queries.GetListCategoryIgnoreQueryFilter;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Categories.Commands.CreateCategory;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Categories.Commands.DeleteCategory;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Categories.Commands.RestoreCategory;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Categories.Commands.UpdateCategory;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Categories.Queries.GetCategoryById;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Categories.Queries.GetListCategory;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Categories.Queries.GetListCategoryIgnoreQueryFilter;
 
 namespace Pizza4Ps.PizzaService.API.Controllers
 {
@@ -26,9 +25,9 @@ namespace Pizza4Ps.PizzaService.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateAsync([FromBody] CreateCategoryDto request)
+        public async Task<IActionResult> CreateAsync([FromBody] CreateCategoryCommand request)
         {
-            var result = await _sender.Send(new CreateCategoryCommand { CreateCategoryDto = request });
+            var result = await _sender.Send(request);
             return Ok(new ApiResponse
             {
                 Result = result,
@@ -38,9 +37,9 @@ namespace Pizza4Ps.PizzaService.API.Controllers
         }
 
         [HttpGet("ignore-filter")]
-        public async Task<IActionResult> GetListIgnoreQueryFilterAsync([FromQuery] GetListCategoryIgnoreQueryFilterDto query)
+        public async Task<IActionResult> GetListIgnoreQueryFilterAsync([FromQuery] GetListCategoryIgnoreQueryFilterQuery query)
         {
-            var result = await _sender.Send(new GetListCategoryIgnoreQueryFilterQuery { GetListCategoryIgnoreQueryFilterDto = query });
+            var result = await _sender.Send(query);
             return Ok(new ApiResponse
             {
                 Result = result,
@@ -50,9 +49,9 @@ namespace Pizza4Ps.PizzaService.API.Controllers
         }
 
         [HttpGet()]
-        public async Task<IActionResult> GetListAsync([FromQuery] GetListCategoryDto query)
+        public async Task<IActionResult> GetListAsync([FromQuery] GetListCategoryQuery query)
         {
-            var result = await _sender.Send(new GetListCategoryQuery { GetListCategoryDto = query });
+            var result = await _sender.Send(query);
             return Ok(new ApiResponse
             {
                 Result = result,
@@ -74,12 +73,13 @@ namespace Pizza4Ps.PizzaService.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAsync([FromRoute] Guid id, [FromBody] UpdateCategoryDto request)
+        public async Task<IActionResult> UpdateAsync([FromRoute] Guid id, [FromBody] UpdateCategoryCommand request)
         {
-            var result = await _sender.Send(new UpdateCategoryCommand { Id = id, UpdateCategoryDto = request });
+            request.Id = id;
+            await _sender.Send(request);
             return Ok(new ApiResponse
             {
-                Result = result,
+                Success = true,
                 Message = Message.UPDATED_SUCCESS,
                 StatusCode = StatusCodes.Status200OK
             });

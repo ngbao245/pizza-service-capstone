@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Pizza4Ps.PizzaService.Application.DTOs.StaffZoneSchedules;
+using Pizza4Ps.PizzaService.Application.Abstractions;
+using Pizza4Ps.PizzaService.Application.DTOs;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.StaffZoneSchedules.Queries.GetListStaffZoneSchedule;
 using Pizza4Ps.PizzaService.Domain.Abstractions.Repositories;
 using Pizza4Ps.PizzaService.Domain.Constants;
@@ -15,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.StaffZoneSchedules.Queries.GetListStaffZoneSchedule
 {
-    public class GetListStaffZoneScheduleQueryHandler : IRequestHandler<GetListStaffZoneScheduleQuery, GetListStaffZoneScheduleQueryResponse>
+    public class GetListStaffZoneScheduleQueryHandler : IRequestHandler<GetListStaffZoneScheduleQuery, PaginatedResultDto<StaffZoneScheduleDto>>
     {
         private readonly IMapper _mapper;
         private readonly IStaffZoneScheduleRepository _StaffZoneScheduleRepository;
@@ -26,27 +27,27 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.StaffZoneSchedules.Quer
             _StaffZoneScheduleRepository = StaffZoneScheduleRepository;
         }
 
-        public async Task<GetListStaffZoneScheduleQueryResponse> Handle(GetListStaffZoneScheduleQuery request, CancellationToken cancellationToken)
+        public async Task<PaginatedResultDto<StaffZoneScheduleDto>> Handle(GetListStaffZoneScheduleQuery request, CancellationToken cancellationToken)
         {
             var query = _StaffZoneScheduleRepository.GetListAsNoTracking(
-                x => (request.GetListStaffZoneScheduleDto.DayofWeek == null || x.DayofWeek == request.GetListStaffZoneScheduleDto.DayofWeek)
-                && (request.GetListStaffZoneScheduleDto.ShiftStart == null || x.ShiftStart == request.GetListStaffZoneScheduleDto.ShiftStart)
-                && (request.GetListStaffZoneScheduleDto.ShiftEnd == null || x.ShiftEnd == request.GetListStaffZoneScheduleDto.ShiftEnd)
-                && (request.GetListStaffZoneScheduleDto.Note == null || x.Note == request.GetListStaffZoneScheduleDto.Note)
-                && (request.GetListStaffZoneScheduleDto.StaffId == null || x.StaffId == request.GetListStaffZoneScheduleDto.StaffId)
-                && (request.GetListStaffZoneScheduleDto.ZoneId == null || x.ZoneId == request.GetListStaffZoneScheduleDto.ZoneId)
-                && (request.GetListStaffZoneScheduleDto.WorkingTimeId == null || x.WorkingTimeId == request.GetListStaffZoneScheduleDto.WorkingTimeId)
+                x => (request.DayofWeek == null || x.DayofWeek == request.DayofWeek)
+                && (request.ShiftStart == null || x.ShiftStart == request.ShiftStart)
+                && (request.ShiftEnd == null || x.ShiftEnd == request.ShiftEnd)
+                && (request.Note == null || x.Note == request.Note)
+                && (request.StaffId == null || x.StaffId == request.StaffId)
+                && (request.ZoneId == null || x.ZoneId == request.ZoneId)
+                && (request.WorkingTimeId == null || x.WorkingTimeId == request.WorkingTimeId)
 
                 ,
-                includeProperties: request.GetListStaffZoneScheduleDto.includeProperties);
+                includeProperties: request.IncludeProperties);
             var entities = await query
-                .OrderBy(request.GetListStaffZoneScheduleDto.SortBy)
-                .Skip(request.GetListStaffZoneScheduleDto.SkipCount).Take(request.GetListStaffZoneScheduleDto.TakeCount).ToListAsync();
+                .OrderBy(request.SortBy)
+                .Skip(request.SkipCount).Take(request.TakeCount).ToListAsync();
             if (!entities.Any())
                 throw new BusinessException(BussinessErrorConstants.StaffZoneScheduleErrorConstant.STAFFZONESCHEDULE_NOT_FOUND);
             var result = _mapper.Map<List<StaffZoneScheduleDto>>(entities);
             var totalCount = await query.CountAsync();
-            return new GetListStaffZoneScheduleQueryResponse(result, totalCount);
+            return new PaginatedResultDto<StaffZoneScheduleDto>(result, totalCount);
         }
     }
 }

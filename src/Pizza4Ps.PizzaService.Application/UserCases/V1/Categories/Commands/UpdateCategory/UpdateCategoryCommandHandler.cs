@@ -3,7 +3,7 @@ using Pizza4Ps.PizzaService.Domain.Abstractions.Services;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Categories.Commands.UpdateCategory
 {
-    public class UpdateCategoryCommandHandler : IRequestHandler<UpdateCategoryCommand, UpdateCategoryCommandResponse>
+    public class UpdateCategoryCommandHandler : IRequestHandler<UpdateCategoryCommand>
     {
         private readonly ICategoryService _categoryService;
 
@@ -12,16 +12,12 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Categories.Commands.Upd
             _categoryService = categoryService;
         }
 
-        public async Task<UpdateCategoryCommandResponse> Handle(UpdateCategoryCommand request, CancellationToken cancellationToken)
+        public async Task Handle(UpdateCategoryCommand request, CancellationToken cancellationToken)
         {
             var result = await _categoryService.UpdateAsync(
                 request.Id,
-                request.UpdateCategoryDto.Name,
-                request.UpdateCategoryDto.Description);
-            return new UpdateCategoryCommandResponse
-            {
-                Id = result
-            };
+                request.Name,
+                request.Description);
         }
     }
 }

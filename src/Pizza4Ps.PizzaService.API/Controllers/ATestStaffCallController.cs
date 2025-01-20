@@ -1,11 +1,7 @@
-﻿using MediatR;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Pizza4Ps.PizzaService.API.Constants;
 using Pizza4Ps.PizzaService.API.Models;
 using Pizza4Ps.PizzaService.Application.Contract.Abstractions.Services;
-using Pizza4Ps.PizzaService.Application.DTOs.Bookings;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.Bookings.Queries.GetListBooking;
 
 namespace Pizza4Ps.PizzaService.API.Controllers
 {

@@ -1,9 +1,10 @@
 ﻿using MediatR;
+using Pizza4Ps.PizzaService.Application.Abstractions;
 using Pizza4Ps.PizzaService.Domain.Abstractions.Services;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Tables.Commands.UpdateTable
 {
-    public class UpdateTableCommandHandler : IRequestHandler<UpdateTableCommand, UpdateTableCommandResponse>
+    public class UpdateTableCommandHandler : IRequestHandler<UpdateTableCommand>
     {
         private readonly ITableService _tableService;
 
@@ -12,18 +13,14 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Tables.Commands.UpdateT
             _tableService = tableService;
         }
 
-        public async Task<UpdateTableCommandResponse> Handle(UpdateTableCommand request, CancellationToken cancellationToken)
+        public async Task Handle(UpdateTableCommand request, CancellationToken cancellationToken)
         {
             var result = await _tableService.UpdateAsync(
-                request.Id,
-                request.UpdateTableDto.TableNumber,
-                request.UpdateTableDto.Capacity,
-                request.UpdateTableDto.Status,
-                request.UpdateTableDto.ZoneId);
-            return new UpdateTableCommandResponse
-            {
-                Id = result
-            };
+                request.Id!.Value,
+                request.TableNumber,
+                request.Capacity,
+                request.Status,
+                request.ZoneId);
         }
     }
 }

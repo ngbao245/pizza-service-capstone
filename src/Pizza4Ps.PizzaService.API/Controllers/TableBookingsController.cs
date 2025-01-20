@@ -2,15 +2,13 @@
 using Microsoft.AspNetCore.Mvc;
 using Pizza4Ps.PizzaService.API.Constants;
 using Pizza4Ps.PizzaService.API.Models;
-using Pizza4Ps.PizzaService.Application.DTOs.TableBookings;
-using Pizza4Ps.PizzaService.Application.DTOs.TableBookings;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.TableBookings.Queries.GetListTableBooking;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.TableBookings.Queries.GetListTableBookingIgnoreQueryFilter;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.TableBookings.Queries.GetTableBookingById;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.TableBookings.Commands.CreateTableBooking;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.TableBookings.Commands.DeleteTableBooking;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.TableBookings.Commands.RestoreTableBooking;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.TableBookings.Commands.UpdateTableBooking;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.TableBookings.Queries.GetListTableBooking;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.TableBookings.Queries.GetListTableBookingIgnoreQueryFilter;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.TableBookings.Queries.GetTableBookingById;
 
 namespace Pizza4Ps.PizzaService.API.Controllers
 {
@@ -28,9 +26,9 @@ namespace Pizza4Ps.PizzaService.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateAsync([FromBody] CreateTableBookingDto request)
+        public async Task<IActionResult> CreateAsync([FromBody] CreateTableBookingCommand request)
         {
-            var result = await _sender.Send(new CreateTableBookingCommand { CreateTableBookingDto = request });
+            var result = await _sender.Send(request);
             return Ok(new ApiResponse
             {
                 Result = result,
@@ -40,9 +38,9 @@ namespace Pizza4Ps.PizzaService.API.Controllers
         }
 
         [HttpGet("ignore-filter")]
-        public async Task<IActionResult> GetListIgnoreQueryFilterAsync([FromQuery] GetListTableBookingIgnoreQueryFilterDto query)
+        public async Task<IActionResult> GetListIgnoreQueryFilterAsync([FromQuery] GetListTableBookingIgnoreQueryFilterQuery query)
         {
-            var result = await _sender.Send(new GetListTableBookingIgnoreQueryFilterQuery { GetListTableBookingIgnoreQueryFilterDto = query });
+            var result = await _sender.Send(query);
             return Ok(new ApiResponse
             {
                 Result = result,
@@ -52,9 +50,9 @@ namespace Pizza4Ps.PizzaService.API.Controllers
         }
 
         [HttpGet()]
-        public async Task<IActionResult> GetListAsync([FromQuery] GetListTableBookingDto query)
+        public async Task<IActionResult> GetListAsync([FromQuery] GetListTableBookingQuery query)
         {
-            var result = await _sender.Send(new GetListTableBookingQuery { GetListTableBookingDto = query });
+            var result = await _sender.Send(query);
             return Ok(new ApiResponse
             {
                 Result = result,
@@ -76,12 +74,13 @@ namespace Pizza4Ps.PizzaService.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAsync([FromRoute] Guid id, [FromBody] UpdateTableBookingDto request)
+        public async Task<IActionResult> UpdateAsync([FromRoute] Guid id, [FromBody] UpdateTableBookingCommand request)
         {
-            var result = await _sender.Send(new UpdateTableBookingCommand { Id = id, UpdateTableBookingDto = request });
+            request.Id = id;
+            await _sender.Send(request);
             return Ok(new ApiResponse
             {
-                Result = result,
+                Success = true,
                 Message = Message.UPDATED_SUCCESS,
                 StatusCode = StatusCodes.Status200OK
             });

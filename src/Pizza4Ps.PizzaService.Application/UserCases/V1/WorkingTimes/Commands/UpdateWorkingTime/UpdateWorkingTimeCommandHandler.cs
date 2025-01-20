@@ -3,7 +3,7 @@ using Pizza4Ps.PizzaService.Domain.Abstractions.Services;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.WorkingTimes.Commands.UpdateWorkingTime
 {
-	public class UpdateWorkingTimeCommandHandler : IRequestHandler<UpdateWorkingTimeCommand, UpdateWorkingTimeCommandResponse>
+	public class UpdateWorkingTimeCommandHandler : IRequestHandler<UpdateWorkingTimeCommand>
 	{
 		private readonly IWorkingTimeService _workingtimeService;
 
@@ -12,19 +12,15 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.WorkingTimes.Commands.U
 			_workingtimeService = workingtimeService;
 		}
 
-		public async Task<UpdateWorkingTimeCommandResponse> Handle(UpdateWorkingTimeCommand request, CancellationToken cancellationToken)
+		public async Task Handle(UpdateWorkingTimeCommand request, CancellationToken cancellationToken)
 		{
 			var result = await _workingtimeService.UpdateAsync(
-				request.Id,
-				request.UpdateWorkingTimeDto.DayOfWeek,
-				request.UpdateWorkingTimeDto.ShiftCode,
-				request.UpdateWorkingTimeDto.Name,
-				request.UpdateWorkingTimeDto.StartTime,
-				request.UpdateWorkingTimeDto.EndTime);
-			return new UpdateWorkingTimeCommandResponse
-			{
-				Id = result
-			};
+				request.Id!.Value,
+				request.DayOfWeek,
+				request.ShiftCode,
+				request.Name,
+				request.StartTime,
+				request.EndTime);
 		}
 	}
 }

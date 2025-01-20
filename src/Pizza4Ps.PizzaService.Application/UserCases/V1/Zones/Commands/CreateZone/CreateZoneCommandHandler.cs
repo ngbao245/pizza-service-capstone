@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
+using Azure;
 using MediatR;
+using Pizza4Ps.PizzaService.Application.Abstractions;
 using Pizza4Ps.PizzaService.Domain.Abstractions.Services;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Zones.Commands.CreateZone
 {
-    public class CreateZoneCommandHandler : IRequestHandler<CreateZoneCommand, CreateZoneCommandResponse>
+    public class CreateZoneCommandHandler : IRequestHandler<CreateZoneCommand, ResultDto<Guid>>
     {
         private readonly IMapper _mapper;
         private readonly IZoneService _zoneService;
@@ -15,14 +17,14 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Zones.Commands.CreateZo
             _zoneService = zoneService;
         }
 
-        public async Task<CreateZoneCommandResponse> Handle(CreateZoneCommand request, CancellationToken cancellationToken)
+        public async Task<ResultDto<Guid>> Handle(CreateZoneCommand request, CancellationToken cancellationToken)
         {
             var result = await _zoneService.CreateAsync(
-                request.CreateZoneDto.Name,
-                request.CreateZoneDto.Capacity,
-                request.CreateZoneDto.Description,
-                request.CreateZoneDto.Status);
-            return new CreateZoneCommandResponse
+                request.Name,
+                request.Capacity,
+                request.Description,
+                request.Status);
+            return new ResultDto<Guid>
             {
                 Id = result
             };

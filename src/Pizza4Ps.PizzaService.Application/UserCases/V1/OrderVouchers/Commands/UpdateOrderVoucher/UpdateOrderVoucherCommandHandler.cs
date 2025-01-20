@@ -3,7 +3,7 @@ using Pizza4Ps.PizzaService.Domain.Abstractions.Services;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.OrderVouchers.Commands.UpdateOrderVoucher
 {
-	public class UpdateOrderVoucherCommandHandler : IRequestHandler<UpdateOrderVoucherCommand, UpdateOrderVoucherCommandResponse>
+	public class UpdateOrderVoucherCommandHandler : IRequestHandler<UpdateOrderVoucherCommand>
 	{
 		private readonly IOrderVoucherService _orderVoucherService;
 
@@ -12,16 +12,12 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.OrderVouchers.Commands.
 			_orderVoucherService = orderVoucherService;
 		}
 
-		public async Task<UpdateOrderVoucherCommandResponse> Handle(UpdateOrderVoucherCommand request, CancellationToken cancellationToken)
+		public async Task Handle(UpdateOrderVoucherCommand request, CancellationToken cancellationToken)
 		{
 			var result = await _orderVoucherService.UpdateAsync(
-				request.Id,
-				request.UpdateOrderVoucherDto.OrderId,
-				request.UpdateOrderVoucherDto.VoucherId);
-			return new UpdateOrderVoucherCommandResponse
-			{
-				Id = result
-			};
+				request.Id!.Value,
+				request.OrderId,
+				request.VoucherId);
 		}
 	}
 }

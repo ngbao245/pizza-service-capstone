@@ -3,7 +3,7 @@ using Pizza4Ps.PizzaService.Domain.Abstractions.Services;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.StaffZoneSchedules.Commands.UpdateStaffZoneSchedule
 {
-    public class UpdateStaffZoneScheduleCommandHandler : IRequestHandler<UpdateStaffZoneScheduleCommand, UpdateStaffZoneScheduleCommandResponse>
+    public class UpdateStaffZoneScheduleCommandHandler : IRequestHandler<UpdateStaffZoneScheduleCommand>
     {
         private readonly IStaffZoneScheduleService _StaffZoneScheduleService;
 
@@ -12,22 +12,18 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.StaffZoneSchedules.Comm
             _StaffZoneScheduleService = StaffZoneScheduleService;
         }
 
-        public async Task<UpdateStaffZoneScheduleCommandResponse> Handle(UpdateStaffZoneScheduleCommand request, CancellationToken cancellationToken)
+        public async Task Handle(UpdateStaffZoneScheduleCommand request, CancellationToken cancellationToken)
         {
             var result = await _StaffZoneScheduleService.UpdateAsync(
-                request.Id,
-                request.UpdateStaffZoneScheduleDto.DayofWeek,
-                request.UpdateStaffZoneScheduleDto.ShiftStart,
-                request.UpdateStaffZoneScheduleDto.ShiftEnd,
-                request.UpdateStaffZoneScheduleDto.Note,
-                request.UpdateStaffZoneScheduleDto.StaffId,
-                request.UpdateStaffZoneScheduleDto.ZoneId,
-                request.UpdateStaffZoneScheduleDto.WorkingTimeId
+                request.Id!.Value,
+                request.DayofWeek,
+                request.ShiftStart,
+                request.ShiftEnd,
+                request.Note,
+                request.StaffId,
+                request.ZoneId,
+                request.WorkingTimeId
                 );
-            return new UpdateStaffZoneScheduleCommandResponse
-            {
-                Id = result
-            };
         }
     }
 }

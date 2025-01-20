@@ -3,7 +3,7 @@ using Pizza4Ps.PizzaService.Domain.Abstractions.Services;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.TableBookings.Commands.UpdateTableBooking
 {
-	public class UpdateTableBookingCommandHandler : IRequestHandler<UpdateTableBookingCommand, UpdateTableBookingCommandResponse>
+	public class UpdateTableBookingCommandHandler : IRequestHandler<UpdateTableBookingCommand>
 	{
 		private readonly ITableBookingService _tableBookingService;
 
@@ -12,17 +12,13 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.TableBookings.Commands.
 			_tableBookingService = tableBookingService;
 		}
 
-		public async Task<UpdateTableBookingCommandResponse> Handle(UpdateTableBookingCommand request, CancellationToken cancellationToken)
+		public async Task Handle(UpdateTableBookingCommand request, CancellationToken cancellationToken)
 		{
 			var result = await _tableBookingService.UpdateAsync(
-				request.Id,
-				request.UpdateTableBookingDto.OnholdTime,
-				request.UpdateTableBookingDto.TableId,
-				request.UpdateTableBookingDto.BookingId);
-			return new UpdateTableBookingCommandResponse
-			{
-				Id = result
-			};
+				request.Id!.Value,
+				request.OnholdTime,
+				request.TableId,
+				request.BookingId);
 		}
 	}
 }

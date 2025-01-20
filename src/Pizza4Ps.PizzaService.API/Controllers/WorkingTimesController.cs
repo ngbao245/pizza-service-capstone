@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Pizza4Ps.PizzaService.API.Constants;
 using Pizza4Ps.PizzaService.API.Models;
-using Pizza4Ps.PizzaService.Application.DTOs.WorkingTimes;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.WorkingTimes.Commands.CreateWorkingTime;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.WorkingTimes.Commands.DeleteWorkingTime;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.WorkingTimes.Commands.RestoreWorkingTime;
@@ -13,7 +12,7 @@ using Pizza4Ps.PizzaService.Application.UserCases.V1.WorkingTimes.Queries.GetWor
 
 namespace Pizza4Ps.PizzaService.API.Controllers
 {
-	[Route("api/working-times")]
+    [Route("api/working-times")]
 	[ApiController]
 	public class WorkingTimesController : ControllerBase
 	{
@@ -27,9 +26,9 @@ namespace Pizza4Ps.PizzaService.API.Controllers
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> CreateAsync([FromBody] CreateWorkingTimeDto request)
+		public async Task<IActionResult> CreateAsync([FromBody] CreateWorkingTimeCommand request)
 		{
-			var result = await _sender.Send(new CreateWorkingTimeCommand { CreateWorkingTimeDto = request });
+			var result = await _sender.Send(request);
 			return Ok(new ApiResponse
 			{
 				Result = result,
@@ -39,9 +38,9 @@ namespace Pizza4Ps.PizzaService.API.Controllers
 		}
 
 		[HttpGet("ignore-filter")]
-		public async Task<IActionResult> GetListIgnoreQueryFilterAsync([FromQuery] GetListWorkingTimeIgnoreQueryFilterDto query)
+		public async Task<IActionResult> GetListIgnoreQueryFilterAsync([FromQuery] GetListWorkingTimeIgnoreQueryFilterQuery query)
 		{
-			var result = await _sender.Send(new GetListWorkingTimeIgnoreQueryFilterQuery { GetListWorkingTimeIgnoreQueryFilterDto = query });
+			var result = await _sender.Send(query);
 			return Ok(new ApiResponse
 			{
 				Result = result,
@@ -51,9 +50,9 @@ namespace Pizza4Ps.PizzaService.API.Controllers
 		}
 
 		[HttpGet()]
-		public async Task<IActionResult> GetListAsync([FromQuery] GetListWorkingTimeDto query)
+		public async Task<IActionResult> GetListAsync([FromQuery] GetListWorkingTimeQuery query)
 		{
-			var result = await _sender.Send(new GetListWorkingTimeQuery { GetListWorkingTimeDto = query });
+			var result = await _sender.Send(query);
 			return Ok(new ApiResponse
 			{
 				Result = result,
@@ -75,12 +74,13 @@ namespace Pizza4Ps.PizzaService.API.Controllers
 		}
 
 		[HttpPut("{id}")]
-		public async Task<IActionResult> UpdateAsync([FromRoute] Guid id, [FromBody] UpdateWorkingTimeDto request)
+		public async Task<IActionResult> UpdateAsync([FromRoute] Guid id, [FromBody] UpdateWorkingTimeCommand request)
 		{
-			var result = await _sender.Send(new UpdateWorkingTimeCommand { Id = id, UpdateWorkingTimeDto = request });
+            request.Id = id;
+            await _sender.Send(request);
 			return Ok(new ApiResponse
 			{
-				Result = result,
+				Success = true,
 				Message = Message.UPDATED_SUCCESS,
 				StatusCode = StatusCodes.Status200OK
 			});

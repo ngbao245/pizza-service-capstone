@@ -3,7 +3,7 @@ using Pizza4Ps.PizzaService.Domain.Abstractions.Services;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.StaffZones.Commands.UpdateStaffZone
 {
-    public class UpdateStaffZoneCommandHandler : IRequestHandler<UpdateStaffZoneCommand, UpdateStaffZoneCommandResponse>
+    public class UpdateStaffZoneCommandHandler : IRequestHandler<UpdateStaffZoneCommand>
     {
         private readonly IStaffZoneService _StaffZoneService;
 
@@ -12,20 +12,16 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.StaffZones.Commands.Upd
             _StaffZoneService = StaffZoneService;
         }
 
-        public async Task<UpdateStaffZoneCommandResponse> Handle(UpdateStaffZoneCommand request, CancellationToken cancellationToken)
+        public async Task Handle(UpdateStaffZoneCommand request, CancellationToken cancellationToken)
         {
             var result = await _StaffZoneService.UpdateAsync(
-                request.Id,
-                request.UpdateStaffZoneDto.ShiftStart,
-                request.UpdateStaffZoneDto.ShiftEnd,
-                request.UpdateStaffZoneDto.Note,
-                request.UpdateStaffZoneDto.StaffId,
-                request.UpdateStaffZoneDto.ZoneId
+                request.Id!.Value,
+                request.ShiftStart,
+                request.ShiftEnd,
+                request.Note,
+                request.StaffId,
+                request.ZoneId
                 );
-            return new UpdateStaffZoneCommandResponse
-            {
-                Id = result
-            };
         }
     }
 }

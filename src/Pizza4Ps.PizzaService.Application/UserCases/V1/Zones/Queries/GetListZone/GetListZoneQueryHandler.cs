@@ -2,14 +2,15 @@
 using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Pizza4Ps.PizzaService.Application.DTOs.Zones;
+using Pizza4Ps.PizzaService.Application.Abstractions;
+using Pizza4Ps.PizzaService.Application.DTOs;
 using Pizza4Ps.PizzaService.Domain.Abstractions.Repositories;
 using Pizza4Ps.PizzaService.Domain.Constants;
 using Pizza4Ps.PizzaService.Domain.Exceptions;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Zones.Queries.GetListZone
 {
-    public class GetListZoneQueryHandler : IRequestHandler<GetListZoneQuery, GetListZoneQueryResponse>
+    public class GetListZoneQueryHandler : IRequestHandler<GetListZoneQuery, PaginatedResultDto<ZoneDto>>
     {
         private readonly IMapper _mapper;
         private readonly IZoneRepository _zoneRepository;
@@ -20,22 +21,22 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Zones.Queries.GetListZo
             _zoneRepository = zoneRepository;
         }
 
-        public async Task<GetListZoneQueryResponse> Handle(GetListZoneQuery request, CancellationToken cancellationToken)
+        public async Task<PaginatedResultDto<ZoneDto>> Handle(GetListZoneQuery request, CancellationToken cancellationToken)
         {
             var query = _zoneRepository.GetListAsNoTracking(
-                x => (request.GetListZoneDto.Name == null || x.Name.Contains(request.GetListZoneDto.Name))
-                && (request.GetListZoneDto.Capacity == null || x.Capacity == request.GetListZoneDto.Capacity)
-                && (request.GetListZoneDto.Description == null || x.Description.Contains(request.GetListZoneDto.Description))
-                && (request.GetListZoneDto.Status == null || x.Status == request.GetListZoneDto.Status),
-                includeProperties: request.GetListZoneDto.includeProperties);
+                x => (request.Name == null || x.Name.Contains(request.Name))
+                && (request.Capacity == null || x.Capacity == request.Capacity)
+                && (request.Description == null || x.Description.Contains(request.Description))
+                && (request.Status == null || x.Status == request.Status),
+                includeProperties: request.IncludeProperties);
             var entities = await query
-                .OrderBy(request.GetListZoneDto.SortBy)
-                .Skip(request.GetListZoneDto.SkipCount).Take(request.GetListZoneDto.TakeCount).ToListAsync();
+                .OrderBy(request.SortBy)
+                .Skip(request.SkipCount).Take(request.TakeCount).ToListAsync();
             if (!entities.Any())
                 throw new BusinessException(BussinessErrorConstants.ZoneErrorConstant.ZONE_NOT_FOUND);
             var result = _mapper.Map<List<ZoneDto>>(entities);
             var totalCount = await query.CountAsync();
-            return new GetListZoneQueryResponse(result, totalCount);
+            return new PaginatedResultDto<ZoneDto>(result, totalCount);
         }
     }
 }

@@ -1,10 +1,11 @@
 ﻿using AutoMapper;
 using MediatR;
+using Pizza4Ps.PizzaService.Application.Abstractions;
 using Pizza4Ps.PizzaService.Domain.Abstractions.Services;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.OrderItems.Commands.CreateOrderItem
 {
-	public class CreateOrderItemCommandHandler : IRequestHandler<CreateOrderItemCommand, CreateOrderItemCommandResponse>
+	public class CreateOrderItemCommandHandler : IRequestHandler<CreateOrderItemCommand, ResultDto<Guid>>
 	{
 		private readonly IMapper _mapper;
 		private readonly IOrderItemService _orderitemService;
@@ -15,16 +16,16 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.OrderItems.Commands.Cre
 			_orderitemService = orderitemService;
 		}
 
-		public async Task<CreateOrderItemCommandResponse> Handle(CreateOrderItemCommand request, CancellationToken cancellationToken)
+		public async Task<ResultDto<Guid>> Handle(CreateOrderItemCommand request, CancellationToken cancellationToken)
 		{
 			var result = await _orderitemService.CreateAsync(
-				request.CreateOrderItemDto.Name,
-				request.CreateOrderItemDto.Quantity,
-				request.CreateOrderItemDto.Price,
-				request.CreateOrderItemDto.OrderId,
-				request.CreateOrderItemDto.ProductId);
-			return new CreateOrderItemCommandResponse
-			{
+				request.Name,
+				request.Quantity,
+				request.Price,
+				request.OrderId,
+				request.ProductId);
+			return new ResultDto<Guid>
+            {
 				Id = result
 			};
 		}

@@ -1,11 +1,13 @@
 ﻿using MediatR;
-using Pizza4Ps.PizzaService.Application.DTOs.Vouchers;
+using Pizza4Ps.PizzaService.Domain.Enums;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Vouchers.Commands.UpdateVoucher
 {
-	public class UpdateVoucherCommand : IRequest<UpdateVoucherCommandResponse>
+    public class UpdateVoucherCommand : IRequest
 	{
-		public Guid Id { get; set; }
-		public UpdateVoucherDto UpdateVoucherDto { get; set; }
-	}
+		public Guid? Id { get; set; }
+        public string Code { get; set; }
+        public DiscountTypeEnum DiscountType { get; set; }
+        public DateTime ExpiryDate { get; set; }
+    }
 }
