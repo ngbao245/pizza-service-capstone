@@ -1,13 +1,14 @@
-﻿using System.Linq.Dynamic.Core;
-using AutoMapper;
+﻿using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Pizza4Ps.PizzaService.Application.DTOs.Feedbacks;
+using Pizza4Ps.PizzaService.Application.Abstractions;
+using Pizza4Ps.PizzaService.Application.DTOs;
 using Pizza4Ps.PizzaService.Domain.Abstractions.Repositories;
+using System.Linq.Dynamic.Core;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Feedbacks.Queries.GetListFeedbackIgnoreQueryFilter
 {
-	public class GetListFeedbackIgnoreQueryFilterQueryHandler : IRequestHandler<GetListFeedbackIgnoreQueryFilterQuery, GetListFeedbackIgnoreQueryFilterQueryResponse>
+    public class GetListFeedbackIgnoreQueryFilterQueryHandler : IRequestHandler<GetListFeedbackIgnoreQueryFilterQuery, PaginatedResultDto<FeedbackDto>>
 	{
 		private readonly IMapper _mapper;
 		private readonly IFeedbackRepository _feedbackRepository;
@@ -18,19 +19,20 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Feedbacks.Queries.GetLi
 			_feedbackRepository = feedbackRepository;
 		}
 
-		public async Task<GetListFeedbackIgnoreQueryFilterQueryResponse> Handle(GetListFeedbackIgnoreQueryFilterQuery request, CancellationToken cancellationToken)
+		public async Task<PaginatedResultDto<FeedbackDto>> Handle(GetListFeedbackIgnoreQueryFilterQuery request, CancellationToken cancellationToken)
 		{
-			var query = _feedbackRepository.GetListAsNoTracking(includeProperties: request.GetListFeedbackIgnoreQueryFilterDto.includeProperties).IgnoreQueryFilters()
+			var query = _feedbackRepository.GetListAsNoTracking(includeProperties: request.IncludeProperties).IgnoreQueryFilters()
 				.Where(
-					x => (request.GetListFeedbackIgnoreQueryFilterDto.Rating == null || x.Rating == request.GetListFeedbackIgnoreQueryFilterDto.Rating)
-					&& (request.GetListFeedbackIgnoreQueryFilterDto.Comments == null || x.Comments.Contains(request.GetListFeedbackIgnoreQueryFilterDto.Comments))
-					&& x.IsDeleted == request.GetListFeedbackIgnoreQueryFilterDto.IsDeleted);
+					x => (request.Rating == null || x.Rating == request.Rating)
+					&& (request.Comments == null || x.Comments.Contains(request.Comments))
+					&& (request.OrderId == null || x.OrderId == request.OrderId)
+					&& x.IsDeleted == request.IsDeleted);
 			var entities = await query
-				.OrderBy(request.GetListFeedbackIgnoreQueryFilterDto.SortBy)
-				.Skip(request.GetListFeedbackIgnoreQueryFilterDto.SkipCount).Take(request.GetListFeedbackIgnoreQueryFilterDto.TakeCount).ToListAsync();
+				.OrderBy(request.SortBy)
+				.Skip(request.SkipCount).Take(request.TakeCount).ToListAsync();
 			var result = _mapper.Map<List<FeedbackDto>>(entities);
 			var totalCount = await query.CountAsync();
-			return new GetListFeedbackIgnoreQueryFilterQueryResponse(result, totalCount);
-		}
-	}
+            return new PaginatedResultDto<FeedbackDto>(result, totalCount);
+        }
+    }
 }

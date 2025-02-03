@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Pizza4Ps.PizzaService.API.Constants;
 using Pizza4Ps.PizzaService.API.Models;
-using Pizza4Ps.PizzaService.Application.DTOs.Payments;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Payments.Commands.CreatePayment;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Payments.Commands.DeletePayment;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Payments.Commands.RestorePayment;
@@ -13,7 +12,7 @@ using Pizza4Ps.PizzaService.Application.UserCases.V1.Payments.Queries.GetPayment
 
 namespace Pizza4Ps.PizzaService.API.Controllers
 {
-	[Route("api/Payments")]
+    [Route("api/payments")]
 	[ApiController]
 	public class PaymentsController : ControllerBase
 	{
@@ -27,9 +26,9 @@ namespace Pizza4Ps.PizzaService.API.Controllers
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> CreateAsync([FromBody] CreatePaymentDto request)
+		public async Task<IActionResult> CreateAsync([FromBody] CreatePaymentCommand request)
 		{
-			var result = await _sender.Send(new CreatePaymentCommand { CreatePaymentDto = request });
+			var result = await _sender.Send(request);
 			return Ok(new ApiResponse
 			{
 				Result = result,
@@ -39,9 +38,9 @@ namespace Pizza4Ps.PizzaService.API.Controllers
 		}
 
 		[HttpGet("ignore-filter")]
-		public async Task<IActionResult> GetListIgnoreQueryFilterAsync([FromQuery] GetListPaymentIgnoreQueryFilterDto query)
+		public async Task<IActionResult> GetListIgnoreQueryFilterAsync([FromQuery] GetListPaymentIgnoreQueryFilterQuery query)
 		{
-			var result = await _sender.Send(new GetListPaymentIgnoreQueryFilterQuery { GetListPaymentIgnoreQueryFilterDto = query });
+			var result = await _sender.Send(query);
 			return Ok(new ApiResponse
 			{
 				Result = result,
@@ -51,9 +50,9 @@ namespace Pizza4Ps.PizzaService.API.Controllers
 		}
 
 		[HttpGet()]
-		public async Task<IActionResult> GetListAsync([FromQuery] GetListPaymentDto query)
+		public async Task<IActionResult> GetListAsync([FromQuery] GetListPaymentQuery query)
 		{
-			var result = await _sender.Send(new GetListPaymentQuery { GetListPaymentDto = query });
+			var result = await _sender.Send(query);
 			return Ok(new ApiResponse
 			{
 				Result = result,
@@ -75,12 +74,13 @@ namespace Pizza4Ps.PizzaService.API.Controllers
 		}
 
 		[HttpPut("{id}")]
-		public async Task<IActionResult> UpdateAsync([FromRoute] Guid id, [FromBody] UpdatePaymentDto request)
-		{
-			var result = await _sender.Send(new UpdatePaymentCommand { Id = id, UpdatePaymentDto = request });
+		public async Task<IActionResult> UpdateAsync([FromRoute] Guid id, [FromBody] UpdatePaymentCommand request)
+        {
+            request.Id = id;
+            await _sender.Send(request);
 			return Ok(new ApiResponse
 			{
-				Result = result,
+				Success = true,
 				Message = Message.UPDATED_SUCCESS,
 				StatusCode = StatusCodes.Status200OK
 			});

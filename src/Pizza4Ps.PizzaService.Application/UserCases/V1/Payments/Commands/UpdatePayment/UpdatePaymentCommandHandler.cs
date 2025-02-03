@@ -3,7 +3,7 @@ using Pizza4Ps.PizzaService.Domain.Abstractions.Services;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Payments.Commands.UpdatePayment
 {
-	public class UpdatePaymentCommandHandler : IRequestHandler<UpdatePaymentCommand, UpdatePaymentCommandResponse>
+	public class UpdatePaymentCommandHandler : IRequestHandler<UpdatePaymentCommand>
 	{
 		private readonly IPaymentService _PaymentService;
 
@@ -12,18 +12,14 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Payments.Commands.Updat
 			_PaymentService = PaymentService;
 		}
 
-		public async Task<UpdatePaymentCommandResponse> Handle(UpdatePaymentCommand request, CancellationToken cancellationToken)
+		public async Task Handle(UpdatePaymentCommand request, CancellationToken cancellationToken)
 		{
 			var result = await _PaymentService.UpdateAsync(
-				request.Id,
-				request.UpdatePaymentDto.Amount,
-				request.UpdatePaymentDto.PaymentMethod,
-				request.UpdatePaymentDto.Status,
-				request.UpdatePaymentDto.OrderId);
-			return new UpdatePaymentCommandResponse
-			{
-				Id = result
-			};
+				request.Id!.Value,
+				request.Amount,
+				request.PaymentMethod,
+				request.Status,
+				request.OrderId);
 		}
 	}
 }

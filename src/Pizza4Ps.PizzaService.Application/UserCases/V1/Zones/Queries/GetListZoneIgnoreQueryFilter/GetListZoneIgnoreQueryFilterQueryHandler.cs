@@ -2,12 +2,13 @@
 using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Pizza4Ps.PizzaService.Application.DTOs.Zones;
+using Pizza4Ps.PizzaService.Application.Abstractions;
+using Pizza4Ps.PizzaService.Application.DTOs;
 using Pizza4Ps.PizzaService.Domain.Abstractions.Repositories;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Zones.Queries.GetListZoneIgnoreQueryFilter
 {
-	public class GetListZoneIgnoreQueryFilterQueryHandler : IRequestHandler<GetListZoneIgnoreQueryFilterQuery, GetListZoneIgnoreQueryFilterQueryResponse>
+    public class GetListZoneIgnoreQueryFilterQueryHandler : IRequestHandler<GetListZoneIgnoreQueryFilterQuery, PaginatedResultDto<ZoneDto>>
 	{
 		private readonly IMapper _mapper;
 		private readonly IZoneRepository _zoneRepository;
@@ -18,21 +19,21 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Zones.Queries.GetListZo
 			_zoneRepository = zoneRepository;
 		}
 
-		public async Task<GetListZoneIgnoreQueryFilterQueryResponse> Handle(GetListZoneIgnoreQueryFilterQuery request, CancellationToken cancellationToken)
+		public async Task<PaginatedResultDto<ZoneDto>> Handle(GetListZoneIgnoreQueryFilterQuery request, CancellationToken cancellationToken)
 		{
-			var query = _zoneRepository.GetListAsNoTracking(includeProperties: request.GetListZoneIgnoreQueryFilterDto.includeProperties).IgnoreQueryFilters()
+			var query = _zoneRepository.GetListAsNoTracking(includeProperties: request.IncludeProperties).IgnoreQueryFilters()
 				.Where(
-					x => (request.GetListZoneIgnoreQueryFilterDto.Name == null || x.Name.Contains(request.GetListZoneIgnoreQueryFilterDto.Name))
-					&& (request.GetListZoneIgnoreQueryFilterDto.Capacity == null || x.Capacity == request.GetListZoneIgnoreQueryFilterDto.Capacity)
-					&& (request.GetListZoneIgnoreQueryFilterDto.Description == null || x.Description.Contains(request.GetListZoneIgnoreQueryFilterDto.Description))
-					&& (request.GetListZoneIgnoreQueryFilterDto.Status == null || x.Status == request.GetListZoneIgnoreQueryFilterDto.Status)
-					&& x.IsDeleted == request.GetListZoneIgnoreQueryFilterDto.IsDeleted);
+					x => (request.Name == null || x.Name.Contains(request.Name))
+					&& (request.Capacity == null || x.Capacity == request.Capacity)
+					&& (request.Description == null || x.Description.Contains(request.Description))
+					&& (request.Status == null || x.Status == request.Status)
+					&& x.IsDeleted == request.IsDeleted);
 			var entities = await query
-				.OrderBy(request.GetListZoneIgnoreQueryFilterDto.SortBy)
-				.Skip(request.GetListZoneIgnoreQueryFilterDto.SkipCount).Take(request.GetListZoneIgnoreQueryFilterDto.TakeCount).ToListAsync();
+				.OrderBy(request.SortBy)
+				.Skip(request.SkipCount).Take(request.TakeCount).ToListAsync();
 			var result = _mapper.Map<List<ZoneDto>>(entities);
 			var totalCount = await query.CountAsync();
-			return new GetListZoneIgnoreQueryFilterQueryResponse(result, totalCount);
+			return new PaginatedResultDto<ZoneDto>(result, totalCount);
 		}
 	}
 }

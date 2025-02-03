@@ -1,10 +1,11 @@
 ﻿using AutoMapper;
 using MediatR;
+using Pizza4Ps.PizzaService.Application.Abstractions;
 using Pizza4Ps.PizzaService.Domain.Abstractions.Services;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Feedbacks.Commands.CreateFeedback
 {
-	public class CreateFeedbackCommandHandler : IRequestHandler<CreateFeedbackCommand, CreateFeedbackCommandResponse>
+	public class CreateFeedbackCommandHandler : IRequestHandler<CreateFeedbackCommand, ResultDto<Guid>>
 	{
 		private readonly IMapper _mapper;
 		private readonly IFeedbackService _feedbackService;
@@ -15,16 +16,16 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Feedbacks.Commands.Crea
 			_feedbackService = feedbackService;
 		}
 
-		public async Task<CreateFeedbackCommandResponse> Handle(CreateFeedbackCommand request, CancellationToken cancellationToken)
+		public async Task<ResultDto<Guid>> Handle(CreateFeedbackCommand request, CancellationToken cancellationToken)
 		{
 			var result = await _feedbackService.CreateAsync(
-				request.CreateFeedbackDto.Rating,
-				request.CreateFeedbackDto.Comments,
-				request.CreateFeedbackDto.OrderId);
-			return new CreateFeedbackCommandResponse
-			{
-				Id = result
-			};
-		}
+				request.Rating,
+				request.Comments,
+				request.OrderId);
+            return new ResultDto<Guid>
+            {
+                Id = result,
+            };
+        }
 	}
 }

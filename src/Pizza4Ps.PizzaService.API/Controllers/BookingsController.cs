@@ -2,11 +2,13 @@
 using Microsoft.AspNetCore.Mvc;
 using Pizza4Ps.PizzaService.API.Constants;
 using Pizza4Ps.PizzaService.API.Models;
-using Pizza4Ps.PizzaService.Application.DTOs.Bookings;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Bookings.Commands.CreateBooking;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Bookings.Commands.DeleteBooking;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Bookings.Commands.RestoreBooking;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Bookings.Commands.UpdateBooking;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Bookings.Queries.GetBookingById;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Bookings.Queries.GetListBooking;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Bookings.Queries.GetListBookingIgnoreQueryFilter;
 
 namespace Pizza4Ps.PizzaService.API.Controllers
 {
@@ -24,9 +26,9 @@ namespace Pizza4Ps.PizzaService.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateAsync([FromBody] CreateBookingDto request)
+        public async Task<IActionResult> CreateAsync([FromBody] CreateBookingCommand request)
         {
-            var result = await _sender.Send(new CreateBookingCommand { CreateBookingDto = request });
+            var result = await _sender.Send(request);
             return Ok(new ApiResponse
             {
                 Result = result,
@@ -35,13 +37,51 @@ namespace Pizza4Ps.PizzaService.API.Controllers
             });
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAsync([FromRoute] Guid id, [FromBody] UpdateBookingDto request)
+        [HttpGet("ignore-filter")]
+        public async Task<IActionResult> GetListIgnoreQueryFilterAsync([FromQuery] GetListBookingIgnoreQueryFilterQuery query)
         {
-            var result = await _sender.Send(new UpdateBookingCommand { Id = id, UpdateBookingDto = request });
+            var result = await _sender.Send(query);
             return Ok(new ApiResponse
             {
                 Result = result,
+                Message = Message.GET_SUCCESS,
+                StatusCode = StatusCodes.Status200OK
+            });
+        }
+
+        [HttpGet()]
+        public async Task<IActionResult> GetListAsync([FromQuery] GetListBookingQuery query)
+        {
+            var result = await _sender.Send(query);
+            return Ok(new ApiResponse
+            {
+                Result = result,
+                Message = Message.GET_SUCCESS,
+                StatusCode = StatusCodes.Status200OK
+            });
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetSingleByIdAsync([FromRoute] Guid id)
+        {
+            var result = await _sender.Send(new GetBookingByIdQuery { Id = id });
+            return Ok(new ApiResponse
+            {
+                Result = result,
+                Message = Message.GET_SUCCESS,
+                StatusCode = StatusCodes.Status200OK
+            });
+        }
+
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateAsync([FromRoute] Guid id, [FromBody] UpdateBookingCommand request)
+        {
+            request.Id = id;
+            await _sender.Send(request);
+            return Ok(new ApiResponse
+            {
+                Success = true,
                 Message = Message.UPDATED_SUCCESS,
                 StatusCode = StatusCodes.Status200OK
             });

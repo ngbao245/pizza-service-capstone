@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using MediatR;
-using Pizza4Ps.PizzaService.Application.DTOs.Staffs;
+using Pizza4Ps.PizzaService.Application.DTOs;
 using Pizza4Ps.PizzaService.Domain.Abstractions.Repositories;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Staffs.Queries.GetStaffById
 {
-	public class GetStaffByIdQueryHandler : IRequestHandler<GetStaffByIdQuery, GetStaffByIdQueryResponse>
+    public class GetStaffByIdQueryHandler : IRequestHandler<GetStaffByIdQuery, StaffDto>
 	{
 		private readonly IMapper _mapper;
 		private readonly IStaffRepository _staffRepository;
@@ -16,14 +16,11 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Staffs.Queries.GetStaff
 			_staffRepository = staffRepository;
 		}
 
-		public async Task<GetStaffByIdQueryResponse> Handle(GetStaffByIdQuery request, CancellationToken cancellationToken)
+		public async Task<StaffDto> Handle(GetStaffByIdQuery request, CancellationToken cancellationToken)
 		{
 			var entity = await _staffRepository.GetSingleByIdAsync(request.Id, request.includeProperties);
 			var result = _mapper.Map<StaffDto>(entity);
-			return new GetStaffByIdQueryResponse
-			{
-				Staff = result
-			};
+			return result;
 		}
 	}
 }

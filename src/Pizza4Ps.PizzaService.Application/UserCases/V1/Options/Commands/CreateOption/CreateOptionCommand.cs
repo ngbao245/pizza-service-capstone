@@ -1,10 +1,11 @@
 ﻿using MediatR;
-using Pizza4Ps.PizzaService.Application.DTOs.Options;
+using Pizza4Ps.PizzaService.Application.Abstractions;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Options.Commands.CreateOption
 {
-	public class CreateOptionCommand : IRequest<CreateOptionCommandResponse>
+    public class CreateOptionCommand : IRequest<ResultDto<Guid>>
 	{
-		public CreateOptionDto CreateOptionDto { get; set; }
-	}
+        public string Name { get; set; }
+        public string Description { get; set; }
+    }
 }

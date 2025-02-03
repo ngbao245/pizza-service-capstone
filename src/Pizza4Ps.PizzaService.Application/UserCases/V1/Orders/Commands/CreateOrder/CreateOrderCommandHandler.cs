@@ -1,10 +1,11 @@
 ﻿using AutoMapper;
 using MediatR;
+using Pizza4Ps.PizzaService.Application.Abstractions;
 using Pizza4Ps.PizzaService.Domain.Abstractions.Services;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Orders.Commands.CreateOrder
 {
-	public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, CreateOrderCommandResponse>
+	public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, ResultDto<Guid>>
 	{
 		private readonly IMapper _mapper;
 		private readonly IOrderService _orderService;
@@ -15,14 +16,14 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Orders.Commands.CreateO
 			_orderService = orderService;
 		}
 
-		public async Task<CreateOrderCommandResponse> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
+		public async Task<ResultDto<Guid>> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
 		{
 			var result = await _orderService.CreateAsync(
-				request.CreateOrderDto.StartTime,
-				request.CreateOrderDto.EndTime,
-				request.CreateOrderDto.Status,
-				request.CreateOrderDto.TableId);
-			return new CreateOrderCommandResponse
+				request.StartTime,
+				request.EndTime,
+				request.Status,
+				request.TableId);
+			return new ResultDto<Guid>
 			{
 				Id = result
 			};

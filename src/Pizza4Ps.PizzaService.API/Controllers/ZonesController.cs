@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Pizza4Ps.PizzaService.API.Constants;
 using Pizza4Ps.PizzaService.API.Models;
-using Pizza4Ps.PizzaService.Application.DTOs.Zones;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Zones.Commands.CreateZone;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Zones.Commands.DeleteZone;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Zones.Commands.RestoreZone;
@@ -13,7 +12,7 @@ using Pizza4Ps.PizzaService.Application.UserCases.V1.Zones.Queries.GetZoneById;
 
 namespace Pizza4Ps.PizzaService.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/zones")]
     [ApiController]
     public class ZonesController : ControllerBase
     {
@@ -27,9 +26,9 @@ namespace Pizza4Ps.PizzaService.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateAsync([FromBody] CreateZoneDto request)
+        public async Task<IActionResult> CreateAsync([FromBody] CreateZoneCommand request)
         {
-            var result = await _sender.Send(new CreateZoneCommand { CreateZoneDto = request });
+            var result = await _sender.Send(request);
             return Ok(new ApiResponse
             {
                 Result = result,
@@ -39,9 +38,9 @@ namespace Pizza4Ps.PizzaService.API.Controllers
         }
 
         [HttpGet("ignore-filter")]
-        public async Task<IActionResult> GetListIgnoreQueryFilterAsync([FromQuery] GetListZoneIgnoreQueryFilterDto query)
+        public async Task<IActionResult> GetListIgnoreQueryFilterAsync([FromQuery] GetListZoneIgnoreQueryFilterQuery query)
         {
-            var result = await _sender.Send(new GetListZoneIgnoreQueryFilterQuery { GetListZoneIgnoreQueryFilterDto = query });
+            var result = await _sender.Send(query);
             return Ok(new ApiResponse
             {
                 Result = result,
@@ -51,9 +50,9 @@ namespace Pizza4Ps.PizzaService.API.Controllers
         }
 
         [HttpGet()]
-        public async Task<IActionResult> GetListAsync([FromQuery] GetListZoneDto query)
+        public async Task<IActionResult> GetListAsync([FromQuery] GetListZoneQuery query)
         {
-            var result = await _sender.Send(new GetListZoneQuery { GetListZoneDto = query });
+            var result = await _sender.Send(query);
             return Ok(new ApiResponse
             {
                 Result = result,
@@ -75,12 +74,13 @@ namespace Pizza4Ps.PizzaService.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAsync([FromRoute] Guid id, [FromBody] UpdateZoneDto request)
+        public async Task<IActionResult> UpdateAsync([FromRoute] Guid id, [FromBody] UpdateZoneCommand request)
         {
-            var result = await _sender.Send(new UpdateZoneCommand { Id = id, UpdateZoneDto = request });
+            request.Id = id;
+            await _sender.Send(request);
             return Ok(new ApiResponse
             {
-                Result = result,
+                Success = true,
                 Message = Message.UPDATED_SUCCESS,
                 StatusCode = StatusCodes.Status200OK
             });

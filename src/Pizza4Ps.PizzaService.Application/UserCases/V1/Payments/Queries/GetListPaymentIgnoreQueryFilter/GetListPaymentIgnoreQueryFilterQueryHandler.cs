@@ -1,13 +1,14 @@
 ﻿using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Pizza4Ps.PizzaService.Application.DTOs.Payments;
+using Pizza4Ps.PizzaService.Application.Abstractions;
+using Pizza4Ps.PizzaService.Application.DTOs;
 using Pizza4Ps.PizzaService.Domain.Abstractions.Repositories;
 using System.Linq.Dynamic.Core;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Payments.Queries.GetListPaymentIgnoreQueryFilter
 {
-	public class GetListPaymentIgnoreQueryFilterQueryHandler : IRequestHandler<GetListPaymentIgnoreQueryFilterQuery, GetListPaymentIgnoreQueryFilterQueryResponse>
+    public class GetListPaymentIgnoreQueryFilterQueryHandler : IRequestHandler<GetListPaymentIgnoreQueryFilterQuery, PaginatedResultDto<PaymentDto>>
 	{
 		private readonly IMapper _mapper;
 		private readonly IPaymentRepository _PaymentRepository;
@@ -18,20 +19,21 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Payments.Queries.GetLis
 			_PaymentRepository = PaymentRepository;
 		}
 
-		public async Task<GetListPaymentIgnoreQueryFilterQueryResponse> Handle(GetListPaymentIgnoreQueryFilterQuery request, CancellationToken cancellationToken)
+		public async Task<PaginatedResultDto<PaymentDto>> Handle(GetListPaymentIgnoreQueryFilterQuery request, CancellationToken cancellationToken)
 		{
-			var query = _PaymentRepository.GetListAsNoTracking(includeProperties: request.GetListPaymentIgnoreQueryFilterDto.includeProperties).IgnoreQueryFilters()
+			var query = _PaymentRepository.GetListAsNoTracking(includeProperties: request.IncludeProperties).IgnoreQueryFilters()
 				.Where(
-					x => (request.GetListPaymentIgnoreQueryFilterDto.Amount == null || x.Amount == request.GetListPaymentIgnoreQueryFilterDto.Amount)
-					&& (request.GetListPaymentIgnoreQueryFilterDto.PaymentMethod == null || x.PaymentMethod == request.GetListPaymentIgnoreQueryFilterDto.PaymentMethod)
-					&& (request.GetListPaymentIgnoreQueryFilterDto.Status == null || x.Status.Contains(request.GetListPaymentIgnoreQueryFilterDto.Status))
-					&& x.IsDeleted == request.GetListPaymentIgnoreQueryFilterDto.IsDeleted);
+					x => (request.Amount == null || x.Amount == request.Amount)
+					&& (request.PaymentMethod == null || x.PaymentMethod == request.PaymentMethod)
+					&& (request.Status == null || x.Status.Contains(request.Status))
+					&& (request.OrderId == null || x.OrderId == request.OrderId)
+					&& x.IsDeleted == request.IsDeleted);
 			var entities = await query
-				.OrderBy(request.GetListPaymentIgnoreQueryFilterDto.SortBy)
-				.Skip(request.GetListPaymentIgnoreQueryFilterDto.SkipCount).Take(request.GetListPaymentIgnoreQueryFilterDto.TakeCount).ToListAsync();
+				.OrderBy(request.SortBy)
+				.Skip(request.SkipCount).Take(request.TakeCount).ToListAsync();
 			var result = _mapper.Map<List<PaymentDto>>(entities);
 			var totalCount = await query.CountAsync();
-			return new GetListPaymentIgnoreQueryFilterQueryResponse(result, totalCount);
+			return new PaginatedResultDto<PaymentDto>(result, totalCount);
 		}
 	}
 }

@@ -7,7 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="BackgroundJobs\" />
+    <PackageReference Include="Hangfire" Version="1.8.17" />
+    <PackageReference Include="Hangfire.AspNetCore" Version="1.8.17" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Pizza4Ps.PizzaService.Application.Contract\Pizza4Ps.PizzaService.Application.Contract.csproj" />
+    <ProjectReference Include="..\Pizza4Ps.PizzaService.Domain\Pizza4Ps.PizzaService.Domain.csproj" />
   </ItemGroup>
 
 </Project>

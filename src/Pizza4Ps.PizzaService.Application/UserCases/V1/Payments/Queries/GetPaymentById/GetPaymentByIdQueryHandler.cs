@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using MediatR;
-using Pizza4Ps.PizzaService.Application.DTOs.Payments;
+using Pizza4Ps.PizzaService.Application.DTOs;
 using Pizza4Ps.PizzaService.Domain.Abstractions.Repositories;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Payments.Queries.GetPaymentById
 {
-	public class GetPaymentByIdQueryHandler : IRequestHandler<GetPaymentByIdQuery, GetPaymentByIdQueryResponse>
+    public class GetPaymentByIdQueryHandler : IRequestHandler<GetPaymentByIdQuery, PaymentDto>
 	{
 		private readonly IMapper _mapper;
 		private readonly IPaymentRepository _PaymentRepository;
@@ -16,14 +16,11 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Payments.Queries.GetPay
 			_PaymentRepository = PaymentRepository;
 		}
 
-		public async Task<GetPaymentByIdQueryResponse> Handle(GetPaymentByIdQuery request, CancellationToken cancellationToken)
+		public async Task<PaymentDto> Handle(GetPaymentByIdQuery request, CancellationToken cancellationToken)
 		{
 			var entity = await _PaymentRepository.GetSingleByIdAsync(request.Id, request.includeProperties);
 			var result = _mapper.Map<PaymentDto>(entity);
-			return new GetPaymentByIdQueryResponse
-			{
-				Payment = result
-			};
+			return result;
 		}
 	}
 }
