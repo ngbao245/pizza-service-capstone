@@ -42,9 +42,7 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/pizza4ps-pizza-service:latest
             ${{ secrets.DOCKERHUB_USERNAME }}/pizza4ps-pizza-service:v${{ github.run_number }}
-            ${{ secrets.DOCKERHUB_USERNAME }}/pizza4ps-pizza-service:${{ github.sha }}
 
   deploy:
     needs: build_and_push
