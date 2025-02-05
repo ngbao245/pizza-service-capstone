@@ -1,13 +1,14 @@
 ﻿using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Pizza4Ps.PizzaService.Application.DTOs.TableBookings;
+using Pizza4Ps.PizzaService.Application.Abstractions;
+using Pizza4Ps.PizzaService.Application.DTOs;
 using Pizza4Ps.PizzaService.Domain.Abstractions.Repositories;
 using System.Linq.Dynamic.Core;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.TableBookings.Queries.GetListTableBookingIgnoreQueryFilter
 {
-	public class GetListTableBookingIgnoreQueryFilterQueryHandler : IRequestHandler<GetListTableBookingIgnoreQueryFilterQuery, GetListTableBookingIgnoreQueryFilterQueryResponse>
+    public class GetListTableBookingIgnoreQueryFilterQueryHandler : IRequestHandler<GetListTableBookingIgnoreQueryFilterQuery, PaginatedResultDto<TableBookingDto>>
 	{
 		private readonly IMapper _mapper;
 		private readonly ITableBookingRepository _TableBookingRepository;
@@ -18,20 +19,20 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.TableBookings.Queries.G
 			_TableBookingRepository = TableBookingRepository;
 		}
 
-		public async Task<GetListTableBookingIgnoreQueryFilterQueryResponse> Handle(GetListTableBookingIgnoreQueryFilterQuery request, CancellationToken cancellationToken)
+		public async Task<PaginatedResultDto<TableBookingDto>> Handle(GetListTableBookingIgnoreQueryFilterQuery request, CancellationToken cancellationToken)
 		{
-			var query = _TableBookingRepository.GetListAsNoTracking(includeProperties: request.GetListTableBookingIgnoreQueryFilterDto.includeProperties).IgnoreQueryFilters()
+			var query = _TableBookingRepository.GetListAsNoTracking(includeProperties: request.IncludeProperties).IgnoreQueryFilters()
 				.Where(
-					x => (request.GetListTableBookingIgnoreQueryFilterDto.OnholdTime == null || x.OnholdTime == request.GetListTableBookingIgnoreQueryFilterDto.OnholdTime)
-					&& (request.GetListTableBookingIgnoreQueryFilterDto.TableId == null || x.TableId == request.GetListTableBookingIgnoreQueryFilterDto.TableId)
-					&& (request.GetListTableBookingIgnoreQueryFilterDto.BookingId == null || x.BookingId == request.GetListTableBookingIgnoreQueryFilterDto.BookingId)
-					&& x.IsDeleted == request.GetListTableBookingIgnoreQueryFilterDto.IsDeleted);
+					x => (request.OnholdTime == null || x.OnholdTime == request.OnholdTime)
+					&& (request.TableId == null || x.TableId == request.TableId)
+					&& (request.BookingId == null || x.BookingId == request.BookingId)
+					&& x.IsDeleted == request.IsDeleted);
 			var entities = await query
-				.OrderBy(request.GetListTableBookingIgnoreQueryFilterDto.SortBy)
-				.Skip(request.GetListTableBookingIgnoreQueryFilterDto.SkipCount).Take(request.GetListTableBookingIgnoreQueryFilterDto.TakeCount).ToListAsync();
+				.OrderBy(request.SortBy)
+				.Skip(request.SkipCount).Take(request.TakeCount).ToListAsync();
 			var result = _mapper.Map<List<TableBookingDto>>(entities);
 			var totalCount = await query.CountAsync();
-			return new GetListTableBookingIgnoreQueryFilterQueryResponse(result, totalCount);
+			return new PaginatedResultDto<TableBookingDto>(result, totalCount);
 		}
 	}
 }

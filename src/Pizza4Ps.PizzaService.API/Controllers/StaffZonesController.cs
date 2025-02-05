@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Pizza4Ps.PizzaService.API.Constants;
 using Pizza4Ps.PizzaService.API.Models;
-using Pizza4Ps.PizzaService.Application.DTOs.StaffZones;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.StaffZones.Commands.CreateStaffZone;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.StaffZones.Commands.DeleteStaffZone;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.StaffZones.Commands.RestoreStaffZone;
@@ -28,9 +27,9 @@ namespace Pizza4Ps.PizzaService.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateAsync([FromBody] CreateStaffZoneDto request)
+        public async Task<IActionResult> CreateAsync([FromBody] CreateStaffZoneCommand request)
         {
-            var result = await _sender.Send(new CreateStaffZoneCommand { CreateStaffZoneDto = request });
+            var result = await _sender.Send(request);
             return Ok(new ApiResponse
             {
                 Result = result,
@@ -40,9 +39,9 @@ namespace Pizza4Ps.PizzaService.API.Controllers
         }
 
         [HttpGet("ignore-filter")]
-        public async Task<IActionResult> GetListIgnoreQueryFilterAsync([FromQuery] GetListStaffZoneIgnoreQueryFilterDto query)
+        public async Task<IActionResult> GetListIgnoreQueryFilterAsync([FromQuery] GetListStaffZoneIgnoreQueryFilterQuery query)
         {
-            var result = await _sender.Send(new GetListStaffZoneIgnoreQueryFilterQuery { GetListStaffZoneIgnoreQueryFilterDto = query });
+            var result = await _sender.Send(query);
             return Ok(new ApiResponse
             {
                 Result = result,
@@ -52,9 +51,9 @@ namespace Pizza4Ps.PizzaService.API.Controllers
         }
 
         [HttpGet()]
-        public async Task<IActionResult> GetListAsync([FromQuery] GetListStaffZoneDto query)
+        public async Task<IActionResult> GetListAsync([FromQuery] GetListStaffZoneQuery query)
         {
-            var result = await _sender.Send(new GetListStaffZoneQuery { GetListStaffZoneDto = query });
+            var result = await _sender.Send(query);
             return Ok(new ApiResponse
             {
                 Result = result,
@@ -76,12 +75,13 @@ namespace Pizza4Ps.PizzaService.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAsync([FromRoute] Guid id, [FromBody] UpdateStaffZoneDto request)
+        public async Task<IActionResult> UpdateAsync([FromRoute] Guid id, [FromBody] UpdateStaffZoneCommand request)
         {
-            var result = await _sender.Send(new UpdateStaffZoneCommand { Id = id, UpdateStaffZoneDto = request });
+            request.Id = id;
+            await _sender.Send(request);
             return Ok(new ApiResponse
             {
-                Result = result,
+                Success = true,
                 Message = Message.UPDATED_SUCCESS,
                 StatusCode = StatusCodes.Status200OK
             });

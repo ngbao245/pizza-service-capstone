@@ -2,19 +2,19 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /app
 
-# Copy and restore dependencies
+# Copy and restore
 COPY ["src/Pizza4Ps.PizzaService.API/Pizza4Ps.PizzaService.API.csproj", "src/Pizza4Ps.PizzaService.API/"]
 RUN dotnet restore "src/Pizza4Ps.PizzaService.API/Pizza4Ps.PizzaService.API.csproj"
 
-# Copy the rest of the application code and build
+# Copy the rest of the files and build
 COPY . .
 WORKDIR "src/Pizza4Ps.PizzaService.API"
 RUN dotnet build "Pizza4Ps.PizzaService.API.csproj" -c Release -o /app/build
 
-# Publish Stage
+# Publish
 RUN dotnet publish "Pizza4Ps.PizzaService.API.csproj" -c Release -o /app/publish
 
-# Runtime Image
+# Runtime image
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
 WORKDIR /app
 COPY --from=build /app/publish .

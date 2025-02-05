@@ -2,14 +2,15 @@
 using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Pizza4Ps.PizzaService.Application.DTOs.OrderItems;
+using Pizza4Ps.PizzaService.Application.Abstractions;
+using Pizza4Ps.PizzaService.Application.DTOs;
 using Pizza4Ps.PizzaService.Domain.Abstractions.Repositories;
 using Pizza4Ps.PizzaService.Domain.Constants;
 using Pizza4Ps.PizzaService.Domain.Exceptions;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.OrderItems.Queries.GetListOrderItem
 {
-	public class GetListOrderItemQueryHandler : IRequestHandler<GetListOrderItemQuery, GetListOrderItemQueryResponse>
+    public class GetListOrderItemQueryHandler : IRequestHandler<GetListOrderItemQuery, PaginatedResultDto<OrderItemDto>>
 	{
 		private readonly IMapper _mapper;
 		private readonly IOrderItemRepository _orderitemRepository;
@@ -20,23 +21,23 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.OrderItems.Queries.GetL
 			_orderitemRepository = orderitemRepository;
 		}
 
-		public async Task<GetListOrderItemQueryResponse> Handle(GetListOrderItemQuery request, CancellationToken cancellationToken)
+		public async Task<PaginatedResultDto<OrderItemDto>> Handle(GetListOrderItemQuery request, CancellationToken cancellationToken)
 		{
 			var query = _orderitemRepository.GetListAsNoTracking(
-				x => (request.GetListOrderItemDto.Name == null || x.Name.Contains(request.GetListOrderItemDto.Name))
-				&& (request.GetListOrderItemDto.Quantity == null || x.Quantity == request.GetListOrderItemDto.Quantity)
-				&& (request.GetListOrderItemDto.Price == null || x.Price == request.GetListOrderItemDto.Price)
-				&& (request.GetListOrderItemDto.OrderId == null || x.OrderId == request.GetListOrderItemDto.OrderId)
-				&& (request.GetListOrderItemDto.ProductId == null || x.ProductId == request.GetListOrderItemDto.ProductId),
-				includeProperties: request.GetListOrderItemDto.includeProperties);
+				x => (request.Name == null || x.Name.Contains(request.Name))
+				&& (request.Quantity == null || x.Quantity == request.Quantity)
+				&& (request.Price == null || x.Price == request.Price)
+				&& (request.OrderId == null || x.OrderId == request.OrderId)
+				&& (request.ProductId == null || x.ProductId == request.ProductId),
+				includeProperties: request.IncludeProperties);
 			var entities = await query
-				.OrderBy(request.GetListOrderItemDto.SortBy)
-				.Skip(request.GetListOrderItemDto.SkipCount).Take(request.GetListOrderItemDto.TakeCount).ToListAsync();
+				.OrderBy(request.SortBy)
+				.Skip(request.SkipCount).Take(request.TakeCount).ToListAsync();
 			if (!entities.Any())
 				throw new BusinessException(BussinessErrorConstants.OrderItemErrorConstant.ORDERITEM_NOT_FOUND);
 			var result = _mapper.Map<List<OrderItemDto>>(entities);
 			var totalCount = await query.CountAsync();
-			return new GetListOrderItemQueryResponse(result, totalCount);
+			return new PaginatedResultDto<OrderItemDto>(result, totalCount);
 		}
 	}
 }

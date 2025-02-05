@@ -1,10 +1,16 @@
 ﻿using MediatR;
-using Pizza4Ps.PizzaService.Application.DTOs.StaffZones;
+using Pizza4Ps.PizzaService.Application.Abstractions;
+using Pizza4Ps.PizzaService.Application.DTOs;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.StaffZones.Queries.GetListStaffZoneIgnoreQueryFilter
 {
-    public class GetListStaffZoneIgnoreQueryFilterQuery : IRequest<GetListStaffZoneIgnoreQueryFilterQueryResponse>
+    public class GetListStaffZoneIgnoreQueryFilterQuery : PaginatedQuery<PaginatedResultDto<StaffZoneDto>>
     {
-        public GetListStaffZoneIgnoreQueryFilterDto GetListStaffZoneIgnoreQueryFilterDto { get; set; }
+        public bool IsDeleted { get; set; } = false;
+        public TimeOnly? ShiftStart { get; set; }
+        public TimeOnly? ShiftEnd { get; set; }
+        public string? Note { get; set; }
+        public Guid? StaffId { get; set; }
+        public Guid? ZoneId { get; set; }
     }
 }

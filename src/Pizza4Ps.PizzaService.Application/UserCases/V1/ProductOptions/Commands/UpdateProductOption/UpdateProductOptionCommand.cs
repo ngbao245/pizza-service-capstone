@@ -1,11 +1,11 @@
 ﻿using MediatR;
-using Pizza4Ps.PizzaService.Application.DTOs.ProductOptions;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.ProductOptions.Commands.UpdateProductOption
 {
-	public class UpdateProductOptionCommand : IRequest<UpdateProductOptionCommandResponse>
+    public class UpdateProductOptionCommand : IRequest
 	{
-		public Guid Id { get; set; }
-		public UpdateProductOptionDto UpdateProductOptionDto { get; set; }
-	}
+		public Guid? Id { get; set; }
+        public Guid ProductId { get; set; }
+        public Guid OptionId { get; set; }
+    }
 }

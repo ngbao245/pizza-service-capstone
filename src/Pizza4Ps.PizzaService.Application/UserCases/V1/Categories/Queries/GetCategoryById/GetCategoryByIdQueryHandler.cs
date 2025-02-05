@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using MediatR;
-using Pizza4Ps.PizzaService.Application.DTOs.Categories;
+using Pizza4Ps.PizzaService.Application.DTOs;
 using Pizza4Ps.PizzaService.Domain.Abstractions.Repositories;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Categories.Queries.GetCategoryById
 {
-    public class GetCategoryByIdQueryHandler : IRequestHandler<GetCategoryByIdQuery, GetCategoryByIdQueryResponse>
+    public class GetCategoryByIdQueryHandler : IRequestHandler<GetCategoryByIdQuery, CategoryDto>
     {
         private readonly IMapper _mapper;
         private readonly ICategoryRepository _CategoryRepository;
@@ -16,14 +16,11 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Categories.Queries.GetC
             _CategoryRepository = CategoryRepository;
         }
 
-        public async Task<GetCategoryByIdQueryResponse> Handle(GetCategoryByIdQuery request, CancellationToken cancellationToken)
+        public async Task<CategoryDto> Handle(GetCategoryByIdQuery request, CancellationToken cancellationToken)
         {
             var entity = await _CategoryRepository.GetSingleByIdAsync(request.Id, request.includeProperties);
             var result = _mapper.Map<CategoryDto>(entity);
-            return new GetCategoryByIdQueryResponse
-            {
-                Category = result
-            };
+            return result;
         }
     }
 }

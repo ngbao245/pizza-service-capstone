@@ -3,7 +3,7 @@ using Pizza4Ps.PizzaService.Domain.Abstractions.Services;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.OptionItemOrderItems.Commands.UpdateOptionItemOrderItem
 {
-	public class UpdateOptionItemOrderItemCommandHandler : IRequestHandler<UpdateOptionItemOrderItemCommand, UpdateOptionItemOrderItemCommandResponse>
+	public class UpdateOptionItemOrderItemCommandHandler : IRequestHandler<UpdateOptionItemOrderItemCommand>
 	{
 		private readonly IOptionItemOrderItemService _optionitemorderitemService;
 
@@ -12,18 +12,14 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.OptionItemOrderItems.Co
 			_optionitemorderitemService = optionitemorderitemService;
 		}
 
-		public async Task<UpdateOptionItemOrderItemCommandResponse> Handle(UpdateOptionItemOrderItemCommand request, CancellationToken cancellationToken)
+		public async Task Handle(UpdateOptionItemOrderItemCommand request, CancellationToken cancellationToken)
 		{
 			var result = await _optionitemorderitemService.UpdateAsync(
-				request.Id,
-				request.UpdateOptionItemOrderItemDto.Name,
-				request.UpdateOptionItemOrderItemDto.AdditionalPrice,
-				request.UpdateOptionItemOrderItemDto.OptionItemId,
-				request.UpdateOptionItemOrderItemDto.OrderItemId);
-			return new UpdateOptionItemOrderItemCommandResponse
-			{
-				Id = result
-			};
+				request.Id!.Value,
+				request.Name,
+				request.AdditionalPrice,
+				request.OptionItemId,
+				request.OrderItemId);
 		}
 	}
 }

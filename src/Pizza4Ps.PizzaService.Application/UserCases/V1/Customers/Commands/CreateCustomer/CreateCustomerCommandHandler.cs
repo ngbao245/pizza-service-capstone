@@ -1,9 +1,10 @@
 ﻿using MediatR;
+using Pizza4Ps.PizzaService.Application.Abstractions;
 using Pizza4Ps.PizzaService.Domain.Abstractions.Services;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Customers.Commands.CreateCustomer
 {
-    public class CreateCustomerCommandHandler : IRequestHandler<CreateCustomerCommand, CreateCustomerCommandResponse>
+    public class CreateCustomerCommandHandler : IRequestHandler<CreateCustomerCommand, ResultDto<Guid>>
     {
         private readonly ICustomerService _customerService;
 
@@ -12,12 +13,12 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Customers.Commands.Crea
             _customerService = customerService;
         }
 
-        public async Task<CreateCustomerCommandResponse> Handle(CreateCustomerCommand request, CancellationToken cancellationToken)
+        public async Task<ResultDto<Guid>> Handle(CreateCustomerCommand request, CancellationToken cancellationToken)
         {
             var result = await _customerService.CreateAsync(
-                request.CreateCustomerDto.FullName,
-                request.CreateCustomerDto.Phone);
-            return new CreateCustomerCommandResponse
+                request.FullName,
+                request.Phone);
+            return new ResultDto<Guid>
             {
                 Id = result
             };

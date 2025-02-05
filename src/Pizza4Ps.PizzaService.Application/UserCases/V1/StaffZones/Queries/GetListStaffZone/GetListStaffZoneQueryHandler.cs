@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Pizza4Ps.PizzaService.Application.DTOs.StaffZones;
+using Pizza4Ps.PizzaService.Application.Abstractions;
+using Pizza4Ps.PizzaService.Application.DTOs;
 using Pizza4Ps.PizzaService.Domain.Abstractions.Repositories;
 using Pizza4Ps.PizzaService.Domain.Constants;
 using Pizza4Ps.PizzaService.Domain.Exceptions;
@@ -9,7 +10,7 @@ using System.Linq.Dynamic.Core;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.StaffZones.Queries.GetListStaffZone
 {
-    public class GetListStaffZoneQueryHandler : IRequestHandler<GetListStaffZoneQuery, GetListStaffZoneQueryResponse>
+    public class GetListStaffZoneQueryHandler : IRequestHandler<GetListStaffZoneQuery, PaginatedResultDto<StaffZoneDto>>
     {
         private readonly IMapper _mapper;
         private readonly IStaffZoneRepository _StaffZoneRepository;
@@ -20,23 +21,23 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.StaffZones.Queries.GetL
             _StaffZoneRepository = StaffZoneRepository;
         }
 
-        public async Task<GetListStaffZoneQueryResponse> Handle(GetListStaffZoneQuery request, CancellationToken cancellationToken)
+        public async Task<PaginatedResultDto<StaffZoneDto>> Handle(GetListStaffZoneQuery request, CancellationToken cancellationToken)
         {
             var query = _StaffZoneRepository.GetListAsNoTracking(
-                x => (request.GetListStaffZoneDto.ShiftStart == null || x.ShiftStart == request.GetListStaffZoneDto.ShiftStart)
-                && (request.GetListStaffZoneDto.ShiftEnd == null || x.ShiftEnd == request.GetListStaffZoneDto.ShiftEnd)
-                && (request.GetListStaffZoneDto.Note == null || x.Note == request.GetListStaffZoneDto.Note)
-                && (request.GetListStaffZoneDto.StaffId == null || x.StaffId == request.GetListStaffZoneDto.StaffId)
-                && (request.GetListStaffZoneDto.ZoneId == null || x.ZoneId == request.GetListStaffZoneDto.ZoneId),
-                includeProperties: request.GetListStaffZoneDto.includeProperties);
+                x => (request.ShiftStart == null || x.ShiftStart == request.ShiftStart)
+                && (request.ShiftEnd == null || x.ShiftEnd == request.ShiftEnd)
+                && (request.Note == null || x.Note == request.Note)
+                && (request.StaffId == null || x.StaffId == request.StaffId)
+                && (request.ZoneId == null || x.ZoneId == request.ZoneId),
+                includeProperties: request.IncludeProperties);
             var entities = await query
-                .OrderBy(request.GetListStaffZoneDto.SortBy)
-                .Skip(request.GetListStaffZoneDto.SkipCount).Take(request.GetListStaffZoneDto.TakeCount).ToListAsync();
+                .OrderBy(request.SortBy)
+                .Skip(request.SkipCount).Take(request.TakeCount).ToListAsync();
             if (!entities.Any())
                 throw new BusinessException(BussinessErrorConstants.StaffZoneErrorConstant.STAFFZONE_NOT_FOUND);
             var result = _mapper.Map<List<StaffZoneDto>>(entities);
             var totalCount = await query.CountAsync();
-            return new GetListStaffZoneQueryResponse(result, totalCount);
+            return new PaginatedResultDto<StaffZoneDto>(result, totalCount);
         }
     }
 }

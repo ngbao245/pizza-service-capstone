@@ -1,8 +1,9 @@
 ﻿using MediatR;
+using Pizza4Ps.PizzaService.Application.DTOs;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.OrderItems.Queries.GetOrderItemById
 {
-	public class GetOrderItemByIdQuery : IRequest<GetOrderItemByIdQueryResponse>
+    public class GetOrderItemByIdQuery : IRequest<OrderItemDto>
 	{
 		public Guid Id { get; set; }
 		public string includeProperties { get; set; } = "";

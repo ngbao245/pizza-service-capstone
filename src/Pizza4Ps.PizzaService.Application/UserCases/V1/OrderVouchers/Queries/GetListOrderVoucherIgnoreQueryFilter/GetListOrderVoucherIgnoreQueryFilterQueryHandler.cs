@@ -1,13 +1,14 @@
 ﻿using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Pizza4Ps.PizzaService.Application.DTOs.OrderVouchers;
+using Pizza4Ps.PizzaService.Application.Abstractions;
+using Pizza4Ps.PizzaService.Application.DTOs;
 using Pizza4Ps.PizzaService.Domain.Abstractions.Repositories;
 using System.Linq.Dynamic.Core;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.OrderVouchers.Queries.GetListOrderVoucherIgnoreQueryFilter
 {
-	public class GetListOrderVoucherIgnoreQueryFilterQueryHandler : IRequestHandler<GetListOrderVoucherIgnoreQueryFilterQuery, GetListOrderVoucherIgnoreQueryFilterQueryResponse>
+    public class GetListOrderVoucherIgnoreQueryFilterQueryHandler : IRequestHandler<GetListOrderVoucherIgnoreQueryFilterQuery, PaginatedResultDto<OrderVoucherDto>>
 	{
 		private readonly IMapper _mapper;
 		private readonly IOrderVoucherRepository _OrderVoucherRepository;
@@ -18,19 +19,19 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.OrderVouchers.Queries.G
 			_OrderVoucherRepository = OrderVoucherRepository;
 		}
 
-		public async Task<GetListOrderVoucherIgnoreQueryFilterQueryResponse> Handle(GetListOrderVoucherIgnoreQueryFilterQuery request, CancellationToken cancellationToken)
+		public async Task<PaginatedResultDto<OrderVoucherDto>> Handle(GetListOrderVoucherIgnoreQueryFilterQuery request, CancellationToken cancellationToken)
 		{
-			var query = _OrderVoucherRepository.GetListAsNoTracking(includeProperties: request.GetListOrderVoucherIgnoreQueryFilterDto.includeProperties).IgnoreQueryFilters()
+			var query = _OrderVoucherRepository.GetListAsNoTracking(includeProperties: request.IncludeProperties).IgnoreQueryFilters()
 				.Where(
-					x => (request.GetListOrderVoucherIgnoreQueryFilterDto.OrderId == null || x.OrderId == request.GetListOrderVoucherIgnoreQueryFilterDto.OrderId)
-					&& (request.GetListOrderVoucherIgnoreQueryFilterDto.VoucherId == null || x.VoucherId == request.GetListOrderVoucherIgnoreQueryFilterDto.VoucherId)
-					&& x.IsDeleted == request.GetListOrderVoucherIgnoreQueryFilterDto.IsDeleted);
+					x => (request.OrderId == null || x.OrderId == request.OrderId)
+					&& (request.VoucherId == null || x.VoucherId == request.VoucherId)
+					&& x.IsDeleted == request.IsDeleted);
 			var entities = await query
-				.OrderBy(request.GetListOrderVoucherIgnoreQueryFilterDto.SortBy)
-				.Skip(request.GetListOrderVoucherIgnoreQueryFilterDto.SkipCount).Take(request.GetListOrderVoucherIgnoreQueryFilterDto.TakeCount).ToListAsync();
+				.OrderBy(request.SortBy)
+				.Skip(request.SkipCount).Take(request.TakeCount).ToListAsync();
 			var result = _mapper.Map<List<OrderVoucherDto>>(entities);
 			var totalCount = await query.CountAsync();
-			return new GetListOrderVoucherIgnoreQueryFilterQueryResponse(result, totalCount);
+			return new PaginatedResultDto<OrderVoucherDto>(result, totalCount);
 		}
 	}
 }

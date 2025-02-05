@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Pizza4Ps.PizzaService.Application.DTOs.Staffs;
+using Pizza4Ps.PizzaService.Application.Abstractions;
+using Pizza4Ps.PizzaService.Application.DTOs;
 using Pizza4Ps.PizzaService.Domain.Abstractions.Repositories;
 using Pizza4Ps.PizzaService.Domain.Constants;
 using Pizza4Ps.PizzaService.Domain.Exceptions;
@@ -9,7 +10,7 @@ using System.Linq.Dynamic.Core;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Staffs.Queries.GetListStaff
 {
-	public class GetListStaffQueryHandler : IRequestHandler<GetListStaffQuery, GetListStaffQueryResponse>
+    public class GetListStaffQueryHandler : IRequestHandler<GetListStaffQuery, PaginatedResultDto<StaffDto>>
 	{
 		private readonly IMapper _mapper;
 		private readonly IStaffRepository _staffRepository;
@@ -20,24 +21,24 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Staffs.Queries.GetListS
 			_staffRepository = staffRepository;
 		}
 
-		public async Task<GetListStaffQueryResponse> Handle(GetListStaffQuery request, CancellationToken cancellationToken)
+		public async Task<PaginatedResultDto<StaffDto>> Handle(GetListStaffQuery request, CancellationToken cancellationToken)
 		{
 			var query = _staffRepository.GetListAsNoTracking(
-				x => (request.GetListStaffDto.Code == null || x.Code.Contains(request.GetListStaffDto.Code))
-				&& (request.GetListStaffDto.Name == null || x.Name.Contains(request.GetListStaffDto.Name))
-				&& (request.GetListStaffDto.Phone == null || x.Phone.Contains(request.GetListStaffDto.Phone))
-				&& (request.GetListStaffDto.Email == null || x.Email.Contains(request.GetListStaffDto.Email))
-				&& (request.GetListStaffDto.StaffType == null || x.StaffType == request.GetListStaffDto.StaffType)
-				&& (request.GetListStaffDto.Status == null || x.Status == request.GetListStaffDto.Status),
-				includeProperties: request.GetListStaffDto.includeProperties);
+				x => (request.Code == null || x.Code.Contains(request.Code))
+				&& (request.Name == null || x.Name.Contains(request.Name))
+				&& (request.Phone == null || x.Phone.Contains(request.Phone))
+				&& (request.Email == null || x.Email.Contains(request.Email))
+				&& (request.StaffType == null || x.StaffType == request.StaffType)
+				&& (request.Status == null || x.Status == request.Status),
+				includeProperties: request.IncludeProperties);
 			var entities = await query
-				.OrderBy(request.GetListStaffDto.SortBy)
-				.Skip(request.GetListStaffDto.SkipCount).Take(request.GetListStaffDto.TakeCount).ToListAsync();
+				.OrderBy(request.SortBy)
+				.Skip(request.SkipCount).Take(request.TakeCount).ToListAsync();
 			if (!entities.Any())
 				throw new BusinessException(BussinessErrorConstants.StaffErrorConstant.STAFF_NOT_FOUND);
 			var result = _mapper.Map<List<StaffDto>>(entities);
 			var totalCount = await query.CountAsync();
-			return new GetListStaffQueryResponse(result, totalCount);
+			return new PaginatedResultDto<StaffDto>(result, totalCount);
 		}
 	}
 }

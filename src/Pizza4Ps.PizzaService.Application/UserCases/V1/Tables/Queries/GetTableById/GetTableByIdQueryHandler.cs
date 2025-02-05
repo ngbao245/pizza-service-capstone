@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using MediatR;
-using Pizza4Ps.PizzaService.Application.DTOs.Tables;
+using Pizza4Ps.PizzaService.Application.DTOs;
 using Pizza4Ps.PizzaService.Domain.Abstractions.Repositories;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Tables.Queries.GetTableById
 {
-    public class GetTableByIdQueryHandler : IRequestHandler<GetTableByIdQuery, GetTableByIdQueryResponse>
+    public class GetTableByIdQueryHandler : IRequestHandler<GetTableByIdQuery, TableDto>
     {
         private readonly IMapper _mapper;
         private readonly ITableRepository _tableRepository;
@@ -15,14 +15,11 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Tables.Queries.GetTable
             _mapper = mapper;
             _tableRepository = tableRepository;
         }
-        public async Task<GetTableByIdQueryResponse> Handle(GetTableByIdQuery request, CancellationToken cancellationToken)
+        public async Task<TableDto> Handle(GetTableByIdQuery request, CancellationToken cancellationToken)
         {
             var entity = await _tableRepository.GetSingleByIdAsync(request.Id, request.includeProperties);
             var result = _mapper.Map<TableDto>(entity);
-            return new GetTableByIdQueryResponse
-            {
-                Table = result
-            };
+            return result;
         }
     }
 }

@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using MediatR;
-using Pizza4Ps.PizzaService.Application.DTOs.OptionItemOrderItems;
+using Pizza4Ps.PizzaService.Application.DTOs;
 using Pizza4Ps.PizzaService.Domain.Abstractions.Repositories;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.OptionItemOrderItems.Queries.GetOptionItemOrderItemById
 {
-	public class GetOptionItemOrderItemByIdQueryHandler : IRequestHandler<GetOptionItemOrderItemByIdQuery, GetOptionItemOrderItemByIdQueryResponse>
+    public class GetOptionItemOrderItemByIdQueryHandler : IRequestHandler<GetOptionItemOrderItemByIdQuery, OptionItemOrderItemDto>
 	{
 		private readonly IMapper _mapper;
 		private readonly IOptionItemOrderItemRepository _optionitemorderitemRepository;
@@ -16,14 +16,11 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.OptionItemOrderItems.Qu
 			_optionitemorderitemRepository = optionitemorderitemRepository;
 		}
 
-		public async Task<GetOptionItemOrderItemByIdQueryResponse> Handle(GetOptionItemOrderItemByIdQuery request, CancellationToken cancellationToken)
+		public async Task<OptionItemOrderItemDto> Handle(GetOptionItemOrderItemByIdQuery request, CancellationToken cancellationToken)
 		{
 			var entity = await _optionitemorderitemRepository.GetSingleByIdAsync(request.Id, request.includeProperties);
 			var result = _mapper.Map<OptionItemOrderItemDto>(entity);
-			return new GetOptionItemOrderItemByIdQueryResponse
-			{
-				OptionItemOrderItem = result
-			};
+			return result;
 		}
 	}
 }

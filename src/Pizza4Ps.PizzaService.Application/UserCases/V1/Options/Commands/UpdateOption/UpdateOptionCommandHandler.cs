@@ -3,7 +3,7 @@ using Pizza4Ps.PizzaService.Domain.Abstractions.Services;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Options.Commands.UpdateOption
 {
-	public class UpdateOptionCommandHandler : IRequestHandler<UpdateOptionCommand, UpdateOptionCommandResponse>
+	public class UpdateOptionCommandHandler : IRequestHandler<UpdateOptionCommand>
 	{
 		private readonly IOptionService _optionService;
 
@@ -12,16 +12,12 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Options.Commands.Update
 			_optionService = optionService;
 		}
 
-		public async Task<UpdateOptionCommandResponse> Handle(UpdateOptionCommand request, CancellationToken cancellationToken)
+		public async Task Handle(UpdateOptionCommand request, CancellationToken cancellationToken)
 		{
 			var result = await _optionService.UpdateAsync(
-				request.Id,
-				request.UpdateOptionDto.Name,
-				request.UpdateOptionDto.Description);
-			return new UpdateOptionCommandResponse
-			{
-				Id = result
-			};
+				request.Id!.Value,
+				request.Name,
+				request.Description);
 		}
 	}
 }

@@ -1,13 +1,14 @@
 ﻿using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Pizza4Ps.PizzaService.Application.DTOs.StaffZoneSchedules;
+using Pizza4Ps.PizzaService.Application.Abstractions;
+using Pizza4Ps.PizzaService.Application.DTOs;
 using Pizza4Ps.PizzaService.Domain.Abstractions.Repositories;
 using System.Linq.Dynamic.Core;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.StaffZoneSchedules.Queries.GetListStaffZoneScheduleIgnoreQueryFilter
 {
-    public class GetListStaffZoneScheduleIgnoreQueryFilterQueryHandler : IRequestHandler<GetListStaffZoneScheduleIgnoreQueryFilterQuery, GetListStaffZoneScheduleIgnoreQueryFilterQueryResponse>
+    public class GetListStaffZoneScheduleIgnoreQueryFilterQueryHandler : IRequestHandler<GetListStaffZoneScheduleIgnoreQueryFilterQuery, PaginatedResultDto<StaffZoneScheduleDto>>
     {
         private readonly IMapper _mapper;
         private readonly IStaffZoneScheduleRepository _StaffZoneScheduleRepository;
@@ -18,25 +19,25 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.StaffZoneSchedules.Quer
             _StaffZoneScheduleRepository = StaffZoneScheduleRepository;
         }
 
-        public async Task<GetListStaffZoneScheduleIgnoreQueryFilterQueryResponse> Handle(GetListStaffZoneScheduleIgnoreQueryFilterQuery request, CancellationToken cancellationToken)
+        public async Task<PaginatedResultDto<StaffZoneScheduleDto>> Handle(GetListStaffZoneScheduleIgnoreQueryFilterQuery request, CancellationToken cancellationToken)
         {
-            var query = _StaffZoneScheduleRepository.GetListAsNoTracking(includeProperties: request.GetListStaffZoneScheduleIgnoreQueryFilterDto.includeProperties).IgnoreQueryFilters()
+            var query = _StaffZoneScheduleRepository.GetListAsNoTracking(includeProperties: request.IncludeProperties).IgnoreQueryFilters()
                 .Where(
-                x => (request.GetListStaffZoneScheduleIgnoreQueryFilterDto.DayofWeek == null || x.DayofWeek == request.GetListStaffZoneScheduleIgnoreQueryFilterDto.DayofWeek)
-                && (request.GetListStaffZoneScheduleIgnoreQueryFilterDto.ShiftStart == null || x.ShiftStart == request.GetListStaffZoneScheduleIgnoreQueryFilterDto.ShiftStart)
-                && (request.GetListStaffZoneScheduleIgnoreQueryFilterDto.ShiftEnd == null || x.ShiftEnd == request.GetListStaffZoneScheduleIgnoreQueryFilterDto.ShiftEnd)
-                && (request.GetListStaffZoneScheduleIgnoreQueryFilterDto.Note == null || x.Note == request.GetListStaffZoneScheduleIgnoreQueryFilterDto.Note)
-                && (request.GetListStaffZoneScheduleIgnoreQueryFilterDto.StaffId == null || x.StaffId == request.GetListStaffZoneScheduleIgnoreQueryFilterDto.StaffId)
-                && (request.GetListStaffZoneScheduleIgnoreQueryFilterDto.ZoneId == null || x.ZoneId == request.GetListStaffZoneScheduleIgnoreQueryFilterDto.ZoneId)
-                && (request.GetListStaffZoneScheduleIgnoreQueryFilterDto.WorkingTimeId == null || x.WorkingTimeId == request.GetListStaffZoneScheduleIgnoreQueryFilterDto.WorkingTimeId)
+                x => (request.DayofWeek == null || x.DayofWeek == request.DayofWeek)
+                && (request.ShiftStart == null || x.ShiftStart == request.ShiftStart)
+                && (request.ShiftEnd == null || x.ShiftEnd == request.ShiftEnd)
+                && (request.Note == null || x.Note == request.Note)
+                && (request.StaffId == null || x.StaffId == request.StaffId)
+                && (request.ZoneId == null || x.ZoneId == request.ZoneId)
+                && (request.WorkingTimeId == null || x.WorkingTimeId == request.WorkingTimeId)
 
-                    && x.IsDeleted == request.GetListStaffZoneScheduleIgnoreQueryFilterDto.IsDeleted);
+                    && x.IsDeleted == request.IsDeleted);
             var entities = await query
-                .OrderBy(request.GetListStaffZoneScheduleIgnoreQueryFilterDto.SortBy)
-                .Skip(request.GetListStaffZoneScheduleIgnoreQueryFilterDto.SkipCount).Take(request.GetListStaffZoneScheduleIgnoreQueryFilterDto.TakeCount).ToListAsync();
+                .OrderBy(request.SortBy)
+                .Skip(request.SkipCount).Take(request.TakeCount).ToListAsync();
             var result = _mapper.Map<List<StaffZoneScheduleDto>>(entities);
             var totalCount = await query.CountAsync();
-            return new GetListStaffZoneScheduleIgnoreQueryFilterQueryResponse(result, totalCount);
+            return new PaginatedResultDto<StaffZoneScheduleDto>(result, totalCount);
         }
     }
 }

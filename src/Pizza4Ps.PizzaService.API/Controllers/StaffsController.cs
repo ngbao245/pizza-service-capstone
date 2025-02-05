@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Pizza4Ps.PizzaService.API.Constants;
 using Pizza4Ps.PizzaService.API.Models;
-using Pizza4Ps.PizzaService.Application.DTOs.Staffs;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Staffs.Commands.CreateStaff;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Staffs.Commands.DeleteStaff;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Staffs.Commands.RestoreStaff;
@@ -13,7 +12,7 @@ using Pizza4Ps.PizzaService.Application.UserCases.V1.Staffs.Queries.GetStaffById
 
 namespace Pizza4Ps.PizzaService.API.Controllers
 {
-	[Route("api/staffs")]
+    [Route("api/staffs")]
 	[ApiController]
 	public class StaffsController : ControllerBase
 	{
@@ -27,9 +26,9 @@ namespace Pizza4Ps.PizzaService.API.Controllers
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> CreateAsync([FromBody] CreateStaffDto request)
+		public async Task<IActionResult> CreateAsync([FromBody] CreateStaffCommand request)
 		{
-			var result = await _sender.Send(new CreateStaffCommand { CreateStaffDto = request });
+			var result = await _sender.Send(request);
 			return Ok(new ApiResponse
 			{
 				Result = result,
@@ -39,9 +38,9 @@ namespace Pizza4Ps.PizzaService.API.Controllers
 		}
 
 		[HttpGet("ignore-filter")]
-		public async Task<IActionResult> GetListIgnoreQueryFilterAsync([FromQuery] GetListStaffIgnoreQueryFilterDto query)
+		public async Task<IActionResult> GetListIgnoreQueryFilterAsync([FromQuery] GetListStaffIgnoreQueryFilterQuery query)
 		{
-			var result = await _sender.Send(new GetListStaffIgnoreQueryFilterQuery { GetListStaffIgnoreQueryFilterDto = query });
+			var result = await _sender.Send(query);
 			return Ok(new ApiResponse
 			{
 				Result = result,
@@ -51,9 +50,9 @@ namespace Pizza4Ps.PizzaService.API.Controllers
 		}
 
 		[HttpGet()]
-		public async Task<IActionResult> GetListAsync([FromQuery] GetListStaffDto query)
+		public async Task<IActionResult> GetListAsync([FromQuery] GetListStaffQuery query)
 		{
-			var result = await _sender.Send(new GetListStaffQuery { GetListStaffDto = query });
+			var result = await _sender.Send(query);
 			return Ok(new ApiResponse
 			{
 				Result = result,
@@ -75,12 +74,13 @@ namespace Pizza4Ps.PizzaService.API.Controllers
 		}
 
 		[HttpPut("{id}")]
-		public async Task<IActionResult> UpdateAsync([FromRoute] Guid id, [FromBody] UpdateStaffDto request)
+		public async Task<IActionResult> UpdateAsync([FromRoute] Guid id, [FromBody] UpdateStaffCommand request)
 		{
-			var result = await _sender.Send(new UpdateStaffCommand { Id = id, UpdateStaffDto = request });
+            request.Id = id;
+            await _sender.Send(request);
 			return Ok(new ApiResponse
 			{
-				Result = result,
+				Success = true,
 				Message = Message.UPDATED_SUCCESS,
 				StatusCode = StatusCodes.Status200OK
 			});

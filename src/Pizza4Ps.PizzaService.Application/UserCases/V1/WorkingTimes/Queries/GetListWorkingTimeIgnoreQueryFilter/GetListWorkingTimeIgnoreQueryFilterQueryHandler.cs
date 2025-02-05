@@ -1,13 +1,14 @@
 ﻿using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Pizza4Ps.PizzaService.Application.DTOs.WorkingTimes;
+using Pizza4Ps.PizzaService.Application.Abstractions;
+using Pizza4Ps.PizzaService.Application.DTOs;
 using Pizza4Ps.PizzaService.Domain.Abstractions.Repositories;
 using System.Linq.Dynamic.Core;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.WorkingTimes.Queries.GetListWorkingTimeIgnoreQueryFilter
 {
-	public class GetListWorkingTimeIgnoreQueryFilterQueryHandler : IRequestHandler<GetListWorkingTimeIgnoreQueryFilterQuery, GetListWorkingTimeIgnoreQueryFilterQueryResponse>
+    public class GetListWorkingTimeIgnoreQueryFilterQueryHandler : IRequestHandler<GetListWorkingTimeIgnoreQueryFilterQuery, PaginatedResultDto<WorkingTimeDto>>
 	{
 		private readonly IMapper _mapper;
 		private readonly IWorkingTimeRepository _workingtimeRepository;
@@ -18,22 +19,22 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.WorkingTimes.Queries.Ge
 			_workingtimeRepository = workingtimeRepository;
 		}
 
-		public async Task<GetListWorkingTimeIgnoreQueryFilterQueryResponse> Handle(GetListWorkingTimeIgnoreQueryFilterQuery request, CancellationToken cancellationToken)
+		public async Task<PaginatedResultDto<WorkingTimeDto>> Handle(GetListWorkingTimeIgnoreQueryFilterQuery request, CancellationToken cancellationToken)
 		{
-			var query = _workingtimeRepository.GetListAsNoTracking(includeProperties: request.GetListWorkingTimeIgnoreQueryFilterDto.includeProperties).IgnoreQueryFilters()
+			var query = _workingtimeRepository.GetListAsNoTracking(includeProperties: request.IncludeProperties).IgnoreQueryFilters()
 				.Where(
-					x => (request.GetListWorkingTimeIgnoreQueryFilterDto.DayOfWeek == null || x.DayOfWeek == request.GetListWorkingTimeIgnoreQueryFilterDto.DayOfWeek)
-					&& (request.GetListWorkingTimeIgnoreQueryFilterDto.ShiftCode == null || x.ShiftCode.Contains(request.GetListWorkingTimeIgnoreQueryFilterDto.ShiftCode))
-					&& (request.GetListWorkingTimeIgnoreQueryFilterDto.Name == null || x.Name.Contains(request.GetListWorkingTimeIgnoreQueryFilterDto.Name))
-					&& (request.GetListWorkingTimeIgnoreQueryFilterDto.StartTime == null || x.StartTime == request.GetListWorkingTimeIgnoreQueryFilterDto.StartTime)
-					&& (request.GetListWorkingTimeIgnoreQueryFilterDto.EndTime == null || x.EndTime == request.GetListWorkingTimeIgnoreQueryFilterDto.EndTime)
-					&& x.IsDeleted == request.GetListWorkingTimeIgnoreQueryFilterDto.IsDeleted);
+					x => (request.DayOfWeek == null || x.DayOfWeek == request.DayOfWeek)
+					&& (request.ShiftCode == null || x.ShiftCode.Contains(request.ShiftCode))
+					&& (request.Name == null || x.Name.Contains(request.Name))
+					&& (request.StartTime == null || x.StartTime == request.StartTime)
+					&& (request.EndTime == null || x.EndTime == request.EndTime)
+					&& x.IsDeleted == request.IsDeleted);
 			var entities = await query
-				.OrderBy(request.GetListWorkingTimeIgnoreQueryFilterDto.SortBy)
-				.Skip(request.GetListWorkingTimeIgnoreQueryFilterDto.SkipCount).Take(request.GetListWorkingTimeIgnoreQueryFilterDto.TakeCount).ToListAsync();
+				.OrderBy(request.SortBy)
+				.Skip(request.SkipCount).Take(request.TakeCount).ToListAsync();
 			var result = _mapper.Map<List<WorkingTimeDto>>(entities);
 			var totalCount = await query.CountAsync();
-			return new GetListWorkingTimeIgnoreQueryFilterQueryResponse(result, totalCount);
+			return new PaginatedResultDto<WorkingTimeDto>(result, totalCount);
 		}
 	}
 }

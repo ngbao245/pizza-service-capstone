@@ -3,7 +3,7 @@ using Pizza4Ps.PizzaService.Domain.Abstractions.Services;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Customers.Commands.UpdateCustomer
 {
-	public class UpdateCustomerCommandHandler : IRequestHandler<UpdateCustomerCommand, UpdateCustomerCommandResponse>
+	public class UpdateCustomerCommandHandler : IRequestHandler<UpdateCustomerCommand>
 	{
 		private readonly ICustomerService _customerService;
 
@@ -12,16 +12,12 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Customers.Commands.Upda
 			_customerService = customerService;
 		}
 
-		public async Task<UpdateCustomerCommandResponse> Handle(UpdateCustomerCommand request, CancellationToken cancellationToken)
+		public async Task Handle(UpdateCustomerCommand request, CancellationToken cancellationToken)
 		{
 			var result = await _customerService.UpdateAsync(
-				request.Id,
-				request.UpdateCustomerDto.FullName,
-				request.UpdateCustomerDto.Phone);
-			return new UpdateCustomerCommandResponse
-			{
-				Id = result
-			};
+				request.Id!.Value,
+				request.FullName,
+				request.Phone);
 		}
 	}
 }

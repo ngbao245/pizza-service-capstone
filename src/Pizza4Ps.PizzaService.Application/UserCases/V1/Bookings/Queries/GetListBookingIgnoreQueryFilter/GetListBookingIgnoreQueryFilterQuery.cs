@@ -1,10 +1,15 @@
 ﻿using MediatR;
-using Pizza4Ps.PizzaService.Application.DTOs.Bookings;
+using Pizza4Ps.PizzaService.Application.Abstractions;
+using Pizza4Ps.PizzaService.Application.DTOs;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Bookings.Queries.GetListBookingIgnoreQueryFilter
 {
-    public class GetListBookingIgnoreQueryFilterQuery : IRequest<GetListBookingIgnoreQueryFilterQueryResponse>
+    public class GetListBookingIgnoreQueryFilterQuery : PaginatedQuery<PaginatedResultDto<BookingDto>>
     {
-        public GetListBookingIgnoreQueryFilterDto GetListBookingIgnoreQueryFilterDto { get; set; }
+        public bool IsDeleted { get; set; } = false;
+        public DateTime? BookingDate { get; set; }
+        public int? GuestCount { get; set; }
+        public string? Status { get; set; }
+        public Guid? CustomerId { get; set; }
     }
 }

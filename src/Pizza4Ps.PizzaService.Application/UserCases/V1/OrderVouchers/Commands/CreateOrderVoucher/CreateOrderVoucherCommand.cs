@@ -1,10 +1,11 @@
 ﻿using MediatR;
-using Pizza4Ps.PizzaService.Application.DTOs.OrderVouchers;
+using Pizza4Ps.PizzaService.Application.Abstractions;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.OrderVouchers.Commands.CreateOrderVoucher
 {
-	public class CreateOrderVoucherCommand : IRequest<CreateOrderVoucherCommandResponse>
+    public class CreateOrderVoucherCommand : IRequest<ResultDto<Guid>>
 	{
-		public CreateOrderVoucherDto CreateOrderVoucherDto { get; set; }
-	}
+        public Guid OrderId { get; set; }
+        public Guid VoucherId { get; set; }
+    }
 }

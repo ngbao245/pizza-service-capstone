@@ -1,10 +1,11 @@
 ﻿using AutoMapper;
 using MediatR;
+using Pizza4Ps.PizzaService.Application.Abstractions;
 using Pizza4Ps.PizzaService.Domain.Abstractions.Services;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.OptionItems.Commands.CreateOptionItem
 {
-	public class CreateOptionItemCommandHandler : IRequestHandler<CreateOptionItemCommand, CreateOptionItemCommandResponse>
+	public class CreateOptionItemCommandHandler : IRequestHandler<CreateOptionItemCommand, ResultDto<Guid>>
 	{
 		private readonly IMapper _mapper;
 		private readonly IOptionItemService _optionitemService;
@@ -15,13 +16,13 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.OptionItems.Commands.Cr
 			_optionitemService = optionitemService;
 		}
 
-		public async Task<CreateOptionItemCommandResponse> Handle(CreateOptionItemCommand request, CancellationToken cancellationToken)
+		public async Task<ResultDto<Guid>> Handle(CreateOptionItemCommand request, CancellationToken cancellationToken)
 		{
 			var result = await _optionitemService.CreateAsync(
-				request.CreateOptionItemDto.Name,
-				request.CreateOptionItemDto.AdditionalPrice,
-				request.CreateOptionItemDto.OptionId);
-			return new CreateOptionItemCommandResponse
+				request.Name,
+				request.AdditionalPrice,
+				request.OptionId);
+			return new ResultDto<Guid>
 			{
 				Id = result
 			};

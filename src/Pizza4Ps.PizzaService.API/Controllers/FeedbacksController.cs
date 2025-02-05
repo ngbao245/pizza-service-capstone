@@ -2,18 +2,17 @@
 using Microsoft.AspNetCore.Mvc;
 using Pizza4Ps.PizzaService.API.Constants;
 using Pizza4Ps.PizzaService.API.Models;
-using Pizza4Ps.PizzaService.Application.DTOs.Feedbacks;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Feedbacks.Commands.CreateFeedback;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Feedbacks.Commands.DeleteFeedback;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Feedbacks.Commands.RestoreFeedback;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Feedbacks.Commands.UpdateFeedback;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.Feedbacks.Queries.GetListFeedback;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Feedbacks.Queries.GetFeedbackById;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Feedbacks.Queries.GetListFeedback;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Feedbacks.Queries.GetListFeedbackIgnoreQueryFilter;
 
 namespace Pizza4Ps.PizzaService.API.Controllers
 {
-	[Route("api/feedbacks")]
+    [Route("api/feedbacks")]
 	[ApiController]
 	public class FeedbacksController : ControllerBase
 	{
@@ -27,9 +26,9 @@ namespace Pizza4Ps.PizzaService.API.Controllers
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> CreateAsync([FromBody] CreateFeedbackDto request)
+		public async Task<IActionResult> CreateAsync([FromBody] CreateFeedbackCommand request)
 		{
-			var result = await _sender.Send(new CreateFeedbackCommand { CreateFeedbackDto = request });
+			var result = await _sender.Send(request);
 			return Ok(new ApiResponse
 			{
 				Result = result,
@@ -39,9 +38,9 @@ namespace Pizza4Ps.PizzaService.API.Controllers
 		}
 
 		[HttpGet("ignore-filter")]
-		public async Task<IActionResult> GetListIgnoreQueryFilterAsync([FromQuery] GetListFeedbackIgnoreQueryFilterDto query)
+		public async Task<IActionResult> GetListIgnoreQueryFilterAsync([FromQuery] GetListFeedbackIgnoreQueryFilterQuery query)
 		{
-			var result = await _sender.Send(new GetListFeedbackIgnoreQueryFilterQuery { GetListFeedbackIgnoreQueryFilterDto = query });
+			var result = await _sender.Send(query);
 			return Ok(new ApiResponse
 			{
 				Result = result,
@@ -51,9 +50,9 @@ namespace Pizza4Ps.PizzaService.API.Controllers
 		}
 
 		[HttpGet()]
-		public async Task<IActionResult> GetListAsync([FromQuery] GetListFeedbackDto query)
+		public async Task<IActionResult> GetListAsync([FromQuery] GetListFeedbackQuery query)
 		{
-			var result = await _sender.Send(new GetListFeedbackQuery { GetListFeedbackDto = query });
+			var result = await _sender.Send(query);
 			return Ok(new ApiResponse
 			{
 				Result = result,
@@ -75,12 +74,13 @@ namespace Pizza4Ps.PizzaService.API.Controllers
 		}
 
 		[HttpPut("{id}")]
-		public async Task<IActionResult> UpdateAsync([FromRoute] Guid id, [FromBody] UpdateFeedbackDto request)
+		public async Task<IActionResult> UpdateAsync([FromRoute] Guid id, [FromBody] UpdateFeedbackCommand request)
 		{
-			var result = await _sender.Send(new UpdateFeedbackCommand { Id = id, UpdateFeedbackDto = request });
+            request.Id = id;
+            await _sender.Send(request);
 			return Ok(new ApiResponse
 			{
-				Result = result,
+				Success = true,
 				Message = Message.UPDATED_SUCCESS,
 				StatusCode = StatusCodes.Status200OK
 			});

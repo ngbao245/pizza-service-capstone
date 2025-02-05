@@ -1,11 +1,13 @@
 ﻿using MediatR;
-using Pizza4Ps.PizzaService.Application.DTOs.Customers;
+using Pizza4Ps.PizzaService.Application.Abstractions;
+using Pizza4Ps.PizzaService.Application.DTOs;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Customers.Queries.GetListCustomer
 {
-    public class GetListCustomerQuery : IRequest<GetListCustomerQueryResponse>
+    public class GetListCustomerQuery : PaginatedQuery<PaginatedResultDto<CustomerDto>>
     {
-        public GetListCustomerDto GetListCustomerDto { get; set; }
+        public string? FullName { get; set; }
+        public string? Phone { get; set; }
 
     }
 }

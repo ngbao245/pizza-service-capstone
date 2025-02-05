@@ -1,12 +1,14 @@
 ﻿using MediatR;
-using Pizza4Ps.PizzaService.Application.DTOs.Bookings;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Bookings.Commands.UpdateBooking
 {
-	public class UpdateBookingCommand : IRequest<UpdateBookingCommandResponse>
+    public class UpdateBookingCommand : IRequest
 	{
-		public Guid Id { get; set; }
-		public UpdateBookingDto UpdateBookingDto { get; set; }
-	}
+		public Guid? Id { get; set; }
+        public DateTime BookingDate { get; set; }
+        public int GuestCount { get; set; }
+        public string Status { get; set; }
+        public Guid CustomerId { get; set; }
+    }
 }
 

@@ -1,11 +1,11 @@
 ﻿using MediatR;
-using Pizza4Ps.PizzaService.Application.DTOs.Categories;
+using Pizza4Ps.PizzaService.Application.Abstractions;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Categories.Commands.CreateCategory
 {
-	public class CreateCategoryCommand : IRequest<CreateCategoryCommandResponse>
+    public class CreateCategoryCommand : IRequest<ResultDto<Guid>>
 	{
-		public Guid Id { get; set; }
-		public CreateCategoryDto CreateCategoryDto { get; set; }
-	}
+        public string Name { get; set; }
+        public string Description { get; set; }
+    }
 }

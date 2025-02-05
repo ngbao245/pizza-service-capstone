@@ -1,10 +1,13 @@
-﻿using MediatR;
-using Pizza4Ps.PizzaService.Application.DTOs.OptionItemOrderItems;
+﻿using Pizza4Ps.PizzaService.Application.Abstractions;
+using Pizza4Ps.PizzaService.Application.DTOs;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.OptionItemOrderItems.Queries.GetListOptionItemOrderItem
 {
-	public class GetListOptionItemOrderItemQuery : IRequest<GetListOptionItemOrderItemQueryResponse>
+    public class GetListOptionItemOrderItemQuery : PaginatedQuery<PaginatedResultDto<OptionItemOrderItemDto>>
 	{
-		public GetListOptionItemOrderItemDto GetListOptionItemOrderItemDto { get; set; }
-	}
+        public string? Name { get; set; }
+        public decimal? AdditionalPrice { get; set; }
+        public Guid? OptionItemId { get; set; }
+        public Guid? OrderItemId { get; set; }
+    }
 }

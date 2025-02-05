@@ -1,10 +1,11 @@
 ﻿using AutoMapper;
 using MediatR;
+using Pizza4Ps.PizzaService.Application.Abstractions;
 using Pizza4Ps.PizzaService.Domain.Abstractions.Services;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.StaffZones.Commands.CreateStaffZone
 {
-    public class CreateStaffZoneCommandHandler : IRequestHandler<CreateStaffZoneCommand, CreateStaffZoneCommandResponse>
+    public class CreateStaffZoneCommandHandler : IRequestHandler<CreateStaffZoneCommand, ResultDto<Guid>>
     {
         private readonly IMapper _mapper;
         private readonly IStaffZoneService _StaffZoneService;
@@ -15,16 +16,16 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.StaffZones.Commands.Cre
             _StaffZoneService = StaffZoneService;
         }
 
-        public async Task<CreateStaffZoneCommandResponse> Handle(CreateStaffZoneCommand request, CancellationToken cancellationToken)
+        public async Task<ResultDto<Guid>> Handle(CreateStaffZoneCommand request, CancellationToken cancellationToken)
         {
             var result = await _StaffZoneService.CreateAsync(
-                request.CreateStaffZoneDto.ShiftStart,
-                request.CreateStaffZoneDto.ShiftEnd,
-                request.CreateStaffZoneDto.Note,
-                request.CreateStaffZoneDto.StaffId,
-                request.CreateStaffZoneDto.ZoneId
+                request.ShiftStart,
+                request.ShiftEnd,
+                request.Note,
+                request.StaffId,
+                request.ZoneId
                 );
-            return new CreateStaffZoneCommandResponse
+            return new ResultDto<Guid>
             {
                 Id = result
             };

@@ -1,11 +1,13 @@
 ﻿using MediatR;
-using Pizza4Ps.PizzaService.Application.DTOs.OptionItemOrderItems;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.OptionItemOrderItems.Commands.UpdateOptionItemOrderItem
 {
-	public class UpdateOptionItemOrderItemCommand : IRequest<UpdateOptionItemOrderItemCommandResponse>
+    public class UpdateOptionItemOrderItemCommand : IRequest
 	{
-		public Guid Id { get; set; }
-		public UpdateOptionItemOrderItemDto UpdateOptionItemOrderItemDto { get; set; }
-	}
+		public Guid? Id { get; set; }
+        public string Name { get; set; }
+        public decimal AdditionalPrice { get; set; }
+        public Guid OptionItemId { get; set; }
+        public Guid OrderItemId { get; set; }
+    }
 }
