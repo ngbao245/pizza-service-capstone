@@ -12,7 +12,7 @@ using Pizza4Ps.PizzaService.Persistence;
 namespace Pizza4Ps.PizzaService.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20250109090701_InitialCreate")]
+    [Migration("20250206110213_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
