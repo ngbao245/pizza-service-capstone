@@ -15,7 +15,7 @@ namespace Pizza4Ps.PizzaService.Infrastructure.DependencyInjection.Extentions
             // Thêm Hangfire
             var serviceProvider = services.BuildServiceProvider();
             var configuration = serviceProvider.GetRequiredService<IConfiguration>();
-            var connectionString = configuration.GetConnectionString("Hangfire");
+            var connectionString = configuration.GetConnectionString("MyDbContext");
             services.AddHangfire(config => config.UseSqlServerStorage(connectionString));
             services.AddHangfireServer();
             return services;
