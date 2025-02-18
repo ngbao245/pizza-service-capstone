@@ -13,99 +13,155 @@ using Pizza4Ps.PizzaService.Application.UserCases.V1.OrderItems.Queries.GetOrder
 namespace Pizza4Ps.PizzaService.API.Controllers
 {
     [Route("api/order-items")]
-	[ApiController]
-	public class OrderItemsController : ControllerBase
-	{
-		private readonly IHttpContextAccessor _httpContextAccessor;
-		private readonly ISender _sender;
+    [ApiController]
+    public class OrderItemsController : ControllerBase
+    {
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly ISender _sender;
 
-		public OrderItemsController(ISender sender, IHttpContextAccessor httpContextAccessor)
-		{
-			_httpContextAccessor = httpContextAccessor;
-			_sender = sender;
-		}
+        public OrderItemsController(ISender sender, IHttpContextAccessor httpContextAccessor)
+        {
+            _httpContextAccessor = httpContextAccessor;
+            _sender = sender;
+        }
 
-		[HttpPost]
-		public async Task<IActionResult> CreateAsync([FromBody] CreateOrderItemCommand request)
-		{
-			var result = await _sender.Send(request);
-			return Ok(new ApiResponse
-			{
-				Result = result,
-				Message = Message.CREATED_SUCCESS,
-				StatusCode = StatusCodes.Status201Created
-			});
-		}
+        [HttpPost]
+        public async Task<IActionResult> CreateAsync([FromBody] CreateOrderItemCommand request)
+        {
+            var result = await _sender.Send(request);
+            return Ok(new ApiResponse
+            {
+                Result = result,
+                Message = Message.CREATED_SUCCESS,
+                StatusCode = StatusCodes.Status201Created
+            });
+        }
 
-		[HttpGet("ignore-filter")]
-		public async Task<IActionResult> GetListIgnoreQueryFilterAsync([FromQuery] GetListOrderItemIgnoreQueryFilterQuery query)
-		{
-			var result = await _sender.Send(query);
-			return Ok(new ApiResponse
-			{
-				Result = result,
-				Message = Message.GET_SUCCESS,
-				StatusCode = StatusCodes.Status200OK
-			});
-		}
+        [HttpGet("ignore-filter")]
+        public async Task<IActionResult> GetListIgnoreQueryFilterAsync([FromQuery] GetListOrderItemIgnoreQueryFilterQuery query)
+        {
+            var result = await _sender.Send(query);
+            return Ok(new ApiResponse
+            {
+                Result = result,
+                Message = Message.GET_SUCCESS,
+                StatusCode = StatusCodes.Status200OK
+            });
+        }
 
-		[HttpGet()]
-		public async Task<IActionResult> GetListAsync([FromQuery] GetListOrderItemQuery query)
-		{
-			var result = await _sender.Send(query);
-			return Ok(new ApiResponse
-			{
-				Result = result,
-				Message = Message.GET_SUCCESS,
-				StatusCode = StatusCodes.Status200OK
-			});
-		}
+        [HttpGet()]
+        public async Task<IActionResult> GetListAsync([FromQuery] GetListOrderItemQuery query)
+        {
+            var result = await _sender.Send(query);
+            return Ok(new ApiResponse
+            {
+                Result = result,
+                Message = Message.GET_SUCCESS,
+                StatusCode = StatusCodes.Status200OK
+            });
+        }
 
-		[HttpGet("{id}")]
-		public async Task<IActionResult> GetSingleByIdAsync([FromRoute] Guid id)
-		{
-			var result = await _sender.Send(new GetOrderItemByIdQuery { Id = id });
-			return Ok(new ApiResponse
-			{
-				Result = result,
-				Message = Message.GET_SUCCESS,
-				StatusCode = StatusCodes.Status200OK
-			});
-		}
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetSingleByIdAsync([FromRoute] Guid id)
+        {
+            var result = await _sender.Send(new GetOrderItemByIdQuery { Id = id });
+            return Ok(new ApiResponse
+            {
+                Result = result,
+                Message = Message.GET_SUCCESS,
+                StatusCode = StatusCodes.Status200OK
+            });
+        }
 
-		[HttpPut("{id}")]
-		public async Task<IActionResult> UpdateAsync([FromRoute] Guid id, [FromBody] UpdateOrderItemCommand request)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateAsync([FromRoute] Guid id, [FromBody] UpdateOrderItemCommand request)
         {
             request.Id = id;
             await _sender.Send(request);
-			return Ok(new ApiResponse
-			{
-				Success = true,
-				Message = Message.UPDATED_SUCCESS,
-				StatusCode = StatusCodes.Status200OK
-			});
-		}
+            return Ok(new ApiResponse
+            {
+                Success = true,
+                Message = Message.UPDATED_SUCCESS,
+                StatusCode = StatusCodes.Status200OK
+            });
+        }
 
-		[HttpPut("restore")]
-		public async Task<IActionResult> RestoreManyAsync(List<Guid> ids)
-		{
-			await _sender.Send(new RestoreOrderItemCommand { Ids = ids });
-			return Ok(new ApiResponse
-			{
-				Message = Message.RESTORE_SUCCESS,
-				StatusCode = StatusCodes.Status200OK
-			});
-		}
+        [HttpPut("cancelled/{id}")]
+        public async Task<IActionResult> CancelledAsync([FromRoute] Guid id, [FromBody] UpdateStatusToCancelledCommand request)
+        {
+            request.Id = id;
+            await _sender.Send(request);
 
-		[HttpDelete()]
-		public async Task<IActionResult> DeleteManyAsync(List<Guid> ids, bool isHardDeleted = false)
-		{
-			await _sender.Send(new DeleteOrderItemCommand { Ids = ids, isHardDelete = isHardDeleted });
-			return Ok(new ApiResponse
-			{
-				Message = Message.DELETED_SUCCESS,
-				StatusCode = StatusCodes.Status200OK
-			});
-		}
-	}
+            return Ok(new ApiResponse
+            {
+                Success = true,
+                Message = Message.UPDATED_SUCCESS,
+                StatusCode = StatusCodes.Status200OK
+            });
+        }
+
+        [HttpPut("pending/{id}")]
+        public async Task<IActionResult> PendingAsync([FromRoute] Guid id, [FromBody] UpdateStatusToDishPendingCommand request)
+        {
+            request.Id = id;
+            await _sender.Send(request);
+
+            return Ok(new ApiResponse
+            {
+                Success = true,
+                Message = Message.UPDATED_SUCCESS,
+                StatusCode = StatusCodes.Status200OK
+            });
+        }
+
+        [HttpPut("serving/{id}")]
+        public async Task<IActionResult> ServingAsync([FromRoute] Guid id, [FromBody] UpdateStatusToServingCommand request)
+        {
+            request.Id = id;
+            await _sender.Send(request);
+
+            return Ok(new ApiResponse
+            {
+                Success = true,
+                Message = Message.UPDATED_SUCCESS,
+                StatusCode = StatusCodes.Status200OK
+            });
+        }
+
+        [HttpPut("served/{id}")]
+        public async Task<IActionResult> ServedAsync([FromRoute] Guid id, [FromBody] UpdateStatusToServedCommand request)
+        {
+            request.Id = id;
+            await _sender.Send(request);
+
+            return Ok(new ApiResponse
+            {
+                Success = true,
+                Message = Message.UPDATED_SUCCESS,
+                StatusCode = StatusCodes.Status200OK
+            });
+        }
+
+        [HttpPut("restore")]
+        public async Task<IActionResult> RestoreManyAsync(List<Guid> ids)
+        {
+            await _sender.Send(new RestoreOrderItemCommand { Ids = ids });
+            return Ok(new ApiResponse
+            {
+                Message = Message.RESTORE_SUCCESS,
+                StatusCode = StatusCodes.Status200OK
+            });
+        }
+
+        [HttpDelete()]
+        public async Task<IActionResult> DeleteManyAsync(List<Guid> ids, bool isHardDeleted = false)
+        {
+            await _sender.Send(new DeleteOrderItemCommand { Ids = ids, isHardDelete = isHardDeleted });
+            return Ok(new ApiResponse
+            {
+                Message = Message.DELETED_SUCCESS,
+                StatusCode = StatusCodes.Status200OK
+            });
+        }
+    }
 }

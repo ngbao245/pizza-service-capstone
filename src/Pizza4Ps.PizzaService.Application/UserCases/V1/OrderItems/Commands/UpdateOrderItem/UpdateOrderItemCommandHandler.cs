@@ -19,7 +19,8 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.OrderItems.Commands.Upd
 				request.Name,
 				request.Quantity,
 				request.Price,
-				request.OrderId,
+				request.Status,
+                request.OrderId,
 				request.ProductId);
 		}
 	}
