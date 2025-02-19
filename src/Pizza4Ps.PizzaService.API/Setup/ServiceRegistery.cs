@@ -65,11 +65,11 @@ namespace Pizza4Ps.PizzaService.API.Setup
 
         private static void RegisterInfrastructureServices(IServiceCollection services)
         {
-            //services.AddHangfireServices();
-            //services.AddBackgroundJobServices();
-            //services.AddExternalServices();
-            //services.AddHttpClientSendApiService();
-            ////services.AddTokenTenantService();
+            services.AddHangfireServices();
+            services.AddBackgroundJobServices();
+            services.AddExternalServices();
+            services.AddHttpClientSendApiService();
+            //services.AddTokenTenantService();
         }
     }
 }
