@@ -9,6 +9,7 @@ using Pizza4Ps.PizzaService.Application.UserCases.V1.OrderItems.Commands.UpdateO
 using Pizza4Ps.PizzaService.Application.UserCases.V1.OrderItems.Queries.GetListOrderItem;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.OrderItems.Queries.GetListOrderItemIgnoreQueryFilter;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.OrderItems.Queries.GetOrderItemById;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.OrderItems.Queries.GetOrderItemByOrderId;
 
 namespace Pizza4Ps.PizzaService.API.Controllers
 {
@@ -160,6 +161,18 @@ namespace Pizza4Ps.PizzaService.API.Controllers
             return Ok(new ApiResponse
             {
                 Message = Message.DELETED_SUCCESS,
+                StatusCode = StatusCodes.Status200OK
+            });
+        }
+
+        [HttpGet("by-order/{orderId}")]
+        public async Task<IActionResult> GetByOrderId([FromRoute] Guid orderId)
+        {
+            var result = await _sender.Send(new GetOrderItemByOrderIdQuery { Id = orderId });
+            return Ok(new ApiResponse
+            {
+                Result = result,
+                Message = "Order items retrieved successfully",
                 StatusCode = StatusCodes.Status200OK
             });
         }
