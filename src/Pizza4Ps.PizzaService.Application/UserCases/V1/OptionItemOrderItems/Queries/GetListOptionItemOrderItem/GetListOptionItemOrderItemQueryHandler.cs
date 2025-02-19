@@ -10,7 +10,7 @@ using System.Linq.Dynamic.Core;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.OptionItemOrderItems.Queries.GetListOptionItemOrderItem
 {
-    public class GetListOptionItemOrderItemQueryHandler : IRequestHandler<GetListOptionItemOrderItemQuery, PaginatedResultDto<OptionItemOrderItemDto>>
+    public class GetListOptionItemOrderItemQueryHandler : IRequestHandler<GetListOptionItemOrderItemQuery, PaginatedResultDto<OrderItemDetailDto>>
 	{
 		private readonly IMapper _mapper;
 		private readonly IOptionItemOrderItemRepository _optionitemorderitemRepository;
@@ -21,7 +21,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.OptionItemOrderItems.Qu
 			_optionitemorderitemRepository = optionitemorderitemRepository;
 		}
 
-		public async Task<PaginatedResultDto<OptionItemOrderItemDto>> Handle(GetListOptionItemOrderItemQuery request, CancellationToken cancellationToken)
+		public async Task<PaginatedResultDto<OrderItemDetailDto>> Handle(GetListOptionItemOrderItemQuery request, CancellationToken cancellationToken)
 		{
 			var query = _optionitemorderitemRepository.GetListAsNoTracking(
 				x => (request.Name == null || x.Name.Contains(request.Name))
@@ -34,9 +34,9 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.OptionItemOrderItems.Qu
 				.Skip(request.SkipCount).Take(request.TakeCount).ToListAsync();
 			if (!entities.Any())
 				throw new BusinessException(BussinessErrorConstants.OptionItemOrderItemErrorConstant.OPTIONITEMORDERITEM_NOT_FOUND);
-			var result = _mapper.Map<List<OptionItemOrderItemDto>>(entities);
+			var result = _mapper.Map<List<OrderItemDetailDto>>(entities);
 			var totalCount = await query.CountAsync();
-            return new PaginatedResultDto<OptionItemOrderItemDto>(result, totalCount);
+            return new PaginatedResultDto<OrderItemDetailDto>(result, totalCount);
         }
     }
 }

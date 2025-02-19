@@ -34,6 +34,6 @@ namespace Pizza4Ps.PizzaService.Persistence.Configurations
 				.HasForeignKey(x => x.ProductId)
 				.IsRequired()
 				.OnDelete(DeleteBehavior.Cascade);
-		}
+        }
 	}
 }

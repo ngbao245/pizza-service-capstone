@@ -2,7 +2,7 @@
 
 namespace Pizza4Ps.PizzaService.Domain.Entities
 {
-	public class OptionItemOrderItem : EntityAuditBase<Guid>
+	public class OrderItemDetail : EntityAuditBase<Guid>
 	{
 		public string Name { get; set; }
 		public decimal AdditionalPrice { get; set; }
@@ -12,11 +12,11 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
 		public virtual OptionItem OptionItem { get; set; }
 		public virtual OrderItem OrderItem { get; set; }
 
-		public OptionItemOrderItem()
+		public OrderItemDetail()
 		{
 		}
 
-		public OptionItemOrderItem(Guid id, string name, decimal additionalPrice, Guid optionItemId, Guid orderItemId)
+		public OrderItemDetail(Guid id, string name, decimal additionalPrice, Guid optionItemId, Guid orderItemId)
 		{
 			Id = id;
 			Name = name;

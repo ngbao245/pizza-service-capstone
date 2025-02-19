@@ -22,7 +22,8 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Commands.Creat
                 request.Name,
                 request.Price,
                 request.Description,
-                request.CategoryId);
+                request.CategoryId,
+                request.ProductType);
             return new ResultDto<Guid>
             {
                 Id = result

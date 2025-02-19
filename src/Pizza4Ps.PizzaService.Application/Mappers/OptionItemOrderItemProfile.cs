@@ -8,7 +8,7 @@ namespace Pizza4Ps.PizzaService.Application.Mappers
 	{
 		public OptionItemOrderItemProfile()
 		{
-			CreateMap<OptionItemOrderItemDto, OptionItemOrderItem>().ReverseMap();
+			CreateMap<OrderItemDetailDto, OrderItemDetail>().ReverseMap();
 		}
 	}
 }

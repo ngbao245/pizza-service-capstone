@@ -5,7 +5,7 @@ using Pizza4Ps.PizzaService.Domain.Abstractions.Repositories;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.OptionItemOrderItems.Queries.GetOptionItemOrderItemById
 {
-    public class GetOptionItemOrderItemByIdQueryHandler : IRequestHandler<GetOptionItemOrderItemByIdQuery, OptionItemOrderItemDto>
+    public class GetOptionItemOrderItemByIdQueryHandler : IRequestHandler<GetOptionItemOrderItemByIdQuery, OrderItemDetailDto>
 	{
 		private readonly IMapper _mapper;
 		private readonly IOptionItemOrderItemRepository _optionitemorderitemRepository;
@@ -16,10 +16,10 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.OptionItemOrderItems.Qu
 			_optionitemorderitemRepository = optionitemorderitemRepository;
 		}
 
-		public async Task<OptionItemOrderItemDto> Handle(GetOptionItemOrderItemByIdQuery request, CancellationToken cancellationToken)
+		public async Task<OrderItemDetailDto> Handle(GetOptionItemOrderItemByIdQuery request, CancellationToken cancellationToken)
 		{
 			var entity = await _optionitemorderitemRepository.GetSingleByIdAsync(request.Id, request.includeProperties);
-			var result = _mapper.Map<OptionItemOrderItemDto>(entity);
+			var result = _mapper.Map<OrderItemDetailDto>(entity);
 			return result;
 		}
 	}

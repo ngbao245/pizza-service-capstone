@@ -1,6 +1,6 @@
 ﻿namespace Pizza4Ps.PizzaService.Application.DTOs
 {
-    public class OptionItemOrderItemDto
+    public class OrderItemDetailDto
     {
         public Guid Id { get; set; }
         public string Name { get; set; }

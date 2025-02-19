@@ -23,7 +23,9 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.OrderItems.Commands.Cre
 				request.Quantity,
 				request.Price,
 				request.OrderId,
-				request.ProductId);
+				request.ProductId,
+				request.OrderItemStatus
+				);
 			return new ResultDto<Guid>
             {
 				Id = result

@@ -25,7 +25,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Orders.Queries.GetListO
 				.Where(
 					x => (request.StartTime == null || x.StartTime == request.StartTime)
 					&& (request.EndTime == null || x.EndTime == request.EndTime)
-					&& (request.Status == null || x.Status.Contains(request.Status))
+					&& (request.Status == null || x.Status.Equals(request.Status))
 					&& (request.TableId == null || x.TableId == request.TableId)
 					&& x.IsDeleted == request.IsDeleted);
 			var entities = await query

@@ -6,6 +6,7 @@ using Pizza4Ps.PizzaService.Domain.Entities;
 using Pizza4Ps.PizzaService.Domain.Constants;
 using Pizza4Ps.PizzaService.Domain.Exceptions;
 using Microsoft.EntityFrameworkCore;
+using Pizza4Ps.PizzaService.Domain.Enums;
 
 namespace Pizza4Ps.PizzaService.Domain.Services
 {
@@ -20,9 +21,9 @@ namespace Pizza4Ps.PizzaService.Domain.Services
 			_orderitemRepository = orderitemRepository;
 		}
 
-		public async Task<Guid> CreateAsync(string name, int quantity, decimal price, Guid orderId, Guid productId)
+		public async Task<Guid> CreateAsync(string name, int quantity, decimal price, Guid orderId, Guid productId, OrderItemTypeEnum orderItemStatus)
 		{
-			var entity = new OrderItem(Guid.NewGuid(), name, quantity, price, orderId, productId);
+			var entity = new OrderItem(Guid.NewGuid(), name, quantity, price, orderId, productId, orderItemStatus);
 			_orderitemRepository.Add(entity);
 			await _unitOfWork.SaveChangeAsync();
 			return entity.Id;
@@ -57,10 +58,10 @@ namespace Pizza4Ps.PizzaService.Domain.Services
 			await _unitOfWork.SaveChangeAsync();
 		}
 
-		public async Task<Guid> UpdateAsync(Guid id, string name, int quantity, decimal price, Guid orderId, Guid productId)
+		public async Task<Guid> UpdateAsync(Guid id, string name, int quantity, decimal price, Guid orderId, Guid productId, OrderItemTypeEnum orderItemStatus)
 		{
 			var entity = await _orderitemRepository.GetSingleByIdAsync(id);
-			entity.UpdateOrderItem(name, quantity, price, orderId, productId);
+			entity.UpdateOrderItem(name, quantity, price, orderId, productId, orderItemStatus);
 			await _unitOfWork.SaveChangeAsync();
 			return entity.Id;
 		}

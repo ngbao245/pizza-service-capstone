@@ -7,7 +7,7 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
 	{
 		public int TableNumber { get; set; }
 		public int Capacity { get; set; }
-		public TableTypeEnum Status { get; set; } = TableTypeEnum.Available;
+		public TableTypeEnum Status { get; set; } = TableTypeEnum.Closed;
 		public Guid ZoneId { get; set; }
 
 		public virtual Zone Zone { get; set; }

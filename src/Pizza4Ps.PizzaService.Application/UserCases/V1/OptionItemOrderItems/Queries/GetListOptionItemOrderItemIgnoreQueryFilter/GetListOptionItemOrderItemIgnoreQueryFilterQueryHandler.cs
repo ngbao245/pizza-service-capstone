@@ -8,7 +8,7 @@ using System.Linq.Dynamic.Core;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.OptionItemOrderItems.Queries.GetListOptionItemOrderItemIgnoreQueryFilter
 {
-    public class GetListOptionItemOrderItemIgnoreQueryFilterQueryHandler : IRequestHandler<GetListOptionItemOrderItemIgnoreQueryFilterQuery, PaginatedResultDto<OptionItemOrderItemDto>>
+    public class GetListOptionItemOrderItemIgnoreQueryFilterQueryHandler : IRequestHandler<GetListOptionItemOrderItemIgnoreQueryFilterQuery, PaginatedResultDto<OrderItemDetailDto>>
 	{
 		private readonly IMapper _mapper;
 		private readonly IOptionItemOrderItemRepository _optionitemorderitemRepository;
@@ -19,7 +19,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.OptionItemOrderItems.Qu
 			_optionitemorderitemRepository = optionitemorderitemRepository;
 		}
 
-		public async Task<PaginatedResultDto<OptionItemOrderItemDto>> Handle(GetListOptionItemOrderItemIgnoreQueryFilterQuery request, CancellationToken cancellationToken)
+		public async Task<PaginatedResultDto<OrderItemDetailDto>> Handle(GetListOptionItemOrderItemIgnoreQueryFilterQuery request, CancellationToken cancellationToken)
 		{
 			var query = _optionitemorderitemRepository.GetListAsNoTracking(includeProperties: request.IncludeProperties).IgnoreQueryFilters()
 				.Where(
@@ -31,9 +31,9 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.OptionItemOrderItems.Qu
 			var entities = await query
 				.OrderBy(request.SortBy)
 				.Skip(request.SkipCount).Take(request.TakeCount).ToListAsync();
-			var result = _mapper.Map<List<OptionItemOrderItemDto>>(entities);
+			var result = _mapper.Map<List<OrderItemDetailDto>>(entities);
 			var totalCount = await query.CountAsync();
-            return new PaginatedResultDto<OptionItemOrderItemDto>(result, totalCount);
+            return new PaginatedResultDto<OrderItemDetailDto>(result, totalCount);
         }
     }
 }

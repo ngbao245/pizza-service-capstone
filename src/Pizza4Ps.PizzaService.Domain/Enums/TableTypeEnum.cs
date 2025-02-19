@@ -2,8 +2,10 @@
 {
     public enum TableTypeEnum
     {
-        Available,
-        Unavailable,
-        Pending
+        Closed,
+        Ordering,
+        Booked,
+        LockedByManager,
+        LockedByMaintenance
     }
 }
