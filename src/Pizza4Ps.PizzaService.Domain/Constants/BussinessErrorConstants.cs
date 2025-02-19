@@ -104,6 +104,10 @@
         public class TableErrorConstant
         {
             public const string TABLE_NOT_FOUND = "Bàn không tìm thấy";
+            public const string TABLE_NOT_HAVE_ORDER = "Bàn không có đơn hàng nào";
+            public const string TABLE_ORDER_NOT_HAVE_ORDER_ITEM = "Đơn hàng không có món ăn nào";
+            public const string INVALID_TABLE_STATUS = "Trạng thái bàn không hợp lệ";
+            public const string TABLE_ORDER_NOT_HAVE_TOTAL_PRICE = "Đơn hàng chưa được tính tổng tiền";
         }
 
         public class StaffZoneErrorConstant

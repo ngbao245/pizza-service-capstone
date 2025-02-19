@@ -8,8 +8,9 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
 		public DateTimeOffset EndTime { get; set; }
 		public string Status { get; set; }
 		public Guid TableId { get; set; }
+		public decimal? TotalPrice { get; set; }
 
-		public virtual Table Table { get; set; }
+        public virtual Table Table { get; set; }
 
 		private Order()
 		{

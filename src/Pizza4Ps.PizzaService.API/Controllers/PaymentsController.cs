@@ -1,14 +1,17 @@
-﻿using MediatR;
+﻿using Hangfire;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Pizza4Ps.PizzaService.API.Constants;
 using Pizza4Ps.PizzaService.API.Models;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Payments.Commands.CreatePayment;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Payments.Commands.CreatePaymentLink;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Payments.Commands.DeletePayment;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Payments.Commands.RestorePayment;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Payments.Commands.UpdatePayment;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Payments.Queries.GetListPayment;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Payments.Queries.GetListPaymentIgnoreQueryFilter;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Payments.Queries.GetPaymentById;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Payments.Queries.GetPaymentInfo;
 
 namespace Pizza4Ps.PizzaService.API.Controllers
 {
@@ -37,7 +40,39 @@ namespace Pizza4Ps.PizzaService.API.Controllers
 			});
 		}
 
-		[HttpGet("ignore-filter")]
+        [HttpPost("create-payment-link")]
+        public async Task<IActionResult> CreatePaymentLink([FromBody] CreatePaymentLinkCommand command)
+        {
+            var result = await _sender.Send(command);
+            return Ok(new ApiResponse
+            {
+                Result = result,
+                Message = Message.CREATED_SUCCESS,
+                StatusCode = StatusCodes.Status201Created
+            });
+        }
+        [HttpGet("get-payment-info")]
+        public async Task<IActionResult> GetPaymentInfo([FromQuery]GetPaymentInfoQuery query)
+        {
+            await _sender.Send(query);
+            return Ok(new ApiResponse
+            {
+                Message = Message.CREATED_SUCCESS,
+                StatusCode = StatusCodes.Status201Created
+            });
+        }
+        [HttpPost("webhook/payment-successfully/{orderCode}")]
+        public async Task<IActionResult> CreateAsync()
+        {
+            var result = await _sender.Send(new CreatePaymentLinkCommand());
+            return Ok(new ApiResponse
+            {
+                Result = result,
+                Message = Message.CREATED_SUCCESS,
+                StatusCode = StatusCodes.Status201Created
+            });
+        }
+        [HttpGet("ignore-filter")]
 		public async Task<IActionResult> GetListIgnoreQueryFilterAsync([FromQuery] GetListPaymentIgnoreQueryFilterQuery query)
 		{
 			var result = await _sender.Send(query);

@@ -567,34 +567,6 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Table",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    TableNumber = table.Column<int>(type: "int", nullable: false),
-                    Capacity = table.Column<int>(type: "int", nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: false),
-                    ZoneId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CreatedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    ModifiedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    DeletedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
-                    DeletedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Table", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Table_Zone_ZoneId",
-                        column: x => x.ZoneId,
-                        principalTable: "Zone",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "ProductOption",
                 columns: table => new
                 {
@@ -627,67 +599,6 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Order",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    StartTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    EndTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    TableId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CreatedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    ModifiedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    DeletedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
-                    DeletedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Order", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Order_Table_TableId",
-                        column: x => x.TableId,
-                        principalTable: "Table",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "TableBooking",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    OnholdTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    TableId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    BookingId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CreatedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    ModifiedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    DeletedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
-                    DeletedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_TableBooking", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_TableBooking_Booking_BookingId",
-                        column: x => x.BookingId,
-                        principalTable: "Booking",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_TableBooking_Table_TableId",
-                        column: x => x.TableId,
-                        principalTable: "Table",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "FeedBack",
                 columns: table => new
                 {
@@ -706,11 +617,57 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_FeedBack", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "OptionItemOrderItem",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    AdditionalPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    OptionItemId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    OrderItemId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreatedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    ModifiedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeletedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    DeletedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OptionItemOrderItem", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_FeedBack_Order_OrderId",
-                        column: x => x.OrderId,
-                        principalTable: "Order",
-                        principalColumn: "Id");
+                        name: "FK_OptionItemOrderItem_OptionItem_OptionItemId",
+                        column: x => x.OptionItemId,
+                        principalTable: "OptionItem",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Order",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    StartTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    EndTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    TableId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TotalPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    CreatedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    ModifiedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeletedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    DeletedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Order", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -809,14 +766,15 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "OptionItemOrderItem",
+                name: "Table",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    AdditionalPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    OptionItemId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    OrderItemId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TableNumber = table.Column<int>(type: "int", nullable: false),
+                    Capacity = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    CurrentOrderId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    ZoneId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreatedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     ModifiedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -827,17 +785,49 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_OptionItemOrderItem", x => x.Id);
+                    table.PrimaryKey("PK_Table", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_OptionItemOrderItem_OptionItem_OptionItemId",
-                        column: x => x.OptionItemId,
-                        principalTable: "OptionItem",
+                        name: "FK_Table_Order_CurrentOrderId",
+                        column: x => x.CurrentOrderId,
+                        principalTable: "Order",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Table_Zone_ZoneId",
+                        column: x => x.ZoneId,
+                        principalTable: "Zone",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TableBooking",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    OnholdTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    TableId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    BookingId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreatedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    ModifiedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeletedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    DeletedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TableBooking", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TableBooking_Booking_BookingId",
+                        column: x => x.BookingId,
+                        principalTable: "Booking",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_OptionItemOrderItem_OrderItem_OrderItemId",
-                        column: x => x.OrderItemId,
-                        principalTable: "OrderItem",
+                        name: "FK_TableBooking_Table_TableId",
+                        column: x => x.TableId,
+                        principalTable: "Table",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -971,6 +961,11 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                 column: "ZoneId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Table_CurrentOrderId",
+                table: "Table",
+                column: "CurrentOrderId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Table_ZoneId",
                 table: "Table",
                 column: "ZoneId");
@@ -984,11 +979,38 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                 name: "IX_TableBooking_TableId",
                 table: "TableBooking",
                 column: "TableId");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_FeedBack_Order_OrderId",
+                table: "FeedBack",
+                column: "OrderId",
+                principalTable: "Order",
+                principalColumn: "Id");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_OptionItemOrderItem_OrderItem_OrderItemId",
+                table: "OptionItemOrderItem",
+                column: "OrderItemId",
+                principalTable: "OrderItem",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Order_Table_TableId",
+                table: "Order",
+                column: "TableId",
+                principalTable: "Table",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_Table_Order_CurrentOrderId",
+                table: "Table");
+
             migrationBuilder.DropTable(
                 name: "AppRoleClaims");
 
@@ -1068,19 +1090,19 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                 name: "Option");
 
             migrationBuilder.DropTable(
-                name: "Order");
-
-            migrationBuilder.DropTable(
                 name: "Product");
 
             migrationBuilder.DropTable(
                 name: "Customer");
 
             migrationBuilder.DropTable(
-                name: "Table");
+                name: "Category");
 
             migrationBuilder.DropTable(
-                name: "Category");
+                name: "Order");
+
+            migrationBuilder.DropTable(
+                name: "Table");
 
             migrationBuilder.DropTable(
                 name: "Zone");

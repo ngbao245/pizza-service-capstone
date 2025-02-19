@@ -7,16 +7,19 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
 	{
 		public int TableNumber { get; set; }
 		public int Capacity { get; set; }
-		public TableTypeEnum Status { get; set; } = TableTypeEnum.Available;
-		public Guid ZoneId { get; set; }
+		public TableStatusEnum Status { get; set; }
+        public Guid? CurrentOrderId { get; set; }
+		public virtual Order CurrentOrder { get; set; }
 
+
+        public Guid ZoneId { get; set; }
 		public virtual Zone Zone { get; set; }
 
 		private Table()
 		{
 		}
 
-		public Table(Guid id, int tableNumber, int capacity, TableTypeEnum status, Guid zoneId)
+		public Table(Guid id, int tableNumber, int capacity, TableStatusEnum status, Guid zoneId)
 		{
 			Id = id;
 			TableNumber = tableNumber;
@@ -25,9 +28,8 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
 			ZoneId = zoneId;
 		}
 
-		internal void UpdateTable(Guid id, int tableNumber, int capacity, TableTypeEnum status, Guid zoneId)
+		internal void UpdateTable(int tableNumber, int capacity, TableStatusEnum status, Guid zoneId)
 		{
-			Id = id;
 			TableNumber = tableNumber;
 			Capacity = capacity;
 			Status = status;
