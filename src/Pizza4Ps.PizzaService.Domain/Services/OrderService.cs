@@ -101,9 +101,10 @@ namespace Pizza4Ps.PizzaService.Domain.Services
                         )).ToList();
 
                     _orderItemRepository.Add(orderItem);
-                }
 
-                return true;
+                }
+            await _unitOfWork.SaveChangeAsync();
+            return true;
 
         }
 
