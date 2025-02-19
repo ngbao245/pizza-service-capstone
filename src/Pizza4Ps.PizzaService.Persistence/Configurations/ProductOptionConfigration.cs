@@ -13,13 +13,13 @@ namespace Pizza4Ps.PizzaService.Persistence.Configurations
 			builder.HasKey(x => x.Id);
 
 			builder.HasOne(x => x.Product)
-				.WithMany()
-				.HasForeignKey(x => x.ProductId)
+                .WithMany(p => p.ProductOptions)
+                .HasForeignKey(x => x.ProductId)
 				.OnDelete(DeleteBehavior.Cascade);
 
 			builder.HasOne(x => x.Option)
-				.WithMany()
-				.HasForeignKey(x => x.OptionId)
+                .WithMany(o => o.ProductOptions)
+                .HasForeignKey(x => x.OptionId)
 				.OnDelete(DeleteBehavior.Cascade);
 		}
 	}

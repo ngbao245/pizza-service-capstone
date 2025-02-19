@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Pizza4Ps.PizzaService.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class DBInit : Migration
+    public partial class IntialDb : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -414,6 +414,7 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false, defaultValue: 0m),
                     Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
                     CategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ProductType = table.Column<int>(type: "int", nullable: false),
                     CreatedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     ModifiedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -633,7 +634,7 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     StartTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     EndTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    Status = table.Column<int>(type: "int", maxLength: 50, nullable: true),
                     TableId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreatedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     ModifiedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
@@ -723,6 +724,7 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     OrderId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    OrderItemStatus = table.Column<int>(type: "int", nullable: false),
                     CreatedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     ModifiedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -853,11 +855,11 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
 
             migrationBuilder.InsertData(
                 table: "Product",
-                columns: new[] { "Id", "CategoryId", "CreatedBy", "CreatedDate", "DeletedAt", "DeletedBy", "Description", "IsDeleted", "ModifiedBy", "ModifiedDate", "Name", "Price" },
+                columns: new[] { "Id", "CategoryId", "CreatedBy", "CreatedDate", "DeletedAt", "DeletedBy", "Description", "IsDeleted", "ModifiedBy", "ModifiedDate", "Name", "Price", "ProductType" },
                 values: new object[,]
                 {
-                    { new Guid("8bf80bc9-2302-4e36-b4ca-146ce7d34543"), new Guid("8bf80bc9-2302-4e36-b4ca-146ce7d34543"), null, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, null, "Pizza", false, null, null, "Pizza In", 1200m },
-                    { new Guid("ad8a1d13-a895-4a94-d20c-08dcf26f96d8"), new Guid("ad8a1d13-a895-4a94-d20c-08dcf26f96d8"), null, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, null, "Pizza", false, null, null, "Pizza hut", 1000m }
+                    { new Guid("8bf80bc9-2302-4e36-b4ca-146ce7d34543"), new Guid("8bf80bc9-2302-4e36-b4ca-146ce7d34543"), null, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, null, "Pizza", false, null, null, "Pizza In", 1200m, 0 },
+                    { new Guid("ad8a1d13-a895-4a94-d20c-08dcf26f96d8"), new Guid("ad8a1d13-a895-4a94-d20c-08dcf26f96d8"), null, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, null, "Pizza", false, null, null, "Pizza hut", 1000m, 0 }
                 });
 
             migrationBuilder.CreateIndex(

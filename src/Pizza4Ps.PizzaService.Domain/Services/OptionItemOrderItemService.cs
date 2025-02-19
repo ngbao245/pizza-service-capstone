@@ -11,7 +11,7 @@ using Pizza4Ps.PizzaService.Domain.Services.ServiceBase;
 
 namespace Pizza4Ps.PizzaService.Domain.Services
 {
-	public class OptionItemOrderItemService : DomainService, IOptionItemOrderItemService
+	public class OptionItemOrderItemService : DomainService, IOrderItemDetailService
 	{
 		private readonly IUnitOfWork _unitOfWork;
 		private readonly IOptionItemOrderItemRepository _optionItemOrderItemRepository;

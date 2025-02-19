@@ -8,9 +8,9 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.OptionItemOrderItems.Co
 	public class CreateOptionItemOrderItemCommandHandler : IRequestHandler<CreateOptionItemOrderItemCommand, ResultDto<Guid>>
 	{
 		private readonly IMapper _mapper;
-		private readonly IOptionItemOrderItemService _optionitemorderitemService;
+		private readonly IOrderItemDetailService _optionitemorderitemService;
 
-		public CreateOptionItemOrderItemCommandHandler(IMapper mapper, IOptionItemOrderItemService optionitemorderitemService)
+		public CreateOptionItemOrderItemCommandHandler(IMapper mapper, IOrderItemDetailService optionitemorderitemService)
 		{
 			_mapper = mapper;
 			_optionitemorderitemService = optionitemorderitemService;

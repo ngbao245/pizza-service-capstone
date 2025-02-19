@@ -5,9 +5,9 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.OptionItemOrderItems.Co
 {
 	public class RestoreOptionItemOrderItemCommandHandler : IRequestHandler<RestoreOptionItemOrderItemCommand>
 	{
-		private readonly IOptionItemOrderItemService _optionitemorderitemService;
+		private readonly IOrderItemDetailService _optionitemorderitemService;
 
-		public RestoreOptionItemOrderItemCommandHandler(IOptionItemOrderItemService optionitemorderitemService)
+		public RestoreOptionItemOrderItemCommandHandler(IOrderItemDetailService optionitemorderitemService)
 		{
 			_optionitemorderitemService = optionitemorderitemService;
 		}

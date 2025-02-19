@@ -2,12 +2,15 @@
 using Microsoft.AspNetCore.Mvc;
 using Pizza4Ps.PizzaService.API.Constants;
 using Pizza4Ps.PizzaService.API.Models;
+using Pizza4Ps.PizzaService.Application.Abstractions;
+using Pizza4Ps.PizzaService.Application.DTOs;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Commands.CreateProduct;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Commands.DeleteProduct;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Commands.RestoreProduct;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Commands.UpdateProduct;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Queries.GetListProduct;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Queries.GetListProductIgnoreQueryFilter;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Queries.GetMenu;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Queries.GetProductById;
 
 namespace Pizza4Ps.PizzaService.API.Controllers
@@ -45,7 +48,19 @@ namespace Pizza4Ps.PizzaService.API.Controllers
 			});
 		}
 
-		[HttpGet("ignore-filter")]
+        [HttpGet("menu")]
+        public async Task<IActionResult> GetMenu([FromQuery] GetMenuQuery query)
+        {
+            var result = await _sender.Send(query);
+            return Ok(new ApiResponse
+			{
+                Result = result,
+                Message = Message.GET_SUCCESS,
+                StatusCode = StatusCodes.Status200OK
+            });
+        }
+
+        [HttpGet("ignore-filter")]
 		public async Task<IActionResult> GetListIgnoreQueryFilterAsync([FromQuery] GetListProductIgnoreQueryFilterQuery query)
 		{
 			var result = await _sender.Send(query);
@@ -115,5 +130,7 @@ namespace Pizza4Ps.PizzaService.API.Controllers
 				StatusCode = StatusCodes.Status200OK
 			});
 		}
+
+
 	}
 }

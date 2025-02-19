@@ -8,5 +8,7 @@
         internal const string RESTORE_SUCCESS = "Item restored successfully";
         internal const string GET_SUCCESS = "Item query successfully";
         internal const string ID_URL_ERROR = "ID in URL and body do not match";
+        internal const string CREATED_FAILED = "Item created failed";
+
     }
 }

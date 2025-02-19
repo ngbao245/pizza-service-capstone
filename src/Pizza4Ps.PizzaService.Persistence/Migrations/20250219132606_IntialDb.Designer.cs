@@ -12,8 +12,8 @@ using Pizza4Ps.PizzaService.Persistence;
 namespace Pizza4Ps.PizzaService.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20250110163227_DBInit")]
-    partial class DBInit
+    [Migration("20250219132606_IntialDb")]
+    partial class IntialDb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -635,7 +635,110 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                     b.ToTable("OptionItem", (string)null);
                 });
 
-            modelBuilder.Entity("Pizza4Ps.PizzaService.Domain.Entities.OptionItemOrderItem", b =>
+            modelBuilder.Entity("Pizza4Ps.PizzaService.Domain.Entities.Order", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<DateTimeOffset?>("DeletedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("DeletedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("EndTime")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset?>("ModifiedDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<DateTimeOffset>("StartTime")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<int?>("Status")
+                        .HasMaxLength(50)
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("TableId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TableId");
+
+                    b.ToTable("Order", (string)null);
+                });
+
+            modelBuilder.Entity("Pizza4Ps.PizzaService.Domain.Entities.OrderItem", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<DateTimeOffset?>("DeletedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("DeletedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset?>("ModifiedDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("OrderItemStatus")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("OrderItem", (string)null);
+                });
+
+            modelBuilder.Entity("Pizza4Ps.PizzaService.Domain.Entities.OrderItemDetail", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -683,106 +786,6 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                     b.HasIndex("OrderItemId");
 
                     b.ToTable("OptionItemOrderItem", (string)null);
-                });
-
-            modelBuilder.Entity("Pizza4Ps.PizzaService.Domain.Entities.Order", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTimeOffset>("CreatedDate")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<DateTimeOffset?>("DeletedAt")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("DeletedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTimeOffset>("EndTime")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("ModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTimeOffset?>("ModifiedDate")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<DateTimeOffset>("StartTime")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("Status")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<Guid>("TableId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TableId");
-
-                    b.ToTable("Order", (string)null);
-                });
-
-            modelBuilder.Entity("Pizza4Ps.PizzaService.Domain.Entities.OrderItem", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTimeOffset>("CreatedDate")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<DateTimeOffset?>("DeletedAt")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("DeletedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("ModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTimeOffset?>("ModifiedDate")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<Guid>("OrderId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<Guid>("ProductId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("OrderId");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("OrderItem", (string)null);
                 });
 
             modelBuilder.Entity("Pizza4Ps.PizzaService.Domain.Entities.OrderVoucher", b =>
@@ -919,6 +922,9 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                         .HasColumnType("decimal(18, 2)")
                         .HasDefaultValue(0m);
 
+                    b.Property<int>("ProductType")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
@@ -934,7 +940,8 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                             Description = "Pizza",
                             IsDeleted = false,
                             Name = "Pizza hut",
-                            Price = 1000m
+                            Price = 1000m,
+                            ProductType = 0
                         },
                         new
                         {
@@ -944,7 +951,8 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                             Description = "Pizza",
                             IsDeleted = false,
                             Name = "Pizza In",
-                            Price = 1200m
+                            Price = 1200m,
+                            ProductType = 0
                         });
                 });
 
@@ -1532,31 +1540,12 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
             modelBuilder.Entity("Pizza4Ps.PizzaService.Domain.Entities.OptionItem", b =>
                 {
                     b.HasOne("Pizza4Ps.PizzaService.Domain.Entities.Option", "Option")
-                        .WithMany()
+                        .WithMany("OptionItems")
                         .HasForeignKey("OptionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Option");
-                });
-
-            modelBuilder.Entity("Pizza4Ps.PizzaService.Domain.Entities.OptionItemOrderItem", b =>
-                {
-                    b.HasOne("Pizza4Ps.PizzaService.Domain.Entities.OptionItem", "OptionItem")
-                        .WithMany()
-                        .HasForeignKey("OptionItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Pizza4Ps.PizzaService.Domain.Entities.OrderItem", "OrderItem")
-                        .WithMany()
-                        .HasForeignKey("OrderItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("OptionItem");
-
-                    b.Navigation("OrderItem");
                 });
 
             modelBuilder.Entity("Pizza4Ps.PizzaService.Domain.Entities.Order", b =>
@@ -1573,7 +1562,7 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
             modelBuilder.Entity("Pizza4Ps.PizzaService.Domain.Entities.OrderItem", b =>
                 {
                     b.HasOne("Pizza4Ps.PizzaService.Domain.Entities.Order", "Order")
-                        .WithMany()
+                        .WithMany("OrderItems")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1587,6 +1576,25 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                     b.Navigation("Order");
 
                     b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("Pizza4Ps.PizzaService.Domain.Entities.OrderItemDetail", b =>
+                {
+                    b.HasOne("Pizza4Ps.PizzaService.Domain.Entities.OptionItem", "OptionItem")
+                        .WithMany()
+                        .HasForeignKey("OptionItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Pizza4Ps.PizzaService.Domain.Entities.OrderItem", "OrderItem")
+                        .WithMany("OrderItemDetails")
+                        .HasForeignKey("OrderItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("OptionItem");
+
+                    b.Navigation("OrderItem");
                 });
 
             modelBuilder.Entity("Pizza4Ps.PizzaService.Domain.Entities.OrderVoucher", b =>
@@ -1633,13 +1641,13 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
             modelBuilder.Entity("Pizza4Ps.PizzaService.Domain.Entities.ProductOption", b =>
                 {
                     b.HasOne("Pizza4Ps.PizzaService.Domain.Entities.Option", "Option")
-                        .WithMany()
+                        .WithMany("ProductOptions")
                         .HasForeignKey("OptionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Pizza4Ps.PizzaService.Domain.Entities.Product", "Product")
-                        .WithMany()
+                        .WithMany("ProductOptions")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1741,6 +1749,28 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                     b.Navigation("Tokens");
 
                     b.Navigation("UserRoles");
+                });
+
+            modelBuilder.Entity("Pizza4Ps.PizzaService.Domain.Entities.Option", b =>
+                {
+                    b.Navigation("OptionItems");
+
+                    b.Navigation("ProductOptions");
+                });
+
+            modelBuilder.Entity("Pizza4Ps.PizzaService.Domain.Entities.Order", b =>
+                {
+                    b.Navigation("OrderItems");
+                });
+
+            modelBuilder.Entity("Pizza4Ps.PizzaService.Domain.Entities.OrderItem", b =>
+                {
+                    b.Navigation("OrderItemDetails");
+                });
+
+            modelBuilder.Entity("Pizza4Ps.PizzaService.Domain.Entities.Product", b =>
+                {
+                    b.Navigation("ProductOptions");
                 });
 #pragma warning restore 612, 618
         }

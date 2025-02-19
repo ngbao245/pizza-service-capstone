@@ -5,9 +5,9 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.OptionItemOrderItems.Co
 {
 	public class DeleteOptionItemOrderItemCommandHandler : IRequestHandler<DeleteOptionItemOrderItemCommand>
 	{
-		private readonly IOptionItemOrderItemService _optionitemorderitemService;
+		private readonly IOrderItemDetailService _optionitemorderitemService;
 
-		public DeleteOptionItemOrderItemCommandHandler(IOptionItemOrderItemService optionitemorderitemservice)
+		public DeleteOptionItemOrderItemCommandHandler(IOrderItemDetailService optionitemorderitemservice)
 		{
 			_optionitemorderitemService = optionitemorderitemservice;
 		}
