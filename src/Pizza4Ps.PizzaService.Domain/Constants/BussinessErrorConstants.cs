@@ -104,6 +104,7 @@
         public class TableErrorConstant
         {
             public const string TABLE_NOT_FOUND = "Bàn không tìm thấy";
+            public const string INVALID_TABLE_STATUS = "Trạng thái bàn không hợp lệ";
         }
 
         public class StaffZoneErrorConstant
