@@ -9,6 +9,6 @@ namespace Pizza4Ps.PizzaService.Domain.Abstractions.Services
 		Task<Guid> UpdateAsync(Guid id, DateTimeOffset startTime, DateTimeOffset endTime, OrderTypeEnum status, Guid TableId);
 		Task DeleteAsync(List<Guid> ids, bool IsHardDeleted = false);
 		Task RestoreAsync(List<Guid> ids);
-		Task<bool> AddFoodToOrderAsync(Guid tableId, List<(Guid ProductId, List<Guid> OptionItemIds, string Note)> items);
+		Task<Guid> AddFoodToOrderAsync(Guid tableId, List<(Guid ProductId, List<Guid> OptionItemIds, string Note)> items);
     }
 }

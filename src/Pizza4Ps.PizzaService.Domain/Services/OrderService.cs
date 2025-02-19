@@ -74,7 +74,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             return entity.Id;
         }
 
-        public async Task<bool> AddFoodToOrderAsync(Guid tableId, List<(Guid ProductId, List<Guid> OptionItemIds, string Note)> items)
+        public async Task<Guid> AddFoodToOrderAsync(Guid tableId, List<(Guid ProductId, List<Guid> OptionItemIds, string Note)> items)
         {
                 var order = await _orderRepository.GetSingleAsync(o => o.TableId == tableId && o.Status == OrderTypeEnum.Cooking);
                 if (order == null)
@@ -104,7 +104,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
 
                 }
             await _unitOfWork.SaveChangeAsync();
-            return true;
+            return order.Id;
 
         }
 
