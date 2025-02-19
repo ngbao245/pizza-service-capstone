@@ -13,7 +13,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Payments.Commands.Creat
         }
         public async Task<string> Handle(CreatePaymentLinkCommand request, CancellationToken cancellationToken)
         {
-            var result = await _payOsService.CreatePaymentLink(float.MinValue, "", "http://localhost:8001/api/categories");
+            var result = await _payOsService.CreatePaymentLink(request.TableId, "", "http://localhost:8001/api/categories");
             return result;
         }
     }
