@@ -10,7 +10,7 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         public decimal Price { get; set; }
         //Bao gồm order item và order items detail
         public decimal TotalPrice { get; set; }
-        public Guid OrderId { get; set; }
+        public Guid OrderId { get; set; }   
         public Guid ProductId { get; set; }
         public OrderItemStatus OrderItemStatus { get; set; }
         public virtual Order Order { get; set; }

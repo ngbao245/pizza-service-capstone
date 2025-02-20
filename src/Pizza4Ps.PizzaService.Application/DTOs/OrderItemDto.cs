@@ -1,5 +1,4 @@
-﻿using Pizza4Ps.PizzaService.Domain.Entities;
-using Pizza4Ps.PizzaService.Domain.Enums;
+﻿using Pizza4Ps.PizzaService.Domain.Enums;
 
 namespace Pizza4Ps.PizzaService.Application.DTOs
 {
@@ -16,6 +15,6 @@ namespace Pizza4Ps.PizzaService.Application.DTOs
         public Guid? OrderItemDetailId { get; set; }
         public virtual OrderDto Order { get; set; }
         public virtual ProductDto Product { get; set; }
-        public virtual ICollection<OrderItemDetailDto> ProductDetails { get; set; }
+        public virtual ICollection<OrderItemDetailDto> OrderItemDetails { get; set; } = new List<OrderItemDetailDto>();
     }
 }

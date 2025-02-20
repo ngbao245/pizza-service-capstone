@@ -154,14 +154,14 @@ namespace Pizza4Ps.PizzaService.API.Controllers
             });
         }
 
-        [HttpGet("by-order/{orderId}")]
+        [HttpGet("get-by/{orderId}")]
         public async Task<IActionResult> GetByOrderId([FromRoute] Guid orderId)
         {
-            var result = await _sender.Send(new GetOrderItemByOrderIdQuery { Id = orderId });
+            var result = await _sender.Send(new GetOrderItemByOrderIdQuery { OrderId = orderId });
             return Ok(new ApiResponse
             {
                 Result = result,
-                Message = "Order items retrieved successfully",
+                Message = Message.GET_SUCCESS,
                 StatusCode = StatusCodes.Status200OK
             });
         }

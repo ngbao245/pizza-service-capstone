@@ -29,19 +29,18 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.OrderItems.Queries.GetO
 
         public async Task<List<OrderItemDto>> Handle(GetOrderItemByOrderIdQuery request, CancellationToken cancellationToken)
         {
-            ////lấy các order item thuộc order
-            //var items = await _orderItemRepository.GetListAsTracking(x => x.OrderId == request.Id).ToListAsync();
-            //if (items == null) throw new BusinessException(BussinessErrorConstants.OrderItemErrorConstant.ORDER_ITEM_NOT_FOUND);
-            //foreach (var item in items)
-            //{
-            //    var itemOptions = await _optionItemOrderItemRepository.GetListAsTracking(
-            //        x => x.OrderItemId == item.Id, includeProperties: "OptionItem").ToListAsync();
-            //}
+            //lấy các order item thuộc order
+            var items = await _orderItemRepository
+                .GetListAsTracking(x => x.OrderId == request.OrderId)
+                .Include(x => x.OrderItemDetails)
+                .ThenInclude(x => x.OptionItem)
+                .ToListAsync();
+            if (!items.Any()) throw new BusinessException(BussinessErrorConstants.OrderItemErrorConstant.ORDER_ITEM_NOT_FOUND);
 
-            //var result = _mapper.Map<OrderItemDto>(entities);
-            //return result;
-        
-            throw new NotImplementedException();
+            var result = _mapper.Map<List<OrderItemDto>>(items);
+            return result;
+
+            //throw new NotImplementedException();
         }
     }
-}
+}   

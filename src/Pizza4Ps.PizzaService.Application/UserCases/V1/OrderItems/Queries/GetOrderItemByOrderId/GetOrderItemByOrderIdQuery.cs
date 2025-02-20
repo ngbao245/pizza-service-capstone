@@ -5,7 +5,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.OrderItems.Queries.GetO
 {
     public class GetOrderItemByOrderIdQuery : IRequest<List<OrderItemDto>>
     {
-        public Guid Id { get; set; }
+        public Guid OrderId { get; set; }
 		public string includeProperties { get; set; } = "";
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace Pizza4Ps.PizzaService.Application.DTOs
+﻿using System.Text.Json.Serialization;
+
+namespace Pizza4Ps.PizzaService.Application.DTOs
 {
     public class OrderItemDetailDto
     {
@@ -9,6 +11,7 @@
         public Guid OrderItemId { get; set; }
 
         public virtual OptionItemDto OptionItem { get; set; }
+        [JsonIgnore]
         public virtual OrderItemDto OrderItem { get; set; }
     }
 }
