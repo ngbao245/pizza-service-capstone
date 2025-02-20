@@ -58,9 +58,16 @@ namespace Pizza4Ps.PizzaService.API.Controllers
             {
                 WebhookDto = webhookDto
             });
-            return Ok(new { success = true });
+            if (result == true)
+            {
+                return Ok(new { success = true });
 
-        }
+            }
+            else
+            {
+                return Ok(new { success = false });
+            }
+        } 
         [HttpGet("return-url-payos")]
         public async Task<IActionResult> ReturnUrlAsync([FromQuery] string orderCode)
         {
