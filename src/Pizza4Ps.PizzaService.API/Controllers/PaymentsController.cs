@@ -41,9 +41,9 @@ namespace Pizza4Ps.PizzaService.API.Controllers
 		}
 
         [HttpPost("create-payment-link")]
-        public async Task<IActionResult> CreatePaymentLink()
+        public async Task<IActionResult> CreatePaymentLink([FromBody] CreatePaymentLinkCommand command)
         {
-            var result = await _sender.Send(new CreatePaymentLinkCommand());
+            var result = await _sender.Send(command);
             return Ok(new ApiResponse
             {
                 Result = result,
