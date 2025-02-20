@@ -1,12 +1,10 @@
 ﻿using MediatR;
-using Pizza4Ps.PizzaService.Application.Abstractions;
-using System.ComponentModel.DataAnnotations;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Orders.Commands.AddFoodToOrder
 {
     public class AddFoodToOrderCommand : IRequest
     {
-        public Guid TableId { get; set; }
+        public Guid OrderId { get; set; }
 
         public List<OrderItemDto> OrderItems { get; set; }
     }

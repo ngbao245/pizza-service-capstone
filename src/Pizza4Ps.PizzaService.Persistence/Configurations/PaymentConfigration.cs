@@ -16,13 +16,6 @@ namespace Pizza4Ps.PizzaService.Persistence.Configurations
 				.IsRequired()
 				.HasColumnType("decimal(18, 2)");
 
-			builder.Property(x => x.PaymentMethod)
-				.IsRequired();
-
-			builder.Property(x => x.Status)
-				.HasMaxLength(50)
-				.IsRequired(false);
-
 			builder.HasOne(x => x.Order)
 				.WithMany()
 				.HasForeignKey(x => x.OrderId)

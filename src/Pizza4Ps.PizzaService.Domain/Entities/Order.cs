@@ -10,7 +10,7 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         public OrderStatusEnum? Status { get; set; }
         public Guid TableId { get; set; }
         public decimal? TotalPrice { get; set; }
-
+        public string? OrderCode { get; set; }
         public virtual Table Table { get; set; }
         public virtual ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
 
@@ -32,9 +32,18 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
             TotalPrice = totalPrice;
         }
 
+        public void SetOrderCode(string orderCode)
+        {
+            OrderCode = orderCode;
+        }
+
         public void SetCheckOut()
         {
             Status = OrderStatusEnum.CheckedOut;
+        }
+        public void SetPaid()
+        {
+            Status = OrderStatusEnum.Paid;
         }
 
         public void UpdateOrder(DateTimeOffset startTime, DateTimeOffset endTime, OrderStatusEnum status, Guid tableId)

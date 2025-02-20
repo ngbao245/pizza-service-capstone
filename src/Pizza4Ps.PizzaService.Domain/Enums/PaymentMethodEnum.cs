@@ -3,8 +3,6 @@
     public enum PaymentMethodEnum
     {
         Cash,
-        Momo,
-        ZaloPay,
-        VnPay,
+        QRCode
     }
 }
