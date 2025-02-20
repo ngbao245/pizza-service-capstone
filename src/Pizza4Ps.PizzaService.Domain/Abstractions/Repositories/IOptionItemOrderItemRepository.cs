@@ -3,7 +3,7 @@ using Pizza4Ps.PizzaService.Domain.Entities;
 
 namespace Pizza4Ps.PizzaService.Domain.Abstractions.Repositories
 {
-    public interface IOptionItemOrderItemRepository : IRepositoryBase<OptionItemOrderItem, Guid>
+    public interface IOptionItemOrderItemRepository : IRepositoryBase<OrderItemDetail, Guid>
     {
     }
 }

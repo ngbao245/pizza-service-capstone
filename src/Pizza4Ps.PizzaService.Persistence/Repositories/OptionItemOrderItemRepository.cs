@@ -3,7 +3,7 @@ using Pizza4Ps.PizzaService.Domain.Entities;
 
 namespace Pizza4Ps.PizzaService.Persistence.Repositories
 {
-    public class OptionItemOrderItemRepository : RepositoryBase<OptionItemOrderItem, Guid>, IOptionItemOrderItemRepository
+    public class OptionItemOrderItemRepository : RepositoryBase<OrderItemDetail, Guid>, IOptionItemOrderItemRepository
     {
         public OptionItemOrderItemRepository(ApplicationDBContext dBContext) : base(dBContext)
         {

@@ -5,9 +5,9 @@ using Pizza4Ps.PizzaService.Persistence.Constants;
 
 namespace Pizza4Ps.PizzaService.Persistence.Configurations
 {
-	public class OptionItemOrderItemConfigration : IEntityTypeConfiguration<OptionItemOrderItem>
+	public class OptionItemOrderItemConfigration : IEntityTypeConfiguration<OrderItemDetail>
 	{
-		public void Configure(EntityTypeBuilder<OptionItemOrderItem> builder)
+		public void Configure(EntityTypeBuilder<OrderItemDetail> builder)
 		{
 			builder.ToTable(TableNames.OptionItemOrderItem);
 			builder.HasKey(x => x.Id);
@@ -26,11 +26,11 @@ namespace Pizza4Ps.PizzaService.Persistence.Configurations
 				.IsRequired()
 				.OnDelete(DeleteBehavior.Cascade);
 
-			builder.HasOne(x => x.OrderItem)
-				.WithMany()
-				.HasForeignKey(x => x.OrderItemId)
-				.IsRequired()
-				.OnDelete(DeleteBehavior.Cascade);
-		}
+            builder.HasOne(x => x.OrderItem)
+                .WithMany(x => x.OrderItemDetails)
+                .HasForeignKey(x => x.OrderItemId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Cascade);
+        }
 	}
 }

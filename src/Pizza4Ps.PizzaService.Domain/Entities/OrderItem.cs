@@ -1,4 +1,5 @@
 ﻿using Pizza4Ps.PizzaService.Domain.Abstractions;
+using Pizza4Ps.PizzaService.Domain.Enums;
 
 namespace Pizza4Ps.PizzaService.Domain.Entities
 {
@@ -11,33 +12,40 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         public Guid OrderId { get; set; }
         public Guid ProductId { get; set; }
 
-        public virtual Order Order { get; set; }
-        public virtual Product Product { get; set; }
-        public virtual ICollection<OptionItemOrderItem> OptionItemOrderItems { get; set; }
+		public OrderItemTypeEnum OrderItemStatus { get; set; } = OrderItemTypeEnum.Cooking;
+
+		public virtual Order Order { get; set; }
+		public virtual Product Product { get; set; }
+        public virtual ICollection<OrderItemDetail> OrderItemDetails { get; set; } = new List<OrderItemDetail>();
+
 
         public OrderItem()
-        {
-        }
+		{
+		}
 
-        public OrderItem(Guid id, string name, int quantity, decimal price, string status, Guid orderId, Guid productId)
-        {
-            Id = id;
-            Name = name;
-            Quantity = quantity;
-            Price = price;
-            Status = status;
-            OrderId = orderId;
-            ProductId = productId;
-        }
 
-        public void UpdateOrderItem(string name, int quantity, decimal price, string status, Guid orderId, Guid productId)
+		public OrderItem(Guid id, string name, int quantity, decimal price, Guid orderId, Guid productId, OrderItemTypeEnum orderItemStatus)
+		{
+			Id = id;
+			Name = name;
+			Quantity = quantity;
+			Price = price;
+			OrderId = orderId;
+			ProductId = productId;
+			OrderItemStatus = orderItemStatus;
+		}
+
+
+		public void UpdateOrderItem(string name, int quantity, decimal price, Guid orderId, Guid productId, OrderItemTypeEnum orderItemStatus)
         {
-            Name = name;
-            Quantity = quantity;
-            Price = price;
-            Status = status;
-            OrderId = orderId;
-            ProductId = productId;
-        }
-    }
+			Name = name;
+			Quantity = quantity;
+			Price = price;
+			OrderId = orderId;
+			ProductId = productId;
+			OrderItemStatus = orderItemStatus;
+
+		}
+	}
+
 }

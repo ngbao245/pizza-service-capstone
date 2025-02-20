@@ -39,7 +39,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.OrderItems.Queries.GetO
 
             foreach (var orderItemDto in orderItemDtos)
             {
-                orderItemDto.OptionItemOrderItems = _mapper.Map<List<OptionItemOrderItemDto>>(
+                orderItemDto.ProductDetail = _mapper.Map<OrderItemDetailDto>(
                     optionItemOrderItems.Where(x => x.OrderItemId == orderItemDto.Id).ToList()
                 );
             }

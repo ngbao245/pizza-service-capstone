@@ -6,6 +6,7 @@ using Pizza4Ps.PizzaService.Domain.Entities;
 using Pizza4Ps.PizzaService.Domain.Constants;
 using Pizza4Ps.PizzaService.Domain.Exceptions;
 using Microsoft.EntityFrameworkCore;
+using Pizza4Ps.PizzaService.Domain.Enums;
 using System.ComponentModel.Design;
 
 namespace Pizza4Ps.PizzaService.Domain.Services
@@ -21,13 +22,14 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             _orderitemRepository = orderitemRepository;
         }
 
-        public async Task<Guid> CreateAsync(string name, int quantity, decimal price, string status, Guid orderId, Guid productId)
-        {
-            var entity = new OrderItem(Guid.NewGuid(), name, quantity, price, status, orderId, productId);
-            _orderitemRepository.Add(entity);
-            await _unitOfWork.SaveChangeAsync();
-            return entity.Id;
-        }
+		public async Task<Guid> CreateAsync(string name, int quantity, decimal price, Guid orderId, Guid productId, OrderItemTypeEnum orderItemStatus)
+		{
+			var entity = new OrderItem(Guid.NewGuid(), name, quantity, price, orderId, productId, orderItemStatus);
+			_orderitemRepository.Add(entity);
+			await _unitOfWork.SaveChangeAsync();
+			return entity.Id;
+		}
+
 
         public async Task DeleteAsync(List<Guid> ids, bool IsHardDeleted = false)
         {
@@ -58,64 +60,33 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             await _unitOfWork.SaveChangeAsync();
         }
 
-        public async Task<Guid> UpdateAsync(Guid id, string name, int quantity, decimal price, string status, Guid orderId, Guid productId)
+		public async Task<Guid> UpdateAsync(Guid id, string name, int quantity, decimal price, Guid orderId, Guid productId, OrderItemTypeEnum orderItemStatus)
+		{
+			var entity = await _orderitemRepository.GetSingleByIdAsync(id);
+			entity.UpdateOrderItem(name, quantity, price, orderId, productId, orderItemStatus);
+			await _unitOfWork.SaveChangeAsync();
+			return entity.Id;
+		}
+
+        public Task UpdateStatusToCancelledAsync(Guid id, Guid orderId)
         {
-            var entity = await _orderitemRepository.GetSingleByIdAsync(id);
-            entity.UpdateOrderItem(name, quantity, price, status, orderId, productId);
-            await _unitOfWork.SaveChangeAsync();
-            return entity.Id;
+            throw new NotImplementedException();
         }
 
-        public async Task UpdateStatusToCancelledAsync(Guid id, Guid orderId)
+        public Task UpdateStatusToPendingAsync(Guid id, Guid orderId)
         {
-            var entities = await _orderitemRepository.GetListAsTracking(x => x.OrderId.Equals(orderId) && x.Id.Equals(id)).ToListAsync();
-            if (entities == null) throw new ServerException(ServerErrorConstants.NOT_FOUND);
-
-            foreach (var entity in entities)
-            {
-                entity.UpdateOrderItem(entity.Name, entity.Quantity, entity.Price, "Cancelled", entity.OrderId, entity.ProductId);
-
-            }
-            await _unitOfWork.SaveChangeAsync();
+            throw new NotImplementedException();
         }
 
-        public async Task UpdateStatusToPendingAsync(Guid id, Guid orderId)
+        public Task UpdateStatusToServedAsync(Guid id, Guid orderId)
         {
-            var entities = await _orderitemRepository.GetListAsTracking(x => x.OrderId.Equals(orderId) && x.Id.Equals(id)).ToListAsync();
-            if (entities == null) throw new ServerException(ServerErrorConstants.NOT_FOUND);
-
-            foreach (var entity in entities)
-            {
-                entity.UpdateOrderItem(entity.Name, entity.Quantity, entity.Price, "Pending", entity.OrderId, entity.ProductId);
-
-            }
-            await _unitOfWork.SaveChangeAsync();
+            throw new NotImplementedException();
         }
 
-        public async Task UpdateStatusToServedAsync(Guid id, Guid orderId)
+        public Task UpdateStatusToServingAsync(Guid id, Guid orderId)
         {
-            var entities = await _orderitemRepository.GetListAsTracking(x => x.OrderId.Equals(orderId) && x.Id.Equals(id)).ToListAsync();
-            if (entities == null) throw new ServerException(ServerErrorConstants.NOT_FOUND);
-
-            foreach (var entity in entities)
-            {
-                entity.UpdateOrderItem(entity.Name, entity.Quantity, entity.Price, "Served", entity.OrderId, entity.ProductId);
-
-            }
-            await _unitOfWork.SaveChangeAsync();
+            throw new NotImplementedException();
         }
 
-        public async Task UpdateStatusToServingAsync(Guid id, Guid orderId)
-        {
-            var entities = await _orderitemRepository.GetListAsTracking(x => x.OrderId.Equals(orderId) && x.Id.Equals(id)).ToListAsync();
-            if (entities == null) throw new ServerException(ServerErrorConstants.NOT_FOUND);
-
-            foreach (var entity in entities)
-            {
-                entity.UpdateOrderItem(entity.Name, entity.Quantity, entity.Price, "Serving", entity.OrderId, entity.ProductId);
-
-            }
-            await _unitOfWork.SaveChangeAsync();
-        }
     }
 }

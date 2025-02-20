@@ -16,16 +16,17 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.OrderItems.Commands.Cre
             _orderitemService = orderitemService;
         }
 
-        public async Task<ResultDto<Guid>> Handle(CreateOrderItemCommand request, CancellationToken cancellationToken)
-        {
-            var result = await _orderitemService.CreateAsync(
-                request.Name,
-                request.Quantity,
-                request.Price,
-                request.Status,
-                request.OrderId,
-                request.ProductId);
-            return new ResultDto<Guid>
+		public async Task<ResultDto<Guid>> Handle(CreateOrderItemCommand request, CancellationToken cancellationToken)
+		{
+			var result = await _orderitemService.CreateAsync(
+				request.Name,
+				request.Quantity,
+				request.Price,
+				request.OrderId,
+				request.ProductId,
+				request.OrderItemStatus
+				);
+			return new ResultDto<Guid>
             {
                 Id = result
             };

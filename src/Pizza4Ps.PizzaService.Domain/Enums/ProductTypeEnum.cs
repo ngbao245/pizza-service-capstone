@@ -4,6 +4,8 @@
     {
         public enum ProductType
         {
+            ColdKitchen,
+            HotKitchen
         }
     }
 }

@@ -6,6 +6,7 @@ using Pizza4Ps.PizzaService.Domain.Constants;
 using Pizza4Ps.PizzaService.Domain.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using Pizza4Ps.PizzaService.Domain.Services.ServiceBase;
+using Pizza4Ps.PizzaService.Domain.Enums;
 
 namespace Pizza4Ps.PizzaService.Domain.Services
 {
@@ -13,14 +14,22 @@ namespace Pizza4Ps.PizzaService.Domain.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IOrderRepository _orderRepository;
+        private readonly ITableRepository _tableRepository;
+        private readonly IProductRepository _productRepository;
+        private readonly IOptionItemRepository _optionItemRepository;
+        private readonly IOrderItemRepository _orderItemRepository;
 
-        public OrderService(IUnitOfWork unitOfWork, IOrderRepository orderRepository)
+        public OrderService(IUnitOfWork unitOfWork, IOrderRepository orderRepository, ITableRepository tableRepository, IProductRepository productRepository, IOptionItemRepository optionItemRepository, IOrderItemRepository orderItemRepository)
         {
             _unitOfWork = unitOfWork;
             _orderRepository = orderRepository;
+            _tableRepository = tableRepository;
+            _productRepository = productRepository;
+            _optionItemRepository = optionItemRepository;
+            _orderItemRepository = orderItemRepository;
         }
 
-        public async Task<Guid> CreateAsync(DateTimeOffset startTime, DateTimeOffset endTime, string? status, Guid tableId)
+        public async Task<Guid> CreateAsync(DateTimeOffset startTime, DateTimeOffset endTime, OrderTypeEnum status, Guid tableId)
         {
             var entity = new Order(Guid.NewGuid(), startTime, endTime, status, tableId);
             _orderRepository.Add(entity);
@@ -57,7 +66,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             await _unitOfWork.SaveChangeAsync();
         }
 
-        public async Task<Guid> UpdateAsync(Guid id, DateTimeOffset startTime, DateTimeOffset endTime, string? status, Guid tableId)
+        public async Task<Guid> UpdateAsync(Guid id, DateTimeOffset startTime, DateTimeOffset endTime, OrderTypeEnum status, Guid tableId)
         {
             var entity = await _orderRepository.GetSingleByIdAsync(id);
             entity.UpdateOrder(startTime, endTime, status, tableId);
@@ -65,20 +74,52 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             return entity.Id;
         }
 
+        public async Task<Guid> AddFoodToOrderAsync(Guid tableId, List<(Guid ProductId, List<Guid> OptionItemIds, string Note)> items)
+        {
+                var order = await _orderRepository.GetSingleAsync(o => o.TableId == tableId && o.Status == OrderTypeEnum.Cooking);
+                if (order == null)
+                {
+                    order = new Order(Guid.NewGuid(), DateTimeOffset.UtcNow, DateTimeOffset.UtcNow.AddHours(2), OrderTypeEnum.Cooking, tableId);
+                    _orderRepository.Add(order);
+                }
+                foreach (var (productId, optionItemIds, note) in items)
+                {
+                    var product = await _productRepository.GetSingleByIdAsync(productId);
+                    var orderItem = new OrderItem(Guid.NewGuid(), product.Name, 1, product.Price, order.Id, productId, OrderItemTypeEnum.Cooking);
+                    var optionItems = await _optionItemRepository
+                        .GetListAsTracking(o => optionItemIds.Contains(o.Id))
+                        .ToListAsync();
+
+
+                orderItem.OrderItemDetails = optionItems.Select(optionItem =>
+                        new OrderItemDetail(
+                            Guid.NewGuid(),
+                            optionItem.Name,
+                            optionItem.AdditionalPrice,
+                            optionItem.Id,
+                            orderItem.Id
+                        )).ToList();
+
+                    _orderItemRepository.Add(orderItem);
+
+                }
+            await _unitOfWork.SaveChangeAsync();
+            return order.Id;
+
+        }
+
+
         public async Task UpdateStatusToPendingAsync(Guid id)
         {
             var entity = await _orderRepository.GetSingleByIdAsync(id);
             if (entity == null) throw new ServerException(ServerErrorConstants.NOT_FOUND);
-            entity.UpdateOrder(entity.StartTime, entity.EndTime, "Pending", entity.TableId);
+            entity.UpdateOrder(entity.StartTime, entity.EndTime, OrderTypeEnum.Cooking, entity.TableId);
             await _unitOfWork.SaveChangeAsync();
         }
 
-        public async Task UpdateStatusToCompleteAsync(Guid id)
+        public Task UpdateStatusToCompleteAsync(Guid id)
         {
-            var entity = await _orderRepository.GetSingleByIdAsync(id);
-            if (entity == null) throw new ServerException(ServerErrorConstants.NOT_FOUND);
-            entity.UpdateOrder(entity.StartTime, entity.EndTime, "Complete", entity.TableId);
-            await _unitOfWork.SaveChangeAsync();
+            throw new NotImplementedException();
         }
     }
 }
