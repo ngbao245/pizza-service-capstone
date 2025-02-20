@@ -2,12 +2,10 @@
 using Pizza4Ps.PizzaService.Domain.Abstractions;
 using Pizza4Ps.PizzaService.Domain.Abstractions.Services;
 using Pizza4Ps.PizzaService.Domain.Services.ServiceBase;
-using Pizza4Ps.PizzaService.Domain.Entities;
 using Pizza4Ps.PizzaService.Domain.Constants;
 using Pizza4Ps.PizzaService.Domain.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using Pizza4Ps.PizzaService.Domain.Enums;
-using System.ComponentModel.Design;
 
 namespace Pizza4Ps.PizzaService.Domain.Services
 {
@@ -22,12 +20,12 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             _orderitemRepository = orderitemRepository;
         }
 
-		public async Task<Guid> CreateAsync(string name, int quantity, decimal price, Guid orderId, Guid productId, OrderItemStatus orderItemStatus)
-		{
-			//var entity = new OrderItem(Guid.NewGuid(), name, quantity, price, orderId, productId, orderItemStatus);
-			//_orderitemRepository.Add(entity);
-			//await _unitOfWork.SaveChangeAsync();
-			//return entity.Id;
+        public async Task<Guid> CreateAsync(string name, int quantity, decimal price, Guid orderId, Guid productId, OrderItemStatus orderItemStatus)
+        {
+            //var entity = new OrderItem(Guid.NewGuid(), name, quantity, price, orderId, productId, orderItemStatus);
+            //_orderitemRepository.Add(entity);
+            //await _unitOfWork.SaveChangeAsync();
+            //return entity.Id;
             throw new NotImplementedException();
         }
 
@@ -61,33 +59,36 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             await _unitOfWork.SaveChangeAsync();
         }
 
-		public async Task<Guid> UpdateAsync(Guid id, string name, int quantity, decimal price, Guid orderId, Guid productId, OrderItemStatus orderItemStatus)
-		{
-			var entity = await _orderitemRepository.GetSingleByIdAsync(id);
-			entity.UpdateOrderItem(name, quantity, price, orderId, productId, orderItemStatus);
-			await _unitOfWork.SaveChangeAsync();
-			return entity.Id;
-		}
-
-        public Task UpdateStatusToCancelledAsync(Guid id, Guid orderId)
+        public async Task<Guid> UpdateAsync(Guid id, string name, int quantity, decimal price, Guid orderId, Guid productId, OrderItemStatus orderItemStatus)
         {
-            throw new NotImplementedException();
+            var entity = await _orderitemRepository.GetSingleByIdAsync(id);
+            entity.UpdateOrderItem(name, quantity, price, orderId, productId, orderItemStatus);
+            await _unitOfWork.SaveChangeAsync();
+            return entity.Id;
         }
 
-        public Task UpdateStatusToPendingAsync(Guid id, Guid orderId)
+        public async Task UpdateStatusToServingAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var entity = await _orderitemRepository.GetSingleByIdAsync(id);
+            if (entity == null) throw new ServerException(ServerErrorConstants.NOT_FOUND);
+            entity.setServing();
+            await _unitOfWork.SaveChangeAsync();
         }
 
-        public Task UpdateStatusToServedAsync(Guid id, Guid orderId)
+        public async Task UpdateStatusToDoneAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var entity = await _orderitemRepository.GetSingleByIdAsync(id);
+            if (entity == null) throw new ServerException(ServerErrorConstants.NOT_FOUND);
+            entity.setDone();
+            await _unitOfWork.SaveChangeAsync();
         }
 
-        public Task UpdateStatusToServingAsync(Guid id, Guid orderId)
+        public async Task UpdateStatusToCancelledAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var entity = await _orderitemRepository.GetSingleByIdAsync(id);
+            if (entity == null) throw new ServerException(ServerErrorConstants.NOT_FOUND);
+            entity.setCancelled();
+            await _unitOfWork.SaveChangeAsync();
         }
-
     }
 }

@@ -6,6 +6,9 @@ using Pizza4Ps.PizzaService.Application.UserCases.V1.OrderItems.Commands.CreateO
 using Pizza4Ps.PizzaService.Application.UserCases.V1.OrderItems.Commands.DeleteOrderItem;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.OrderItems.Commands.RestoreOrderItem;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.OrderItems.Commands.UpdateOrderItem;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.OrderItems.Commands.UpdateStatusToCancelled;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.OrderItems.Commands.UpdateStatusToDone;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.OrderItems.Commands.UpdateStatusToServed;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.OrderItems.Queries.GetListOrderItem;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.OrderItems.Queries.GetListOrderItemIgnoreQueryFilter;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.OrderItems.Queries.GetOrderItemById;
@@ -87,50 +90,36 @@ namespace Pizza4Ps.PizzaService.API.Controllers
             });
         }
 
+        [HttpPut("serving/{id}")]
+        public async Task<IActionResult> ServAsync([FromRoute] Guid id, [FromBody] UpdateStatusToServingCommand request)
+        {
+            request.Id = id;
+            await _sender.Send(request);
+
+            return Ok(new ApiResponse
+            {
+                Success = true,
+                Message = Message.UPDATED_SUCCESS,
+                StatusCode = StatusCodes.Status200OK
+            });
+        }
+
+        [HttpPut("done/{id}")]
+        public async Task<IActionResult> DoneAsync([FromRoute] Guid id, [FromBody] UpdateStatusToDoneCommand request)
+        {
+            request.Id = id;
+            await _sender.Send(request);
+
+            return Ok(new ApiResponse
+            {
+                Success = true,
+                Message = Message.UPDATED_SUCCESS,
+                StatusCode = StatusCodes.Status200OK
+            });
+        }
+
         [HttpPut("cancelled/{id}")]
         public async Task<IActionResult> CancelledAsync([FromRoute] Guid id, [FromBody] UpdateStatusToCancelledCommand request)
-        {
-            request.Id = id;
-            await _sender.Send(request);
-
-            return Ok(new ApiResponse
-            {
-                Success = true,
-                Message = Message.UPDATED_SUCCESS,
-                StatusCode = StatusCodes.Status200OK
-            });
-        }
-
-        [HttpPut("pending/{id}")]
-        public async Task<IActionResult> PendingAsync([FromRoute] Guid id, [FromBody] UpdateStatusToDishPendingCommand request)
-        {
-            request.Id = id;
-            await _sender.Send(request);
-
-            return Ok(new ApiResponse
-            {
-                Success = true,
-                Message = Message.UPDATED_SUCCESS,
-                StatusCode = StatusCodes.Status200OK
-            });
-        }
-
-        [HttpPut("serving/{id}")]
-        public async Task<IActionResult> ServingAsync([FromRoute] Guid id, [FromBody] UpdateStatusToServingCommand request)
-        {
-            request.Id = id;
-            await _sender.Send(request);
-
-            return Ok(new ApiResponse
-            {
-                Success = true,
-                Message = Message.UPDATED_SUCCESS,
-                StatusCode = StatusCodes.Status200OK
-            });
-        }
-
-        [HttpPut("served/{id}")]
-        public async Task<IActionResult> ServedAsync([FromRoute] Guid id, [FromBody] UpdateStatusToServedCommand request)
         {
             request.Id = id;
             await _sender.Send(request);

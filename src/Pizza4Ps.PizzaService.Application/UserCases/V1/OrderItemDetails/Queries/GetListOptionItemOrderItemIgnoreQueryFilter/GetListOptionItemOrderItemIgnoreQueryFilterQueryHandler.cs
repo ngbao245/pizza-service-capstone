@@ -11,9 +11,9 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.OptionItemOrderItems.Qu
     public class GetListOptionItemOrderItemIgnoreQueryFilterQueryHandler : IRequestHandler<GetListOptionItemOrderItemIgnoreQueryFilterQuery, PaginatedResultDto<OrderItemDetailDto>>
 	{
 		private readonly IMapper _mapper;
-		private readonly IOptionItemOrderItemRepository _optionitemorderitemRepository;
+		private readonly IOrderItemDetailRepository _optionitemorderitemRepository;
 
-		public GetListOptionItemOrderItemIgnoreQueryFilterQueryHandler(IMapper mapper, IOptionItemOrderItemRepository optionitemorderitemRepository)
+		public GetListOptionItemOrderItemIgnoreQueryFilterQueryHandler(IMapper mapper, IOrderItemDetailRepository optionitemorderitemRepository)
 		{
 			_mapper = mapper;
 			_optionitemorderitemRepository = optionitemorderitemRepository;

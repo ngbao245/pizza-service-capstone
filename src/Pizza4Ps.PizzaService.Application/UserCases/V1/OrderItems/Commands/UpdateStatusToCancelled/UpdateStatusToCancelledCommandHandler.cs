@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Pizza4Ps.PizzaService.Domain.Abstractions.Services;
 
-namespace Pizza4Ps.PizzaService.Application.UserCases.V1.OrderItems.Commands.UpdateOrderItem
+namespace Pizza4Ps.PizzaService.Application.UserCases.V1.OrderItems.Commands.UpdateStatusToCancelled
 {
     public class UpdateStatusToCancelledCommandHandler : IRequestHandler<UpdateStatusToCancelledCommand>
     {
@@ -14,7 +14,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.OrderItems.Commands.Upd
 
         public async Task Handle(UpdateStatusToCancelledCommand request, CancellationToken cancellationToken)
         {
-            await _orderItemService.UpdateStatusToCancelledAsync(request.Id!.Value, request.OrderId);
+            await _orderItemService.UpdateStatusToCancelledAsync(request.Id!.Value);
         }
     }
 }

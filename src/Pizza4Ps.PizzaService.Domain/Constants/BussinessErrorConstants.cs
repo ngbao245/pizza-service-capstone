@@ -48,7 +48,7 @@
 
         public class OrderItemErrorConstant
         {
-            public const string ORDERITEM_NOT_FOUND = "Order item không tìm thấy";
+            public const string ORDER_ITEM_NOT_FOUND = "Order item không tìm thấy";
         }
 
         public class OptionItemOrderItemErrorConstant

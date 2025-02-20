@@ -14,7 +14,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
     public class OrderService : DomainService, IOrderService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IOptionItemOrderItemRepository _optionItemOrderItemRepository;
+        private readonly IOrderItemDetailRepository _optionItemOrderItemRepository;
         private readonly IOrderRepository _orderRepository;
         private readonly ITableRepository _tableRepository;
         private readonly IProductRepository _productRepository;
@@ -22,7 +22,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
         private readonly IOrderItemRepository _orderItemRepository;
 
         public OrderService(IUnitOfWork unitOfWork,
-            IOptionItemOrderItemRepository optionItemOrderItemRepository,
+            IOrderItemDetailRepository optionItemOrderItemRepository,
             IOrderRepository orderRepository,
             ITableRepository tableRepository,
             IProductRepository productRepository,

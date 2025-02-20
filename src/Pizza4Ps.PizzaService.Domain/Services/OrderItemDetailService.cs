@@ -11,12 +11,12 @@ using Pizza4Ps.PizzaService.Domain.Services.ServiceBase;
 
 namespace Pizza4Ps.PizzaService.Domain.Services
 {
-	public class OptionItemOrderItemService : DomainService, IOrderItemDetailService
+	public class OrderItemDetailService : DomainService, IOrderItemDetailService
 	{
 		private readonly IUnitOfWork _unitOfWork;
-		private readonly IOptionItemOrderItemRepository _optionItemOrderItemRepository;
+		private readonly IOrderItemDetailRepository _optionItemOrderItemRepository;
 
-		public OptionItemOrderItemService(IUnitOfWork unitOfWork, IOptionItemOrderItemRepository optionItemOrderItemRepository)
+		public OrderItemDetailService(IUnitOfWork unitOfWork, IOrderItemDetailRepository optionItemOrderItemRepository)
 		{
 			_unitOfWork = unitOfWork;
 			_optionItemOrderItemRepository = optionItemOrderItemRepository;
