@@ -3,7 +3,7 @@ using Pizza4Ps.PizzaService.Application.DTOs;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.OptionItemOrderItems.Queries.GetListOptionItemOrderItem
 {
-    public class GetListOptionItemOrderItemQuery : PaginatedQuery<PaginatedResultDto<OrderItemDetailDto>>
+    public class GetListOrderItemDetailQuery : PaginatedQuery<PaginatedResultDto<OrderItemDetailDto>>
 	{
         public string? Name { get; set; }
         public decimal? AdditionalPrice { get; set; }

@@ -55,7 +55,7 @@ namespace Pizza4Ps.PizzaService.Persistence
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<Option> Options { get; set; }
         public DbSet<OptionItem> OptionItems { get; set; }
-        public DbSet<OrderItemDetail> OptionItemOrderItems { get; set; }
+        public DbSet<OrderItemDetail> OrderItemDetail { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderVoucher> OrderVouchers { get; set; }
         public DbSet<Payment> Payments { get; set; }

@@ -27,7 +27,7 @@ namespace Pizza4Ps.PizzaService.Persistence.Constants
 		internal const string Notification = nameof(Notification);
 		internal const string Option = nameof(Option);
 		internal const string OptionItem = nameof(OptionItem);
-		internal const string OptionItemOrderItem = nameof(OptionItemOrderItem);
+		internal const string OrderItemDetail = nameof(OrderItemDetail);
 		internal const string Order = nameof(Order);
 		internal const string OrderInTable = nameof(OrderInTable);
 		internal const string OrderItem = nameof(OrderItem);

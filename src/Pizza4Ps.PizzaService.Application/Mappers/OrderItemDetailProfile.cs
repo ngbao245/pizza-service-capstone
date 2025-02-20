@@ -4,9 +4,9 @@ using Pizza4Ps.PizzaService.Domain.Entities;
 
 namespace Pizza4Ps.PizzaService.Application.Mappers
 {
-    public class OptionItemOrderItemProfile : Profile
+    public class OrderItemDetailProfile : Profile
 	{
-		public OptionItemOrderItemProfile()
+		public OrderItemDetailProfile()
 		{
 			CreateMap<OrderItemDetailDto, OrderItemDetail>().ReverseMap();
 		}

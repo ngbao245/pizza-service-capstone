@@ -8,20 +8,20 @@ using System.Linq.Dynamic.Core;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.OptionItemOrderItems.Queries.GetListOptionItemOrderItemIgnoreQueryFilter
 {
-    public class GetListOptionItemOrderItemIgnoreQueryFilterQueryHandler : IRequestHandler<GetListOptionItemOrderItemIgnoreQueryFilterQuery, PaginatedResultDto<OrderItemDetailDto>>
+    public class GetListOrderItemDetailIgnoreQueryFilterQueryHandler : IRequestHandler<OrderItemDetailIgnoreQueryFilterQuery, PaginatedResultDto<OrderItemDetailDto>>
 	{
 		private readonly IMapper _mapper;
-		private readonly IOrderItemDetailRepository _optionitemorderitemRepository;
+		private readonly IOrderItemDetailRepository _orderItemDetailRepository;
 
-		public GetListOptionItemOrderItemIgnoreQueryFilterQueryHandler(IMapper mapper, IOrderItemDetailRepository optionitemorderitemRepository)
-		{
-			_mapper = mapper;
-			_optionitemorderitemRepository = optionitemorderitemRepository;
-		}
+        public GetListOrderItemDetailIgnoreQueryFilterQueryHandler(IMapper mapper, IOrderItemDetailRepository orderItemDetailRepository)
+        {
+            _mapper = mapper;
+            _orderItemDetailRepository = orderItemDetailRepository;
+        }
 
-		public async Task<PaginatedResultDto<OrderItemDetailDto>> Handle(GetListOptionItemOrderItemIgnoreQueryFilterQuery request, CancellationToken cancellationToken)
+        public async Task<PaginatedResultDto<OrderItemDetailDto>> Handle(OrderItemDetailIgnoreQueryFilterQuery request, CancellationToken cancellationToken)
 		{
-			var query = _optionitemorderitemRepository.GetListAsNoTracking(includeProperties: request.IncludeProperties).IgnoreQueryFilters()
+			var query = _orderItemDetailRepository.GetListAsNoTracking(includeProperties: request.IncludeProperties).IgnoreQueryFilters()
 				.Where(
 					x => (request.Name == null || x.Name.Contains(request.Name))
 					&& (request.AdditionalPrice == null || x.AdditionalPrice == request.AdditionalPrice)

@@ -5,11 +5,11 @@ using Pizza4Ps.PizzaService.Persistence.Constants;
 
 namespace Pizza4Ps.PizzaService.Persistence.Configurations
 {
-	public class OptionItemOrderItemConfigration : IEntityTypeConfiguration<OrderItemDetail>
+	public class OrderItemDetailConfigration : IEntityTypeConfiguration<OrderItemDetail>
 	{
 		public void Configure(EntityTypeBuilder<OrderItemDetail> builder)
 		{
-			builder.ToTable(TableNames.OptionItemOrderItem);
+			builder.ToTable(TableNames.OrderItemDetail);
 			builder.HasKey(x => x.Id);
 
 			builder.Property(x => x.Name)

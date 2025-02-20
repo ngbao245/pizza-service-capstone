@@ -26,7 +26,7 @@ namespace Pizza4Ps.PizzaService.API.Controllers
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> CreateAsync([FromBody] CreateOptionItemOrderItemCommand request)
+		public async Task<IActionResult> CreateAsync([FromBody] CreateOrderItemDetailCommand request)
 		{
 			var result = await _sender.Send(request);
 			return Ok(new ApiResponse
@@ -38,7 +38,7 @@ namespace Pizza4Ps.PizzaService.API.Controllers
 		}
 
 		[HttpGet("ignore-filter")]
-		public async Task<IActionResult> GetListIgnoreQueryFilterAsync([FromQuery] GetListOptionItemOrderItemIgnoreQueryFilterQuery query)
+		public async Task<IActionResult> GetListIgnoreQueryFilterAsync([FromQuery] OrderItemDetailIgnoreQueryFilterQuery query)
 		{
 			var result = await _sender.Send(query);
 			return Ok(new ApiResponse
@@ -50,7 +50,7 @@ namespace Pizza4Ps.PizzaService.API.Controllers
 		}
 
 		[HttpGet()]
-		public async Task<IActionResult> GetListAsync([FromQuery] GetListOptionItemOrderItemQuery query)
+		public async Task<IActionResult> GetListAsync([FromQuery] GetListOrderItemDetailQuery query)
 		{
 			var result = await _sender.Send(query);
 			return Ok(new ApiResponse
@@ -64,7 +64,7 @@ namespace Pizza4Ps.PizzaService.API.Controllers
 		[HttpGet("{id}")]
 		public async Task<IActionResult> GetSingleByIdAsync([FromRoute] Guid id)
 		{
-			var result = await _sender.Send(new GetOptionItemOrderItemByIdQuery { Id = id });
+			var result = await _sender.Send(new GetOrderItemDetailByIdQuery { Id = id });
 			return Ok(new ApiResponse
 			{
 				Result = result,
@@ -74,7 +74,7 @@ namespace Pizza4Ps.PizzaService.API.Controllers
 		}
 
 		[HttpPut("{id}")]
-		public async Task<IActionResult> UpdateAsync([FromRoute] Guid id, [FromBody] UpdateOptionItemOrderItemCommand request)
+		public async Task<IActionResult> UpdateAsync([FromRoute] Guid id, [FromBody] UpdateOrderItemDetailCommand request)
         {
             request.Id = id;
             await _sender.Send(request);
@@ -89,7 +89,7 @@ namespace Pizza4Ps.PizzaService.API.Controllers
 		[HttpPut("restore")]
 		public async Task<IActionResult> RestoreManyAsync(List<Guid> ids)
 		{
-			await _sender.Send(new RestoreOptionItemOrderItemCommand { Ids = ids });
+			await _sender.Send(new RestoreOrderItemDetailCommand { Ids = ids });
 			return Ok(new ApiResponse
 			{
 				Message = Message.RESTORE_SUCCESS,
@@ -100,7 +100,7 @@ namespace Pizza4Ps.PizzaService.API.Controllers
 		[HttpDelete()]
 		public async Task<IActionResult> DeleteManyAsync(List<Guid> ids, bool isHardDeleted = false)
 		{
-			await _sender.Send(new DeleteOptionItemOrderItemCommand { Ids = ids, isHardDelete = isHardDeleted });
+			await _sender.Send(new DeleteOrderItemDetailCommand { Ids = ids, isHardDelete = isHardDeleted });
 			return Ok(new ApiResponse
 			{
 				Message = Message.DELETED_SUCCESS,

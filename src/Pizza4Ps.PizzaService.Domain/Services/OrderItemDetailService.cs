@@ -14,35 +14,35 @@ namespace Pizza4Ps.PizzaService.Domain.Services
 	public class OrderItemDetailService : DomainService, IOrderItemDetailService
 	{
 		private readonly IUnitOfWork _unitOfWork;
-		private readonly IOrderItemDetailRepository _optionItemOrderItemRepository;
+		private readonly IOrderItemDetailRepository _orderItemDetailRepository;
 
-		public OrderItemDetailService(IUnitOfWork unitOfWork, IOrderItemDetailRepository optionItemOrderItemRepository)
-		{
-			_unitOfWork = unitOfWork;
-			_optionItemOrderItemRepository = optionItemOrderItemRepository;
-		}
+        public OrderItemDetailService(IUnitOfWork unitOfWork, IOrderItemDetailRepository orderItemDetailRepository)
+        {
+            _unitOfWork = unitOfWork;
+            _orderItemDetailRepository = orderItemDetailRepository;
+        }
 
-		public async Task<Guid> CreateAsync(string name, decimal additionalPrice, Guid optionItemId, Guid orderItemId)
+        public async Task<Guid> CreateAsync(string name, decimal additionalPrice, Guid optionItemId, Guid orderItemId)
 		{
 			var entity = new OrderItemDetail(Guid.NewGuid(), name, additionalPrice, optionItemId, orderItemId);
-			_optionItemOrderItemRepository.Add(entity);
+            _orderItemDetailRepository.Add(entity);
 			await _unitOfWork.SaveChangeAsync();
 			return entity.Id;
 		}
 
 		public async Task DeleteAsync(List<Guid> ids, bool IsHardDeleted = false)
 		{
-			var entities = await _optionItemOrderItemRepository.GetListAsTracking(x => ids.Contains(x.Id)).IgnoreQueryFilters().ToListAsync();
+			var entities = await _orderItemDetailRepository.GetListAsTracking(x => ids.Contains(x.Id)).IgnoreQueryFilters().ToListAsync();
 			if (!entities.Any()) throw new ServerException(ServerErrorConstants.NOT_FOUND);
 			foreach (var entity in entities)
 			{
 				if (IsHardDeleted)
 				{
-					_optionItemOrderItemRepository.HardDelete(entity);
+                    _orderItemDetailRepository.HardDelete(entity);
 				}
 				else
 				{
-					_optionItemOrderItemRepository.SoftDelete(entity);
+                    _orderItemDetailRepository.SoftDelete(entity);
 				}
 			}
 			await _unitOfWork.SaveChangeAsync();
@@ -50,18 +50,18 @@ namespace Pizza4Ps.PizzaService.Domain.Services
 
 		public async Task RestoreAsync(List<Guid> ids)
 		{
-			var entities = await _optionItemOrderItemRepository.GetListAsTracking(x => ids.Contains(x.Id)).IgnoreQueryFilters().ToListAsync();
+			var entities = await _orderItemDetailRepository.GetListAsTracking(x => ids.Contains(x.Id)).IgnoreQueryFilters().ToListAsync();
 			if (entities == null) throw new ServerException(ServerErrorConstants.NOT_FOUND);
 			foreach (var entity in entities)
 			{
-				_optionItemOrderItemRepository.Restore(entity);
+				_orderItemDetailRepository.Restore(entity);
 			}
 			await _unitOfWork.SaveChangeAsync();
 		}
 
 		public async Task<Guid> UpdateAsync(Guid id, string name, decimal additionalPrice, Guid optionItemId, Guid orderItemId)
 		{
-			var entity = await _optionItemOrderItemRepository.GetSingleByIdAsync(id);
+			var entity = await _orderItemDetailRepository.GetSingleByIdAsync(id);
 			entity.UpdateOptionItemOrderItem(name, additionalPrice, optionItemId, orderItemId);
 			await _unitOfWork.SaveChangeAsync();
 			return entity.Id;

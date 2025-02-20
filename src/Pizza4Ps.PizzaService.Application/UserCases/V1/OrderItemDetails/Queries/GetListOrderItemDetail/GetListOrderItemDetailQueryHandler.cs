@@ -10,20 +10,20 @@ using System.Linq.Dynamic.Core;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.OptionItemOrderItems.Queries.GetListOptionItemOrderItem
 {
-    public class GetListOptionItemOrderItemQueryHandler : IRequestHandler<GetListOptionItemOrderItemQuery, PaginatedResultDto<OrderItemDetailDto>>
+    public class GetListOrderItemDetailQueryHandler : IRequestHandler<GetListOrderItemDetailQuery, PaginatedResultDto<OrderItemDetailDto>>
 	{
 		private readonly IMapper _mapper;
-		private readonly IOrderItemDetailRepository _optionitemorderitemRepository;
+		private readonly IOrderItemDetailRepository _orderItemDetailRepository;
 
-		public GetListOptionItemOrderItemQueryHandler(IMapper mapper, IOrderItemDetailRepository optionitemorderitemRepository)
-		{
-			_mapper = mapper;
-			_optionitemorderitemRepository = optionitemorderitemRepository;
-		}
+        public GetListOrderItemDetailQueryHandler(IMapper mapper, IOrderItemDetailRepository orderItemDetailRepository)
+        {
+            _mapper = mapper;
+            _orderItemDetailRepository = orderItemDetailRepository;
+        }
 
-		public async Task<PaginatedResultDto<OrderItemDetailDto>> Handle(GetListOptionItemOrderItemQuery request, CancellationToken cancellationToken)
+        public async Task<PaginatedResultDto<OrderItemDetailDto>> Handle(GetListOrderItemDetailQuery request, CancellationToken cancellationToken)
 		{
-			var query = _optionitemorderitemRepository.GetListAsNoTracking(
+			var query = _orderItemDetailRepository.GetListAsNoTracking(
 				x => (request.Name == null || x.Name.Contains(request.Name))
 				&& (request.AdditionalPrice == null || x.AdditionalPrice == request.AdditionalPrice)
 				&& (request.OptionItemId == null || x.OptionItemId == request.OptionItemId)
@@ -33,7 +33,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.OptionItemOrderItems.Qu
 				.OrderBy(request.SortBy)
 				.Skip(request.SkipCount).Take(request.TakeCount).ToListAsync();
 			if (!entities.Any())
-				throw new BusinessException(BussinessErrorConstants.OptionItemOrderItemErrorConstant.OPTIONITEMORDERITEM_NOT_FOUND);
+				throw new BusinessException(BussinessErrorConstants.OrderItemDetailErrorConstant.ORDER_ITEM_DETAIL_NOT_FOUND);
 			var result = _mapper.Map<List<OrderItemDetailDto>>(entities);
 			var totalCount = await query.CountAsync();
             return new PaginatedResultDto<OrderItemDetailDto>(result, totalCount);

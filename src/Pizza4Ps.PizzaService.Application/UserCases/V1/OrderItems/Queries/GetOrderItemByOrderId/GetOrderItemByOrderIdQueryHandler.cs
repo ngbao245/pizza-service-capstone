@@ -11,19 +11,13 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.OrderItems.Queries.GetO
     public class GetOrderItemByOrderIdQueryHandler : IRequestHandler<GetOrderItemByOrderIdQuery, List<OrderItemDto>>
     {
         private readonly IOrderItemRepository _orderItemRepository;
-        private readonly IOrderItemDetailRepository _optionItemOrderItemRepository;
-        private readonly IOptionItemRepository _optionItemRepository;
         private readonly IMapper _mapper;
 
         public GetOrderItemByOrderIdQueryHandler(
             IOrderItemRepository orderItemRepository,
-            IOrderItemDetailRepository optionItemOrderItemRepository,
-            IOptionItemRepository optionItemRepository,
             IMapper mapper)
         {
             _orderItemRepository = orderItemRepository;
-            _optionItemOrderItemRepository = optionItemOrderItemRepository;
-            _optionItemRepository = optionItemRepository;
             _mapper = mapper;
         }
 
@@ -43,4 +37,4 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.OrderItems.Queries.GetO
             //throw new NotImplementedException();
         }
     }
-}   
+}
