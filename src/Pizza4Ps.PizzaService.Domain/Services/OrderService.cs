@@ -112,9 +112,10 @@ namespace Pizza4Ps.PizzaService.Domain.Services
                         optionItemId: optionItemId,
                         orderItemId: orderItem.Id
                         );
-                    _optionItemOrderItemRepository.Add(orderDetail);
+                    //_optionItemOrderItemRepository.Add(orderDetail);
                     orderItem.OrderItemDetails.Add(orderDetail);
                 }
+                orderItem.SetTotalPrice();
             }
             await _unitOfWork.SaveChangeAsync();
         }
@@ -135,15 +136,20 @@ namespace Pizza4Ps.PizzaService.Domain.Services
 
         public async Task CheckOutOrder(Guid orderId)
         {
-            var order = await _orderRepository.GetSingleByIdAsync(orderId, "OrderItems.OrderItemDetails");
+            decimal totalPrice = 0;
+            var order = await _orderRepository.GetSingleByIdAsync(orderId, "OrderItems");
             if (order == null)
                 throw new BusinessException(BussinessErrorConstants.OrderErrorConstant.ORDER_NOT_FOUND);
             if (order.Status != OrderStatusEnum.Unpaid)
                 throw new BusinessException(BussinessErrorConstants.OrderErrorConstant.ORDER_CANNOT_CHECK_OUT);
+            //Validate các món phải done hết mới được checkout
             foreach(var orderItem in order.OrderItems)
             {
-                
+                totalPrice += orderItem.TotalPrice;
             }
+            order.SetCheckOut();
+            order.SetTotalPrice(totalPrice);
+            await _unitOfWork.SaveChangeAsync();
         }
 
         public Task UpdateStatusToPendingAsync(Guid id)

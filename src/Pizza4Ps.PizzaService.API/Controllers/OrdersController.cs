@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Pizza4Ps.PizzaService.API.Constants;
 using Pizza4Ps.PizzaService.API.Models;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Orders.Commands.AddFoodToOrder;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Orders.Commands.CheckOutOrder;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Orders.Commands.CreateOrder;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Orders.Commands.DeleteOrder;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Orders.Commands.RestoreOrder;
@@ -138,10 +139,24 @@ namespace Pizza4Ps.PizzaService.API.Controllers
             });
         }
 
-        [HttpPost("order-items")]
+        [HttpPost("add-food-to-order")]
         public async Task<IActionResult> AddFoodToOrderAsync([FromBody] AddFoodToOrderCommand request)
         {
             await _sender.Send(request);
+            return Ok(new ApiResponse
+            {
+                Success = true,
+                Message = Message.CREATED_SUCCESS,
+                StatusCode = StatusCodes.Status200OK
+            });
+        }
+
+        [HttpPut("check-out-order/{orderId}")]
+        public async Task<IActionResult> CheckOutOrderAsync([FromRoute] Guid orderId)
+        {
+            await _sender.Send(new CheckOutOrderCommand{
+                OrderId = orderId
+            });
             return Ok(new ApiResponse
             {
                 Success = true,

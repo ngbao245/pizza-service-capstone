@@ -13,7 +13,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Orders.Commands.CheckOu
         }
         public async Task Handle(CheckOutOrderCommand request, CancellationToken cancellationToken)
         {
-            var order = _orderService.CheckOutOrder(request.OrderId);
+            await _orderService.CheckOutOrder(request.OrderId);
         }
     }
 }

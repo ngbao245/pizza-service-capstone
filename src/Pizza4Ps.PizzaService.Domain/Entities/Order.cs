@@ -27,6 +27,16 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
             TableId = tableId;
         }
 
+        public void SetTotalPrice(decimal totalPrice)
+        {
+            TotalPrice = totalPrice;
+        }
+
+        public void SetCheckOut()
+        {
+            Status = OrderStatusEnum.CheckedOut;
+        }
+
         public void UpdateOrder(DateTimeOffset startTime, DateTimeOffset endTime, OrderStatusEnum status, Guid tableId)
         {
             StartTime = startTime;

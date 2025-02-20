@@ -34,10 +34,10 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
 			OrderItemStatus = OrderItemStatus.Pending;
 		}
 
-		public void SetTotalPrice(OrderItem orderItem)
+		public void SetTotalPrice()
 		{
-			var totalOrderItemDetails = orderItem.OrderItemDetails.Select(x => x.AdditionalPrice).Sum();
-			var totalOrderItem = orderItem.Price + totalOrderItemDetails;
+			var totalOrderItemDetails = OrderItemDetails.Select(x => x.AdditionalPrice).Sum();
+			var totalOrderItem = Price + totalOrderItemDetails;
 			var totalPrice = totalOrderItem * Quantity;
 			TotalPrice = totalPrice;
 		}
