@@ -23,13 +23,13 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Tables.Queries.GetTable
         public async Task<bool> Handle(GetTableStatusQuery request, CancellationToken cancellationToken)
         {
             var entity = await _tableRepository.GetSingleByIdAsync(request.Id);
-            if (entity.Status == TableTypeEnum.Closed)
+            if (entity.Status == TableStatusEnum.Closing)
             {
                 await _tableService.UpdateAsync(
                     entity.Id,
                     entity.TableNumber,
                     entity.Capacity,
-                    TableTypeEnum.Ordering,
+                    TableStatusEnum.Opening,
                     entity.ZoneId
                 );
                 return true;

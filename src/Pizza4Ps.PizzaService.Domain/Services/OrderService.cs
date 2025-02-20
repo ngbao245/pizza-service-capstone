@@ -113,16 +113,13 @@ namespace Pizza4Ps.PizzaService.Domain.Services
         {
             var entity = await _orderRepository.GetSingleByIdAsync(id);
             if (entity == null) throw new ServerException(ServerErrorConstants.NOT_FOUND);
-            entity.UpdateOrder(entity.StartTime, entity.EndTime, "Pending", entity.TableId);
+            entity.UpdateOrder(entity.StartTime, entity.EndTime, OrderTypeEnum.Cooking, entity.TableId);
             await _unitOfWork.SaveChangeAsync();
         }
 
-        public async Task UpdateStatusToCompleteAsync(Guid id)
+        public Task UpdateStatusToCompleteAsync(Guid id)
         {
-            var entity = await _orderRepository.GetSingleByIdAsync(id);
-            if (entity == null) throw new ServerException(ServerErrorConstants.NOT_FOUND);
-            entity.UpdateOrder(entity.StartTime, entity.EndTime, "Complete", entity.TableId);
-            await _unitOfWork.SaveChangeAsync();
+            throw new NotImplementedException();
         }
     }
 }

@@ -7,7 +7,7 @@ namespace Pizza4Ps.PizzaService.Application.DTOs
         public Guid? Id { get; set; }
         public int TableNumber { get; set; }
         public int Capacity { get; set; }
-        public TableTypeEnum Status { get; set; } = TableTypeEnum.Closed;
+        public string Status { get; set; }
         public Guid ZoneId { get; set; }
 
         public virtual ZoneDto Zone { get; set; }

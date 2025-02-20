@@ -10,7 +10,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Tables.Queries.GetListT
         public bool IsDeleted { get; set; } = false;
         public int? TableNumber { get; set; }
         public int? Capacity { get; set; }
-        public TableTypeEnum? Status { get; set; } = TableTypeEnum.Closed;
+        public string? Status { get; set; }
         public Guid? ZoneId { get; set; }
     }
 }

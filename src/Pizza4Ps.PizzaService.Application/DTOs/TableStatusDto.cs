@@ -4,6 +4,6 @@ namespace Pizza4Ps.PizzaService.Application.DTOs
 {
     public class TableStatusDto
     {
-        public TableTypeEnum Status { get; set; }
+        public TableStatusEnum Status { get; set; }
     }
 }
