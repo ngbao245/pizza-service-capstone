@@ -62,6 +62,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
                     order.SetPaid();
                     _orderRepository.Update(order);
                 }
+                await _unitOfWork.SaveChangeAsync();
                 return true;
             }
             return false;
