@@ -37,11 +37,13 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             var orderCode = GenerateOrderCode();
             var result = await _payOsService.CreatePaymentLink(orderCode, (int) order.TotalPrice!, "Thanh toán đơn hàng");
             var entity = new Payment(Guid.NewGuid(), order.TotalPrice.Value, PaymentMethodEnum.QRCode, orderId, orderCode.ToString());
+            order.SetOrderCode(orderCode.ToString());
             _paymentRepository.Add(entity);
+            _orderRepository.Update(order);
             await _unitOfWork.SaveChangeAsync();
             return result.qrCode;
         }
-        public async Task ProcessWebhookData(object webhookData)
+        public async Task<bool> ProcessWebhookData(object webhookData)
         {
             // Xác thực và lấy thông tin từ webhook thông qua gateway PayOS
             var result = _payOsService.VerifyPaymentWebhookData(webhookData);
@@ -60,7 +62,9 @@ namespace Pizza4Ps.PizzaService.Domain.Services
                     order.SetPaid();
                     _orderRepository.Update(order);
                 }
+                return true;
             }
+            return false;
         }
         public long GenerateOrderCode()
         {

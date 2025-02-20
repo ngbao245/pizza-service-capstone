@@ -15,29 +15,29 @@ using Pizza4Ps.PizzaService.Application.UserCases.V1.Payments.Queries.GetPayment
 namespace Pizza4Ps.PizzaService.API.Controllers
 {
     [Route("api/payments")]
-	[ApiController]
-	public class PaymentsController : ControllerBase
-	{
-		private readonly IHttpContextAccessor _httpContextAccessor;
-		private readonly ISender _sender;
+    [ApiController]
+    public class PaymentsController : ControllerBase
+    {
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly ISender _sender;
 
-		public PaymentsController(ISender sender, IHttpContextAccessor httpContextAccessor)
-		{
-			_httpContextAccessor = httpContextAccessor;
-			_sender = sender;
-		}
+        public PaymentsController(ISender sender, IHttpContextAccessor httpContextAccessor)
+        {
+            _httpContextAccessor = httpContextAccessor;
+            _sender = sender;
+        }
 
-		//[HttpPost]
-		//public async Task<IActionResult> CreateAsync([FromBody] CreatePaymentCommand request)
-		//{
-		//	var result = await _sender.Send(request);
-		//	return Ok(new ApiResponse
-		//	{
-		//		Result = result,
-		//		Message = Message.CREATED_SUCCESS,
-		//		StatusCode = StatusCodes.Status201Created
-		//	});
-		//}
+        //[HttpPost]
+        //public async Task<IActionResult> CreateAsync([FromBody] CreatePaymentCommand request)
+        //{
+        //	var result = await _sender.Send(request);
+        //	return Ok(new ApiResponse
+        //	{
+        //		Result = result,
+        //		Message = Message.CREATED_SUCCESS,
+        //		StatusCode = StatusCodes.Status201Created
+        //	});
+        //}
 
         [HttpPost("create-payment-qrcode")]
         public async Task<IActionResult> CreatePaymentLink([FromBody] CreatePaymentQRCodeCommand command)
@@ -50,23 +50,22 @@ namespace Pizza4Ps.PizzaService.API.Controllers
                 StatusCode = StatusCodes.Status201Created
             });
         }
-        [HttpPost("webhook/payos")]
+        [HttpPost("webhook")]
         public async Task<IActionResult> PaymentWebhook([FromBody] object webhookData)
         {
-            await _sender.Send(new WebhookPayOsCommand{
-				WebhookData = webhookData
-			});
-            return Ok();
+            var result = await _sender.Send(new WebhookPayOsCommand
+            {
+                WebhookData = webhookData
+            });
+            return Ok(new { success = true });
+
         }
-        [HttpPost("webhook")]
-        public async Task<IActionResult> PaymentWebhookAsync([FromBody] object webhookData)
+        [HttpGet("return-url-payos")]
+        public async Task<IActionResult> ReturnUrlAsync([FromQuery] string orderCode)
         {
             try
             {
-                await _sender.Send(new WebhookPayOsCommand
-                {
-                    WebhookData = webhookData
-                });
+                var test = orderCode;
                 return Ok();
             }
             catch (Exception ex)
@@ -77,7 +76,7 @@ namespace Pizza4Ps.PizzaService.API.Controllers
             }
         }
         [HttpGet("get-payment-info")]
-        public async Task<IActionResult> GetPaymentInfo([FromQuery]GetPaymentInfoQuery query)
+        public async Task<IActionResult> GetPaymentInfo([FromQuery] GetPaymentInfoQuery query)
         {
             await _sender.Send(query);
             return Ok(new ApiResponse
@@ -98,74 +97,74 @@ namespace Pizza4Ps.PizzaService.API.Controllers
         //    });
         //}
         [HttpGet("ignore-filter")]
-		public async Task<IActionResult> GetListIgnoreQueryFilterAsync([FromQuery] GetListPaymentIgnoreQueryFilterQuery query)
-		{
-			var result = await _sender.Send(query);
-			return Ok(new ApiResponse
-			{
-				Result = result,
-				Message = Message.GET_SUCCESS,
-				StatusCode = StatusCodes.Status200OK
-			});
-		}
+        public async Task<IActionResult> GetListIgnoreQueryFilterAsync([FromQuery] GetListPaymentIgnoreQueryFilterQuery query)
+        {
+            var result = await _sender.Send(query);
+            return Ok(new ApiResponse
+            {
+                Result = result,
+                Message = Message.GET_SUCCESS,
+                StatusCode = StatusCodes.Status200OK
+            });
+        }
 
-		[HttpGet()]
-		public async Task<IActionResult> GetListAsync([FromQuery] GetListPaymentQuery query)
-		{
-			var result = await _sender.Send(query);
-			return Ok(new ApiResponse
-			{
-				Result = result,
-				Message = Message.GET_SUCCESS,
-				StatusCode = StatusCodes.Status200OK
-			});
-		}
+        [HttpGet()]
+        public async Task<IActionResult> GetListAsync([FromQuery] GetListPaymentQuery query)
+        {
+            var result = await _sender.Send(query);
+            return Ok(new ApiResponse
+            {
+                Result = result,
+                Message = Message.GET_SUCCESS,
+                StatusCode = StatusCodes.Status200OK
+            });
+        }
 
-		[HttpGet("{id}")]
-		public async Task<IActionResult> GetSingleByIdAsync([FromRoute] Guid id)
-		{
-			var result = await _sender.Send(new GetPaymentByIdQuery { Id = id });
-			return Ok(new ApiResponse
-			{
-				Result = result,
-				Message = Message.GET_SUCCESS,
-				StatusCode = StatusCodes.Status200OK
-			});
-		}
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetSingleByIdAsync([FromRoute] Guid id)
+        {
+            var result = await _sender.Send(new GetPaymentByIdQuery { Id = id });
+            return Ok(new ApiResponse
+            {
+                Result = result,
+                Message = Message.GET_SUCCESS,
+                StatusCode = StatusCodes.Status200OK
+            });
+        }
 
-		[HttpPut("{id}")]
-		public async Task<IActionResult> UpdateAsync([FromRoute] Guid id, [FromBody] UpdatePaymentCommand request)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateAsync([FromRoute] Guid id, [FromBody] UpdatePaymentCommand request)
         {
             request.Id = id;
             await _sender.Send(request);
-			return Ok(new ApiResponse
-			{
-				Success = true,
-				Message = Message.UPDATED_SUCCESS,
-				StatusCode = StatusCodes.Status200OK
-			});
-		}
+            return Ok(new ApiResponse
+            {
+                Success = true,
+                Message = Message.UPDATED_SUCCESS,
+                StatusCode = StatusCodes.Status200OK
+            });
+        }
 
-		[HttpPut("restore")]
-		public async Task<IActionResult> RestoreManyAsync(List<Guid> ids)
-		{
-			await _sender.Send(new RestorePaymentCommand { Ids = ids });
-			return Ok(new ApiResponse
-			{
-				Message = Message.RESTORE_SUCCESS,
-				StatusCode = StatusCodes.Status200OK
-			});
-		}
+        [HttpPut("restore")]
+        public async Task<IActionResult> RestoreManyAsync(List<Guid> ids)
+        {
+            await _sender.Send(new RestorePaymentCommand { Ids = ids });
+            return Ok(new ApiResponse
+            {
+                Message = Message.RESTORE_SUCCESS,
+                StatusCode = StatusCodes.Status200OK
+            });
+        }
 
-		[HttpDelete()]
-		public async Task<IActionResult> DeleteManyAsync(List<Guid> ids, bool isHardDeleted = false)
-		{
-			await _sender.Send(new DeletePaymentCommand { Ids = ids, isHardDelete = isHardDeleted });
-			return Ok(new ApiResponse
-			{
-				Message = Message.DELETED_SUCCESS,
-				StatusCode = StatusCodes.Status200OK
-			});
-		}
-	}
+        [HttpDelete()]
+        public async Task<IActionResult> DeleteManyAsync(List<Guid> ids, bool isHardDeleted = false)
+        {
+            await _sender.Send(new DeletePaymentCommand { Ids = ids, isHardDelete = isHardDeleted });
+            return Ok(new ApiResponse
+            {
+                Message = Message.DELETED_SUCCESS,
+                StatusCode = StatusCodes.Status200OK
+            });
+        }
+    }
 }

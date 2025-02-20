@@ -27,14 +27,14 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
             TableId = tableId;
         }
 
-        public void SetTotalPrice(decimal totalPrice)
-        {
-            TotalPrice = totalPrice;
-        }
-
         public void SetOrderCode(string orderCode)
         {
             OrderCode = orderCode;
+        }
+
+        public void SetTotalPrice(decimal totalPrice)
+        {
+            TotalPrice = totalPrice;
         }
 
         public void SetCheckOut()
