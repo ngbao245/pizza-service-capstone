@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pizza4Ps.PizzaService.Persi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pizza4Ps.PizzaService.Application.Contract", "src\Pizza4Ps.PizzaService.Application.Contract\Pizza4Ps.PizzaService.Application.Contract.csproj", "{521C8765-1B86-48A1-B148-1CF53CDB5F52}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{839385C2-22CC-4C50-867F-5DB496C382CF}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{06614215-8975-4A06-AD32-7DEF90651F74}"
 	ProjectSection(SolutionItems) = preProject
 		Dockerfile = Dockerfile
 	EndProjectSection

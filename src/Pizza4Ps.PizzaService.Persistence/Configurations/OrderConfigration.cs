@@ -22,6 +22,10 @@ namespace Pizza4Ps.PizzaService.Persistence.Configurations
 				.HasMaxLength(50)
 				.IsRequired(false);
 
+			builder.Property(x => x.TotalPrice)
+				.HasDefaultValue(null)
+				.HasColumnType("decimal(18, 2)"); // Xác định kiểu cột là decimal với độ chính xác và thang đo.
+
 			builder.HasOne(x => x.Table)
 				.WithMany()
 				.HasForeignKey(x => x.TableId)

@@ -26,6 +26,16 @@ namespace Pizza4Ps.PizzaService.API.Controllers
             _sender = sender;
         }
 
+        /// <summary>
+        /// Thêm danh sách trạng thái thiết bị.
+        /// </summary>
+        /// <remarks>
+        /// Opening
+        /// Closing
+        /// Locked
+        /// Paid
+        /// Booked
+        /// </remarks>
         [HttpPost]
         public async Task<IActionResult> CreateAsync([FromBody] CreateTableCommand request)
         {

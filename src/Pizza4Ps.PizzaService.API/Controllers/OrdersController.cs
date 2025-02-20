@@ -87,6 +87,35 @@ namespace Pizza4Ps.PizzaService.API.Controllers
             });
         }
 
+        [HttpPut("pending/{id}")]
+        public async Task<IActionResult> PendingAsync([FromRoute] Guid id, [FromBody] UpdateStatusToPendingCommand request)
+        {
+            request.Id = id;
+            await _sender.Send(request);
+
+            return Ok(new ApiResponse
+            {
+                Success = true,
+                Message = Message.UPDATED_SUCCESS,
+                StatusCode = StatusCodes.Status200OK
+            });
+        }
+
+        [HttpPut("complete/{id}")]
+        public async Task<IActionResult> CompleteAsync([FromRoute] Guid id, [FromBody] UpdateStatusToCompleteCommand request)
+        {
+            request.Id = id;
+            await _sender.Send(request);
+
+            return Ok(new ApiResponse
+            {
+                Success = true,
+                Message = Message.UPDATED_SUCCESS,
+                StatusCode = StatusCodes.Status200OK
+            });
+        }
+
+
         [HttpPut("restore")]
         public async Task<IActionResult> RestoreManyAsync(List<Guid> ids)
         {

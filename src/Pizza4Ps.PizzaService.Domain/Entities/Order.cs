@@ -9,10 +9,13 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
 		public DateTimeOffset EndTime { get; set; }
 		public OrderTypeEnum? Status { get; set; } = OrderTypeEnum.Cooking;
 		public Guid TableId { get; set; }
+		public decimal? TotalPrice { get; set; }
 
 		public virtual Table Table { get; set; }
         public virtual ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
-        private Order()
+        public virtual Table Table { get; set; }
+
+		private Order()
 		{
 		}
 

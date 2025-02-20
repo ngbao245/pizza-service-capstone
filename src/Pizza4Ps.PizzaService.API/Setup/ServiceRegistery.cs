@@ -56,6 +56,7 @@ namespace Pizza4Ps.PizzaService.API.Setup
         private static void RegisterDomainServices(IServiceCollection services)
         {
             services.AddDomainServices();
+            services.AddVietQRConfig();
         }
         private static void RegisterApiServices(IServiceCollection services)
         {
