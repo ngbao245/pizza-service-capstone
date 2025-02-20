@@ -13,6 +13,7 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
 
         public virtual Order Order { get; set; }
         public virtual Product Product { get; set; }
+        public virtual ICollection<OptionItemOrderItem> OptionItemOrderItems { get; set; }
 
         public OrderItem()
         {
