@@ -45,29 +45,26 @@ namespace Pizza4Ps.PizzaService.Domain.Services
         }
         public async Task<bool> ProcessWebhookData(WebhookType webhookData)
         {
-            var order = await _orderRepository.GetSingleAsync(x => x.OrderCode == webhookData.code.ToString());
-            if (order != null)
-            {
-                order.SetPaid();
-                _orderRepository.Update(order);
-            }
-            await _unitOfWork.SaveChangeAsync();
-
             // Xác thực và lấy thông tin từ webhook thông qua gateway PayOS
-            var result =  _payOsService.VerifyPaymentWebhookData(webhookData);                
-            // Giả sử result.OrderCode tương ứng với OrderId
-            var payment = await _paymentRepository.GetSingleAsync(x => x.OrderCode == webhookData.code.ToString());
-            if (payment != null)
-            {
-                payment.SetPaid();
-                _paymentRepository.Update(payment);
-            }
+            var result =  _payOsService.VerifyPaymentWebhookData(webhookData);
             if (result != null && result.code == "00")
             {
+                // Giả sử result.OrderCode tương ứng với OrderId
+                var payment = await _paymentRepository.GetSingleAsync(x => x.OrderCode == webhookData.code.ToString());
+                if (payment != null)
+                {
+                    payment.SetPaid();
+                    _paymentRepository.Update(payment);
+                }
+                var order = await _orderRepository.GetSingleAsync(x => x.OrderCode == webhookData.code.ToString());
+                if (order != null)
+                {
+                    order.SetPaid();
+                    _orderRepository.Update(order);
+                }
                 await _unitOfWork.SaveChangeAsync();
                 return true;
             }
-            await _unitOfWork.SaveChangeAsync();
             return false;
         }
         public long GenerateOrderCode()

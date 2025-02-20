@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Net.payOS.Types;
 using Pizza4Ps.PizzaService.API.Constants;
 using Pizza4Ps.PizzaService.API.Models;
 using Pizza4Ps.PizzaService.Application.DTOs.WebhookPayOsDto;
@@ -52,21 +53,21 @@ namespace Pizza4Ps.PizzaService.API.Controllers
             });
         }
         [HttpPost("webhook")]
-        public async Task<IActionResult> PaymentWebhook([FromBody] PayOSWebhookDto webhookDto)
+        public async Task<IActionResult> PaymentWebhook([FromBody] WebhookType webhookDto)
         {
-            var result = await _sender.Send(new WebhookPayOsCommand
-            {
-                WebhookDto = webhookDto
-            });
-            if (result == true)
-            {
+            //var result = await _sender.Send(new WebhookPayOsCommand
+            //{
+            //    WebhookDto = webhookDto
+            //});
+            //if (result == true)
+            //{
                 return Ok(new { success = true });
 
-            }
-            else
-            {
-                return Ok(new { success = false });
-            }
+            //}
+            //else
+            //{
+            //    return Ok(new { success = false });
+            //}
         } 
         [HttpGet("return-url-payos")]
         public async Task<IActionResult> ReturnUrlAsync([FromQuery] string orderCode)
