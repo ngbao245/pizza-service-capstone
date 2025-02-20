@@ -58,6 +58,24 @@ namespace Pizza4Ps.PizzaService.API.Controllers
 			});
             return Ok();
         }
+        [HttpPost("webhook")]
+        public async Task<IActionResult> PaymentWebhookAsync([FromBody] object webhookData)
+        {
+            try
+            {
+                await _sender.Send(new WebhookPayOsCommand
+                {
+                    WebhookData = webhookData
+                });
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                // Log chi tiết lỗi, ví dụ dùng ILogger
+                // _logger.LogError(ex, "Lỗi trong PaymentWebhook");
+                return StatusCode(500, new { message = "Có lỗi xảy ra trong quá trình xử lý webhook", error = ex.Message });
+            }
+        }
         [HttpGet("get-payment-info")]
         public async Task<IActionResult> GetPaymentInfo([FromQuery]GetPaymentInfoQuery query)
         {
