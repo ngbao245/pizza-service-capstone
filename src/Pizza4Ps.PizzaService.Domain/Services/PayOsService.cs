@@ -53,10 +53,10 @@ namespace Pizza4Ps.PizzaService.Domain.Services
 
             return paymentLinkInformation;
         }
-        public WebhookData VerifyPaymentWebhookData(object webhookData)
+        public WebhookData VerifyPaymentWebhookData(WebhookType webhookData)
         {
             PayOS payOS = new PayOS(_vietQRConfig.ClientId, _vietQRConfig.ApiKey, _vietQRConfig.ChecksumKey);
-            var data = payOS.verifyPaymentWebhookData((WebhookType)webhookData);
+            var data = payOS.verifyPaymentWebhookData(webhookData);
             if (data == null)
             {
                 throw new BusinessException("Xác thực thanh toán thất bại");

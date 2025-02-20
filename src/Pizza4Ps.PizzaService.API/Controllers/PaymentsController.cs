@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Pizza4Ps.PizzaService.API.Constants;
 using Pizza4Ps.PizzaService.API.Models;
+using Pizza4Ps.PizzaService.Application.DTOs.WebhookPayOsDto;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Payments.Commands.CreatePaymentQRCode;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Payments.Commands.DeletePayment;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Payments.Commands.RestorePayment;
@@ -51,11 +52,11 @@ namespace Pizza4Ps.PizzaService.API.Controllers
             });
         }
         [HttpPost("webhook")]
-        public async Task<IActionResult> PaymentWebhook([FromBody] object webhookData)
+        public async Task<IActionResult> PaymentWebhook([FromBody] PayOSWebhookDto webhookDto)
         {
             var result = await _sender.Send(new WebhookPayOsCommand
             {
-                WebhookData = webhookData
+                WebhookDto = webhookDto
             });
             return Ok(new { success = true });
 

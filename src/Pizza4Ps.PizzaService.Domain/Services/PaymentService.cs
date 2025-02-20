@@ -43,7 +43,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             await _unitOfWork.SaveChangeAsync();
             return result.qrCode;
         }
-        public async Task<bool> ProcessWebhookData(object webhookData)
+        public async Task<bool> ProcessWebhookData(WebhookType webhookData)
         {
             // Xác thực và lấy thông tin từ webhook thông qua gateway PayOS
             var result = _payOsService.VerifyPaymentWebhookData(webhookData);

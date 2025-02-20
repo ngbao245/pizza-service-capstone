@@ -7,6 +7,6 @@ namespace Pizza4Ps.PizzaService.Domain.Abstractions.Services
     {
         Task<CreatePaymentResult> CreatePaymentLink(long orderCode, decimal amount, string description);
         Task<PaymentLinkInformation> GetPaymentLinkInformation(long orderCode);
-        WebhookData VerifyPaymentWebhookData(object webhookData);
+        WebhookData VerifyPaymentWebhookData(WebhookType webhookData);
     }
 }
