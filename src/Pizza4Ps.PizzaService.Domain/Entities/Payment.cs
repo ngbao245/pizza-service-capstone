@@ -5,27 +5,40 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
 {
 	public class Payment : EntityAuditBase<Guid>
 	{
-		public decimal Amount { get; set; } = decimal.Zero;
-		public PaymentMethodEnum PaymentMethod { get; set; } = PaymentMethodEnum.Cash;
-		public string Status { get; set; }
-		public Guid OrderId { get; set; }
-
-		public virtual Order Order { get; set; }
+		public decimal Amount { get; set; }
+		public PaymentMethodEnum PaymentMethod { get; set; }
+		public PaymentStatusEnum Status { get; set; }
+		public DateTimeOffset? PaidTime { get; set; }
+        public Guid OrderId { get; set; }
+		public string OrderCode { get; set; }
+        public virtual Order Order { get; set; }
 
 		public Payment()
 		{
 		}
 
-		public Payment(Guid id, decimal amount, PaymentMethodEnum paymentMethod, string status, Guid orderId)
+		public Payment(Guid id, decimal amount, PaymentMethodEnum paymentMethod, Guid orderId, string orderCode)
 		{
 			Id = id;
 			Amount = amount;
 			PaymentMethod = paymentMethod;
-			Status = status;
+			Status = PaymentStatusEnum.Pending;
 			OrderId = orderId;
-		}
+            OrderCode = orderCode;
+        }
 
-		public void UpdatePayment(decimal amount, PaymentMethodEnum paymentMethod, string status, Guid orderId)
+		public void SetPaid()
+        {
+            Status = PaymentStatusEnum.Paid;
+            PaidTime = DateTimeOffset.Now;
+        }
+
+		public void SetRefunded()
+        {
+            Status = PaymentStatusEnum.Refunded;
+        }
+
+        public void UpdatePayment(decimal amount, PaymentMethodEnum paymentMethod, PaymentStatusEnum status, Guid orderId)
 		{
 			Amount = amount;
 			PaymentMethod = paymentMethod;

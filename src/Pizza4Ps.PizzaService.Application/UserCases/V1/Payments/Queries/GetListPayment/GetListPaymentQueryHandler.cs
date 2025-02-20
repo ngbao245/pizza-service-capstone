@@ -26,7 +26,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Payments.Queries.GetLis
 			var query = _PaymentRepository.GetListAsNoTracking(
 				x => (request.Amount == null || x.Amount == request.Amount)
 				&& (request.PaymentMethod == null || x.PaymentMethod == request.PaymentMethod)
-				&& (request.Status == null || x.Status.Contains(request.Status))
+				//&& (request.Status == null || x.Status.Contains(request.Status))
 				&& (request.OrderId == null || x.OrderId == request.OrderId),
 				includeProperties: request.IncludeProperties);
 			var entities = await query

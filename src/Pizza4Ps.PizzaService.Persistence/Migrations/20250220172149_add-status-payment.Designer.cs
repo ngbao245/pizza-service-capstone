@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Pizza4Ps.PizzaService.Persistence;
 
@@ -11,9 +12,11 @@ using Pizza4Ps.PizzaService.Persistence;
 namespace Pizza4Ps.PizzaService.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20250220172149_add-status-payment")]
+    partial class addstatuspayment
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -872,9 +875,6 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
 
                     b.Property<Guid>("OrderId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTimeOffset?>("PaidTime")
-                        .HasColumnType("datetimeoffset");
 
                     b.Property<int>("PaymentMethod")
                         .HasColumnType("int");

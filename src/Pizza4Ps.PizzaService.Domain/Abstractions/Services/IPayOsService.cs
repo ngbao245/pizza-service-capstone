@@ -5,7 +5,8 @@ namespace Pizza4Ps.PizzaService.Domain.Abstractions.Services
 {
     public interface IPayOsService : IDomainService
     {
-        Task<string> CreatePaymentLink(Guid tableId, string cancelUrl, string returnUrl);
+        Task<CreatePaymentResult> CreatePaymentLink(long orderCode, decimal amount, string description);
         Task<PaymentLinkInformation> GetPaymentLinkInformation(long orderCode);
+        WebhookData VerifyPaymentWebhookData(WebhookType webhookData);
     }
 }

@@ -1,10 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
-using Net.payOS;
+﻿using Net.payOS;
 using Net.payOS.Types;
 using Pizza4Ps.PizzaService.Domain.Abstractions.Repositories;
 using Pizza4Ps.PizzaService.Domain.Abstractions.Services;
-using Pizza4Ps.PizzaService.Domain.Constants;
 using Pizza4Ps.PizzaService.Domain.DependencyInjection.Options;
 using Pizza4Ps.PizzaService.Domain.Exceptions;
 using Pizza4Ps.PizzaService.Domain.Services.ServiceBase;
@@ -29,40 +26,23 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             _orderItemRepository = orderItemRepository;
         }
 
-        public async Task<string> CreatePaymentLink(Guid tableId, string cancelUrl, string returnUrl)
-        { 
-            var table = await _tableRepository.GetSingleByIdAsync(tableId, "CurrentOrder");
-            if (table == null)
-            {
-                throw new BusinessException(BussinessErrorConstants.TableErrorConstant.TABLE_NOT_FOUND);
-            }
-            if (table.CurrentOrderId == null || table.CurrentOrder == null)
-            {
-                throw new BusinessException(BussinessErrorConstants.TableErrorConstant.TABLE_NOT_HAVE_ORDER);
-            }
-            if (table.CurrentOrder.TotalPrice == null)
-            {
-                throw new BusinessException(BussinessErrorConstants.TableErrorConstant.TABLE_ORDER_NOT_HAVE_TOTAL_PRICE);
-            }
-            var orderItems = _orderItemRepository.GetListAsNoTracking(x => x.OrderId == table.CurrentOrderId)
-                .Include(x => x.Product);
-            if (orderItems == null)
-            {
-                throw new BusinessException(BussinessErrorConstants.TableErrorConstant.TABLE_ORDER_NOT_HAVE_ORDER_ITEM);
-            }    
-            PayOS payOS = new PayOS(_vietQRConfig.ClientId, _vietQRConfig.ApiKey, _vietQRConfig.ChecksumKey);
-            var items = orderItems.Select(x => new ItemData(x.Product.Name, x.Quantity, decimal.ToInt32(x.Price))).ToList();
-            var orderCode = GenerateOrderCode();
-            PaymentData paymentData = new PaymentData(orderCode, decimal.ToInt32(table.CurrentOrder.TotalPrice.Value), "Thanh toan don hang",
-                items, cancelUrl, returnUrl);
-            CreatePaymentResult createPayment = await payOS.createPaymentLink(paymentData);
-            return createPayment.qrCode;
-        }
-        long GenerateOrderCode()
+        public async Task<CreatePaymentResult> CreatePaymentLink(long orderCode, decimal amount, string description)
         {
-            long timestamp = DateTime.UtcNow.Ticks % 1_000_000_000; // 9 số cuối của Ticks
-            int randomPart = new Random().Next(100, 999); // Thêm 3 số ngẫu nhiên
-            return long.Parse($"{timestamp}{randomPart}");
+            //var order = await _orderRepository.GetSingleByIdAsync(orderId, "OrderItems");
+            //if (order == null) 
+            //    throw new BusinessException(BussinessErrorConstants.OrderErrorConstant.ORDER_NOT_FOUND);
+            //if (order.Status != Enums.OrderStatusEnum.CheckedOut)
+            //    throw new BusinessException(BussinessErrorConstants.OrderErrorConstant.ORDER_CANNOT_PAY);
+            var items = new List<ItemData>
+            {
+                new ItemData("Thanh toán đơn hàng", 1, (int)amount)
+            };
+            PayOS payOS = new PayOS(_vietQRConfig.ClientId, _vietQRConfig.ApiKey, _vietQRConfig.ChecksumKey);
+            //var items = order.OrderItems.Select(x => new ItemData(x.Product.Name, x.Quantity, decimal.ToInt32(x.Price))).ToList();
+            PaymentData paymentData = new PaymentData(orderCode, (int)amount, description,
+                items, _vietQRConfig.CancelUrl, _vietQRConfig.ReturnUrl);
+            CreatePaymentResult createPayment = await payOS.createPaymentLink(paymentData);
+            return createPayment;
         }
 
         public async Task<PaymentLinkInformation> GetPaymentLinkInformation(long orderCode)
@@ -70,8 +50,34 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             PayOS payOS = new PayOS(_vietQRConfig.ClientId, _vietQRConfig.ApiKey, _vietQRConfig.ChecksumKey);
 
             PaymentLinkInformation paymentLinkInformation = await payOS.getPaymentLinkInformation(orderCode);
-            
+
             return paymentLinkInformation;
+        }
+        public WebhookData VerifyPaymentWebhookData(WebhookType webhookData)
+        {
+            PayOS payOS = new PayOS(_vietQRConfig.ClientId, _vietQRConfig.ApiKey, _vietQRConfig.ChecksumKey);
+            var data = payOS.verifyPaymentWebhookData(webhookData);
+            if (data == null)
+            {
+                throw new BusinessException("Xác thực thanh toán thất bại");
+            }
+            return data;
+            //var orderCode = data.orderCode;
+            //var paymentStatus = data.paymentStatus;
+            //var order = await _orderRepository.GetSingleAsync(x => x.OrderCode == orderCode);
+            //if (order == null)
+            //{
+            //    throw new BusinessException(BussinessErrorConstants.OrderErrorConstant.ORDER_NOT_FOUND);
+            //}
+            //if (paymentStatus == "SUCCESS")
+            //{
+            //    order.Status = OrderStatusEnum.Paid;
+            //}
+            //else
+            //{
+            //    order.Status = OrderStatusEnum.PaymentFailed;
+            //}
+            //await _orderRepository.UpdateAsync(order);
         }
     }
 }

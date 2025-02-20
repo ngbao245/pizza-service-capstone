@@ -19,7 +19,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Orders.Commands.AddFood
                 .Select(item => (item.ProductId, item.OptionItemIds, item.Quantity, item.Note))
                 .ToList();
 
-            await _orderService.AddFoodToOrderAsync(request.TableId, orderItems);
+            await _orderService.AddFoodToOrderAsync(request.OrderId, orderItems);
         }
     }
 }
