@@ -12,14 +12,14 @@ using Pizza4Ps.PizzaService.Application.UserCases.V1.OptionItemOrderItems.Querie
 
 namespace Pizza4Ps.PizzaService.API.Controllers
 {
-    [Route("api/option-item-order-items")]
+    [Route("api/order-item-detail-items")]
 	[ApiController]
-	public class OptionItemOrderItemsController : ControllerBase
+	public class OrderItemDetailsController : ControllerBase
 	{
 		private readonly IHttpContextAccessor _httpContextAccessor;
 		private readonly ISender _sender;
 
-		public OptionItemOrderItemsController(ISender sender, IHttpContextAccessor httpContextAccessor)
+		public OrderItemDetailsController(ISender sender, IHttpContextAccessor httpContextAccessor)
 		{
 			_httpContextAccessor = httpContextAccessor;
 			_sender = sender;
