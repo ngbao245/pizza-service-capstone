@@ -8,6 +8,8 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         public string Name { get; set; }
         public int Quantity { get; set; }
         public decimal Price { get; set; }
+		//Bao gồm order item và order items detail
+        public decimal TotalPrice { get; set; }
         public Guid OrderId { get; set; }
         public Guid ProductId { get; set; }
 		public OrderItemStatus OrderItemStatus { get; set; }
@@ -32,6 +34,13 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
 			OrderItemStatus = OrderItemStatus.Pending;
 		}
 
+		public void SetTotalPrice(OrderItem orderItem)
+		{
+			var totalOrderItemDetails = orderItem.OrderItemDetails.Select(x => x.AdditionalPrice).Sum();
+			var totalOrderItem = orderItem.Price + totalOrderItemDetails;
+			var totalPrice = totalOrderItem * Quantity;
+			TotalPrice = totalPrice;
+		}
 
 		public void UpdateOrderItem(string name, int quantity, decimal price, Guid orderId, Guid productId, OrderItemStatus orderItemStatus)
         {

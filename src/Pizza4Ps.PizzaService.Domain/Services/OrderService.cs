@@ -79,76 +79,37 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             return entity.Id;
         }
 
-        public async Task AddFoodToOrderAsync(Guid tableId, List<(Guid productId, List<Guid> optionItemIds, int quantity, string note)> items)
+        public async Task AddFoodToOrderAsync(Guid orderId, List<(Guid productId, List<Guid> optionItemIds, int quantity, string note)> items)
         {
-            var table = await _tableRepository.GetSingleByIdAsync(tableId, "CurrentOrder");
-            if (table == null) throw new BusinessException(BussinessErrorConstants.TableErrorConstant.TABLE_NOT_FOUND);
-            if (table.CurrentOrder.Status != OrderStatusEnum.Unpaid) throw new BusinessException(BussinessErrorConstants.OrderErrorConstant.ORDER_STATUS_INVALID_TO_ORDER);
-            if (table.CurrentOrderId == null)
+            var order = await _orderRepository.GetSingleByIdAsync(orderId);
+            if (order == null) throw new BusinessException(BussinessErrorConstants.OrderErrorConstant.ORDER_NOT_FOUND);
+            if (order.Status != OrderStatusEnum.Unpaid) throw new BusinessException(BussinessErrorConstants.OrderErrorConstant.ORDER_STATUS_INVALID_TO_ORDER);
+            foreach (var item in items)
             {
-                var order = new Order(
+                var product = await _productRepository.GetSingleByIdAsync(item.productId);
+                if (product == null) throw new BusinessException(BussinessErrorConstants.ProductErrorConstant.PRODUCT_NOT_FOUND);
+                var orderItem = new OrderItem(
                     id: Guid.NewGuid(),
-                    startTime: DateTimeOffset.Now,
-                    tableId: tableId);
-                table.SetCurrentOrderId(order.Id);
-                _orderRepository.Add(order);
-                foreach (var item in items)
+                    name: product.Name,
+                    quantity: item.quantity,
+                    price: product.Price,
+                    orderId: order.Id,
+                    productId: product.Id);
+                _orderItemRepository.Add(orderItem);
+                var optionItems = await _optionItemRepository.GetListAsTracking(x => item.optionItemIds.Contains(x.Id)).ToListAsync();
+                foreach (var optionItemId in item.optionItemIds)
                 {
-                    var product = await _productRepository.GetSingleByIdAsync(item.productId);
-                    if (product == null) throw new BusinessException(BussinessErrorConstants.ProductErrorConstant.PRODUCT_NOT_FOUND);
-                    var orderItem = new OrderItem(
+                    var optionItem = optionItems.FirstOrDefault(x => x.Id == optionItemId);
+                    if (optionItem == null) throw new BusinessException(BussinessErrorConstants.OptionItemErrorConstant.OPTION_ITEM_NOT_FOUND);
+                    var orderDetail = new OrderItemDetail(
                         id: Guid.NewGuid(),
-                        name: product.Name,
-                        quantity: item.quantity,
-                        price: product.Price,
-                        orderId: order.Id,
-                        productId: product.Id);
-                    _orderItemRepository.Add(orderItem);
-                    var optionItems = await _optionItemRepository.GetListAsTracking(x => item.optionItemIds.Contains(x.Id)).ToListAsync();
-                    foreach (var optionItemId in item.optionItemIds)
-                    {
-                        var optionItem = optionItems.FirstOrDefault(x => x.Id == optionItemId);
-                        if (optionItem == null) throw new BusinessException(BussinessErrorConstants.OptionItemErrorConstant.OPTION_ITEM_NOT_FOUND);
-                        var orderDetail = new OrderItemDetail(
-                            id: Guid.NewGuid(),
-                            name: optionItem.Name,
-                            additionalPrice: optionItem.AdditionalPrice,
-                            optionItemId: optionItemId,
-                            orderItemId: orderItem.Id
-                            );
-                        _optionItemOrderItemRepository.Add(orderDetail);
-                    }
-                }
-            }
-            else if (table.CurrentOrderId != null)
-            {
-                if (table.CurrentOrder.Status != OrderStatusEnum.Unpaid) throw new BusinessException(BussinessErrorConstants.OrderErrorConstant.ORDER_STATUS_INVALID_TO_ORDER);
-                foreach (var item in items)
-                {
-                    var product = await _productRepository.GetSingleByIdAsync(item.productId);
-                    if (product == null) throw new BusinessException(BussinessErrorConstants.ProductErrorConstant.PRODUCT_NOT_FOUND);
-                    var orderItem = new OrderItem(
-                        id: Guid.NewGuid(),
-                        name: product.Name,
-                        quantity: item.quantity,
-                        price: product.Price,
-                        orderId: table.CurrentOrderId.Value,
-                        productId: product.Id);
-                    _orderItemRepository.Add(orderItem);
-                    var optionItems = await _optionItemRepository.GetListAsTracking(x => item.optionItemIds.Contains(x.Id)).ToListAsync();
-                    foreach (var optionItemId in item.optionItemIds)
-                    {
-                        var optionItem = optionItems.FirstOrDefault(x => x.Id == optionItemId);
-                        if (optionItem == null) throw new BusinessException(BussinessErrorConstants.OptionItemErrorConstant.OPTION_ITEM_NOT_FOUND);
-                        var orderDetail = new OrderItemDetail(
-                            id: Guid.NewGuid(),
-                            name: optionItem.Name,
-                            additionalPrice: optionItem.AdditionalPrice,
-                            optionItemId: optionItemId,
-                            orderItemId: orderItem.Id
-                            );
-                        _optionItemOrderItemRepository.Add(orderDetail);
-                    }
+                        name: optionItem.Name,
+                        additionalPrice: optionItem.AdditionalPrice,
+                        optionItemId: optionItemId,
+                        orderItemId: orderItem.Id
+                        );
+                    _optionItemOrderItemRepository.Add(orderDetail);
+                    orderItem.OrderItemDetails.Add(orderDetail);
                 }
             }
             await _unitOfWork.SaveChangeAsync();
@@ -168,9 +129,17 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             throw new NotImplementedException();
         }
 
-        public Task CheckOutOrder(Guid orderId)
+        public async Task CheckOutOrder(Guid orderId)
         {
-            throw new NotImplementedException();
+            var order = await _orderRepository.GetSingleByIdAsync(orderId, "OrderItems.OrderItemDetails");
+            if (order == null)
+                throw new BusinessException(BussinessErrorConstants.OrderErrorConstant.ORDER_NOT_FOUND);
+            if (order.Status != OrderStatusEnum.Unpaid)
+                throw new BusinessException(BussinessErrorConstants.OrderErrorConstant.ORDER_CANNOT_CHECK_OUT);
+            foreach(var orderItem in order.OrderItems)
+            {
+                
+            }
         }
 
         public Task UpdateStatusToPendingAsync(Guid id)

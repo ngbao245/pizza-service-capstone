@@ -83,7 +83,8 @@
 
         public class OrderErrorConstant
         {
-            public const string ORDER_NOT_FOUND = "Order không tìm thấy";
+            public const string ORDER_NOT_FOUND = "Đơn hàng không tìm thấy";
+            public const string ORDER_CANNOT_CHECK_OUT = "Đơn hàng đã được xuất hoá đơn hoặc thanh toán";
             public const string ORDER_STATUS_INVALID_TO_ORDER = "Đơn hàng đã được xuất hoá đơn hoặc được thanh toán";
         }
 
