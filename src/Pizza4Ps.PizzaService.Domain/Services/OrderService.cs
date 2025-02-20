@@ -7,6 +7,7 @@ using Pizza4Ps.PizzaService.Domain.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using Pizza4Ps.PizzaService.Domain.Services.ServiceBase;
 using Pizza4Ps.PizzaService.Domain.Enums;
+using System.Xml.Linq;
 
 namespace Pizza4Ps.PizzaService.Domain.Services
 {
@@ -37,9 +38,12 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             _orderItemRepository = orderItemRepository;
         }
 
-        public async Task<Guid> CreateAsync(DateTimeOffset startTime, DateTimeOffset endTime, OrderStatusEnum status, Guid tableId)
+        public async Task<Guid> CreateAsync(DateTimeOffset startTime, Guid tableId)
         {
-            throw new NotImplementedException();
+            var entity = new Order(Guid.NewGuid(), startTime, tableId);
+            _orderRepository.Add(entity);
+            await _unitOfWork.SaveChangeAsync();
+            return entity.Id;
         }
 
         public async Task DeleteAsync(List<Guid> ids, bool IsHardDeleted = false)
@@ -83,7 +87,6 @@ namespace Pizza4Ps.PizzaService.Domain.Services
         {
             var table = await _tableRepository.GetSingleByIdAsync(tableId, "CurrentOrder");
             if (table == null) throw new BusinessException(BussinessErrorConstants.TableErrorConstant.TABLE_NOT_FOUND);
-            if (table.CurrentOrder.Status != OrderStatusEnum.Unpaid) throw new BusinessException(BussinessErrorConstants.OrderErrorConstant.ORDER_STATUS_INVALID_TO_ORDER);
             if (table.CurrentOrderId == null)
             {
                 var order = new Order(

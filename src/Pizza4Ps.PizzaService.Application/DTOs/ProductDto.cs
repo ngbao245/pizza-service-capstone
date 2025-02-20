@@ -12,5 +12,6 @@ namespace Pizza4Ps.PizzaService.Application.DTOs
         public ProductTypeEnum.ProductType ProductType { get; set; }
 
         public virtual CategoryDto Category { get; set; }
+        public virtual ProductOptionDto ProductOption { get; set; }
     }
 }

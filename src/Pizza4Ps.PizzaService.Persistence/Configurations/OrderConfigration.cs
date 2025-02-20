@@ -15,9 +15,6 @@ namespace Pizza4Ps.PizzaService.Persistence.Configurations
 			builder.Property(x => x.StartTime)
 				.IsRequired();
 
-			builder.Property(x => x.EndTime)
-				.IsRequired();
-
 			builder.Property(x => x.Status)
 				.HasMaxLength(50)
 				.IsRequired(false);
