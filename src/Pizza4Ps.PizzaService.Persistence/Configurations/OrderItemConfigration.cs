@@ -24,8 +24,8 @@ namespace Pizza4Ps.PizzaService.Persistence.Configurations
 				.HasColumnType("decimal(18,2)");
 
 			builder.HasOne(x => x.Order)
-				.WithMany()
-				.HasForeignKey(x => x.OrderId)
+				.WithMany(x => x.OrderItems)
+                .HasForeignKey(x => x.OrderId)
 				.IsRequired()
 				.OnDelete(DeleteBehavior.Cascade);
 
@@ -34,6 +34,12 @@ namespace Pizza4Ps.PizzaService.Persistence.Configurations
 				.HasForeignKey(x => x.ProductId)
 				.IsRequired()
 				.OnDelete(DeleteBehavior.Cascade);
-		}
+
+            builder.HasMany(x => x.OrderItemDetails)
+			   .WithOne(x => x.OrderItem)
+			   .HasForeignKey(x => x.OrderItemId)
+			   .IsRequired()
+			   .OnDelete(DeleteBehavior.Cascade);
+        }
 	}
 }

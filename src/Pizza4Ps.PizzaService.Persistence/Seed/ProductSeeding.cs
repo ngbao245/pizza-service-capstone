@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Pizza4Ps.PizzaService.Domain.Entities;
+using static Pizza4Ps.PizzaService.Domain.Enums.ProductTypeEnum;
 
 namespace Pizza4Ps.PizzaService.Persistence.Seed
 {
@@ -15,7 +16,8 @@ namespace Pizza4Ps.PizzaService.Persistence.Seed
                     CategoryId = Guid.Parse("AD8A1D13-A895-4A94-D20C-08DCF26F96D8"),
                     Name = "Pizza hut",
                     Price = 1000,
-                    Description = "Pizza"
+                    Description = "Pizza",
+                    ProductType = ProductType.ColdKitchen
                 },
                 new Product
                 {
@@ -23,7 +25,8 @@ namespace Pizza4Ps.PizzaService.Persistence.Seed
                     CategoryId = Guid.Parse("8BF80BC9-2302-4E36-B4CA-146CE7D34543"),
                     Name = "Pizza In",
                     Price = 1200,
-                    Description = "Pizza"
+                    Description = "Pizza",
+                    ProductType = ProductType.ColdKitchen
                 }
             );
         }

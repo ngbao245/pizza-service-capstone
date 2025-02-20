@@ -26,7 +26,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Orders.Queries.GetListO
 			var query = _orderRepository.GetListAsNoTracking(
 				x => (request.StartTime == null || x.StartTime == request.StartTime)
 				&& (request.EndTime == null || x.EndTime == request.EndTime)
-				&& (request.Status == null || x.Status.Contains(request.Status))
+				&& (request.Status == null || x.Status.Equals(request.Status))
 				&& (request.TableId == null || x.TableId == request.TableId),
 				includeProperties: request.IncludeProperties);
 			var entities = await query

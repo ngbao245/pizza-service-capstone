@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Pizza4Ps.PizzaService.API.Constants;
 using Pizza4Ps.PizzaService.API.Models;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Orders.Commands.AddFoodToOrder;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Orders.Commands.CreateOrder;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Orders.Commands.DeleteOrder;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Orders.Commands.RestoreOrder;
@@ -86,6 +87,35 @@ namespace Pizza4Ps.PizzaService.API.Controllers
             });
         }
 
+        [HttpPut("pending/{id}")]
+        public async Task<IActionResult> PendingAsync([FromRoute] Guid id, [FromBody] UpdateStatusToPendingCommand request)
+        {
+            request.Id = id;
+            await _sender.Send(request);
+
+            return Ok(new ApiResponse
+            {
+                Success = true,
+                Message = Message.UPDATED_SUCCESS,
+                StatusCode = StatusCodes.Status200OK
+            });
+        }
+
+        [HttpPut("complete/{id}")]
+        public async Task<IActionResult> CompleteAsync([FromRoute] Guid id, [FromBody] UpdateStatusToCompleteCommand request)
+        {
+            request.Id = id;
+            await _sender.Send(request);
+
+            return Ok(new ApiResponse
+            {
+                Success = true,
+                Message = Message.UPDATED_SUCCESS,
+                StatusCode = StatusCodes.Status200OK
+            });
+        }
+
+
         [HttpPut("restore")]
         public async Task<IActionResult> RestoreManyAsync(List<Guid> ids)
         {
@@ -104,6 +134,18 @@ namespace Pizza4Ps.PizzaService.API.Controllers
             return Ok(new ApiResponse
             {
                 Message = Message.DELETED_SUCCESS,
+                StatusCode = StatusCodes.Status200OK
+            });
+        }
+
+        [HttpPost("order-items")]
+        public async Task<IActionResult> AddFoodToOrderAsync([FromBody] AddFoodToOrderCommand request)
+        {
+            var result = await _sender.Send(request);
+            return Ok(new ApiResponse
+            {
+                Result = result,
+                Message = Message.CREATED_SUCCESS,
                 StatusCode = StatusCodes.Status200OK
             });
         }

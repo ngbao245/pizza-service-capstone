@@ -29,7 +29,14 @@ namespace Pizza4Ps.PizzaService.Persistence.Configurations
 			builder.HasOne(x => x.Table)
 				.WithMany()
 				.HasForeignKey(x => x.TableId)
-				.IsRequired();
-		}
+				.IsRequired()
+				.OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasMany(x => x.OrderItems)
+			   .WithOne(x => x.Order)
+			   .HasForeignKey(x => x.OrderId)
+			   .IsRequired()
+			   .OnDelete(DeleteBehavior.Cascade);
+        }
 	}
 }

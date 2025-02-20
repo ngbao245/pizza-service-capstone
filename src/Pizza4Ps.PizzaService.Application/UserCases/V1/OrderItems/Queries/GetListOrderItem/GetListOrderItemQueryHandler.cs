@@ -27,9 +27,13 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.OrderItems.Queries.GetL
 				x => (request.Name == null || x.Name.Contains(request.Name))
 				&& (request.Quantity == null || x.Quantity == request.Quantity)
 				&& (request.Price == null || x.Price == request.Price)
+				&& (request.Status == null || x.Status == request.Status)
 				&& (request.OrderId == null || x.OrderId == request.OrderId)
-				&& (request.ProductId == null || x.ProductId == request.ProductId),
-				includeProperties: request.IncludeProperties);
+				&& (request.ProductId == null || x.ProductId == request.ProductId)
+				&& (request.OrderItemStatus == null || x.OrderItemStatus == request.OrderItemStatus)
+
+                ,
+                includeProperties: request.IncludeProperties);
 			var entities = await query
 				.OrderBy(request.SortBy)
 				.Skip(request.SkipCount).Take(request.TakeCount).ToListAsync();

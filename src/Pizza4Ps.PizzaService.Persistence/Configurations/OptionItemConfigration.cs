@@ -21,8 +21,8 @@ namespace Pizza4Ps.PizzaService.Persistence.Configurations
 				.HasColumnType("decimal(18, 2)");
 
 			builder.HasOne(x => x.Option)
-				.WithMany()
-				.HasForeignKey(x => x.OptionId)
+                .WithMany(o => o.OptionItems)
+                .HasForeignKey(x => x.OptionId)
 				.IsRequired()
 				.OnDelete(DeleteBehavior.Cascade);
 		}

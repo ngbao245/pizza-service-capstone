@@ -9,6 +9,7 @@ using Pizza4Ps.PizzaService.Application.UserCases.V1.Tables.Commands.UpdateTable
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Tables.Queries.GetListTable;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Tables.Queries.GetListTableIgnoreQueryFilter;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Tables.Queries.GetTableById;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Tables.Queries.GetTableStatus;
 
 namespace Pizza4Ps.PizzaService.API.Controllers
 {
@@ -44,6 +45,30 @@ namespace Pizza4Ps.PizzaService.API.Controllers
                 Result = result,
                 Message = Message.CREATED_SUCCESS,
                 StatusCode = StatusCodes.Status201Created
+            });
+        }
+
+        //[HttpGet("{id}/status")]
+        //public async Task<IActionResult> GetTableStatusByIdAsync([FromRoute] Guid id)
+        //{
+        //    var result = await _sender.Send(new GetTableStatusQuery { Id = id });
+        //    return Ok(new ApiResponse
+        //    {
+        //        Result = result,
+        //        Message = Message.GET_SUCCESS,
+        //        StatusCode = StatusCodes.Status200OK
+        //    });
+        //}
+
+        [HttpPost("{id}/check-in")]
+        public async Task<IActionResult> CheckInTableByIdAsync([FromRoute] Guid id)
+        {
+            var result = await _sender.Send(new GetTableStatusQuery { Id = id });
+            return Ok(new ApiResponse
+            {
+                Result = result,
+                Message = Message.GET_SUCCESS,
+                StatusCode = StatusCodes.Status200OK
             });
         }
 
