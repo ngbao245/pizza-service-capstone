@@ -8,12 +8,9 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         public string Name { get; set; }
         public int Quantity { get; set; }
         public decimal Price { get; set; }
-        public string Status { get; set; }
         public Guid OrderId { get; set; }
         public Guid ProductId { get; set; }
-
-		public OrderItemTypeEnum OrderItemStatus { get; set; } = OrderItemTypeEnum.Cooking;
-
+		public OrderItemStatus OrderItemStatus { get; set; }
 		public virtual Order Order { get; set; }
 		public virtual Product Product { get; set; }
         public virtual ICollection<OrderItemDetail> OrderItemDetails { get; set; } = new List<OrderItemDetail>();
@@ -24,7 +21,7 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
 		}
 
 
-		public OrderItem(Guid id, string name, int quantity, decimal price, Guid orderId, Guid productId, OrderItemTypeEnum orderItemStatus)
+		public OrderItem(Guid id, string name, int quantity, decimal price, Guid orderId, Guid productId)
 		{
 			Id = id;
 			Name = name;
@@ -32,11 +29,11 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
 			Price = price;
 			OrderId = orderId;
 			ProductId = productId;
-			OrderItemStatus = orderItemStatus;
+			OrderItemStatus = OrderItemStatus.Pending;
 		}
 
 
-		public void UpdateOrderItem(string name, int quantity, decimal price, Guid orderId, Guid productId, OrderItemTypeEnum orderItemStatus)
+		public void UpdateOrderItem(string name, int quantity, decimal price, Guid orderId, Guid productId, OrderItemStatus orderItemStatus)
         {
 			Name = name;
 			Quantity = quantity;

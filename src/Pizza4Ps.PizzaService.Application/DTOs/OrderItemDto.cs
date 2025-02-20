@@ -11,7 +11,7 @@ namespace Pizza4Ps.PizzaService.Application.DTOs
         public string Status { get; set; }
         public Guid OrderId { get; set; }
         public Guid ProductId { get; set; }
-        public OrderItemTypeEnum OrderItemStatus { get; set; }
+        public OrderItemStatus OrderItemStatus { get; set; }
         public Guid OrderItemDetailId { get; set; }
         public virtual OrderDto Order { get; set; }
         public virtual ProductDto Product { get; set; }

@@ -141,10 +141,10 @@ namespace Pizza4Ps.PizzaService.API.Controllers
         [HttpPost("order-items")]
         public async Task<IActionResult> AddFoodToOrderAsync([FromBody] AddFoodToOrderCommand request)
         {
-            var result = await _sender.Send(request);
+            await _sender.Send(request);
             return Ok(new ApiResponse
             {
-                Result = result,
+                Success = true,
                 Message = Message.CREATED_SUCCESS,
                 StatusCode = StatusCodes.Status200OK
             });

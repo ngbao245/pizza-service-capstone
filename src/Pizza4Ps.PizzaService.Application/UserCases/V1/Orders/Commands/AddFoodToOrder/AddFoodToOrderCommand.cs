@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Orders.Commands.AddFoodToOrder
 {
-    public class AddFoodToOrderCommand : IRequest<ResultDto<Guid>>
+    public class AddFoodToOrderCommand : IRequest
     {
         public Guid TableId { get; set; }
 
@@ -16,6 +16,8 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Orders.Commands.AddFood
         public Guid ProductId { get; set; }
 
         public List<Guid> OptionItemIds { get; set; }
+
+        public int Quantity { get; set; }
 
         public string Note { get; set; }
     }

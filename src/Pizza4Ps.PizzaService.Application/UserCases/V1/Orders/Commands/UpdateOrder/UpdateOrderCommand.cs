@@ -8,7 +8,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Orders.Commands.UpdateO
 		public Guid? Id { get; set; }
         public DateTimeOffset StartTime { get; set; }
         public DateTimeOffset EndTime { get; set; }
-        public OrderTypeEnum Status { get; set; }
+        public OrderStatusEnum Status { get; set; }
         public Guid TableId { get; set; }
     }
 }

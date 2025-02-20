@@ -58,7 +58,7 @@
 
         public class OptionItemErrorConstant
         {
-            public const string OPTIONITEM_NOT_FOUND = "Option item không tìm thấy";
+            public const string OPTION_ITEM_NOT_FOUND = "lựa chọn không tìm thấy";
         }
 
         public class PaymentErrorConstant
@@ -84,6 +84,7 @@
         public class OrderErrorConstant
         {
             public const string ORDER_NOT_FOUND = "Order không tìm thấy";
+            public const string ORDER_STATUS_INVALID_TO_ORDER = "Đơn hàng đã được xuất hoá đơn hoặc được thanh toán";
         }
 
         public class StaffErrorConstant
