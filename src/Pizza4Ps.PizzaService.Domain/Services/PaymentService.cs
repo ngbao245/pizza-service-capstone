@@ -57,6 +57,9 @@ namespace Pizza4Ps.PizzaService.Domain.Services
                     _paymentRepository.Update(payment);
                     Console.WriteLine($"Payment {payment.Id} is paid, {payment}");
                 }
+                payment.SetPaid();
+                _paymentRepository.Update(payment);
+                Console.WriteLine($"Payment {payment.Id} is paid, {payment}");
                 var order = await _orderRepository.GetListAsTracking(x => x.OrderCode == webhookData.code.ToString()).FirstOrDefaultAsync();
                 if (order != null)
                 {
@@ -64,6 +67,9 @@ namespace Pizza4Ps.PizzaService.Domain.Services
                     _orderRepository.Update(order);
                     Console.WriteLine($"Order {order.Id} is paid, {order}");
                 }
+                order.SetPaid();
+                _orderRepository.Update(order);
+                Console.WriteLine($"Order {order.Id} is paid, {order}");
                 await _unitOfWork.SaveChangeAsync();
                 return true;
             }
