@@ -50,13 +50,13 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             if (result != null && result.code == "00")
             {
                 // Giả sử result.OrderCode tương ứng với OrderId
-                var payment = await _paymentRepository.GetSingleAsync(x => x.OrderCode == webhookData.code.ToString());
+                var payment = await _paymentRepository.GetListAsTracking(x => x.OrderCode == webhookData.code.ToString()).FirstOrDefaultAsync();
                 if (payment != null)
                 {
                     payment.SetPaid();
                     _paymentRepository.Update(payment);
                 }
-                var order = await _orderRepository.GetSingleAsync(x => x.OrderCode == webhookData.code.ToString());
+                var order = await _orderRepository.GetListAsTracking(x => x.OrderCode == webhookData.code.ToString()).FirstOrDefaultAsync();
                 if (order != null)
                 {
                     order.SetPaid();
