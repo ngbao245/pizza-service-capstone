@@ -6,6 +6,7 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
     public class OrderItem : EntityAuditBase<Guid>
     {
         public string Name { get; set; }
+        public string TableCode { get; set; }
         public int Quantity { get; set; }
         public decimal Price { get; set; }
         //Bao gồm order item và order items detail
@@ -23,7 +24,7 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         }
 
 
-        public OrderItem(Guid id, string name, int quantity, decimal price, Guid orderId, Guid productId)
+        public OrderItem(Guid id, string name, int quantity, decimal price, Guid orderId, Guid productId, string tableCode)
         {
             Id = id;
             Name = name;
@@ -32,6 +33,7 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
             OrderId = orderId;
             ProductId = productId;
             OrderItemStatus = OrderItemStatus.Pending;
+            TableCode = tableCode;
         }
 
         public void SetTotalPrice()
@@ -54,6 +56,10 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
 
         public void setServing()
         {
+            //if (OrderItemStatus != OrderItemStatus.Pending)
+            //{
+            //    throw new BusinessException(BussinessErrorConstants.OrderItemErrorConstant.ORDER_ITEM_CANNOT_SERVED);
+            //}
             OrderItemStatus = OrderItemStatus.Serving;
         }
 

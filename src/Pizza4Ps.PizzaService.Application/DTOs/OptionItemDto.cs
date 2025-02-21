@@ -7,8 +7,8 @@ namespace Pizza4Ps.PizzaService.Application.DTOs
         public Guid Id { get; set; }
         public string Name { get; set; }
         public decimal AdditionalPrice { get; set; }
-        public Guid OptionId { get; set; }
+        //public Guid OptionId { get; set; }
 
-        public virtual OptionDto Option { get; set; }
+        //public virtual OptionDto Option { get; set; }
     }
 }

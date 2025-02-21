@@ -21,6 +21,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Commands.Creat
             var result = await _productService.CreateAsync(
                 request.Name,
                 request.Price,
+                request.Image,
                 request.Description,
                 request.CategoryId,
                 request.ProductType);

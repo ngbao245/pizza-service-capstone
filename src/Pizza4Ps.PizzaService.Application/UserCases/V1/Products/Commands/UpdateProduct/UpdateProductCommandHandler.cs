@@ -18,7 +18,8 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Commands.Updat
 				request.Id!.Value,
 				request.Name,
 				request.Price,
-				request.Description,
+                request.Image,
+                request.Description,
 				request.CategoryId,
 				request.ProductType
 				);

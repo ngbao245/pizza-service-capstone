@@ -12,7 +12,7 @@ namespace Pizza4Ps.PizzaService.Persistence.Configurations
 			builder.ToTable(TableNames.Table);
 			builder.HasKey(x => x.Id);
 
-			builder.Property(x => x.TableNumber)
+			builder.Property(x => x.Code)
 				.IsRequired();
 
 			builder.Property(x => x.Capacity)

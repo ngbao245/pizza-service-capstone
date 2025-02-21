@@ -2,9 +2,6 @@
 using MediatR;
 using Pizza4Ps.PizzaService.Application.Abstractions;
 using Pizza4Ps.PizzaService.Domain.Abstractions.Services;
-using Pizza4Ps.PizzaService.Domain.Constants;
-using Pizza4Ps.PizzaService.Domain.Enums;
-using Pizza4Ps.PizzaService.Domain.Exceptions;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Tables.Commands.CreateTable
 {
@@ -21,16 +18,9 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Tables.Commands.CreateT
 
         public async Task<ResultDto<Guid>> Handle(CreateTableCommand request, CancellationToken cancellationToken)
         {
-            TableStatusEnum? tableStatus = string.IsNullOrEmpty(request.Status)
-                ? throw new BusinessException(BussinessErrorConstants.TableErrorConstant.INVALID_TABLE_STATUS)
-                : Enum.TryParse(request.Status, true, out TableStatusEnum status)
-                    ? status
-                    : throw new BusinessException(BussinessErrorConstants.TableErrorConstant.INVALID_TABLE_STATUS);
-
             var result = await _tableService.CreateAsync(
-                request.TableNumber,
+                request.Code,
                 request.Capacity,
-                tableStatus.Value,
                 request.ZoneId);
             return new ResultDto<Guid>
             {

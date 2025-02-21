@@ -32,7 +32,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Tables.Queries.GetListT
                     : throw new BusinessException(BussinessErrorConstants.TableErrorConstant.INVALID_TABLE_STATUS);
             var query = _tableRepository.GetListAsNoTracking(includeProperties: request.IncludeProperties).IgnoreQueryFilters()
                 .Where(
-                x => (request.TableNumber == null || x.TableNumber == request.TableNumber)
+                x => (request.Code == null || x.Code == request.Code)
                 && (request.Capacity == null || x.Capacity == request.Capacity)
                 && (request.Status == null || x.Status == tableStatus)
                 && (request.ZoneId == null || x.ZoneId == request.ZoneId)

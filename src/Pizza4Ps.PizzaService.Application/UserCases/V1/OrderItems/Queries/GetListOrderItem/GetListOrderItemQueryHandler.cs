@@ -23,22 +23,15 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.OrderItems.Queries.GetL
 
 		public async Task<PaginatedResultDto<OrderItemDto>> Handle(GetListOrderItemQuery request, CancellationToken cancellationToken)
 		{
-			var query = _orderitemRepository.GetListAsNoTracking(
-				x => (request.Name == null || x.Name.Contains(request.Name))
-				&& (request.Quantity == null || x.Quantity == request.Quantity)
-				&& (request.Price == null || x.Price == request.Price)
-				//&& (request.Status == null || x.Status == request.Status)
-				&& (request.OrderId == null || x.OrderId == request.OrderId)
+			var query = _orderitemRepository.GetListAsNoTracking(x =>
+			    (request.OrderId == null || x.OrderId == request.OrderId)
 				&& (request.ProductId == null || x.ProductId == request.ProductId)
 				&& (request.OrderItemStatus == null || x.OrderItemStatus == request.OrderItemStatus)
-
-                ,
-                includeProperties: request.IncludeProperties);
+                , includeProperties: request.IncludeProperties);
 			var entities = await query
 				.OrderBy(request.SortBy)
 				.Skip(request.SkipCount).Take(request.TakeCount).ToListAsync();
-			if (!entities.Any())
-				throw new BusinessException(BussinessErrorConstants.OrderItemErrorConstant.ORDER_ITEM_NOT_FOUND);
+
 			var result = _mapper.Map<List<OrderItemDto>>(entities);
 			var totalCount = await query.CountAsync();
 			return new PaginatedResultDto<OrderItemDto>(result, totalCount);

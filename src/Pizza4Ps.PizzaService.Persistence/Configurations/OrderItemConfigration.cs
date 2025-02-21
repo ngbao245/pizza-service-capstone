@@ -23,7 +23,11 @@ namespace Pizza4Ps.PizzaService.Persistence.Configurations
 				.IsRequired()
 				.HasColumnType("decimal(18,2)");
 
-			builder.HasOne(x => x.Order)
+            builder.Property(x => x.TotalPrice)
+				.HasColumnType("decimal(18, 2)") // Xác định kiểu cột là decimal với độ chính xác và thang đo.
+				.IsRequired();
+
+            builder.HasOne(x => x.Order)
 				.WithMany(x => x.OrderItems)
                 .HasForeignKey(x => x.OrderId)
 				.IsRequired()

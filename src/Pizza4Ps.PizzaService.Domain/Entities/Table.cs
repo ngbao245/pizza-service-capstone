@@ -5,7 +5,7 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
 {
 	public class Table : EntityAuditBase<Guid>
 	{
-		public int TableNumber { get; set; }
+		public string Code { get; set; }
 		public int Capacity { get; set; }
 		public Guid ZoneId { get; set; }
 
@@ -19,12 +19,12 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
 		{
 		}
 
-		public Table(Guid id, int tableNumber, int capacity, TableStatusEnum status, Guid zoneId)
+		public Table(Guid id, string code, int capacity, Guid zoneId)
 		{
 			Id = id;
-			TableNumber = tableNumber;
+			Code = code;
 			Capacity = capacity;
-			Status = status;
+			SetClosing();
 			ZoneId = zoneId;
 		}
 
@@ -32,10 +32,36 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         {
             CurrentOrderId = currentOrderId;
         }
-
-        internal void UpdateTable(int tableNumber, int capacity, TableStatusEnum status, Guid zoneId)
+		public void SetNullCurrentOrderId()
 		{
-			TableNumber = tableNumber;
+			CurrentOrderId = null;
+		}
+		public void SetOpening()
+		{
+			Status = TableStatusEnum.Opening;
+		}
+        public void SetClosing()
+        {
+            Status = TableStatusEnum.Closing;
+			SetNullCurrentOrderId();
+        }
+        public void SetPaid()
+        {
+            Status = TableStatusEnum.Paid;
+            SetNullCurrentOrderId();
+        }
+        public void SetLocked()
+        {
+            Status = TableStatusEnum.Locked;
+        }
+        public void SetBooked()
+        {
+            Status = TableStatusEnum.Booked;
+        }
+
+        internal void UpdateTable(string code, int capacity, TableStatusEnum status, Guid zoneId)
+		{
+			Code = code;
 			Capacity = capacity;
 			Status = status;
 			ZoneId = zoneId;

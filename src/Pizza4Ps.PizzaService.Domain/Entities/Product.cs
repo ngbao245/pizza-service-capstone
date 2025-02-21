@@ -8,6 +8,7 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         public string Name { get; set; }
         public decimal Price { get; set; }
         public string Description { get; set; }
+        public byte[]? Image { get; set; }
         public Guid CategoryId { get; set; }
         public ProductTypeEnum.ProductType ProductType { get; set; }
 
@@ -18,7 +19,7 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         {
         }
 
-        public Product(Guid id, string name, decimal price, string description, Guid categoryId, ProductTypeEnum.ProductType productType)
+        public Product(Guid id, string name, decimal price, byte[]? image, string description, Guid categoryId, ProductTypeEnum.ProductType productType)
         {
             Id = Id;
             Name = SetName(name);
@@ -26,15 +27,17 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
             Description = description;
             CategoryId = categoryId;
             ProductType = productType;
+            Image = image;
         }
 
-        public void UpdateProduct(string name, decimal price, string description, Guid categoryId, ProductTypeEnum.ProductType productType)
+        public void UpdateProduct(string name, decimal price, byte[]? image, string description, Guid categoryId, ProductTypeEnum.ProductType productType)
         {
             Name = SetName(name);
             Price = price;
             Description = description;
             CategoryId = categoryId;
             ProductType = productType;
+            Image = image;
         }
         private string SetName(string name)
         {

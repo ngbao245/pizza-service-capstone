@@ -48,7 +48,10 @@
 
         public class OrderItemErrorConstant
         {
-            public const string ORDER_ITEM_NOT_FOUND = "Order item không tìm thấy";
+            public const string ORDER_ITEM_CANNOT_DONE = "Order item không tìm thấy";
+            public const string ORDER_ITEM_CANNOT_SERVED = "Món ăn không thể được phục vụ";
+            public const string ORDER_ITEM_NOT_FOUND = "Món ăn không thể hoàn thành";
+
         }
 
         public class OrderItemDetailErrorConstant

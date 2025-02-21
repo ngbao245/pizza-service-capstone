@@ -70,7 +70,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
         public async Task UpdateStatusToServingAsync(Guid id)
         {
             var entity = await _orderitemRepository.GetSingleByIdAsync(id);
-            if (entity == null) throw new ServerException(ServerErrorConstants.NOT_FOUND);
+            if (entity == null) throw new ServerException(BussinessErrorConstants.OrderItemErrorConstant.ORDER_ITEM_NOT_FOUND);
             entity.setServing();
             await _unitOfWork.SaveChangeAsync();
         }
@@ -78,7 +78,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
         public async Task UpdateStatusToDoneAsync(Guid id)
         {
             var entity = await _orderitemRepository.GetSingleByIdAsync(id);
-            if (entity == null) throw new ServerException(ServerErrorConstants.NOT_FOUND);
+            if (entity == null) throw new ServerException(BussinessErrorConstants.OrderItemErrorConstant.ORDER_ITEM_NOT_FOUND);
             entity.setDone();
             await _unitOfWork.SaveChangeAsync();
         }
@@ -86,7 +86,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
         public async Task UpdateStatusToCancelledAsync(Guid id)
         {
             var entity = await _orderitemRepository.GetSingleByIdAsync(id);
-            if (entity == null) throw new ServerException(ServerErrorConstants.NOT_FOUND);
+            if (entity == null) throw new ServerException(BussinessErrorConstants.OrderItemErrorConstant.ORDER_ITEM_NOT_FOUND);
             entity.setCancelled();
             await _unitOfWork.SaveChangeAsync();
         }

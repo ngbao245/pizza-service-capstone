@@ -1,13 +1,12 @@
-﻿using Pizza4Ps.PizzaService.Domain.Abstractions.Repositories;
+﻿using Microsoft.EntityFrameworkCore;
 using Pizza4Ps.PizzaService.Domain.Abstractions;
+using Pizza4Ps.PizzaService.Domain.Abstractions.Repositories;
 using Pizza4Ps.PizzaService.Domain.Abstractions.Services;
-using Pizza4Ps.PizzaService.Domain.Entities;
 using Pizza4Ps.PizzaService.Domain.Constants;
-using Pizza4Ps.PizzaService.Domain.Exceptions;
-using Microsoft.EntityFrameworkCore;
-using Pizza4Ps.PizzaService.Domain.Services.ServiceBase;
+using Pizza4Ps.PizzaService.Domain.Entities;
 using Pizza4Ps.PizzaService.Domain.Enums;
-using System.Xml.Linq;
+using Pizza4Ps.PizzaService.Domain.Exceptions;
+using Pizza4Ps.PizzaService.Domain.Services.ServiceBase;
 
 namespace Pizza4Ps.PizzaService.Domain.Services
 {
@@ -40,8 +39,11 @@ namespace Pizza4Ps.PizzaService.Domain.Services
 
         public async Task<Guid> CreateAsync(DateTimeOffset startTime, Guid tableId)
         {
-            var entity = new Order(Guid.NewGuid(), startTime, tableId);
+            var table = await _tableRepository.GetSingleByIdAsync(tableId);
+            var entity = new Order(Guid.NewGuid(), startTime, tableId, table.Code);
             _orderRepository.Add(entity);
+            table.SetCurrentOrderId(entity.Id);
+            _tableRepository.Update(table);
             await _unitOfWork.SaveChangeAsync();
             return entity.Id;
         }
@@ -98,7 +100,8 @@ namespace Pizza4Ps.PizzaService.Domain.Services
                     quantity: item.quantity,
                     price: product.Price,
                     orderId: order.Id,
-                    productId: product.Id);
+                    productId: product.Id,
+                    tableCode: order.TableCode);
                 _orderItemRepository.Add(orderItem);
                 var optionItems = await _optionItemRepository.GetListAsTracking(x => item.optionItemIds.Contains(x.Id)).ToListAsync();
                 foreach (var optionItemId in item.optionItemIds)

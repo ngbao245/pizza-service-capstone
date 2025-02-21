@@ -2,14 +2,15 @@
 using Microsoft.AspNetCore.Mvc;
 using Pizza4Ps.PizzaService.API.Constants;
 using Pizza4Ps.PizzaService.API.Models;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Tables.Commands.CloseTable;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Tables.Commands.CreateTable;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Tables.Commands.DeleteTable;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Tables.Commands.OpenTable;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Tables.Commands.RestoreTable;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Tables.Commands.UpdateTable;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Tables.Queries.GetListTable;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Tables.Queries.GetListTableIgnoreQueryFilter;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Tables.Queries.GetTableById;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.Tables.Queries.GetTableStatus;
 
 namespace Pizza4Ps.PizzaService.API.Controllers
 {
@@ -48,8 +49,8 @@ namespace Pizza4Ps.PizzaService.API.Controllers
             });
         }
 
-        //[HttpGet("{id}/status")]
-        //public async Task<IActionResult> GetTableStatusByIdAsync([FromRoute] Guid id)
+        //[HttpPost("{id}/check-in")]
+        //public async Task<IActionResult> CheckInTableByIdAsync([FromRoute] Guid id)
         //{
         //    var result = await _sender.Send(new GetTableStatusQuery { Id = id });
         //    return Ok(new ApiResponse
@@ -59,18 +60,6 @@ namespace Pizza4Ps.PizzaService.API.Controllers
         //        StatusCode = StatusCodes.Status200OK
         //    });
         //}
-
-        [HttpPost("{id}/check-in")]
-        public async Task<IActionResult> CheckInTableByIdAsync([FromRoute] Guid id)
-        {
-            var result = await _sender.Send(new GetTableStatusQuery { Id = id });
-            return Ok(new ApiResponse
-            {
-                Result = result,
-                Message = Message.GET_SUCCESS,
-                StatusCode = StatusCodes.Status200OK
-            });
-        }
 
         [HttpGet("ignore-filter")]
         public async Task<IActionResult> GetListIgnoreQueryFilterAsync([FromQuery] GetListTableIgnoreQueryFilterQuery query)
@@ -140,6 +129,36 @@ namespace Pizza4Ps.PizzaService.API.Controllers
             return Ok(new ApiResponse
             {
                 Message = Message.DELETED_SUCCESS,
+                StatusCode = StatusCodes.Status200OK
+            });
+        }
+
+
+        [HttpPut("close-table/{tableId}")]
+        public async Task<IActionResult> CloseTableAsync(Guid tableId)
+        {
+            await _sender.Send(new CloseTableCommand
+            {
+                Id = tableId
+            });
+            return Ok(new ApiResponse
+            {
+                Success = true,
+                Message = Message.UPDATED_SUCCESS,
+                StatusCode = StatusCodes.Status200OK
+            });
+        }
+        [HttpPut("open-table/{tableId}")]
+        public async Task<IActionResult> OpenTableAsync(Guid tableId)
+        {
+            await _sender.Send(new OpenTableCommand
+            {
+                Id = tableId
+            });
+            return Ok(new ApiResponse
+            {
+                Success = true,
+                Message = Message.UPDATED_SUCCESS,
                 StatusCode = StatusCodes.Status200OK
             });
         }

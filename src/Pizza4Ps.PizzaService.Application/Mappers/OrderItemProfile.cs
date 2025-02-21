@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Pizza4Ps.PizzaService.Application.DTOs;
 using Pizza4Ps.PizzaService.Domain.Entities;
+using Pizza4Ps.PizzaService.Domain.Enums;
 
 namespace Pizza4Ps.PizzaService.Application.Mappers
 {
@@ -8,7 +9,8 @@ namespace Pizza4Ps.PizzaService.Application.Mappers
 	{
 		public OrderItemProfile()
 		{
-			CreateMap<OrderItemDto, OrderItem>().ReverseMap();
-		}
+			CreateMap<OrderItemDto, OrderItem>().ReverseMap()
+                .ForMember(dest => dest.OrderItemStatus, opt => opt.MapFrom(src => Enum.GetName(typeof(OrderItemStatus), src.OrderItemStatus)));
+        }
 	}
 }
