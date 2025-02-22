@@ -6,13 +6,14 @@ namespace Pizza4Ps.PizzaService.API.Setup
     {
         public static IApplicationBuilder MiddlewareRegisteryMethod(this IApplicationBuilder app)
         {
+            app.UseCors("AllowAll");
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
                 c.RoutePrefix = "swagger"; // Cấu hình để Swagger UI chạy tại /swagger
             }); ;
             app.UseMiddleware<ExceptionHandler>();
-            app.UseCors("AllowAll");
+            //app.UseCors("AllowAll");
             return app;
         }
     }
