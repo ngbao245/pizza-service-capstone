@@ -37,10 +37,10 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             _orderItemRepository = orderItemRepository;
         }
 
-        public async Task<Guid> CreateAsync(DateTimeOffset startTime, Guid tableId)
+        public async Task<Guid> CreateAsync(Guid tableId)
         {
             var table = await _tableRepository.GetSingleByIdAsync(tableId);
-            var entity = new Order(Guid.NewGuid(), startTime, tableId, table.Code);
+            var entity = new Order(Guid.NewGuid(), tableId, table.Code);
             _orderRepository.Add(entity);
             table.SetCurrentOrderId(entity.Id);
             _tableRepository.Update(table);

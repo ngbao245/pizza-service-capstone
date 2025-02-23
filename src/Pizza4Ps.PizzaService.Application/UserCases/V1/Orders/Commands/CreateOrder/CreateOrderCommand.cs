@@ -6,7 +6,6 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Orders.Commands.CreateO
 {
     public class CreateOrderCommand : IRequest<ResultDto<Guid>>
 	{
-        public DateTimeOffset StartTime { get; set; }
         public Guid TableId { get; set; }
     }
 }

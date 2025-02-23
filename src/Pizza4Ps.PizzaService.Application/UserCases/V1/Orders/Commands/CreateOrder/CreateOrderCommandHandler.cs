@@ -19,7 +19,6 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Orders.Commands.CreateO
         public async Task<ResultDto<Guid>> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
         {
             var result = await _orderService.CreateAsync(
-                request.StartTime,
                 request.TableId);
             return new ResultDto<Guid>
             {
