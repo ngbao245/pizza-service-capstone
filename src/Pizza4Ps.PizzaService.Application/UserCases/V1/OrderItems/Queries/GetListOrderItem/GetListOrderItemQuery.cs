@@ -8,6 +8,6 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.OrderItems.Queries.GetL
     {
         public Guid? OrderId { get; set; }
         public Guid? ProductId { get; set; }
-        public OrderItemStatus? OrderItemStatus { get; set; }
+        public string? OrderItemStatus { get; set; }
     }
 }

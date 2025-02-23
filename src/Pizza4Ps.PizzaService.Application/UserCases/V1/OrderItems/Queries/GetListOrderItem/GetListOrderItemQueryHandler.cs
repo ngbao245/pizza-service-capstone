@@ -6,6 +6,7 @@ using Pizza4Ps.PizzaService.Application.Abstractions;
 using Pizza4Ps.PizzaService.Application.DTOs;
 using Pizza4Ps.PizzaService.Domain.Abstractions.Repositories;
 using Pizza4Ps.PizzaService.Domain.Constants;
+using Pizza4Ps.PizzaService.Domain.Enums;
 using Pizza4Ps.PizzaService.Domain.Exceptions;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.OrderItems.Queries.GetListOrderItem
@@ -22,11 +23,20 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.OrderItems.Queries.GetL
 		}
 
 		public async Task<PaginatedResultDto<OrderItemDto>> Handle(GetListOrderItemQuery request, CancellationToken cancellationToken)
-		{
-			var query = _orderitemRepository.GetListAsNoTracking(x =>
+        {
+            OrderItemStatus? orderItemStatus = null;
+            if (!string.IsNullOrEmpty(request.OrderItemStatus))
+            {
+                if (!Enum.TryParse(request.OrderItemStatus, true, out OrderItemStatus parsedStatus))
+                {
+                    throw new BusinessException(BussinessErrorConstants.OrderItemErrorConstant.INVALID_ORDER_ITEM_STATUS);
+                }
+                orderItemStatus = parsedStatus;
+            }
+            var query = _orderitemRepository.GetListAsNoTracking(x =>
 			    (request.OrderId == null || x.OrderId == request.OrderId)
 				&& (request.ProductId == null || x.ProductId == request.ProductId)
-				&& (request.OrderItemStatus == null || x.OrderItemStatus == request.OrderItemStatus)
+				&& (orderItemStatus == null || x.OrderItemStatus == orderItemStatus)
                 , includeProperties: request.IncludeProperties);
 			var entities = await query
 				.OrderBy(request.SortBy)

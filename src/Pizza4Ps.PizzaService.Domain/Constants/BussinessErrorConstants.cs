@@ -48,6 +48,7 @@
 
         public class OrderItemErrorConstant
         {
+            public const string INVALID_ORDER_ITEM_STATUS = "Trạng thái món ăn không phù hợp";
             public const string ORDER_ITEM_CANNOT_DONE = "Order item không tìm thấy";
             public const string ORDER_ITEM_CANNOT_SERVED = "Món ăn không thể được phục vụ";
             public const string ORDER_ITEM_NOT_FOUND = "Món ăn không thể hoàn thành";
