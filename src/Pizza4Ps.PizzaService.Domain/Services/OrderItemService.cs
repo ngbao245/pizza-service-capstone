@@ -20,7 +20,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             _orderitemRepository = orderitemRepository;
         }
 
-        public async Task<Guid> CreateAsync(string name, int quantity, decimal price, Guid orderId, Guid productId, OrderItemStatus orderItemStatus)
+        public async Task<Guid> CreateAsync(string name, string? note, int quantity, decimal price, Guid orderId, Guid productId, OrderItemStatus orderItemStatus)
         {
             //var entity = new OrderItem(Guid.NewGuid(), name, quantity, price, orderId, productId, orderItemStatus);
             //_orderitemRepository.Add(entity);

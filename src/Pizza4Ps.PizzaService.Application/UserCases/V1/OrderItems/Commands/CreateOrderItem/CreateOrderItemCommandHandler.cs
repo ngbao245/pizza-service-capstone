@@ -20,6 +20,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.OrderItems.Commands.Cre
 		{
 			var result = await _orderitemService.CreateAsync(
 				request.Name,
+                request.Note,
 				request.Quantity,
 				request.Price,
 				request.OrderId,

@@ -101,7 +101,8 @@ namespace Pizza4Ps.PizzaService.Domain.Services
                     price: product.Price,
                     orderId: order.Id,
                     productId: product.Id,
-                    tableCode: order.TableCode);
+                    tableCode: order.TableCode,
+                    note: item.note);
                 _orderItemRepository.Add(orderItem);
                 var optionItems = await _optionItemRepository.GetListAsTracking(x => item.optionItemIds.Contains(x.Id)).ToListAsync();
                 foreach (var optionItemId in item.optionItemIds)

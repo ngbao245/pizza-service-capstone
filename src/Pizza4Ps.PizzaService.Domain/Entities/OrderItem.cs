@@ -6,6 +6,7 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
     public class OrderItem : EntityAuditBase<Guid>
     {
         public string Name { get; set; }
+        public string? Note { get; set; }
         public string TableCode { get; set; }
         public int Quantity { get; set; }
         public decimal Price { get; set; }
@@ -24,7 +25,7 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         }
 
 
-        public OrderItem(Guid id, string name, int quantity, decimal price, Guid orderId, Guid productId, string tableCode)
+        public OrderItem(Guid id, string name, int quantity, decimal price, Guid orderId, Guid productId, string tableCode, string? note)
         {
             Id = id;
             Name = name;
@@ -34,6 +35,7 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
             ProductId = productId;
             OrderItemStatus = OrderItemStatus.Pending;
             TableCode = tableCode;
+            Note = note;
         }
 
         public void SetTotalPrice()
