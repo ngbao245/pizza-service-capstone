@@ -19,10 +19,10 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         {
         }
 
-        public Order(Guid id, DateTimeOffset startTime, Guid tableId, string tableCode)
+        public Order(Guid id, Guid tableId, string tableCode)
         {
             Id = id;
-            StartTime = startTime;
+            StartTime = DateTime.Now;
             EndTime = null;
             Status = OrderStatusEnum.Unpaid;
             TableId = tableId;

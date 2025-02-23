@@ -5,7 +5,7 @@ namespace Pizza4Ps.PizzaService.Domain.Abstractions.Services
 {
 	public interface IOrderService : IDomainService
     {
-		Task<Guid> CreateAsync(DateTimeOffset startTime, Guid TableId);
+		Task<Guid> CreateAsync(Guid TableId);
 		Task<Guid> UpdateAsync(Guid id, DateTimeOffset startTime, DateTimeOffset endTime, OrderStatusEnum status, Guid TableId);
 		Task DeleteAsync(List<Guid> ids, bool IsHardDeleted = false);
 		Task RestoreAsync(List<Guid> ids);
