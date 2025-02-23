@@ -1,4 +1,4 @@
-﻿using Pizza4Ps.PizzaService.Domain.Entities;
+﻿using System.Text.Json.Serialization;
 
 namespace Pizza4Ps.PizzaService.Application.DTOs
 {
@@ -8,6 +8,7 @@ namespace Pizza4Ps.PizzaService.Application.DTOs
         public Guid ProductId { get; set; }
         public Guid OptionId { get; set; }
 
+        [JsonIgnore]
         public virtual ProductDto Product { get; set; }
         public virtual OptionDto Option { get; set; }
     }
