@@ -117,24 +117,38 @@ INSERT INTO [PizzaService].[dbo].[OptionItem]
     ([Id], [Name], [AdditionalPrice], [OptionId], [CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy], [IsDeleted], [DeletedAt], [DeletedBy]) 
 VALUES 
     -- Cỡ Pizza
-    (NEWID(), N'Nhỏ (S)', 0, @PizzaSizeOption, GETDATE(), NULL, 'admin', NULL, 0, NULL, NULL),
-    (NEWID(), N'Vừa (M)', 3000, @PizzaSizeOption, GETDATE(), NULL, 'admin', NULL, 0, NULL, NULL),
-    (NEWID(), N'Lớn (L)', 6000, @PizzaSizeOption, GETDATE(), NULL, 'admin', NULL, 0, NULL, NULL),
+    (NEWID(), N'Nhỏ (S)', 0, @PizzaSizeOption, GETDATE(), NULL, 'undefined', NULL, 0, NULL, NULL),
+    (NEWID(), N'Vừa (M)', 3000, @PizzaSizeOption, GETDATE(), NULL, 'undefined', NULL, 0, NULL, NULL),
+    (NEWID(), N'Lớn (L)', 6000, @PizzaSizeOption, GETDATE(), NULL, 'undefined', NULL, 0, NULL, NULL),
 
     -- Viền Pizza
-    (NEWID(), N'Viền Mỏng', 0, @PizzaCrustOption, GETDATE(), NULL, 'admin', NULL, 0, NULL, NULL),
-    (NEWID(), N'Viền Dày', 2000, @PizzaCrustOption, GETDATE(), NULL, 'admin', NULL, 0, NULL, NULL),
-    (NEWID(), N'Viền Phô Mai', 4000, @PizzaCrustOption, GETDATE(), NULL, 'admin', NULL, 0, NULL, NULL),
+    (NEWID(), N'Viền Mỏng', 0, @PizzaCrustOption, GETDATE(), NULL, 'undefined', NULL, 0, NULL, NULL),
+    (NEWID(), N'Viền Dày', 2000, @PizzaCrustOption, GETDATE(), NULL, 'undefined', NULL, 0, NULL, NULL),
+    (NEWID(), N'Viền Phô Mai', 4000, @PizzaCrustOption, GETDATE(), NULL, 'undefined', NULL, 0, NULL, NULL),
 
     -- Topping
-    (NEWID(), N'Tôm', 1500, @ToppingOption, GETDATE(), NULL, 'admin', NULL, 0, NULL, NULL),
-    (NEWID(), N'Bò', 2000, @ToppingOption, GETDATE(), NULL, 'admin', NULL, 0, NULL, NULL),
-    (NEWID(), N'Xúc Xích', 1000, @ToppingOption, GETDATE(), NULL, 'admin', NULL, 0, NULL, NULL),
+    (NEWID(), N'Tôm', 1500, @ToppingOption, GETDATE(), NULL, 'undefined', NULL, 0, NULL, NULL),
+    (NEWID(), N'Bò', 2000, @ToppingOption, GETDATE(), NULL, 'undefined', NULL, 0, NULL, NULL),
+    (NEWID(), N'Xúc Xích', 1000, @ToppingOption, GETDATE(), NULL, 'undefined', NULL, 0, NULL, NULL),
 
     -- Nước uống
-    (NEWID(), N'Coca-Cola', 1000, @DrinkOption, GETDATE(), NULL, 'admin', NULL, 0, NULL, NULL),
-    (NEWID(), N'Pepsi', 1000, @DrinkOption, GETDATE(), NULL, 'admin', NULL, 0, NULL, NULL),
-    (NEWID(), N'Sprite', 1000, @DrinkOption, GETDATE(), NULL, 'admin', NULL, 0, NULL, NULL);
+    (NEWID(), N'Coca-Cola', 1000, @DrinkOption, GETDATE(), NULL, 'undefined', NULL, 0, NULL, NULL),
+    (NEWID(), N'Pepsi', 1000, @DrinkOption, GETDATE(), NULL, 'undefined', NULL, 0, NULL, NULL),
+    (NEWID(), N'Sprite', 1000, @DrinkOption, GETDATE(), NULL, 'undefined', NULL, 0, NULL, NULL);
+
+DECLARE @PizzaProduct UNIQUEIDENTIFIER = (SELECT TOP 1 [Id] FROM [PizzaService].[dbo].[Product] WHERE [Name] = N'Pizza Hải Sản');
+DECLARE @SideDishProduct UNIQUEIDENTIFIER = (SELECT TOP 1 [Id] FROM [PizzaService].[dbo].[Product] WHERE [Name] = N'Khoai Tây Chiên');
+DECLARE @DrinkProduct UNIQUEIDENTIFIER = (SELECT TOP 1 [Id] FROM [PizzaService].[dbo].[Product] WHERE [Name] = N'Pepsi Lon');
+DECLARE @DessertProduct UNIQUEIDENTIFIER = (SELECT TOP 1 [Id] FROM [PizzaService].[dbo].[Product] WHERE [Name] = N'Tiramisu');
+DECLARE @ComboProduct UNIQUEIDENTIFIER = (SELECT TOP 1 [Id] FROM [PizzaService].[dbo].[Product] WHERE [Name] = N'Combo Tiết Kiệm');
+INSERT INTO [PizzaService].[dbo].[ProductOption]
+    ([Id], [ProductId], [OptionId], [CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy], [IsDeleted], [DeletedAt], [DeletedBy]) 
+VALUES
+    (NEWID(), @PizzaProduct, @PizzaSizeOption, GETDATE(), NULL, 'undefined', NULL, 0, NULL, NULL),
+    (NEWID(), @PizzaProduct, @PizzaCrustOption, GETDATE(), NULL, 'undefined', NULL, 0, NULL, NULL),
+    (NEWID(), @PizzaProduct, @ToppingOption, GETDATE(), NULL, 'undefined', NULL, 0, NULL, NULL),
+    (NEWID(), @DrinkProduct, @DrinkOption, GETDATE(), NULL, 'undefined', NULL, 0, NULL, NULL),
+    (NEWID(), @ComboProduct, @ToppingOption, GETDATE(), NULL, 'undefined', NULL, 0, NULL, NULL);
 
 COMMIT;
 GO
