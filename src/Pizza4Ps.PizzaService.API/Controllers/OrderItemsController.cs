@@ -140,7 +140,6 @@ namespace Pizza4Ps.PizzaService.API.Controllers
             });
         }
 
-        [ApiExplorerSettings(IgnoreApi = true)]
         [HttpPut("restore")]
         public async Task<IActionResult> RestoreManyAsync(List<Guid> ids)
         {
@@ -152,7 +151,6 @@ namespace Pizza4Ps.PizzaService.API.Controllers
             });
         }
 
-        [ApiExplorerSettings(IgnoreApi = true)]
         [HttpDelete()]
         public async Task<IActionResult> DeleteManyAsync(List<Guid> ids, bool isHardDeleted = false)
         {
