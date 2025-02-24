@@ -49,6 +49,7 @@ namespace Pizza4Ps.PizzaService.API.Controllers
 			});
 		}
 
+        [ApiExplorerSettings(IgnoreApi = true)]
         [HttpGet("menu")]
         public async Task<IActionResult> GetMenu([FromQuery] GetMenuQuery query)
         {

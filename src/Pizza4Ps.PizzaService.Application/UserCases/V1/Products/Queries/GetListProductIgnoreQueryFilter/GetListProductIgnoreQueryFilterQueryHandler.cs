@@ -27,7 +27,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Queries.GetLis
 					&& (request.Description == null || x.Description.Contains(request.Description))
 					&& (request.Price == null || x.Price == request.Price)
 					&& (request.CategoryId == null || x.CategoryId == request.CategoryId)
-                    && (request.ProductType == null || x.ProductType == request.ProductType)
+                    && (request.ProductType == null || x.ProductType.Equals(request.ProductType))
                     && x.IsDeleted == request.IsDeleted);
 			var entities = await query
 				.OrderBy(request.SortBy)

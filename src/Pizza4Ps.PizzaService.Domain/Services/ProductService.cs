@@ -21,7 +21,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
 			_productRepository = productRepository;
 		}
 
-		public async Task<Guid> CreateAsync(string name, decimal price, byte[]? image, string description, Guid categoryId, ProductTypeEnum.ProductType productType)
+		public async Task<Guid> CreateAsync(string name, decimal price, byte[]? image, string description, Guid categoryId, ProductTypeEnum productType)
 		{
 			var entity = new Product(Guid.NewGuid(), name, price, image, description, categoryId, productType);
 			_productRepository.Add(entity);
@@ -58,7 +58,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
 			await _unitOfWork.SaveChangeAsync();
 		}
 
-		public async Task<Guid> UpdateAsync(Guid id, string name, decimal price, byte[]? image, string description, Guid categoryId, ProductTypeEnum.ProductType productType)
+		public async Task<Guid> UpdateAsync(Guid id, string name, decimal price, byte[]? image, string description, Guid categoryId, ProductTypeEnum productType)
 		{
 			var entity = await _productRepository.GetSingleByIdAsync(id);
 			entity.UpdateProduct(name, price,image, description, categoryId, productType);

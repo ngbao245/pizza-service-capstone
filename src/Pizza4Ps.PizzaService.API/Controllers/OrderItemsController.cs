@@ -29,6 +29,7 @@ namespace Pizza4Ps.PizzaService.API.Controllers
             _sender = sender;
         }
 
+        [ApiExplorerSettings(IgnoreApi = true)]
         [HttpPost]
         public async Task<IActionResult> CreateAsync([FromBody] CreateOrderItemCommand request)
         {
@@ -77,6 +78,7 @@ namespace Pizza4Ps.PizzaService.API.Controllers
             });
         }
 
+        [ApiExplorerSettings(IgnoreApi = true)]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateAsync([FromRoute] Guid id, [FromBody] UpdateOrderItemCommand request)
         {
@@ -138,6 +140,7 @@ namespace Pizza4Ps.PizzaService.API.Controllers
             });
         }
 
+        [ApiExplorerSettings(IgnoreApi = true)]
         [HttpPut("restore")]
         public async Task<IActionResult> RestoreManyAsync(List<Guid> ids)
         {
@@ -149,6 +152,7 @@ namespace Pizza4Ps.PizzaService.API.Controllers
             });
         }
 
+        [ApiExplorerSettings(IgnoreApi = true)]
         [HttpDelete()]
         public async Task<IActionResult> DeleteManyAsync(List<Guid> ids, bool isHardDeleted = false)
         {
@@ -160,6 +164,7 @@ namespace Pizza4Ps.PizzaService.API.Controllers
             });
         }
 
+        [ApiExplorerSettings(IgnoreApi = true)]
         [HttpGet("get-by/{orderId}")]
         public async Task<IActionResult> GetByOrderId([FromRoute] Guid orderId)
         {

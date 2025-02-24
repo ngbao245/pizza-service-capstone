@@ -11,7 +11,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Commands.Updat
         public byte[]? Image { get; set; }
         public string Description { get; set; }
         public Guid CategoryId { get; set; }
-        public ProductTypeEnum.ProductType ProductType { get; set; }
+        public ProductTypeEnum ProductType { get; set; }
     }
 }
 

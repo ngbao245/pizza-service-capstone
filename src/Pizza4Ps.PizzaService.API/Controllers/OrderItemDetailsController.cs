@@ -25,7 +25,8 @@ namespace Pizza4Ps.PizzaService.API.Controllers
 			_sender = sender;
 		}
 
-		[HttpPost]
+        [ApiExplorerSettings(IgnoreApi = true)]
+        [HttpPost]
 		public async Task<IActionResult> CreateAsync([FromBody] CreateOrderItemDetailCommand request)
 		{
 			var result = await _sender.Send(request);
@@ -73,7 +74,8 @@ namespace Pizza4Ps.PizzaService.API.Controllers
 			});
 		}
 
-		[HttpPut("{id}")]
+		[ApiExplorerSettings(IgnoreApi = true)]
+        [HttpPut("{id}")]
 		public async Task<IActionResult> UpdateAsync([FromRoute] Guid id, [FromBody] UpdateOrderItemDetailCommand request)
         {
             request.Id = id;
@@ -86,7 +88,8 @@ namespace Pizza4Ps.PizzaService.API.Controllers
 			});
 		}
 
-		[HttpPut("restore")]
+        [ApiExplorerSettings(IgnoreApi = true)]
+        [HttpPut("restore")]
 		public async Task<IActionResult> RestoreManyAsync(List<Guid> ids)
 		{
 			await _sender.Send(new RestoreOrderItemDetailCommand { Ids = ids });
@@ -97,7 +100,8 @@ namespace Pizza4Ps.PizzaService.API.Controllers
 			});
 		}
 
-		[HttpDelete()]
+        [ApiExplorerSettings(IgnoreApi = true)]
+        [HttpDelete()]
 		public async Task<IActionResult> DeleteManyAsync(List<Guid> ids, bool isHardDeleted = false)
 		{
 			await _sender.Send(new DeleteOrderItemDetailCommand { Ids = ids, isHardDelete = isHardDeleted });

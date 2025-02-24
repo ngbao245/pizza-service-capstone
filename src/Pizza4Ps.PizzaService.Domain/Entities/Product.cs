@@ -10,7 +10,7 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         public string Description { get; set; }
         public byte[]? Image { get; set; }
         public Guid CategoryId { get; set; }
-        public ProductTypeEnum.ProductType ProductType { get; set; }
+        public ProductTypeEnum ProductType { get; set; }
 
         public virtual Category Category { get; set; }
         public virtual ICollection<ProductOption> ProductOptions { get; set; } = new List<ProductOption>();
@@ -19,7 +19,7 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         {
         }
 
-        public Product(Guid id, string name, decimal price, byte[]? image, string description, Guid categoryId, ProductTypeEnum.ProductType productType)
+        public Product(Guid id, string name, decimal price, byte[]? image, string description, Guid categoryId, ProductTypeEnum productType)
         {
             Id = Id;
             Name = SetName(name);
@@ -30,7 +30,7 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
             Image = image;
         }
 
-        public void UpdateProduct(string name, decimal price, byte[]? image, string description, Guid categoryId, ProductTypeEnum.ProductType productType)
+        public void UpdateProduct(string name, decimal price, byte[]? image, string description, Guid categoryId, ProductTypeEnum productType)
         {
             Name = SetName(name);
             Price = price;
@@ -41,7 +41,7 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         }
         private string SetName(string name)
         {
-        //    if (Name == null) throw new ValidationException("Invalid name");
+            //    if (Name == null) throw new ValidationException("Invalid name");
             return name;
         }
     }

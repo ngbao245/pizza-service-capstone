@@ -1,11 +1,8 @@
 ﻿namespace Pizza4Ps.PizzaService.Domain.Enums
 {
-    public class ProductTypeEnum
+    public enum ProductTypeEnum
     {
-        public enum ProductType
-        {
-            ColdKitchen, // bếp lạnh
-            HotKitchen // bếp nóng
-        }
+        ColdKitchen, // bếp lạnh
+        HotKitchen // bếp nóng
     }
 }

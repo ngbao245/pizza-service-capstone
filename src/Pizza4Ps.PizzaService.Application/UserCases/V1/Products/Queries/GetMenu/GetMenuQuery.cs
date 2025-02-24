@@ -10,6 +10,6 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Queries.GetMen
         public decimal? Price { get; set; }
         public string? Description { get; set; }
         public Guid? CategoryId { get; set; }
-        public ProductTypeEnum.ProductType? ProductType { get; set; }
+        public ProductTypeEnum? ProductType { get; set; }
     }
 }

@@ -17,7 +17,7 @@ namespace Pizza4Ps.PizzaService.Persistence.Seed
                     Name = "Pizza hut",
                     Price = 1000,
                     Description = "Pizza",
-                    ProductType = ProductType.ColdKitchen
+                    ProductType = ColdKitchen
                 },
                 new Product
                 {
@@ -26,7 +26,7 @@ namespace Pizza4Ps.PizzaService.Persistence.Seed
                     Name = "Pizza In",
                     Price = 1200,
                     Description = "Pizza",
-                    ProductType = ProductType.ColdKitchen
+                    ProductType = ColdKitchen
                 }
             );
         }
