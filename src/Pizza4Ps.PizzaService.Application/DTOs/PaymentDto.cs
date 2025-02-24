@@ -6,7 +6,7 @@ namespace Pizza4Ps.PizzaService.Application.DTOs
     {
         public Guid Id { get; set; }
         public decimal Amount { get; set; } = decimal.Zero;
-        public PaymentMethodEnum PaymentMethod { get; set; } = PaymentMethodEnum.Cash;
+        public string PaymentMethod { get; set; }
         public string Status { get; set; }
         public Guid OrderId { get; set; }
 
