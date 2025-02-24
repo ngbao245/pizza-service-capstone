@@ -2,7 +2,7 @@
 {
     public enum PaymentMethodEnum
     {
-        Cash,
-        QRCode
+        Cash, // thanh toán tiền mặt
+        QRCode // chuyển khoản
     }
 }

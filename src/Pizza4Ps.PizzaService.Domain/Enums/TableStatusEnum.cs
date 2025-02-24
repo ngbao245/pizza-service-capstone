@@ -2,10 +2,10 @@
 {
     public enum TableStatusEnum
     {
-        Opening,
-        Closing,
-        Paid,
-        Booked,
-        Locked
+        Opening, // bàn mở sẵn sàng phục vụ
+        Closing, // bàn đóng 
+        Paid, // bàn đã thanh toán
+        Booked, // bàn được đặt
+        Locked // đã khóa
     }
 }

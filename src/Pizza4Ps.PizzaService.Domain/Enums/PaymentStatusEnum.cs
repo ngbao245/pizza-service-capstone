@@ -2,8 +2,8 @@
 {
     public enum PaymentStatusEnum
     {
-        Pending,
-        Paid,
-        Refunded
+        Pending, // chờ thanh toán
+        Paid, // đã thanh toán
+        Refunded // đã hoàn tiền
     }
 }

@@ -2,8 +2,8 @@
 {
     public enum MenuItemTypeEnum
     {
-        Available,
-        Unavailable,
-        Terminated
+        Available, // món ăn được phụ vụ
+        Unavailable, // món ăn không phụ vụ
+        Terminated // món ăn bị xóa
     }
 }

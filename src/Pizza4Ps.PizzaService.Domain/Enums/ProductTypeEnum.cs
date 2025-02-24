@@ -4,8 +4,8 @@
     {
         public enum ProductType
         {
-            ColdKitchen,
-            HotKitchen
+            ColdKitchen, // bếp lạnh
+            HotKitchen // bếp nóng
         }
     }
 }

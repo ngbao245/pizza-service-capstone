@@ -2,7 +2,7 @@
 {
     public enum DiscountTypeEnum
     {
-        Direct,
-        Percentage
+        Direct, // Giảm giá trực tiếp
+        Percentage // Giảm theo %
     }
 }
