@@ -91,10 +91,12 @@ namespace Pizza4Ps.PizzaService.API.Controllers
         }
 
         [HttpPut("serving/{id}")]
-        public async Task<IActionResult> ServAsync([FromRoute] Guid id, [FromBody] UpdateStatusToServingCommand request)
+        public async Task<IActionResult> ServAsync([FromRoute] Guid id)
         {
-            request.Id = id;
-            await _sender.Send(request);
+            await _sender.Send(new UpdateStatusToServingCommand
+            {
+                Id = id
+            });
 
             return Ok(new ApiResponse
             {
@@ -105,10 +107,12 @@ namespace Pizza4Ps.PizzaService.API.Controllers
         }
 
         [HttpPut("done/{id}")]
-        public async Task<IActionResult> DoneAsync([FromRoute] Guid id, [FromBody] UpdateStatusToDoneCommand request)
+        public async Task<IActionResult> DoneAsync([FromRoute] Guid id)
         {
-            request.Id = id;
-            await _sender.Send(request);
+            await _sender.Send(new UpdateStatusToDoneCommand
+            {
+                Id = id
+            });
 
             return Ok(new ApiResponse
             {
@@ -119,10 +123,12 @@ namespace Pizza4Ps.PizzaService.API.Controllers
         }
 
         [HttpPut("cancelled/{id}")]
-        public async Task<IActionResult> CancelledAsync([FromRoute] Guid id, [FromBody] UpdateStatusToCancelledCommand request)
+        public async Task<IActionResult> CancelledAsync([FromRoute] Guid id)
         {
-            request.Id = id;
-            await _sender.Send(request);
+            await _sender.Send(new UpdateStatusToCancelledCommand
+            {
+                Id = id
+            });
 
             return Ok(new ApiResponse
             {
