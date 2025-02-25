@@ -43,6 +43,23 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             await _unitOfWork.SaveChangeAsync();
             return result.qrCode;
         }
+        public async Task<Guid> CreatePaymentCash(Guid orderId)
+        {
+            var order = await _orderRepository.GetSingleByIdAsync(orderId);
+            if (order == null)
+                throw new BusinessException(BussinessErrorConstants.OrderErrorConstant.ORDER_NOT_FOUND);
+            if (order.Status != Enums.OrderStatusEnum.CheckedOut)
+                throw new BusinessException(BussinessErrorConstants.OrderErrorConstant.ORDER_CANNOT_PAY);
+            var orderCode = GenerateOrderCode();
+            var entity = new Payment(Guid.NewGuid(), order.TotalPrice!.Value, PaymentMethodEnum.Cash, orderId, orderCode.ToString());
+            order.SetOrderCode(orderCode.ToString());
+            entity.SetPaid();
+            order.SetPaid();
+            _paymentRepository.Add(entity);
+            _orderRepository.Update(order);
+            await _unitOfWork.SaveChangeAsync();
+            return entity.Id;
+        }
         public async Task<bool> ProcessWebhookData(WebhookType webhookData)
         {
             // Xác thực và lấy thông tin từ webhook thông qua gateway PayOS

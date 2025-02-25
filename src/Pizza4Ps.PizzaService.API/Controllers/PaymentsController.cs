@@ -6,6 +6,7 @@ using Pizza4Ps.PizzaService.API.Models;
 using Pizza4Ps.PizzaService.Application.DTOs.WebhookPayOsDto;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Payments.Commands.CreatePaymentQRCode;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Payments.Commands.DeletePayment;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Payments.Commands.PayOrderCash;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Payments.Commands.RestorePayment;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Payments.Commands.UpdatePayment;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Payments.Commands.WebhookPayOS;
@@ -42,7 +43,18 @@ namespace Pizza4Ps.PizzaService.API.Controllers
         //}
 
         [HttpPost("create-payment-qrcode")]
-        public async Task<IActionResult> CreatePaymentLink([FromBody] CreatePaymentQRCodeCommand command)
+        public async Task<IActionResult> CreatePaymentLinkAsync([FromBody] CreatePaymentQRCodeCommand command)
+        {
+            var result = await _sender.Send(command);
+            return Ok(new ApiResponse
+            {
+                Result = result,
+                Message = Message.CREATED_SUCCESS,
+                StatusCode = StatusCodes.Status201Created
+            });
+        }
+        [HttpPost("pay-order-by-cash")]
+        public async Task<IActionResult> PayOrderByCashAsync([FromBody] PayOrderCashCommand command)
         {
             var result = await _sender.Send(command);
             return Ok(new ApiResponse
