@@ -42,10 +42,13 @@ namespace Pizza4Ps.PizzaService.API.Controllers
         //	});
         //}
 
-        [HttpPost("create-payment-qrcode")]
-        public async Task<IActionResult> CreatePaymentLinkAsync([FromBody] CreatePaymentQRCodeCommand command)
+        [HttpPost("create-payment-qrcode/{orderId}")]
+        public async Task<IActionResult> CreatePaymentLinkAsync([FromRoute] Guid orderId)
         {
-            var result = await _sender.Send(command);
+            var result = await _sender.Send(new CreatePaymentQRCodeCommand
+            {
+                OrderId = orderId
+            });
             return Ok(new ApiResponse
             {
                 Result = result,
@@ -53,10 +56,13 @@ namespace Pizza4Ps.PizzaService.API.Controllers
                 StatusCode = StatusCodes.Status201Created
             });
         }
-        [HttpPost("pay-order-by-cash")]
-        public async Task<IActionResult> PayOrderByCashAsync([FromBody] PayOrderCashCommand command)
+        [HttpPost("pay-order-by-cash/{orderId}")]
+        public async Task<IActionResult> PayOrderByCashAsync([FromRoute] Guid orderId)
         {
-            var result = await _sender.Send(command);
+            var result = await _sender.Send(new PayOrderCashCommand
+            {
+                OrderId = orderId
+            });
             return Ok(new ApiResponse
             {
                 Result = result,
