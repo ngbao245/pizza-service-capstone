@@ -2,6 +2,11 @@
 {
     public static class BussinessErrorConstants
     {
+        public class CurrentOrderIdExisted
+        {
+            public const string CURRENT_ORDER_ID_EXISTED = "Bàn đã tồn tại mã đơn hàng";
+        }
+
         public class ProductOptionErrorConstant
         {
             public const string PRODUCTOPTION_NOT_FOUND = "Product option không tìm thấy";

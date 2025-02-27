@@ -17,14 +17,20 @@ namespace Pizza4Ps.PizzaService.Domain.Services
         private readonly IPayOsService _payOsService;
         private readonly IOrderRepository _orderRepository;
         private readonly IPaymentRepository _paymentRepository;
+        private readonly ITableRepository _tableRepository;
 
-        public PaymentService(IUnitOfWork unitOfWork, IPaymentRepository paymentRepository,
-            IOrderRepository orderRepository, IPayOsService payOsService)
+        public PaymentService(
+            IUnitOfWork unitOfWork,
+            IPayOsService payOsService,
+            IOrderRepository orderRepository,
+            IPaymentRepository paymentRepository,
+            ITableRepository tableRepository)
         {
             _unitOfWork = unitOfWork;
             _payOsService = payOsService;
             _orderRepository = orderRepository;
             _paymentRepository = paymentRepository;
+            _tableRepository = tableRepository;
         }
 
         public async Task<string> CreatePaymentQRCode(Guid orderId)
@@ -35,9 +41,18 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             if (order.Status != Enums.OrderStatusEnum.CheckedOut)
                 throw new BusinessException(BussinessErrorConstants.OrderErrorConstant.ORDER_CANNOT_PAY);
             var orderCode = GenerateOrderCode();
-            var result = await _payOsService.CreatePaymentLink(orderCode, (int) order.TotalPrice!, "Thanh toán đơn hàng");
+            var result = await _payOsService.CreatePaymentLink(orderCode, (int)order.TotalPrice!, "Thanh toán đơn hàng");
             var entity = new Payment(Guid.NewGuid(), order.TotalPrice.Value, PaymentMethodEnum.QRCode, orderId, orderCode.ToString());
             order.SetOrderCode(orderCode.ToString());
+
+            var table = await _tableRepository.GetListAsTracking(x => x.CurrentOrderId == orderId).FirstAsync();
+            if (table != null)
+            {
+                table.SetNullCurrentOrderId();
+                table.SetClosing();
+                _tableRepository.Update(table);
+            }
+
             _paymentRepository.Add(entity);
             _orderRepository.Update(order);
             await _unitOfWork.SaveChangeAsync();
@@ -55,6 +70,15 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             order.SetOrderCode(orderCode.ToString());
             entity.SetPaid();
             order.SetPaid();
+
+            var table = await _tableRepository.GetListAsTracking(x => x.CurrentOrderId == orderId).FirstAsync();
+            if (table != null)
+            {
+                table.SetNullCurrentOrderId();
+                table.SetClosing();
+                _tableRepository.Update(table);
+            }
+
             _paymentRepository.Add(entity);
             _orderRepository.Update(order);
             await _unitOfWork.SaveChangeAsync();
@@ -63,7 +87,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
         public async Task<bool> ProcessWebhookData(WebhookType webhookData)
         {
             // Xác thực và lấy thông tin từ webhook thông qua gateway PayOS
-            var result =  _payOsService.VerifyPaymentWebhookData(webhookData);
+            var result = _payOsService.VerifyPaymentWebhookData(webhookData);
             if (result != null && result.code == "00")
             {
                 // Giả sử result.OrderCode tương ứng với OrderId

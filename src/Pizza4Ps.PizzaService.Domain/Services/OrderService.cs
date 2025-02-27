@@ -7,6 +7,7 @@ using Pizza4Ps.PizzaService.Domain.Entities;
 using Pizza4Ps.PizzaService.Domain.Enums;
 using Pizza4Ps.PizzaService.Domain.Exceptions;
 using Pizza4Ps.PizzaService.Domain.Services.ServiceBase;
+using static Pizza4Ps.PizzaService.Domain.Constants.BussinessErrorConstants;
 
 namespace Pizza4Ps.PizzaService.Domain.Services
 {
@@ -40,6 +41,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
         public async Task<Guid> CreateAsync(Guid tableId)
         {
             var table = await _tableRepository.GetSingleByIdAsync(tableId);
+            if (table.CurrentOrderId != null) throw new BusinessException(CurrentOrderIdExisted.CURRENT_ORDER_ID_EXISTED);
             var entity = new Order(Guid.NewGuid(), tableId, table.Code);
             _orderRepository.Add(entity);
             table.SetCurrentOrderId(entity.Id);
@@ -147,7 +149,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             if (order.Status != OrderStatusEnum.Unpaid)
                 throw new BusinessException(BussinessErrorConstants.OrderErrorConstant.ORDER_CANNOT_CHECK_OUT);
             //Validate các món phải done hết mới được checkout
-            foreach(var orderItem in order.OrderItems)
+            foreach (var orderItem in order.OrderItems)
             {
                 totalPrice += orderItem.TotalPrice;
             }

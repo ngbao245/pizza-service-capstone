@@ -4,7 +4,7 @@
     {
         Opening, // bàn mở sẵn sàng phục vụ
         Closing, // bàn đóng 
-        Paid, // bàn đã thanh toán
+        //Paid, // bàn đã thanh toán
         Booked, // bàn được đặt
         Locked // đã khóa
     }
