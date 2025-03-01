@@ -89,7 +89,7 @@ VALUES
     (NEWID(), 1, @VipZoneId, 0, NULL, GETDATE(), NULL, 'undefined', NULL, 0, NULL, NULL, 'A01'),
     (NEWID(), 2, @FamilyZoneId, 1, NULL, GETDATE(), NULL, 'undefined', NULL, 0, NULL, NULL, 'A02'),
     (NEWID(), 3, @BalconyZoneId, 3, NULL, GETDATE(), NULL, 'undefined', NULL, 0, NULL, NULL, 'A12'),
-    (NEWID(), 4, @BarZoneId, 4, NULL, GETDATE(), NULL, 'undefined', NULL, 0, NULL, NULL, 'B01'),
+    (NEWID(), 4, @BarZoneId, 0, NULL, GETDATE(), NULL, 'undefined', NULL, 0, NULL, NULL, 'B01'),
     (NEWID(), 5, @GardenZoneId, 0, NULL, GETDATE(), NULL, 'undefined', NULL, 0, NULL, NULL, 'B02');
 
 -- Chèn dữ liệu vào bảng Product
