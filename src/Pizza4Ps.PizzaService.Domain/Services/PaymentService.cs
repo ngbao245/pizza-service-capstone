@@ -44,15 +44,6 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             var result = await _payOsService.CreatePaymentLink(orderCode, (int)order.TotalPrice!, "Thanh toán đơn hàng");
             var entity = new Payment(Guid.NewGuid(), order.TotalPrice.Value, PaymentMethodEnum.QRCode, orderId, orderCode.ToString());
             order.SetOrderCode(orderCode.ToString());
-
-            var table = await _tableRepository.GetListAsTracking(x => x.CurrentOrderId == orderId).FirstAsync();
-            if (table != null)
-            {
-                table.SetNullCurrentOrderId();
-                table.SetClosing();
-                _tableRepository.Update(table);
-            }
-
             _paymentRepository.Add(entity);
             _orderRepository.Update(order);
             await _unitOfWork.SaveChangeAsync();
@@ -104,6 +95,13 @@ namespace Pizza4Ps.PizzaService.Domain.Services
                     order.SetPaid();
                     _orderRepository.Update(order);
                     Console.WriteLine($"Order {order.Id} is paid, {order}");
+                }
+                var table = await _tableRepository.GetListAsTracking(x => x.CurrentOrderId == order.Id).FirstAsync();
+                if (table != null)
+                {
+                    table.SetNullCurrentOrderId();
+                    table.SetClosing();
+                    _tableRepository.Update(table);
                 }
                 await _unitOfWork.SaveChangeAsync();
                 return true;
