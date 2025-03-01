@@ -133,7 +133,6 @@ namespace Pizza4Ps.PizzaService.API.Controllers
             });
         }
 
-        [ApiExplorerSettings(IgnoreApi = true)]
         [HttpPut("close-table/{tableId}")]
         public async Task<IActionResult> CloseTableAsync(Guid tableId)
         {

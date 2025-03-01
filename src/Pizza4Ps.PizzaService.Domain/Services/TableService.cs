@@ -61,6 +61,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
         {
             var entity = await _tableRepository.GetSingleByIdAsync(tableId);
             entity.SetClosing();
+            entity.SetNullCurrentOrderId();
             await _unitOfWork.SaveChangeAsync();
             return entity.Id;
         }
