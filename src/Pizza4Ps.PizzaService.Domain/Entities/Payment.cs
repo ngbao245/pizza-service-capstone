@@ -7,7 +7,6 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
 	{
 		public decimal Amount { get; set; }
 		public PaymentMethodEnum PaymentMethod { get; set; }
-		public PaymentStatusEnum Status { get; set; }
 		public DateTimeOffset? PaidTime { get; set; }
         public Guid OrderId { get; set; }
 		public string OrderCode { get; set; }
@@ -22,28 +21,8 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
 			Id = id;
 			Amount = amount;
 			PaymentMethod = paymentMethod;
-			Status = PaymentStatusEnum.Pending;
 			OrderId = orderId;
             OrderCode = orderCode;
         }
-
-		public void SetPaid()
-        {
-            Status = PaymentStatusEnum.Paid;
-            PaidTime = DateTimeOffset.Now;
-        }
-
-		public void SetRefunded()
-        {
-            Status = PaymentStatusEnum.Refunded;
-        }
-
-        public void UpdatePayment(decimal amount, PaymentMethodEnum paymentMethod, PaymentStatusEnum status, Guid orderId)
-		{
-			Amount = amount;
-			PaymentMethod = paymentMethod;
-			Status = status;
-			OrderId = orderId;
-		}
 	}
 }

@@ -25,7 +25,6 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Payments.Queries.GetLis
 				.Where(
 					x => (request.Amount == null || x.Amount == request.Amount)
 					&& (request.PaymentMethod == null || x.PaymentMethod.Equals(request.PaymentMethod))
-					&& (request.Status == null || x.Status.Equals(request.Status))
 					&& (request.OrderId == null || x.OrderId == request.OrderId)
 					&& x.IsDeleted == request.IsDeleted);
 			var entities = await query

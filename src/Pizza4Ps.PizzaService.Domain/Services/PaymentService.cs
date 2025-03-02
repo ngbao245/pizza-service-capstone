@@ -57,7 +57,6 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             var orderCode = GenerateOrderCode();
             var entity = new Payment(Guid.NewGuid(), order.TotalPrice!.Value, PaymentMethodEnum.Cash, orderId, orderCode.ToString());
             order.SetOrderCode(orderCode.ToString());
-            entity.SetPaid();
             order.SetPaid();
 
             var table = await _tableRepository.GetListAsTracking(x => x.CurrentOrderId == orderId).FirstAsync();
@@ -84,8 +83,8 @@ namespace Pizza4Ps.PizzaService.Domain.Services
                 {
                     order.SetPaid();
                     _orderRepository.Update(order);
-                    //var entity = new Payment(Guid.NewGuid(), order.TotalPrice!.Value, PaymentMethodEnum.QRCode, order.Id, webhookData.data.orderCode.ToString());
-                    //_paymentRepository.Add(entity);
+                    var entity = new Payment(Guid.NewGuid(), order.TotalPrice!.Value, PaymentMethodEnum.QRCode, order.Id, webhookData.data.orderCode.ToString());
+                    _paymentRepository.Add(entity);
                     Console.WriteLine($"Order {order.Id} is paid, {order}");
                 }
                 var table = await _tableRepository.GetListAsTracking(x => x.CurrentOrderId == order.Id).FirstAsync();

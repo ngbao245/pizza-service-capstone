@@ -10,7 +10,6 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Payments.Queries.GetLis
         public bool IsDeleted { get; set; } = false;
         public decimal? Amount { get; set; }
         public string? PaymentMethod { get; set; }
-        public string? Status { get; set; }
         public Guid? OrderId { get; set; }
     }
 }
