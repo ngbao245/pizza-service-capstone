@@ -42,9 +42,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
                 throw new BusinessException(BussinessErrorConstants.OrderErrorConstant.ORDER_CANNOT_PAY);
             var orderCode = GenerateOrderCode();
             var result = await _payOsService.CreatePaymentLink(orderCode, (int)order.TotalPrice!, "Thanh toán đơn hàng");
-            var entity = new Payment(Guid.NewGuid(), order.TotalPrice.Value, PaymentMethodEnum.QRCode, orderId, orderCode.ToString());
             order.SetOrderCode(orderCode.ToString());
-            _paymentRepository.Add(entity);
             _orderRepository.Update(order);
             await _unitOfWork.SaveChangeAsync();
             return result.qrCode;
@@ -81,19 +79,13 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             var result = _payOsService.VerifyPaymentWebhookData(webhookData);
             if (result != null && result.code == "00")
             {
-                // Giả sử result.OrderCode tương ứng với OrderId
-                var payment = await _paymentRepository.GetSingleAsync(x => x.OrderCode == webhookData.data.orderCode.ToString());
-                if (payment != null)
-                {
-                    payment.SetPaid();
-                    _paymentRepository.Update(payment);
-                    Console.WriteLine($"Payment {payment.Id} is paid, {payment}");
-                }
                 var order = await _orderRepository.GetSingleAsync(x => x.OrderCode == webhookData.data.orderCode.ToString());
                 if (order != null)
                 {
                     order.SetPaid();
                     _orderRepository.Update(order);
+                    var entity = new Payment(Guid.NewGuid(), order.TotalPrice!.Value, PaymentMethodEnum.QRCode, order.Id, webhookData.data.orderCode.ToString());
+                    _paymentRepository.Add(entity);
                     Console.WriteLine($"Order {order.Id} is paid, {order}");
                 }
                 var table = await _tableRepository.GetListAsTracking(x => x.CurrentOrderId == order.Id).FirstAsync();
