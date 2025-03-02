@@ -81,21 +81,22 @@ namespace Pizza4Ps.PizzaService.Domain.Services
                 if (result != null && result.code == "00")
                 {
                     var order = await _orderRepository.GetSingleAsync(x => x.OrderCode == webhookData.data.orderCode.ToString());
-                    if (order != null)
+                    if (order == null)
+                        throw new BusinessException(BussinessErrorConstants.OrderErrorConstant.ORDER_NOT_FOUND);
+                    order.SetPaid();
+                    _orderRepository.Update(order);
+                    var entity = new Payment(Guid.NewGuid(), order.TotalPrice!.Value, PaymentMethodEnum.QRCode, order.Id, webhookData.data.orderCode.ToString());
+                    _paymentRepository.Add(entity);
+                    Console.WriteLine($"Order {order.Id} is paid, {order}");
+
+                    var table = await _tableRepository.GetSingleAsync(x => x.CurrentOrderId == order.Id);
+                    if (table != null)
                     {
-                        order.SetPaid();
-                        _orderRepository.Update(order);
-                        var entity = new Payment(Guid.NewGuid(), order.TotalPrice!.Value, PaymentMethodEnum.QRCode, order.Id, webhookData.data.orderCode.ToString());
-                        _paymentRepository.Add(entity);
+                        table.SetNullCurrentOrderId();
+                        table.SetClosing();
+                        _tableRepository.Update(table);
                         Console.WriteLine($"Order {order.Id} is paid, {order}");
                     }
-                    //var table = await _tableRepository.GetListAsTracking(x => x.CurrentOrderId == order.Id).FirstAsync();
-                    //if (table != null)
-                    //{
-                    //    table.SetNullCurrentOrderId();
-                    //    table.SetClosing();
-                    //    _tableRepository.Update(table);
-                    //}
                     await _unitOfWork.SaveChangeAsync();
                     return true;
                 }
