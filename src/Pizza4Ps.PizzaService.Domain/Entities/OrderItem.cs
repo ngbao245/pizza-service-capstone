@@ -12,6 +12,7 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         public decimal Price { get; set; }
         //Bao gồm order item và order items detail
         public decimal TotalPrice { get; set; }
+        public DateTimeOffset StartTime { get; set; }
         public Guid OrderId { get; set; }   
         public Guid ProductId { get; set; }
         public OrderItemStatus OrderItemStatus { get; set; }
@@ -24,8 +25,7 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         {
         }
 
-
-        public OrderItem(Guid id, string name, int quantity, decimal price, Guid orderId, Guid productId, string tableCode, string? note)
+        public OrderItem(Guid id, string name, int quantity, decimal price, Guid orderId, Guid productId, string tableCode, string? note, DateTimeOffset startTime)
         {
             Id = id;
             Name = name;
@@ -34,6 +34,7 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
             OrderId = orderId;
             ProductId = productId;
             OrderItemStatus = OrderItemStatus.Pending;
+            StartTime = startTime;
             TableCode = tableCode;
             Note = note;
         }

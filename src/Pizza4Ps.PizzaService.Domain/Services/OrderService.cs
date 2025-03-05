@@ -89,6 +89,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
 
         public async Task AddFoodToOrderAsync(Guid orderId, List<(Guid productId, List<Guid> optionItemIds, int quantity, string note)> items)
         {
+            var createTime = DateTimeOffset.UtcNow;
             var order = await _orderRepository.GetSingleByIdAsync(orderId);
             if (order == null) throw new BusinessException(BussinessErrorConstants.OrderErrorConstant.ORDER_NOT_FOUND);
             if (order.Status != OrderStatusEnum.Unpaid) throw new BusinessException(BussinessErrorConstants.OrderErrorConstant.ORDER_STATUS_INVALID_TO_ORDER);
@@ -104,7 +105,8 @@ namespace Pizza4Ps.PizzaService.Domain.Services
                     orderId: order.Id,
                     productId: product.Id,
                     tableCode: order.TableCode,
-                    note: item.note);
+                    note: item.note,
+                    startTime: createTime);
                 _orderItemRepository.Add(orderItem);
                 var optionItems = await _optionItemRepository.GetListAsTracking(x => item.optionItemIds.Contains(x.Id)).ToListAsync();
                 foreach (var optionItemId in item.optionItemIds)
