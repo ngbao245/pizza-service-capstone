@@ -8,7 +8,7 @@ namespace Pizza4Ps.PizzaService.Application.DTOs
         public string TableCode { get; set; }
         public decimal? TotalPrice { get; set; }
         public string? OrderCode { get; set; }
-        public DateTimeOffset StartTime { get; set; }
+        public DateTimeOffset StartTime { get; set; } //bắt đầu tạo đơn
         public DateTimeOffset? EndTime { get; set; }
         public string Status { get; set; }
         public Guid TableId { get; set; }

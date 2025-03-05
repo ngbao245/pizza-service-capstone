@@ -66,7 +66,6 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             if (table != null)
             {
                 table.SetNullCurrentOrderId();
-                table.SetClosing();
                 _tableRepository.Update(table);
             }
 
@@ -100,7 +99,6 @@ namespace Pizza4Ps.PizzaService.Domain.Services
                 if (table != null)
                 {
                     table.SetNullCurrentOrderId();
-                    table.SetClosing();
                     _tableRepository.Update(table);
                 }
                 await _unitOfWork.SaveChangeAsync();

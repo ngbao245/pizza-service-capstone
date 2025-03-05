@@ -4,6 +4,6 @@
     {
         Available,
         Unavailable,
-        Pending
+        //Pending
     }
 }
