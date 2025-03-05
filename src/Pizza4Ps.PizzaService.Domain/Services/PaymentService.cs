@@ -92,7 +92,6 @@ namespace Pizza4Ps.PizzaService.Domain.Services
                     if (table != null)
                     {
                         table.SetNullCurrentOrderId();
-                        table.SetClosing();
                         _tableRepository.Update(table);
                         Console.WriteLine($"Order {order.Id} is paid, {order}");
                     }
