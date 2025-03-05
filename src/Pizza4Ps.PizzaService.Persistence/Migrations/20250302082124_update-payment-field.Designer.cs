@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Pizza4Ps.PizzaService.Persistence;
 
@@ -11,9 +12,11 @@ using Pizza4Ps.PizzaService.Persistence;
 namespace Pizza4Ps.PizzaService.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20250302082124_update-payment-field")]
+    partial class updatepaymentfield
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -133,10 +136,7 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("BookingStatus")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("BookingTime")
+                    b.Property<DateTime>("BookingDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreatedBy")
@@ -145,18 +145,17 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                     b.Property<DateTimeOffset>("CreatedDate")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<Guid?>("CustomerCode")
+                    b.Property<Guid>("CustomerId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("CustomerName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTimeOffset?>("DeletedAt")
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("DeletedBy")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("GuestCount")
+                        .HasColumnType("int");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -167,57 +166,16 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                     b.Property<DateTimeOffset?>("ModifiedDate")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<int>("NumberOfPeople")
-                        .HasColumnType("int");
-
-                    b.Property<string>("PhoneNumber")
+                    b.Property<string>("Status")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CustomerId");
 
                     b.ToTable("Booking", (string)null);
-                });
-
-            modelBuilder.Entity("Pizza4Ps.PizzaService.Domain.Entities.BookingSlot", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("Capacity")
-                        .HasColumnType("int");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTimeOffset>("CreatedDate")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<DateTimeOffset?>("DeletedAt")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("DeletedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<TimeSpan>("EndTime")
-                        .HasColumnType("time");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("ModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTimeOffset?>("ModifiedDate")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<TimeSpan>("StartTime")
-                        .HasColumnType("time");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("BookingSlot", (string)null);
                 });
 
             modelBuilder.Entity("Pizza4Ps.PizzaService.Domain.Entities.Category", b =>
@@ -1589,6 +1547,17 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Pizza4Ps.PizzaService.Domain.Entities.Booking", b =>
+                {
+                    b.HasOne("Pizza4Ps.PizzaService.Domain.Entities.Customer", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("Pizza4Ps.PizzaService.Domain.Entities.Feedback", b =>

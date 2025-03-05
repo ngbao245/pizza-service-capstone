@@ -7,7 +7,6 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Payments.Queries.GetLis
     {
         public decimal? Amount { get; set; }
         public string? PaymentMethod { get; set; }
-        public string? Status { get; set; }
         public Guid? OrderId { get; set; }
     }
 }

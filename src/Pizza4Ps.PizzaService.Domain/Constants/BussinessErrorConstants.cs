@@ -34,8 +34,12 @@
         public class BookingErrorConstant
         {
             public const string BOOKING_NOT_FOUND = "Bàn đặt không tìm thấy";
+            public const string BOOKING_SLOT_FULL = "Hiện tại đã không còn bàn trống";
         }
-
+        public class BookingSlotErrorConstant
+        {
+            public const string BOOKING_SLOT_NOT_FOUND = "Không thể đặt bàn vào thời gian này";
+        }
         public class OrderVoucherErrorConstant
         {
             public const string ORDERVOUCHER_NOT_FOUND = "Order voucher không tìm thấy";

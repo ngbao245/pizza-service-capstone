@@ -11,22 +11,6 @@ namespace Pizza4Ps.PizzaService.Persistence.Configurations
 		{
 			builder.ToTable(TableNames.Booking);
 			builder.HasKey(x => x.Id);
-
-			builder.Property(x => x.BookingDate)
-				.IsRequired();
-
-			builder.Property(x => x.GuestCount)
-				.IsRequired();
-
-			builder.Property(x => x.Status)
-				.IsRequired()
-				.HasMaxLength(50);
-
-			builder.HasOne(x => x.Customer)
-				.WithMany()
-				.HasForeignKey(x => x.CustomerId)
-				.IsRequired()
-				.OnDelete(DeleteBehavior.Cascade);
 		}
 	}
 }

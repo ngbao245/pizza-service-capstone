@@ -43,7 +43,6 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         public void SetClosing()
         {
             Status = TableStatusEnum.Closing;
-            SetNullCurrentOrderId();
         }
         public void SetLocked()
         {

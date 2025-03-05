@@ -42,9 +42,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
                 throw new BusinessException(BussinessErrorConstants.OrderErrorConstant.ORDER_CANNOT_PAY);
             var orderCode = GenerateOrderCode();
             var result = await _payOsService.CreatePaymentLink(orderCode, (int)order.TotalPrice!, "Thanh toán đơn hàng");
-            var entity = new Payment(Guid.NewGuid(), order.TotalPrice.Value, PaymentMethodEnum.QRCode, orderId, orderCode.ToString());
             order.SetOrderCode(orderCode.ToString());
-            _paymentRepository.Add(entity);
             _orderRepository.Update(order);
             await _unitOfWork.SaveChangeAsync();
             return result.qrCode;
@@ -59,7 +57,6 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             var orderCode = GenerateOrderCode();
             var entity = new Payment(Guid.NewGuid(), order.TotalPrice!.Value, PaymentMethodEnum.Cash, orderId, orderCode.ToString());
             order.SetOrderCode(orderCode.ToString());
-            entity.SetPaid();
             order.SetPaid();
 
             var table = await _tableRepository.GetListAsTracking(x => x.CurrentOrderId == orderId).FirstAsync();
@@ -77,34 +74,38 @@ namespace Pizza4Ps.PizzaService.Domain.Services
         public async Task<bool> ProcessWebhookData(WebhookType webhookData)
         {
             // Xác thực và lấy thông tin từ webhook thông qua gateway PayOS
-            var result = _payOsService.VerifyPaymentWebhookData(webhookData);
-            if (result != null && result.code == "00")
+            try
             {
-                // Giả sử result.OrderCode tương ứng với OrderId
-                var payment = await _paymentRepository.GetSingleAsync(x => x.OrderCode == webhookData.data.orderCode.ToString());
-                if (payment != null)
+                var result = _payOsService.VerifyPaymentWebhookData(webhookData);
+                if (result != null && result.code == "00")
                 {
-                    payment.SetPaid();
-                    _paymentRepository.Update(payment);
-                    Console.WriteLine($"Payment {payment.Id} is paid, {payment}");
-                }
-                var order = await _orderRepository.GetSingleAsync(x => x.OrderCode == webhookData.data.orderCode.ToString());
-                if (order != null)
-                {
+                    var order = await _orderRepository.GetSingleAsync(x => x.OrderCode == webhookData.data.orderCode.ToString());
+                    if (order == null)
+                        throw new BusinessException(BussinessErrorConstants.OrderErrorConstant.ORDER_NOT_FOUND);
                     order.SetPaid();
                     _orderRepository.Update(order);
+                    var entity = new Payment(Guid.NewGuid(), order.TotalPrice!.Value, PaymentMethodEnum.QRCode, order.Id, webhookData.data.orderCode.ToString());
+                    _paymentRepository.Add(entity);
                     Console.WriteLine($"Order {order.Id} is paid, {order}");
+
+                    var table = await _tableRepository.GetSingleAsync(x => x.CurrentOrderId == order.Id);
+                    if (table != null)
+                    {
+                        table.SetNullCurrentOrderId();
+                        table.SetClosing();
+                        _tableRepository.Update(table);
+                        Console.WriteLine($"Order {order.Id} is paid, {order}");
+                    }
+                    await _unitOfWork.SaveChangeAsync();
+                    return true;
                 }
-                var table = await _tableRepository.GetListAsTracking(x => x.CurrentOrderId == order.Id).FirstAsync();
-                if (table != null)
-                {
-                    table.SetNullCurrentOrderId();
-                    _tableRepository.Update(table);
-                }
-                await _unitOfWork.SaveChangeAsync();
-                return true;
+                return false;
             }
-            return false;
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
         }
         public long GenerateOrderCode()
         {

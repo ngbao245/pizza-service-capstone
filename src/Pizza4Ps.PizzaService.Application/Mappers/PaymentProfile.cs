@@ -11,7 +11,6 @@ namespace Pizza4Ps.PizzaService.Application.Mappers
         {
             //CreateMap<PaymentDto, Payment>().ReverseMap();
             CreateMap<PaymentDto, Payment>().ReverseMap()
-                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => Enum.GetName(typeof(PaymentStatusEnum), src.Status)))
                 .ForMember(dest => dest.PaymentMethod, opt => opt.MapFrom(src => Enum.GetName(typeof(PaymentMethodEnum), src.PaymentMethod)));
         }
     }

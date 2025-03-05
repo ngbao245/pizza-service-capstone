@@ -1,35 +1,36 @@
 ﻿using Pizza4Ps.PizzaService.Domain.Abstractions;
+using Pizza4Ps.PizzaService.Domain.Enums;
 
 namespace Pizza4Ps.PizzaService.Domain.Entities
 {
 	public class Booking : EntityAuditBase<Guid>
 	{
-		public DateTime BookingDate { get; set; }
-		public int GuestCount { get; set; }
-		public string Status { get; set; }
-		public Guid CustomerId { get; set; }
+        public Guid Id { get; private set; }
+        public Guid? CustomerCode { get; set; }
+        public string CustomerName { get; set; }
+        public string PhoneNumber { get; set; }
+        public DateTime BookingTime { get; set; } // Giờ khách hàng chọn đến
+        public int NumberOfPeople { get; set; }
+        public BookingStatusEnum BookingStatus { get; private set; }
 
-		public virtual Customer Customer { get; set; }
-
-		private Booking()
+        private Booking()
 		{
 		}
 
-		public Booking(Guid id, DateTime bookingDate, int guestCount, string status, Guid customerId)
-		{
-			Id = id;
-			BookingDate = bookingDate;
-			GuestCount = guestCount;
-			Status = status;
-			CustomerId = customerId;
-		}
+        public Booking(Guid? customerCode, string customerName, string phoneNumber, DateTime bookingTime, int numberOfPeople)
+        {
+            Id = Guid.NewGuid();
+            CustomerCode = customerCode;
+            CustomerName = customerName;
+            PhoneNumber = phoneNumber;
+            BookingTime = bookingTime;
+            NumberOfPeople = numberOfPeople;
+            BookingStatus = BookingStatusEnum.Confirmed;
+        }
 
-		public void UpdateBooking(DateTime bookingDate, int guestCount, string status, Guid customerId)
-		{
-			BookingDate = bookingDate;
-			GuestCount = guestCount;
-			Status = status;
-			CustomerId = customerId;
-		}
+        public void Cancel()
+        {
+            BookingStatus = BookingStatusEnum.Cancelled;
+        }
 	}
 }
