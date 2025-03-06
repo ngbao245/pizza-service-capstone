@@ -160,6 +160,19 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             await _unitOfWork.SaveChangeAsync();
         }
 
+        public async Task CancelCheckOut(Guid orderId)
+        {
+            decimal totalPrice = 0;
+            var order = await _orderRepository.GetSingleByIdAsync(orderId);
+            if (order == null)
+                throw new BusinessException(BussinessErrorConstants.OrderErrorConstant.ORDER_NOT_FOUND);
+            if (order.Status != OrderStatusEnum.CheckedOut)
+                throw new BusinessException(BussinessErrorConstants.OrderErrorConstant.ORDER_CANNOT_CHECK_OUT);
+            order.SetTotalPrice(totalPrice);
+            order.SetCancelCheckOut();
+            await _unitOfWork.SaveChangeAsync();
+        }
+
         public Task UpdateStatusToPendingAsync(Guid id)
         {
             throw new NotImplementedException();

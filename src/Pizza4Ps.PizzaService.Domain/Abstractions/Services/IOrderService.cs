@@ -13,5 +13,6 @@ namespace Pizza4Ps.PizzaService.Domain.Abstractions.Services
 		Task UpdateStatusToPendingAsync(Guid id);
 		Task UpdateStatusToCompleteAsync(Guid id);
         Task CheckOutOrder(Guid orderId);
+        Task CancelCheckOut(Guid orderId);
     }
 }

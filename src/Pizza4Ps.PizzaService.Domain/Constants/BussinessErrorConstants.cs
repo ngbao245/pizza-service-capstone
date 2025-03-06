@@ -98,6 +98,7 @@
         {
             public const string ORDER_NOT_FOUND = "Đơn hàng không tìm thấy";
             public const string ORDER_CANNOT_CHECK_OUT = "Đơn hàng đã được xuất hoá đơn hoặc thanh toán";
+            public const string ORDER_CANNOT_CANCEL_CHECK_OUT = "Đơn hàng chưa được xuất hoá đơn hoặc thanh toán";
             public const string ORDER_CANNOT_PAY = "Đơn hàng chưa được check out hoặc đã được thanh toán";
             public const string ORDER_STATUS_INVALID_TO_ORDER = "Đơn hàng đã được xuất hoá đơn hoặc được thanh toán";
         }

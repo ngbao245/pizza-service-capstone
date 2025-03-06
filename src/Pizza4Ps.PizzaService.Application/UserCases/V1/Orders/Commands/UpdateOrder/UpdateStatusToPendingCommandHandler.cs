@@ -14,7 +14,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Orders.Commands.UpdateO
 
         public async Task Handle(UpdateStatusToPendingCommand request, CancellationToken cancellationToken)
         {
-            await _orderService.UpdateStatusToPendingAsync(request.Id!.Value);
+            throw new NotImplementedException();
         }
     }
 }

@@ -39,10 +39,16 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
             TotalPrice = totalPrice;
         }
 
+        public void SetCancelCheckOut()
+        {
+            Status = OrderStatusEnum.Unpaid;
+        }
+
         public void SetCheckOut()
         {
             Status = OrderStatusEnum.CheckedOut;
         }
+
         public void SetPaid()
         {
             Status = OrderStatusEnum.Paid;
