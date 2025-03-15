@@ -24,8 +24,8 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.StaffZoneSchedules.Quer
         public async Task<PaginatedResultDto<StaffZoneScheduleDto>> Handle(GetListStaffZoneScheduleQuery request, CancellationToken cancellationToken)
         {
             var query = _StaffZoneScheduleRepository.GetListAsNoTracking(
-                x => (request.StaffName == null || x.StaffName == request.StaffName)
-                && (request.ZoneName == null || x.ZoneName == request.ZoneName)
+                x => (request.StaffName == null || x.StaffName.Contains(request.StaffName))
+                && (request.ZoneName == null || x.ZoneName.Contains(request.ZoneName))
                 && (request.WorkingDate == null || x.WorkingDate == request.WorkingDate)
                 && (request.StaffId == null || x.StaffId == request.StaffId)
                 && (request.ZoneId == null || x.ZoneId == request.ZoneId)
