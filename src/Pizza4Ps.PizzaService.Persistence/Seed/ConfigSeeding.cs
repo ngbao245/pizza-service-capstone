@@ -30,6 +30,13 @@ namespace Pizza4Ps.PizzaService.Persistence.Seed
                     ConfigType = ConfigType.REGISTRATION_CUTOFF_DAY,
                     Key = "REGISTRATION_CUTOFF_DAY",
                     Value = "2"
+                },
+                new Config
+                {
+                    Id = Guid.Parse("984394dd-9af3-401f-9319-0c5a7a3686fd"),
+                    ConfigType = ConfigType.REGISTRATION_WEEK_LIMIT,
+                    Key = "REGISTRATION_WEEK_LIMIT",
+                    Value = "2"
                 }
             );
         }

@@ -20,7 +20,7 @@ namespace Pizza4Ps.PizzaService.API.Controllers
         }
 
         /// <remarks>
-        /// **time format**:
+        /// **shiftTime format**:
         /// - "shiftStart": "08:00:00"
         /// - "shiftEnd": "13:00:00"
         /// </remarks>

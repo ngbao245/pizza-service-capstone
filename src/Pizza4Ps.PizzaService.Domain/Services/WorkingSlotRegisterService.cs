@@ -31,41 +31,46 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             _staffRepository = staffRepository;
         }
 
-        public async Task<Guid> RegisterWorkingSlotAsync(DateTime workingDate, Guid staffId, Guid workingSlotId)
+        public async Task<Guid> RegisterWorkingSlotAsync(DateOnly workingDate, Guid staffId, Guid workingSlotId)
         {
-
             var staff = await _staffRepository.GetSingleByIdAsync(staffId);
             if (staff == null) throw new BusinessException(BussinessErrorConstants.StaffErrorConstant.STAFF_NOT_FOUND);
 
             var existingRegistration = await _workingSlotRegisterRepository.GetSingleAsync(
                 x => x.StaffId == staffId && x.WorkingSlotId == workingSlotId);
-            if (existingRegistration != null)
-            {
-                throw new BusinessException(BussinessErrorConstants.WorkingSlotErrorConstant.ALREADY_REGISTERED);
-            }
+            if (existingRegistration != null) throw new BusinessException(BussinessErrorConstants.WorkingSlotErrorConstant.ALREADY_REGISTERED);
 
             var workingSlot = await _workingSlotRepository.GetSingleByIdAsync(workingSlotId);
-            if (workingSlot == null)
-            {
-                throw new BusinessException(BussinessErrorConstants.WorkingSlotErrorConstant.WORKING_SLOT_NOT_FOUND);
-            }
+            if (workingSlot == null) throw new BusinessException(BussinessErrorConstants.WorkingSlotErrorConstant.WORKING_SLOT_NOT_FOUND);
 
             var cutoffConfig = await _configRepository.GetSingleAsync(
                 x => x.ConfigType == ConfigType.REGISTRATION_CUTOFF_DAY);
             int cutoffDays = int.Parse(cutoffConfig.Value);
 
-            DateTime startOfWeek = workingDate.Date.AddDays(-(int)workingDate.DayOfWeek + (int)DayOfWeek.Monday);
-            DateTime cutoffDate = startOfWeek.AddDays(-cutoffDays);
-            if (DateTime.UtcNow.Date > cutoffDate)
+            DateOnly startOfWeek = workingDate.AddDays(-(int)workingDate.DayOfWeek + (int)DayOfWeek.Monday);
+            DateOnly cutoffDate = startOfWeek.AddDays(-cutoffDays);
+            if (DateTime.UtcNow.Date > cutoffDate.ToDateTime(TimeOnly.MinValue))
             {
-                throw new BusinessException($"Hạn đăng ký đã kết thúc vào ngày {cutoffDate:yyyy-MM-dd}. Bạn phải đăng ký trước {cutoffDays} ngày.");
+                throw new BusinessException($"Hạn đăng ký đã kết thúc vào ngày {cutoffDate:yyyy-MM-dd}, bạn phải đăng ký trước ngày {cutoffDays}");
             }
 
             var expectedDayOfWeek = GetDayOfWeekFromDayName(workingSlot.DayName);
             if (workingDate.DayOfWeek != expectedDayOfWeek)
             {
-                throw new BusinessException($"Ngày {workingDate:yyyy-MM-dd} không hợp lệ cho ca {workingSlot.ShiftName} (chỉ áp dụng cho {workingSlot.DayName}).");
+                throw new BusinessException($"Ngày {workingDate:yyyy-MM-dd} không hợp lệ cho ca {workingSlot.ShiftName} vì ca này chỉ áp dụng cho {workingSlot.DayName.ToLower()}");
             }
+
+            var maxRegisterDaysConfig = await _configRepository.GetSingleAsync(
+                x => x.ConfigType == ConfigType.REGISTRATION_WEEK_LIMIT);
+            int maxRegisterDays = int.Parse(maxRegisterDaysConfig.Value)*7;
+
+            DateOnly startOfNextWeek = DateOnly.FromDateTime(DateTime.UtcNow.Date)
+                .AddDays(7 - (int)DateTime.UtcNow.DayOfWeek + (int)DayOfWeek.Monday);
+            DateOnly maxRegisterDate = startOfNextWeek.AddDays(maxRegisterDays - 1);
+            if (workingDate > maxRegisterDate)
+            {
+                throw new BusinessException($"Bạn chỉ có thể đăng ký trước tối đa {maxRegisterDays} ngày từ ngày {startOfNextWeek:yyyy-MM-dd}. Hạn đăng ký cho ngày {workingDate:yyyy-MM-dd} đã vượt quá giới hạn.");
+            }   
 
             var maxSlotsConfig = await _configRepository.GetSingleAsync(
                 x => x.ConfigType == ConfigType.MAXIMUM_REGISTER_SLOT);
@@ -80,24 +85,23 @@ namespace Pizza4Ps.PizzaService.Domain.Services
                 status = WorkingSlotRegisterStatusEnum.Approved;
             }
 
-            var registration = new WorkingSlotRegister(Guid.NewGuid(), staff.FullName, workingDate, DateTime.Now, status, staffId, workingSlotId);
-            _workingSlotRegisterRepository.Add(registration);
-
+            var workingSlotRegister = new WorkingSlotRegister(Guid.NewGuid(), staff.FullName, workingDate, DateTime.Now, status, staffId, workingSlotId);
+            _workingSlotRegisterRepository.Add(workingSlotRegister);
             await _unitOfWork.SaveChangeAsync();
-            return registration.Id;
+            return workingSlotRegister.Id;
         }
 
         private DayOfWeek GetDayOfWeekFromDayName(string dayName)
         {
             return dayName.ToLower() switch
             {
-                "monday" => DayOfWeek.Monday,
-                "tuesday" => DayOfWeek.Tuesday,
-                "wednesday" => DayOfWeek.Wednesday,
-                "thursday" => DayOfWeek.Thursday,
-                "friday" => DayOfWeek.Friday,
-                "saturday" => DayOfWeek.Saturday,
-                "sunday" => DayOfWeek.Sunday,
+                "thứ hai" => DayOfWeek.Monday,
+                "thứ ba" => DayOfWeek.Tuesday,
+                "thứ tư" => DayOfWeek.Wednesday,
+                "thứ năm" => DayOfWeek.Thursday,
+                "thứ sáu" => DayOfWeek.Friday,
+                "thứ bảy" => DayOfWeek.Saturday,
+                "chủ nhật" => DayOfWeek.Sunday,
                 _ => throw new BusinessException(BussinessErrorConstants.DayErrorConstant.INVALID_DAY_OF_WEEK)
             };
         }

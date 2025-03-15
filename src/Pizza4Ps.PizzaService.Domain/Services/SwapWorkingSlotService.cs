@@ -33,7 +33,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
 
         public async Task<Guid> CreateAsync(Guid employeeFromId, Guid employeeToId, Guid workingSlotFromId, Guid workingSlotToId)
         {
-            var today = DateTime.Today;
+            var today = DateOnly.FromDateTime(DateTime.Today);
             var employeeFrom = await _staffRepository.GetSingleByIdAsync(employeeFromId);
             var employeeTo = await _staffRepository.GetSingleByIdAsync(employeeToId);
             if (employeeFrom == null || employeeTo == null) throw new BusinessException(BussinessErrorConstants.StaffErrorConstant.STAFF_NOT_FOUND);

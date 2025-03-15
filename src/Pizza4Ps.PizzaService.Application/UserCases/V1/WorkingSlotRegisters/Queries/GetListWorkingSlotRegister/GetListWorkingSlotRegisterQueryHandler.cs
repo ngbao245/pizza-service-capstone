@@ -36,7 +36,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.WorkingSlotRegisters.Qu
 
             var query = _WorkingSlotRegisterRepository.GetListAsNoTracking(
                 x => (request.WorkingDate == null || x.WorkingDate == request.WorkingDate)
-                && (workingSlotRegisterStatus == null || x.Status == workingSlotRegisterStatus)
+                &&(workingSlotRegisterStatus == null || x.Status == workingSlotRegisterStatus)
                 && (request.StaffId == null || x.StaffId.Equals(request.StaffId))
                 && (request.WorkingSlotId == null || x.WorkingSlotId.Equals(request.WorkingSlotId)),
                 includeProperties: request.IncludeProperties);

@@ -5,7 +5,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.StaffZoneSchedules.Comm
 {
     public class CreateStaffZoneScheduleCommand : IRequest<ResultDto<Guid>>
     {
-        public DateTime WorkingDate { get; set; }
+        public DateOnly WorkingDate { get; set; }
         public Guid StaffId { get; set; }
         public Guid ZoneId { get; set; }
         public Guid WorkingSlotId { get; set; }

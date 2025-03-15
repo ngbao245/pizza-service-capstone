@@ -35,16 +35,19 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             _staffRepository = staffRepository;
         }
 
-        public async Task<Guid> CreateAsync(DateTime date, Guid staffId, Guid zoneId, Guid workingSlotId)
+        public async Task<Guid> CreateAsync(DateOnly workingDate, Guid staffId, Guid zoneId, Guid workingSlotId)
         {
             var workingSlotRegister = await _workingSlotRegisterRepository.GetSingleAsync(
                   x => x.StaffId == staffId && x.WorkingSlotId == workingSlotId);
             if (workingSlotRegister == null) throw new BusinessException(BussinessErrorConstants.WorkingSlotRegisterErrorConstant.WORKING_SLOT_REGISTER_NOT_FOUND);
 
+            if (workingSlotRegister.WorkingDate != workingDate) 
+                throw new BusinessException($"Ngày làm việc {workingDate:yyyy-MM-dd} không khớp với ngày đăng ký {workingSlotRegister.WorkingDate:yyyy-MM-dd}");
+
             var zone = await _zoneRepository.GetSingleByIdAsync(zoneId);
             if (zone == null) throw new BusinessException(BussinessErrorConstants.ZoneErrorConstant.ZONE_NOT_FOUND);
 
-            var staffZoneSchedule = new StaffZoneSchedule(Guid.NewGuid(), date, staffId, zoneId, workingSlotId);
+            var staffZoneSchedule = new StaffZoneSchedule(Guid.NewGuid(), workingDate, staffId, zoneId, workingSlotId);
             _staffZoneScheduleRepository.Add(staffZoneSchedule);
 
             if (workingSlotRegister.Status == WorkingSlotRegisterStatusEnum.Onhold)

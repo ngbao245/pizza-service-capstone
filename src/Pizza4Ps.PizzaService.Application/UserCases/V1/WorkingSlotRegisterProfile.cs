@@ -3,7 +3,7 @@ using Pizza4Ps.PizzaService.Application.DTOs;
 using Pizza4Ps.PizzaService.Domain.Entities;
 using Pizza4Ps.PizzaService.Domain.Enums;
 
-namespace Pizza4Ps.PizzaService.Application.Mappers
+namespace Pizza4Ps.PizzaService.Application.UserCases.V1
 {
     public class WorkingSlotRegisterProfile : Profile
     {

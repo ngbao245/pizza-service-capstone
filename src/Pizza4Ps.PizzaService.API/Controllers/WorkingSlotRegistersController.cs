@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Pizza4Ps.PizzaService.API.Constants;
 using Pizza4Ps.PizzaService.API.Models;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.OrderItems.Commands.UpdateStatusToServed;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.WorkingSlotRegisters.Commands.RegisterWorkingSlot;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.WorkingSlotRegisters.Commands.UpdateStatusToApproved;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.WorkingSlotRegisters.Commands.UpdateStatusToRejected;
@@ -22,6 +21,10 @@ namespace Pizza4Ps.PizzaService.API.Controllers
             _sender = sender;
         }
 
+        /// <remarks>
+        /// **workingDate format**:
+        /// - "workingDate": "2025-03-24"
+        /// </remarks>
         [HttpPost]
         public async Task<IActionResult> CreateAsync([FromBody] RegisterWorkingSlotCommand request)
         {
@@ -66,6 +69,10 @@ namespace Pizza4Ps.PizzaService.API.Controllers
             });
         }
 
+        /// <remarks>
+        /// **workingDate format**:
+        /// - "workingDate": "2025-03-24"
+        /// </remarks>
         [HttpGet()]
         public async Task<IActionResult> GetListAsync([FromQuery] GetListWorkingSlotRegisterQuery query)
         {
