@@ -9,6 +9,8 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.StaffZoneSchedules.Quer
         //public TimeOnly? ShiftStart { get; set; }
         //public TimeOnly? ShiftEnd { get; set; }
         //public string? Note { get; set; }
+        public string? StaffName { get; set; }
+        public string? ZoneName { get; set; }
         public DateOnly? WorkingDate { get; set; }
         public Guid? StaffId { get; set; }
         public Guid? ZoneId { get; set; }

@@ -3,6 +3,8 @@
     public class StaffZoneScheduleDto
     {
         public Guid Id { get; set; }
+        public string StaffName { get; set; }
+        public string ZoneName { get; set; }
         public DateOnly WorkingDate { get; set; }
         public Guid StaffId { get; set; }
         public Guid ZoneId { get; set; }
