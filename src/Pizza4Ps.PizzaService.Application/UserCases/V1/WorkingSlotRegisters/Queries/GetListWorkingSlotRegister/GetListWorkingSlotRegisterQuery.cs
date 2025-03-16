@@ -5,7 +5,6 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.WorkingSlotRegisters.Qu
 {
     public class GetListWorkingSlotRegisterQuery : PaginatedQuery<PaginatedResultDto<WorkingSlotRegisterDto>>
     {
-        public string? StaffName { get; set; }
         public DateOnly? WorkingDate { get; set; }
         public string? Status { get; set; }
         public Guid? StaffId { get; set; }
