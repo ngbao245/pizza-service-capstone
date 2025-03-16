@@ -34,6 +34,7 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
             Id = id;
             FullName = fullName;
             Phone = phone;
+            IsVerifiedEmail = false;
         }
 
         public Customer(string? fullName, string? phone,

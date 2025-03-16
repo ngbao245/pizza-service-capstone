@@ -19,7 +19,6 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Bookings.Commands.Creat
 		public async Task<ResultDto<Guid>> Handle(CreateReservationCommand request, CancellationToken cancellationToken)
 		{
 			var result = await _bookingService.CreateAsync(
-				customerCode: request.CustomerCode,
 				customerName: request.CustomerName,
 				phoneNumber: request.PhoneNumber,
 				bookingTime: request.BookingTime, 

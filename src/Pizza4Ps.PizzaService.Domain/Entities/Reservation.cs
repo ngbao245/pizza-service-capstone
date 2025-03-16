@@ -4,7 +4,8 @@ using Pizza4Ps.PizzaService.Domain.Enums;
 
 public class Reservation : EntityAuditBase<Guid>
 {
-    public Guid? CustomerCode { get; set; }
+    public Guid? CustomerId { get; set; }
+    public virtual Customer Customer { get; set; }
     public string CustomerName { get; set; }
     public string PhoneNumber { get; set; }
     public DateTime BookingTime { get; set; }
@@ -16,10 +17,10 @@ public class Reservation : EntityAuditBase<Guid>
 
     private Reservation() { }
 
-    public Reservation(Guid? customerCode, string customerName, string phoneNumber, DateTime bookingTime, int numberOfPeople, Guid? tableId)
+    public Reservation(Guid? customerId, string customerName, string phoneNumber, DateTime bookingTime, int numberOfPeople, Guid? tableId)
     {
         Id = Guid.NewGuid();
-        CustomerCode = customerCode;
+        CustomerId = customerId;
         CustomerName = customerName;
         PhoneNumber = phoneNumber;
         BookingTime = bookingTime;
