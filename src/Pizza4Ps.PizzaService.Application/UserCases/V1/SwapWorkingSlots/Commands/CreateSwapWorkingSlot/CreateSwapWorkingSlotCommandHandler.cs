@@ -20,8 +20,8 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.SwapWorkingSlots.Comman
         {
             var result = await _swapWorkingSlotService.CreateAsync(
                 request.EmployeeFromId,
-                request.EmployeeToId,
                 request.WorkingSlotFromId,
+                request.EmployeeToId,
                 request.WorkingSlotToId);
             return new ResultDto<Guid>
             {

@@ -6,8 +6,8 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.SwapWorkingSlots.Comman
     public class CreateSwapWorkingSlotCommand : IRequest<ResultDto<Guid>>
     {
         public Guid EmployeeFromId { get; set; }
-        public Guid EmployeeToId { get; set; }
         public Guid WorkingSlotFromId { get; set; }
+        public Guid EmployeeToId { get; set; }
         public Guid WorkingSlotToId { get; set; }
     }
 }

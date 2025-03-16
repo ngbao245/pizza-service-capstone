@@ -22,6 +22,7 @@
             public const string SWAP_WORKING_SLOT_ALREADY_PENDING_APPROVE = "Swap working slot request is pending manager approval";
             public const string SWAP_WORKING_SLOT_ALREADY_APPROVED = "Swap working slot request has already been approved";
             public const string SWAP_WORKING_SLOT_NOT_FOUND = "Swap working slot request not found";
+            public const string SWAP_WORKING_SLOT_INVALID_WORKING_DATE = "Hai nhân viên có cùng ngày làm việc và cùng ca";
             public const string SWAP_WORKING_SLOT_INVALID_STATE = "Cannot reject a request that is not pending";
         }
 
@@ -39,7 +40,7 @@
         public class WorkingSlotErrorConstant
         {
             public const string WORKING_SLOT_NOT_FOUND = "Working slot not found";
-            public const string INVALID_WORKING_SLOT_SHIFT_TIME= "Shift start time must be earlier than shift end time";
+            public const string INVALID_WORKING_SLOT_SHIFT_TIME = "Shift start time must be earlier than shift end time";
             public const string ALREADY_REGISTERED = "Employee has already registered for this working slot";
         }
 
@@ -120,7 +121,7 @@
         public class ProductErrorConstant
         {
             public const string PRODUCT_NOT_FOUND = "Product not found";
-            public const string INVALID_PRODUCT_TYPE= "Invalid product type";
+            public const string INVALID_PRODUCT_TYPE = "Invalid product type";
         }
 
         public class ProductSizeErrorConstant
