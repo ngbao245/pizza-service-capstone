@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Pizza4Ps.PizzaService.API.Constants;
 using Pizza4Ps.PizzaService.API.Models;
@@ -24,6 +25,7 @@ namespace Pizza4Ps.PizzaService.API.Controllers
             _sender = sender;
         }
 
+        [Authorize(Roles = "Customer")]
         [HttpPost]
         public async Task<IActionResult> CreateAsync([FromBody] CreateCategoryCommand request)
         {
@@ -35,7 +37,7 @@ namespace Pizza4Ps.PizzaService.API.Controllers
                 StatusCode = StatusCodes.Status201Created
             });
         }
-
+        [Authorize(Roles = "Staff")]
         [HttpGet("ignore-filter")]
         public async Task<IActionResult> GetListIgnoreQueryFilterAsync([FromQuery] GetListCategoryIgnoreQueryFilterQuery query)
         {

@@ -51,7 +51,8 @@ namespace Pizza4Ps.PizzaService.API.Setup
         {
             services.AddInterceptorPersistence();
             services.AddSQLServerPersistence();
-            services.AddRepositoryAssembly();
+            services.AddRepositoryAssembly(); 
+            services.AddAuthService();
         }
         private static void RegisterDomainServices(IServiceCollection services)
         {

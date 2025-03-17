@@ -11,7 +11,9 @@ namespace Pizza4Ps.PizzaService.API.Setup
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
                 c.RoutePrefix = "swagger"; // Cấu hình để Swagger UI chạy tại /swagger
-            }); ;
+            });
+            app.UseAuthentication();
+            app.UseAuthorization();
             app.UseMiddleware<ExceptionHandler>();
             app.UseCors("AllowAll");
             return app;

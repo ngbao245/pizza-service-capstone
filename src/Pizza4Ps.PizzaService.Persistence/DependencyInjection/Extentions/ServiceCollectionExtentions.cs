@@ -1,11 +1,15 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Pizza4Ps.PizzaService.Persistence.Intercepter;
-using Pizza4Ps.PizzaService.Domain.Abstractions.Repositories.RepositoryBase;
+using Microsoft.IdentityModel.Tokens;
 using Pizza4Ps.PizzaService.Domain.Abstractions;
-
+using Pizza4Ps.PizzaService.Domain.Abstractions.Repositories.RepositoryBase;
+using Pizza4Ps.PizzaService.Domain.Entities.Identity;
+using Pizza4Ps.PizzaService.Persistence.Intercepter;
+using System.Text;
 namespace Pizza4Ps.PizzaService.Persistence.DependencyInjection.Extentions
 {
     public static class ServiceCollectionExtentions
@@ -27,6 +31,35 @@ namespace Pizza4Ps.PizzaService.Persistence.DependencyInjection.Extentions
                     sqlServerOptionsAction: optionsBuilder
                         => optionsBuilder.MigrationsAssembly(typeof(ApplicationDBContext).Assembly.GetName().Name))
                 .AddInterceptors(auditSaveChangesInterceptor);
+            });
+        }
+        public static void AddAuthService(this IServiceCollection services)
+        {
+            var serviceProvider = services.BuildServiceProvider();
+            var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+            // 2. Cấu hình Identity
+            services.AddIdentity<AppUser, AppRole>()
+                .AddEntityFrameworkStores<ApplicationDBContext>()
+                .AddDefaultTokenProviders();
+
+            var jwtSettings = configuration.GetSection("JwtSettings");
+            var key = Encoding.UTF8.GetBytes(jwtSettings["SecretKey"]);
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.RequireHttpsMetadata = false;
+                options.SaveToken = true;
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                };
             });
         }
         public static IServiceCollection AddRepositoryAssembly(this IServiceCollection services)

@@ -19,7 +19,8 @@ namespace Pizza4Ps.PizzaService.Persistence.Constants
 		internal const string AppUserLogins = nameof(AppUserLogins); // IdentityRoleClaim
 		internal const string AppUserTokens = nameof(AppUserTokens); // IdentityUserToken
 
-		internal const string Booking = nameof(Booking);
+        internal const string AppUserCustomer = nameof(AppUserCustomer);
+        internal const string Booking = nameof(Booking);
         internal const string BookingSlot = nameof(BookingSlot);
         internal const string Category = nameof(Category);
 		internal const string Config = nameof(Config);
