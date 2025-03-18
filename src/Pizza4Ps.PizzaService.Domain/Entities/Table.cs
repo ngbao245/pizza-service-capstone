@@ -1,5 +1,7 @@
 ﻿using Pizza4Ps.PizzaService.Domain.Enums;
 using Pizza4Ps.PizzaService.Domain.Abstractions;
+using Pizza4Ps.PizzaService.Domain.Constants;
+using Pizza4Ps.PizzaService.Domain.Exceptions;
 
 namespace Pizza4Ps.PizzaService.Domain.Entities
 {
@@ -7,12 +9,12 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
     {
         public string Code { get; set; }
         public int Capacity { get; set; }
+        public TableStatusEnum Status { get; set; }
+
+        public Guid? CurrentOrderId { get; set; }
         public Guid ZoneId { get; set; }
 
-        public TableStatusEnum Status { get; set; }
-        public Guid? CurrentOrderId { get; set; }
         public virtual Order CurrentOrder { get; set; }
-
         public virtual Zone Zone { get; set; }
 
         private Table()
@@ -23,9 +25,18 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         {
             Id = id;
             Code = code;
-            Capacity = capacity;
+            Capacity = ValidateCapacity(capacity);
             SetClosing();
             ZoneId = zoneId;
+        }
+
+        private int ValidateCapacity(int capacity)
+        {
+            if (capacity <= 0)
+            {
+                throw new BusinessException(BussinessErrorConstants.TableErrorConstant.CAPACITY_INVALID);
+            }
+            return capacity;
         }
 
         internal void SetCurrentOrderId(Guid currentOrderId)

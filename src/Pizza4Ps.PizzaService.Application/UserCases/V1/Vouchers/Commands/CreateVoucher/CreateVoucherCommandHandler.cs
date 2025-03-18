@@ -21,7 +21,8 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Vouchers.Commands.Creat
 			var result = await _voucherService.CreateAsync(
 				request.Code,
 				request.DiscountType,
-				request.ExpiryDate);
+				request.ExpiryDate,
+				request.VoucherTypeId);
 			return new ResultDto<Guid>
             {
 				Id = result

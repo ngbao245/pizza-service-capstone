@@ -89,11 +89,6 @@
             public const string FEEDBACK_NOT_FOUND = "Feedback không tìm thấy";
         }
 
-        public class ZoneErrorConstant
-        {
-            public const string ZONE_NOT_FOUND = "Khu vực không tìm thấy";
-        }
-
         public class OrderErrorConstant
         {
             public const string ORDER_NOT_FOUND = "Đơn hàng không tìm thấy";
@@ -113,9 +108,9 @@
             public const string OPTION_NOT_FOUND = "Option không tìm thấy";
         }
 
-        public class VoucherErrorConstant
+        public class StaffZoneErrorConstant
         {
-            public const string VOUCHER_NOT_FOUND = "Voucher không tìm thấy";
+            public const string STAFFZONE_NOT_FOUND = "Khu vực nhân viên không tìm thấy";
         }
 
         public class TableErrorConstant
@@ -125,11 +120,22 @@
             public const string TABLE_ORDER_NOT_HAVE_ORDER_ITEM = "Đơn hàng không có món ăn nào";
             public const string INVALID_TABLE_STATUS = "Trạng thái bàn không hợp lệ";
             public const string TABLE_ORDER_NOT_HAVE_TOTAL_PRICE = "Đơn hàng chưa được tính tổng tiền";
+            public const string CAPACITY_INVALID = "Tổng chổ ngồi phải lớn hơn 0";
         }
 
-        public class StaffZoneErrorConstant
+        public class VoucherErrorConstant
         {
-            public const string STAFFZONE_NOT_FOUND = "Khu vực nhân viên không tìm thấy";
+            public const string VOUCHER_NOT_FOUND = "Voucher không tìm thấy";
+        }
+
+        public class VoucherTypeErrorConstant
+        {
+            public const string TOTAL_QUANTITY_INVALID = "Tổng số lượng phải lớn hơn 0";
+        }
+
+        public class ZoneErrorConstant
+        {
+            public const string ZONE_NOT_FOUND = "Khu vực không tìm thấy";
         }
     }
 }

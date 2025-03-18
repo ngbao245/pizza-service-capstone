@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Commands.UpdateProduct;
 using Pizza4Ps.PizzaService.Domain.Abstractions.Services;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Vouchers.Commands.UpdateVoucher
@@ -19,7 +18,8 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Vouchers.Commands.Updat
 				request.Id!.Value,
 				request.Code,
 				request.DiscountType,
-				request.ExpiryDate);
+				request.ExpiryDate,
+				request.VoucherTypeId);
 		}
 	}
 }

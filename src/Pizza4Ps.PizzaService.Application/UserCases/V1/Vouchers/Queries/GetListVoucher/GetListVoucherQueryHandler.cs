@@ -26,8 +26,9 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Vouchers.Queries.GetLis
 			var query = _voucherRepository.GetListAsNoTracking(
 				x => (request.Code == null || x.Code.Contains(request.Code))
 				&& (request.DiscountType == null || x.DiscountType == request.DiscountType)
-				&& (request.ExpiryDate == null || x.ExpiryDate == request.ExpiryDate),
-				includeProperties: request.IncludeProperties);
+				&& (request.ExpiryDate == null || x.ExpiryDate == request.ExpiryDate)
+				&& (request.VoucherTypeId == null || x.VoucherTypeId == request.VoucherTypeId),
+                includeProperties: request.IncludeProperties);
 			var entities = await query
 				.OrderBy(request.SortBy)
 				.Skip(request.SkipCount).Take(request.TakeCount).ToListAsync();

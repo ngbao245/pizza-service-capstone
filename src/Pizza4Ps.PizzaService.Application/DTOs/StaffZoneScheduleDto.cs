@@ -13,6 +13,5 @@
 
         public virtual StaffDto Staff { get; set; }
         public virtual ZoneDto Zone { get; set; }
-        public virtual WorkingTimeDto WorkingTime { get; set; }
     }
 }

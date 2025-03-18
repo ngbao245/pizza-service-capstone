@@ -15,7 +15,6 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
 
         public virtual Staff Staff { get; set; }
         public virtual Zone Zone { get; set; }
-        public virtual WorkingTime WorkingTime { get; set; }
 
         public Guid Guid { get; }
 

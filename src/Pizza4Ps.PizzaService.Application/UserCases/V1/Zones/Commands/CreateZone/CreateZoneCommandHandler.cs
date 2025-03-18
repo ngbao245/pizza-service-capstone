@@ -21,9 +21,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Zones.Commands.CreateZo
         {
             var result = await _zoneService.CreateAsync(
                 request.Name,
-                request.Capacity,
-                request.Description,
-                request.Status);
+                request.Description);
             return new ResultDto<Guid>
             {
                 Id = result

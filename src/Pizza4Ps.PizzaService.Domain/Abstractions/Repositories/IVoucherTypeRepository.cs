@@ -3,7 +3,7 @@ using Pizza4Ps.PizzaService.Domain.Entities;
 
 namespace Pizza4Ps.PizzaService.Domain.Abstractions.Repositories
 {
-    public interface ITableBookingRepository : IRepositoryBase<TableBooking, Guid>
+    public interface IVoucherTypeRepository : IRepositoryBase<VoucherType, Guid>
     {
     }
 }

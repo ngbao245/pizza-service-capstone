@@ -8,24 +8,29 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         public string Code { get; set; }
         public DiscountTypeEnum DiscountType { get; set; }
         public DateTime ExpiryDate { get; set; }
+        public Guid VoucherTypeId { get; set; }
+
+        public virtual VoucherType VoucherType { get; set; }
 
         public Voucher()
         {
         }
 
-        public Voucher(Guid id, string code, DiscountTypeEnum discountType, DateTime expiryDate)
+        public Voucher(Guid id, string code, DiscountTypeEnum discountType, DateTime expiryDate, Guid voucherTypeId)
         {
             Id = id;
             Code = code;
             DiscountType = discountType;
             ExpiryDate = expiryDate;
+            VoucherTypeId = voucherTypeId;
         }
 
-        public void UpdateVoucher(string code, DiscountTypeEnum discountType, DateTime expiryDate)
+        public void UpdateVoucher(string code, DiscountTypeEnum discountType, DateTime expiryDate, Guid voucherTypeId)
         {
             Code = code;
             DiscountType = discountType;
             ExpiryDate = expiryDate;
+            VoucherTypeId = voucherTypeId;
         }
     }
 }

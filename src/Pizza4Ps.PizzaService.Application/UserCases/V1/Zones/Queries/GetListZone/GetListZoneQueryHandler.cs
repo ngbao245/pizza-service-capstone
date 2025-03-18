@@ -25,7 +25,6 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Zones.Queries.GetListZo
         {
             var query = _zoneRepository.GetListAsNoTracking(
                 x => (request.Name == null || x.Name.Contains(request.Name))
-                && (request.Capacity == null || x.Capacity == request.Capacity)
                 && (request.Description == null || x.Description.Contains(request.Description))
                 && (request.Status == null || x.Status == request.Status),
                 includeProperties: request.IncludeProperties);

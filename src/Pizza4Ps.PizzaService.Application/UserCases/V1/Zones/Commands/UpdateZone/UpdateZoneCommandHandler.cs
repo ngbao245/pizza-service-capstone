@@ -17,7 +17,6 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Zones.Commands.UpdateZo
             var result = await _zoneService.UpdateAsync(
                 request.Id!.Value,
                 request.Name,
-                request.Capacity,
                 request.Description,
                 request.Status);
         }

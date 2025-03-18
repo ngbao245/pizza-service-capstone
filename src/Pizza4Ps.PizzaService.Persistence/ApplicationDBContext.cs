@@ -64,8 +64,8 @@ namespace Pizza4Ps.PizzaService.Persistence
         public DbSet<StaffZone> StaffZones { get; set; }
         public DbSet<StaffZoneSchedule> StaffZoneSchedules { get; set; }
         public DbSet<Table> Tables { get; set; }
-        public DbSet<TableBooking> TableBookings { get; set; }
         public DbSet<Voucher> Vouchers { get; set; }
+        public DbSet<VoucherType> VoucherTypes { get; set; }
         public DbSet<Zone> Zones { get; set; }
         #endregion
     }

@@ -26,6 +26,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Vouchers.Queries.GetLis
 				x => (request.Code == null || x.Code.Contains(request.Code))
 				&& (request.DiscountType == null || x.DiscountType == request.DiscountType)
 				&& (request.ExpiryDate == null || x.ExpiryDate == request.ExpiryDate)
+				&& (request.VoucherTypeId == null || x.VoucherTypeId == request.VoucherTypeId)
 					&& x.IsDeleted == request.IsDeleted);
 			var entities = await query
 				.OrderBy(request.SortBy)
