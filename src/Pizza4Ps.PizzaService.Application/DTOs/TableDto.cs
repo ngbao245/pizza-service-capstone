@@ -4,7 +4,7 @@ namespace Pizza4Ps.PizzaService.Application.DTOs
 {
     public class TableDto
     {
-        public Guid? Id { get; set; }
+        public Guid Id { get; set; }
         public string Code { get; set; }
         public int Capacity { get; set; }
         public string Status { get; set; }

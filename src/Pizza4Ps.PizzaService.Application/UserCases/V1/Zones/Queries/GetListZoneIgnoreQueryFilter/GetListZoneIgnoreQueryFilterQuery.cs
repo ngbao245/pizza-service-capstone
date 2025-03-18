@@ -10,6 +10,6 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Zones.Queries.GetListZo
         public bool IsDeleted { get; set; } = false;
         public string? Name { get; set; }
         public string? Description { get; set; }
-        public ZoneTypeEnum? Status { get; set; } = ZoneTypeEnum.Available;
+        public string? Status { get; set; }
     }
 }

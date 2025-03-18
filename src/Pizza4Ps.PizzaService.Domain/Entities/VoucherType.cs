@@ -7,11 +7,16 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
     public class VoucherType : EntityAuditBase<Guid>
     {
         public string Name { get; set; }
-        public string Description { get; set; }
+        public string? Description { get; set; }
         public int TotalQuantity { get; set; }
 
-        public VoucherType(string name, string description, int totalQuantity)
+        public VoucherType()
         {
+        }
+
+        public VoucherType(Guid id, string name, string description, int totalQuantity)
+        {
+            Id = id;
             Name = name;
             Description = description;
             TotalQuantity = ValidateTotalQuantity(totalQuantity);

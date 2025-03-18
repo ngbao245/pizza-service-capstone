@@ -26,7 +26,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Orders.Queries.GetListO
 					x => (request.StartTime == null || x.StartTime == request.StartTime)
 					&& (request.EndTime == null || x.EndTime == request.EndTime)
 					&& (request.Status == null || x.Status.Equals(request.Status))
-					&& (request.TableId == null || x.TableId == request.TableId)
+                    && (request.TableId == null || x.TableId == request.TableId)
 					&& x.IsDeleted == request.IsDeleted);
 			var entities = await query
 				.OrderBy(request.SortBy)

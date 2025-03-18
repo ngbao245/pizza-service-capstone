@@ -5,28 +5,36 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
 {
     public class Order : EntityAuditBase<Guid>
     {
-        public DateTimeOffset StartTime { get; set; }
-        public DateTimeOffset? EndTime { get; set; }
-        public OrderStatusEnum Status { get; set; }
-        public Guid TableId { get; set; }
-        public string TableCode { get; set; }
-        public decimal? TotalPrice { get; set; }
         public string? OrderCode { get; set; }
+        public string TableCode { get; set; }
+        public DateTime StartTime { get; set; }
+        public DateTime? EndTime { get; set; }
+        public decimal? TotalPrice { get; set; }
+        public OrderStatusEnum Status { get; set; }
+        public OrderTypeEnum Type { get; set; }
+        public string? Phone { get; set; }
+
+        public Guid TableId { get; set; }
+
         public virtual Table Table { get; set; }
+        public virtual ICollection<AdditionalFee> AdditionalFees { get; set; } = new List<AdditionalFee>();
         public virtual ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
 
         private Order()
         {
         }
 
-        public Order(Guid id, Guid tableId, string tableCode)
+        public Order(Guid id, Guid tableId, string tableCode, OrderTypeEnum type)
         {
             Id = id;
+            OrderCode = null;
+            TableCode = tableCode;
             StartTime = DateTime.Now;
             EndTime = null;
+            TotalPrice = null;
             Status = OrderStatusEnum.Unpaid;
+            Type = type;
             TableId = tableId;
-            TableCode = tableCode;
         }
 
         public void SetOrderCode(string orderCode)
@@ -55,7 +63,7 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         }
 
 
-        public void UpdateOrder(DateTimeOffset startTime, DateTimeOffset endTime, OrderStatusEnum status, Guid tableId)
+        public void UpdateOrder(DateTime startTime, DateTime endTime, OrderStatusEnum status, Guid tableId)
         {
             StartTime = startTime;
             EndTime = endTime;

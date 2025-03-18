@@ -12,19 +12,13 @@ namespace Pizza4Ps.PizzaService.Persistence.Configurations
 			builder.ToTable(TableNames.OptionItem);
 			builder.HasKey(x => x.Id);
 
-			builder.Property(x => x.Name)
-				.IsRequired()
-				.HasMaxLength(200);
-
 			builder.Property(x => x.AdditionalPrice)
 				.IsRequired()
 				.HasColumnType("decimal(18, 2)");
 
 			builder.HasOne(x => x.Option)
-                .WithMany(o => o.OptionItems)
-                .HasForeignKey(x => x.OptionId)
-				.IsRequired()
-				.OnDelete(DeleteBehavior.Cascade);
+				.WithMany(o => o.OptionItems)
+				.HasForeignKey(x => x.OptionId);
 		}
 	}
 }

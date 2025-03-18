@@ -19,6 +19,7 @@ namespace Pizza4Ps.PizzaService.Persistence.Constants
 		internal const string AppUserLogins = nameof(AppUserLogins); // IdentityRoleClaim
 		internal const string AppUserTokens = nameof(AppUserTokens); // IdentityUserToken
 
+		internal const string AdditionalFee = nameof(AdditionalFee);
 		internal const string Booking = nameof(Booking);
         internal const string BookingSlot = nameof(BookingSlot);
         internal const string Category = nameof(Category);
@@ -38,13 +39,18 @@ namespace Pizza4Ps.PizzaService.Persistence.Constants
 		internal const string ProductOption = nameof(ProductOption);
 		internal const string ScheduleConfig = nameof(ScheduleConfig);
 		internal const string Staff = nameof(Staff);
+        internal const string Size = nameof(Size);
 		internal const string StaffZoneSchedule = nameof(StaffZoneSchedule);
 		internal const string StaffScheduleLog = nameof(StaffScheduleLog);
 		internal const string StaffZone = nameof(StaffZone);
 		internal const string Table = nameof(Table);
 		internal const string TableBooking = nameof(TableBooking);
 		internal const string Voucher = nameof(Voucher);
+		internal const string VoucherType = nameof(VoucherType);
 		internal const string WorkingTime = nameof(WorkingTime);
 		internal const string Zone = nameof(Zone);
-	}
+		internal const string Ingredient = nameof(Ingredient);
+		internal const string Recipe = nameof(Recipe);
+		internal const string ProductSize = nameof(ProductSize);
+    }
 }

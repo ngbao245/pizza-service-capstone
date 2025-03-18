@@ -5,7 +5,7 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
     public class Option : EntityAuditBase<Guid>
     {
         public string Name { get; set; }
-        public string Description { get; set; }
+        public string? Description { get; set; }
         public virtual ICollection<ProductOption> ProductOptions { get; set; }
         public virtual ICollection<OptionItem> OptionItems { get; set; }
 

@@ -9,7 +9,7 @@ namespace Pizza4Ps.PizzaService.Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<VoucherType> builder)
         {
-            builder.ToTable(TableNames.Voucher);
+            builder.ToTable(TableNames.VoucherType);
             builder.HasKey(x => x.Id);
         }
     }

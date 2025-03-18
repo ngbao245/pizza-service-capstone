@@ -5,7 +5,7 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
 {
     public class Zone : EntityAuditBase<Guid>
     {
-        public string? Name { get; set; }
+        public string Name { get; set; }
         public string? Description { get; set; }
         public ZoneTypeEnum Status { get; set; }
 

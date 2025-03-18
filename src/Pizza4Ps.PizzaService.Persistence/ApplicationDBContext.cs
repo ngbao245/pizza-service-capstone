@@ -3,9 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Pizza4Ps.PizzaService.Domain.Abstractions.Entities;
 using Pizza4Ps.PizzaService.Domain.Entities;
 using Pizza4Ps.PizzaService.Domain.Entities.Identity;
-using Pizza4Ps.PizzaService.Persistence.Configurations;
 using Pizza4Ps.PizzaService.Persistence.Intercepter;
-using Pizza4Ps.PizzaService.Persistence.Repositories;
 using System.Linq.Expressions;
 
 namespace Pizza4Ps.PizzaService.Persistence
@@ -47,6 +45,8 @@ namespace Pizza4Ps.PizzaService.Persistence
         #region Configuration DbSet
         public DbSet<AppUser> AppUsers { get; set; }
         public DbSet<AppRole> AppRoles { get; set; }
+
+        public DbSet<AdditionalFee> AdditionalFees{ get; set; }
         public DbSet<Booking> Bookings { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Config> Configs { get; set; }
@@ -64,8 +64,8 @@ namespace Pizza4Ps.PizzaService.Persistence
         public DbSet<StaffZone> StaffZones { get; set; }
         public DbSet<StaffZoneSchedule> StaffZoneSchedules { get; set; }
         public DbSet<Table> Tables { get; set; }
-        public DbSet<Voucher> Vouchers { get; set; }
         public DbSet<VoucherType> VoucherTypes { get; set; }
+        public DbSet<Voucher> Vouchers { get; set; }
         public DbSet<Zone> Zones { get; set; }
         #endregion
     }

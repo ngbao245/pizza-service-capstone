@@ -2,6 +2,12 @@
 {
     public static class BussinessErrorConstants
     {
+        public class AdditionalFeeErrorConstant
+        {
+            public const string VALUE_INVALID = "Giá tiền không được âm";
+            public const string ADDITIONAL_FEE_NOT_FOUND = "Phụ phí không tìm thấy";
+        }
+
         public class CurrentOrderIdExisted
         {
             public const string CURRENT_ORDER_ID_EXISTED = "Bàn đã tồn tại mã đơn hàng";
@@ -14,6 +20,11 @@
         public class StaffScheduleErrorConstant
         {
             public const string STAFFSCHEDULE_NOT_FOUND = "Lịch làm việc nhân viên không tìm thấy";
+        }
+
+        public class IngredientErrorConstant
+        {
+            public const string INGREDIENT_NOT_FOUND = "Nguyên liệu không tìm thấy";
         }
 
         public class StaffZoneScheduleErrorConstant
@@ -29,6 +40,11 @@
         public class TableBookingErrorConstant
         {
             public const string TABLEBOOKING_NOT_FOUND = "Table booking không tìm thấy";
+        }
+
+        public class SizeErrorConstant
+        {
+            public const string SIZE_NOT_FOUND = "Kích thước bánh pizza không tìm thấy";
         }
 
         public class BookingErrorConstant
@@ -131,6 +147,7 @@
         public class VoucherTypeErrorConstant
         {
             public const string TOTAL_QUANTITY_INVALID = "Tổng số lượng phải lớn hơn 0";
+            public const string VOUCHER_TYPE_NOT_FOUND = "Kiểu khuyến mãi không tìm thấy";
         }
 
         public class ZoneErrorConstant

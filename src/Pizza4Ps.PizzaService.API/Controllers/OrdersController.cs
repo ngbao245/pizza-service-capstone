@@ -28,6 +28,12 @@ namespace Pizza4Ps.PizzaService.API.Controllers
             _sender = sender;
         }
 
+        /// <summary>
+        /// 0: Order - Khách tới ăn
+        /// 1: Workshop - Khách tới tham gia workshop
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> CreateAsync([FromBody] CreateOrderCommand request)
         {
