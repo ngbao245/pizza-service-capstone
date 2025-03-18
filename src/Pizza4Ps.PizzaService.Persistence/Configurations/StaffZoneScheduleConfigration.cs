@@ -10,41 +10,15 @@ namespace Pizza4Ps.PizzaService.Persistence.Configurations
         public void Configure(EntityTypeBuilder<StaffZoneSchedule> builder)
         {
             builder.ToTable(TableNames.StaffZoneSchedule);
-
             builder.HasKey(x => x.Id);
-
-            builder.Property(x => x.DayofWeek)
-                .IsRequired();
-
-            builder.Property(x => x.ShiftStart)
-                .IsRequired();
-
-            builder.Property(x => x.ShiftEnd)
-                .IsRequired();
-
-            builder.Property(x => x.Note)
-                .HasMaxLength(500)
-                .HasColumnName("Note");
-
-            builder.Property(x => x.StaffId)
-                .IsRequired();
-
-
-            builder.Property(x => x.ZoneId)
-                .IsRequired();
-
-            builder.Property(x => x.WorkingTimeId)
-                .IsRequired();
 
             builder.HasOne(x => x.Staff)
                 .WithMany()
-                .HasForeignKey(x => x.StaffId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .HasForeignKey(x => x.StaffId);
 
             builder.HasOne(x => x.Zone)
                 .WithMany()
-                .HasForeignKey(x => x.ZoneId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .HasForeignKey(x => x.ZoneId);
         }
     }
 }

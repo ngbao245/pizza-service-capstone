@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Pizza4Ps.PizzaService.Persistence;
 
@@ -11,9 +12,11 @@ using Pizza4Ps.PizzaService.Persistence;
 namespace Pizza4Ps.PizzaService.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20250318154106_entity8")]
+    partial class entity8
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -286,7 +289,8 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -299,7 +303,8 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.HasKey("Id");
 
@@ -387,7 +392,8 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
 
                     b.Property<string>("FullName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -414,7 +420,8 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Comments")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
 
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime2");
@@ -707,7 +714,8 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -720,7 +728,8 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.HasKey("Id");
 
@@ -862,7 +871,8 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("Note")
                         .HasColumnType("nvarchar(max)");
@@ -933,7 +943,8 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<Guid>("OptionItemId")
                         .HasColumnType("uniqueidentifier");
@@ -1064,7 +1075,9 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<byte[]>("Image")
                         .HasColumnType("varbinary(max)");
@@ -1080,10 +1093,13 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18, 2)");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(18, 2)")
+                        .HasDefaultValue(0m);
 
                     b.Property<int>("ProductType")
                         .HasColumnType("int");
@@ -1315,7 +1331,8 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
 
                     b.Property<string>("Code")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
@@ -1331,7 +1348,8 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -1344,11 +1362,13 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("Phone")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(15)
+                        .HasColumnType("nvarchar(15)");
 
                     b.Property<int>("StaffType")
                         .HasColumnType("int");
@@ -1357,9 +1377,6 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Code")
-                        .IsUnique();
 
                     b.ToTable("Staff", (string)null);
                 });
@@ -1479,7 +1496,9 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("Note")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)")
+                        .HasColumnName("Note");
 
                     b.Property<TimeOnly>("ShiftEnd")
                         .HasColumnType("time");
@@ -1753,9 +1772,7 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                 {
                     b.HasOne("Pizza4Ps.PizzaService.Domain.Entities.Order", "Order")
                         .WithMany()
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("OrderId");
 
                     b.Navigation("Order");
                 });
@@ -1831,7 +1848,7 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                     b.HasOne("Pizza4Ps.PizzaService.Domain.Entities.Voucher", "Voucher")
                         .WithMany()
                         .HasForeignKey("VoucherId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Order");
@@ -1923,13 +1940,13 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                     b.HasOne("Pizza4Ps.PizzaService.Domain.Entities.Staff", "Staff")
                         .WithMany()
                         .HasForeignKey("StaffId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Pizza4Ps.PizzaService.Domain.Entities.Zone", "Zone")
                         .WithMany()
                         .HasForeignKey("ZoneId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Staff");

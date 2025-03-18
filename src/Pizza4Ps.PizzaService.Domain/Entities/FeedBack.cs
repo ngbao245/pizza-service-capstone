@@ -6,7 +6,8 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
 	{
 		public int Rating { get; set; }
 		public string? Comments { get; set; }
-		public Guid OrderId { get; set; }
+        public DateTime CreateDate { get; set; }
+        public Guid OrderId { get; set; }
 
 		public virtual Order Order { get; set; }
 
@@ -19,6 +20,7 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
 			Id = id;
 			Rating = rating;
 			Comments = comments;
+			CreateDate = DateTime.Now;
 			OrderId = orderId;
 		}
 

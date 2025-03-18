@@ -12,17 +12,9 @@ namespace Pizza4Ps.PizzaService.Persistence.Configurations
 			builder.ToTable(TableNames.FeedBack);
 			builder.HasKey(x => x.Id);
 
-			builder.Property(x => x.Rating)
-				.IsRequired();
-
-			builder.Property(x => x.Comments)
-				.HasMaxLength(1000)
-				.IsRequired(false);
-
 			builder.HasOne(x => x.Order)
 				.WithMany()
-				.HasForeignKey(x => x.OrderId)
-				.IsRequired(false);
+				.HasForeignKey(x => x.OrderId);
 		}
 	}
 }

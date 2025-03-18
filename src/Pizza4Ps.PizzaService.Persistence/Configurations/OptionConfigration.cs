@@ -11,13 +11,6 @@ namespace Pizza4Ps.PizzaService.Persistence.Configurations
 		{
 			builder.ToTable(TableNames.Option);
 			builder.HasKey(x => x.Id);
-
-			builder.Property(x => x.Name)
-				.IsRequired()
-				.HasMaxLength(200);
-
-			builder.Property(x => x.Description)
-				.HasMaxLength(500);
 		}
 	}
 }

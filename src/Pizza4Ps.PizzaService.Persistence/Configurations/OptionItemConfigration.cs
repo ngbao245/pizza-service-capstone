@@ -13,7 +13,6 @@ namespace Pizza4Ps.PizzaService.Persistence.Configurations
 			builder.HasKey(x => x.Id);
 
 			builder.Property(x => x.AdditionalPrice)
-				.IsRequired()
 				.HasColumnType("decimal(18, 2)");
 
 			builder.HasOne(x => x.Option)
