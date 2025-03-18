@@ -1,4 +1,5 @@
 ﻿using Pizza4Ps.PizzaService.Domain.Abstractions;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Pizza4Ps.PizzaService.Domain.Entities
 {
@@ -29,5 +30,11 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         public int MaxPizzaPerRegister { get; set; }
 
         public int MaxParticipantPerRegister { get; set; }
+
+        public Guid ZoneId { get; set; }
+
+        public Zone Zone { get; set; }
+
+        public string ZoneName { get; set; }
     }
 }
