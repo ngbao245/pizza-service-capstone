@@ -47,5 +47,12 @@ namespace Pizza4Ps.PizzaService.Persistence.Constants
 		internal const string Voucher = nameof(Voucher);
 		internal const string WorkingTime = nameof(WorkingTime);
 		internal const string Zone = nameof(Zone);
-	}
+        internal const string Workshop = nameof(Workshop);
+        internal const string WorkshopFoodDetail = nameof(WorkshopFoodDetail);
+        internal const string WorkshopPizzaRegister = nameof(WorkshopPizzaRegister);
+        internal const string WorkshopPizzaRegisterDetail = nameof(WorkshopPizzaRegisterDetail);
+        internal const string WorkshopRegister = nameof(WorkshopRegister);
+
+
+    }
 }

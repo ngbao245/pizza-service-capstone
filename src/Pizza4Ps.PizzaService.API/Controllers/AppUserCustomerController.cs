@@ -4,7 +4,6 @@ using Pizza4Ps.PizzaService.API.Constants;
 using Pizza4Ps.PizzaService.API.Models;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.AuthCustomer.Commands.LoginCustomer;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.AuthCustomer.Commands.RegisterCustomer;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.Customers.Commands.CreateCustomer;
 
 namespace Pizza4Ps.PizzaService.API.Controllers
 {
