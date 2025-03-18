@@ -10,6 +10,7 @@ namespace Pizza4Ps.PizzaService.Domain.Abstractions.Repositories.RepositoryBase
         IQueryable<TEntity> GetListAsTracking(Expression<Func<TEntity, bool>>? predicate = null, string includeProperties = "");
         Task<long> CountAsync(Expression<Func<TEntity, bool>>? predicate = null);
         void Add(TEntity entity);
+        void AddRange(List<TEntity> entities);
         void Update(TEntity entity);
         void SoftDelete(TEntity entity);
         void HardDelete(TEntity entity);

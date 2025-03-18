@@ -23,7 +23,7 @@ namespace Pizza4Ps.PizzaService.Persistence.Configurations
 				.IsRequired();
 
 			builder.HasOne(x => x.Zone)
-				.WithMany()
+				.WithMany(x => x.Tables)
 				.HasForeignKey(x => x.ZoneId)
 				.OnDelete(DeleteBehavior.Cascade);
 

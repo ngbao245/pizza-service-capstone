@@ -22,5 +22,22 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         public Guid? OrderId { get; set; }
 
         public Order Order { get; set; }
+
+        public ICollection<WorkshopPizzaRegister> WorkshopPizzaRegisters { get; set; }
+
+        public WorkshopRegister()
+        {
+            
+        }
+
+        public WorkshopRegister(Guid customerId, Guid workshopId, DateTime registeredAt, int totalParticipant)
+        {
+            Id = Guid.NewGuid();
+            CustomerId = customerId;
+            WorkshopId = workshopId;
+            RegisteredAt = registeredAt;
+            TotalParticipant = totalParticipant;
+            WorkshopRegisterStatus = WorkshopRegisterStatus.Registered;
+        }
     }
 }

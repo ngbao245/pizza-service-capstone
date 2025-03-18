@@ -13,7 +13,7 @@ namespace Pizza4Ps.PizzaService.Persistence.Configurations
             builder.HasKey(x => x.Id);
 
             builder.HasOne(x => x.WorkshopRegister)
-                .WithMany()
+                .WithMany(x => x.WorkshopPizzaRegisters)
                 .HasForeignKey(x => x.WorkshopRegisterId);
 
             builder.HasOne(x => x.Product)

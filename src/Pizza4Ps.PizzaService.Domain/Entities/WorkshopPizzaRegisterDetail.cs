@@ -13,5 +13,17 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         public Guid OptionItemId { get;set; }
 
         public OptionItem OptionItem { get; set; }
+        public WorkshopPizzaRegisterDetail()
+        {
+            
+        }
+
+        public WorkshopPizzaRegisterDetail(Guid workshopPizzaRegisterId, decimal additionalPrice, Guid optionItemId)
+        {
+            Id = Guid.NewGuid();
+            WorkshopPizzaRegisterId = workshopPizzaRegisterId;
+            AdditionalPrice = additionalPrice;
+            OptionItemId = optionItemId;
+        }
     }
 }

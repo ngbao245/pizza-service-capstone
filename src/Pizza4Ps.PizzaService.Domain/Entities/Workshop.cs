@@ -1,4 +1,5 @@
 ﻿using Pizza4Ps.PizzaService.Domain.Abstractions;
+using Pizza4Ps.PizzaService.Domain.Enums;
 using System.Security.Cryptography.X509Certificates;
 
 namespace Pizza4Ps.PizzaService.Domain.Entities
@@ -31,10 +32,48 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
 
         public int MaxParticipantPerRegister { get; set; }
 
+        public WorkshopStatus WorkshopStatus { get; set; }  
+
         public Guid ZoneId { get; set; }
 
         public Zone Zone { get; set; }
 
         public string ZoneName { get; set; }
+
+        public ICollection<WorkshopFoodDetail> WorkshopFoodDetails { get; set; }
+
+        public ICollection<WorkshopRegister> WorkshopRegisters { get; set; }
+
+        public Workshop()
+        {
+            
+        }
+
+        public Workshop(string name, string header,
+            string description, string location,
+            string organizer, string hotLineContact,
+            DateTime workshopDate, DateTime startRegisterDate,
+            DateTime endRegisterDate, decimal totalFee,
+            int maxRegister, int maxPizzaPerRegister,
+            int maxParticipantPerRegister, Guid zoneId, string zoneName)
+        {
+            Id = Guid.NewGuid();
+            Name = name;
+            Header = header;
+            Description = description;
+            Location = location;
+            Organizer = organizer;
+            HotLineContact = hotLineContact;
+            WorkshopDate = workshopDate;
+            StartRegisterDate = startRegisterDate;
+            EndRegisterDate = endRegisterDate;
+            TotalFee = totalFee;
+            MaxRegister = maxRegister;
+            MaxPizzaPerRegister = maxPizzaPerRegister;
+            MaxParticipantPerRegister = maxParticipantPerRegister;
+            ZoneId = zoneId;
+            ZoneName = zoneName;
+            WorkshopStatus = WorkshopStatus.Scheduled;
+        }
     }
 }

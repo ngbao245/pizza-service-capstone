@@ -17,7 +17,7 @@ namespace Pizza4Ps.PizzaService.Persistence.Configurations
                 .HasForeignKey(x => x.CustomerId);
 
             builder.HasOne(x => x.Workshop)
-                .WithMany()
+                .WithMany(x => x.WorkshopRegisters)
                 .HasForeignKey(x => x.WorkshopId);
 
             builder.HasOne(x => x.Order)
