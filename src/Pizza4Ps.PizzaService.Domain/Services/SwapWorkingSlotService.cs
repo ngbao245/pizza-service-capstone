@@ -15,21 +15,29 @@ namespace Pizza4Ps.PizzaService.Domain.Services
         private readonly ISwapWorkingSlotRepository _swapWorkingSlotRepository;
         private readonly IStaffZoneScheduleRepository _staffZoneScheduleRepository;
         private readonly IWorkingSlotRegisterRepository _workingSlotRegisterRepository;
+        private readonly IStaffRepository _staffRepository;
 
         public SwapWorkingSlotService(
             IUnitOfWork unitOfWork,
             ISwapWorkingSlotRepository swapWorkingSlotRepository,
             IStaffZoneScheduleRepository staffZoneScheduleRepository,
-            IWorkingSlotRegisterRepository workingSlotRegisterRepository)
+            IWorkingSlotRegisterRepository workingSlotRegisterRepository,
+            IStaffRepository staffRepository)
         {
             _unitOfWork = unitOfWork;
             _swapWorkingSlotRepository = swapWorkingSlotRepository;
             _staffZoneScheduleRepository = staffZoneScheduleRepository;
             _workingSlotRegisterRepository = workingSlotRegisterRepository;
+            _staffRepository = staffRepository;
         }
 
         public async Task<Guid> CreateAsync(Guid employeeFromId, Guid employeeToId, Guid workingSlotFromId, Guid workingSlotToId)
         {
+            var today = DateTime.Today;
+            var employeeFrom = await _staffRepository.GetSingleByIdAsync(employeeFromId);
+            var employeeTo = await _staffRepository.GetSingleByIdAsync(employeeToId);
+            if (employeeFrom == null || employeeTo == null) throw new BusinessException(BussinessErrorConstants.StaffErrorConstant.STAFF_NOT_FOUND);
+
             var workingSlotRegisterFrom = await _workingSlotRegisterRepository.GetSingleAsync(
               x => x.StaffId == employeeFromId && x.WorkingSlotId == workingSlotFromId && x.Status == WorkingSlotRegisterStatusEnum.Approved);
             var workingSlotRegisterTo = await _workingSlotRegisterRepository.GetSingleAsync(
@@ -39,7 +47,21 @@ namespace Pizza4Ps.PizzaService.Domain.Services
                 throw new BusinessException(BussinessErrorConstants.WorkingSlotRegisterErrorConstant.WORKING_SLOT_REGISTER_NOT_FOUND);
             }
 
-            var swapWorkingSlot = new SwapWorkingSlot(Guid.NewGuid(), employeeFromId, employeeToId, workingSlotFromId, workingSlotToId);
+            if (workingSlotRegisterFrom.WorkingDate == workingSlotRegisterTo.WorkingDate &&
+                workingSlotRegisterFrom.WorkingSlotId == workingSlotRegisterTo.WorkingSlotId)
+            {
+                throw new BusinessException("Không thể đổi ca nếu cả hai nhân viên có cùng ngày làm việc và cùng ca.");
+            }
+
+            var swapDate = workingSlotRegisterFrom.WorkingDate < workingSlotRegisterTo.WorkingDate ? workingSlotRegisterFrom.WorkingDate : workingSlotRegisterTo.WorkingDate;
+
+            if (swapDate < today.AddDays(2) || (swapDate.DayOfWeek <= DayOfWeek.Tuesday && swapDate < today.AddDays(1)))
+            {
+                throw new BusinessException("Đơn đổi ca phải được tạo trước ít nhất 2 ngày và không sau ngày thứ 2 trong tuần.");
+            }
+
+
+            var swapWorkingSlot = new SwapWorkingSlot(Guid.NewGuid(), employeeFrom.FullName, employeeFromId, workingSlotFromId, employeeTo.FullName, employeeToId, workingSlotToId);
             _swapWorkingSlotRepository.Add(swapWorkingSlot);
             await _unitOfWork.SaveChangeAsync();
             return swapWorkingSlot.Id;

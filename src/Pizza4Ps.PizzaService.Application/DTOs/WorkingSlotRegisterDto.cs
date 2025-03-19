@@ -5,6 +5,7 @@ namespace Pizza4Ps.PizzaService.Application.DTOs
     public class WorkingSlotRegisterDto
     {
         public Guid Id { get; set; }
+        public string StaffName { get; set; }
         public DateTime WorkingDate { get; set; }
         public DateTime RegisterDate { get; set; }
         public string Status { get; set; }

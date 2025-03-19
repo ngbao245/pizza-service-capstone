@@ -39,6 +39,7 @@
         public class WorkingSlotErrorConstant
         {
             public const string WORKING_SLOT_NOT_FOUND = "Working slot not found";
+            public const string INVALID_WORKING_SLOT_SHIFT_TIME= "Shift start time must be earlier than shift end time";
             public const string ALREADY_REGISTERED = "Employee has already registered for this working slot";
         }
 
@@ -60,6 +61,7 @@
         public class DayErrorConstant
         {
             public const string DAY_NOT_FOUND = "Day of week not found";
+            public const string INVALID_DAY_OF_WEEK = "Invalid day of week";
         }
 
         public class StaffScheduleErrorConstant

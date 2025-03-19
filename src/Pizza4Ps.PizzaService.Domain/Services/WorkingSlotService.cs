@@ -29,6 +29,11 @@ namespace Pizza4Ps.PizzaService.Domain.Services
 
         public async Task<Guid> CreateAsync(TimeSpan shiftStart, TimeSpan shiftEnd, int capacity, Guid dayId, Guid shiftId)
         {
+            if (shiftStart >= shiftEnd)
+            {
+                throw new BusinessException(BussinessErrorConstants.WorkingSlotErrorConstant.INVALID_WORKING_SLOT_SHIFT_TIME);
+            }
+
             var shift = await _shiftRepository.GetSingleByIdAsync(shiftId);
             if (shift == null) throw new BusinessException(BussinessErrorConstants.ShiftErrorConstant.SHIFT_NOT_FOUND);
 

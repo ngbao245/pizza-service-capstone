@@ -23,6 +23,13 @@ namespace Pizza4Ps.PizzaService.Persistence.Seed
                     ConfigType = ConfigType.MAXIMUM_REGISTER_SLOT,
                     Key = "MAXIMUM_REGISTER_SLOT",
                     Value = "3"
+                },
+                new Config
+                {
+                    Id = Guid.Parse("b7c6da0c-f0de-44d7-9aa5-cb72eb569a9d"),
+                    ConfigType = ConfigType.REGISTRATION_CUTOFF_DAY,
+                    Key = "REGISTRATION_CUTOFF_DAY",
+                    Value = "2"
                 }
             );
         }

@@ -4,5 +4,6 @@
     {
         VAT,
         MAXIMUM_REGISTER_SLOT,
+        REGISTRATION_CUTOFF_DAY,
     }
 }
