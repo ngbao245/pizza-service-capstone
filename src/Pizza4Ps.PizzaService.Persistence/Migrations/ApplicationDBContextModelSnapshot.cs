@@ -161,7 +161,7 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("OrderId")
+                    b.Property<Guid>("OrderId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("Value")
@@ -673,6 +673,48 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("AppUserCustomer", (string)null);
+                });
+
+            modelBuilder.Entity("Pizza4Ps.PizzaService.Domain.Entities.Ingredient", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<DateTimeOffset?>("DeletedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("DeletedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset?>("ModifiedDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Ingredient", (string)null);
                 });
 
             modelBuilder.Entity("Pizza4Ps.PizzaService.Domain.Entities.Notification", b =>
@@ -1567,11 +1609,16 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                     b.Property<Guid>("ZoneId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("ZoneId1")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CurrentOrderId");
 
                     b.HasIndex("ZoneId");
+
+                    b.HasIndex("ZoneId1");
 
                     b.ToTable("Table", (string)null);
                 });
@@ -2041,6 +2088,17 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Pizza4Ps.PizzaService.Domain.Entities.AdditionalFee", b =>
+                {
+                    b.HasOne("Pizza4Ps.PizzaService.Domain.Entities.Order", "Order")
+                        .WithMany("AdditionalFees")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+                });
+
             modelBuilder.Entity("Pizza4Ps.PizzaService.Domain.Entities.Customer", b =>
                 {
                     b.HasOne("Pizza4Ps.PizzaService.Domain.Entities.Identity.AppUserCustomer", "AppUserCustomer")
@@ -2245,10 +2303,14 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                         .HasForeignKey("CurrentOrderId");
 
                     b.HasOne("Pizza4Ps.PizzaService.Domain.Entities.Zone", "Zone")
-                        .WithMany("Tables")
+                        .WithMany()
                         .HasForeignKey("ZoneId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Pizza4Ps.PizzaService.Domain.Entities.Zone", null)
+                        .WithMany("Tables")
+                        .HasForeignKey("ZoneId1");
 
                     b.Navigation("CurrentOrder");
 
@@ -2286,7 +2348,7 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                         .IsRequired();
 
                     b.HasOne("Pizza4Ps.PizzaService.Domain.Entities.Workshop", "Workshop")
-                        .WithMany()
+                        .WithMany("WorkshopFoodDetails")
                         .HasForeignKey("WorkshopId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -2305,7 +2367,7 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                         .IsRequired();
 
                     b.HasOne("Pizza4Ps.PizzaService.Domain.Entities.WorkshopRegister", "WorkshopRegister")
-                        .WithMany()
+                        .WithMany("WorkshopPizzaRegisters")
                         .HasForeignKey("WorkshopRegisterId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -2324,7 +2386,7 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                         .IsRequired();
 
                     b.HasOne("Pizza4Ps.PizzaService.Domain.Entities.WorkshopPizzaRegister", "WorkshopPizzaRegister")
-                        .WithMany()
+                        .WithMany("WorkshopPizzaRegisterDetails")
                         .HasForeignKey("WorkshopPizzaRegisterId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -2347,7 +2409,7 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                         .HasForeignKey("OrderId");
 
                     b.HasOne("Pizza4Ps.PizzaService.Domain.Entities.Workshop", "Workshop")
-                        .WithMany()
+                        .WithMany("WorkshopRegisters")
                         .HasForeignKey("WorkshopId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -2383,6 +2445,11 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Pizza4Ps.PizzaService.Domain.Entities.Ingredient", b =>
+                {
+                    b.Navigation("Recipes");
+                });
+
             modelBuilder.Entity("Pizza4Ps.PizzaService.Domain.Entities.Option", b =>
                 {
                     b.Navigation("OptionItems");
@@ -2405,6 +2472,23 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
             modelBuilder.Entity("Pizza4Ps.PizzaService.Domain.Entities.Product", b =>
                 {
                     b.Navigation("ProductOptions");
+                });
+
+            modelBuilder.Entity("Pizza4Ps.PizzaService.Domain.Entities.Workshop", b =>
+                {
+                    b.Navigation("WorkshopFoodDetails");
+
+                    b.Navigation("WorkshopRegisters");
+                });
+
+            modelBuilder.Entity("Pizza4Ps.PizzaService.Domain.Entities.WorkshopPizzaRegister", b =>
+                {
+                    b.Navigation("WorkshopPizzaRegisterDetails");
+                });
+
+            modelBuilder.Entity("Pizza4Ps.PizzaService.Domain.Entities.WorkshopRegister", b =>
+                {
+                    b.Navigation("WorkshopPizzaRegisters");
                 });
 
             modelBuilder.Entity("Pizza4Ps.PizzaService.Domain.Entities.Zone", b =>

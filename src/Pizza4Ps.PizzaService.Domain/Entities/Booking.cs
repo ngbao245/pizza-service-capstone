@@ -5,7 +5,6 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
 {
 	public class Booking : EntityAuditBase<Guid>
 	{
-        public Guid Id { get; private set; }
         public Guid? CustomerCode { get; set; }
         public string CustomerName { get; set; }
         public string PhoneNumber { get; set; }
