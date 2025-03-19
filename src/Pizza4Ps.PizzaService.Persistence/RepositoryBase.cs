@@ -96,5 +96,8 @@ namespace Pizza4Ps.PizzaService.Persistence
         {
             _dbContext.Set<TEntity>().Remove(entity);
         }
+
+        public void AddRange(List<TEntity> entities)
+            => _dbContext.AddRange(entities);
     }
 }

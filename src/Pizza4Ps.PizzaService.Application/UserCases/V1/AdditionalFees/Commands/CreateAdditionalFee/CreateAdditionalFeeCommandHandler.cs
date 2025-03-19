@@ -18,7 +18,8 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.AdditionalFees.Commands
             var result = await _additionalFeeService.CreateAsync(
                 request.Name,
                 request.Description,
-                request.Value);
+                request.Value,
+                request.OrderId);
             return new ResultDto<Guid>
             {
                 Id = result

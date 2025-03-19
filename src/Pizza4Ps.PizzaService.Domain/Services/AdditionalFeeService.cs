@@ -17,9 +17,9 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             _additionalFeeRepository = additionalFeeRepository;
         }
 
-        public async Task<Guid> CreateAsync(string name, string description, decimal value)
+        public async Task<Guid> CreateAsync(string name, string description, decimal value, Guid orderId)
         {
-            var entity = new AdditionalFee(Guid.NewGuid(), name, description, value);
+            var entity = new AdditionalFee(Guid.NewGuid(), name, description, value, orderId);
             _additionalFeeRepository.Add(entity);
             await _unitOfWork.SaveChangeAsync();
             return entity.Id;

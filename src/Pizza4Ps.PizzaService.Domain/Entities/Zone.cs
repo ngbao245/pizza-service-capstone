@@ -9,6 +9,8 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         public string? Description { get; set; }
         public ZoneTypeEnum Status { get; set; }
 
+        public virtual ICollection<Table> Tables { get; set; }
+
         private Zone()
         {
         }

@@ -8,6 +8,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.AdditionalFees.Queries.
         public string? Name { get; set; }
         public string? Description { get; set; }
         public decimal? Value { get; set; }
+        public Guid? OrderId { get; set; }
     }
 }
 

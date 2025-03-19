@@ -16,7 +16,7 @@ namespace Pizza4Ps.PizzaService.API.DependencyInjection.Extentions
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "api", Version = "v1" });
-                //Pizza4Ps.PizzaService
+                //IndustrySolution.Mainternance
                 // Set the comments path for the Swagger JSON and UI.
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);

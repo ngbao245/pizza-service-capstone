@@ -9,17 +9,21 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         public string Name { get; set; }
         public string? Description { get; set; }
         public decimal Value { get; set; }
+        public Guid OrderId { get; set; }
+
+        public virtual Order Order { get; set; }
 
         public AdditionalFee()
         {
         }
 
-        public AdditionalFee(Guid id, string name, string description, decimal value)
+        public AdditionalFee(Guid id, string name, string description, decimal value, Guid orderId)
         {
             Id = id;
             Name = name;
             Description = description;
             Value = ValidateValue(value);
+            OrderId = orderId;
         }
 
         private decimal ValidateValue(decimal value)
