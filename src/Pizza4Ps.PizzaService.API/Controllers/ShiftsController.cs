@@ -1,28 +1,27 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Pizza4Ps.PizzaService.API.Constants;
 using Pizza4Ps.PizzaService.API.Models;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.Ingredients.Commands.CreateIngredient;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.Ingredients.Queries.GetIngredientById;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.Ingredients.Queries.GetListIngredient;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Shifts.Commands.CreateShift;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Shifts.Queries.GetShiftById;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Shifts.Queries.GetListShift;
 
 namespace Pizza4Ps.PizzaService.API.Controllers
 {
-    [Route("api/ingredients")]
+    [Route("api/shifts")]
     [ApiController]
-    public class IngredientsController : ControllerBase
+    public class ShiftsController : ControllerBase
     {
-        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ISender _sender;
 
-        public IngredientsController(IHttpContextAccessor httpContextAccessor, ISender sender)
+        public ShiftsController(ISender sender)
         {
-            _httpContextAccessor = httpContextAccessor;
             _sender = sender;
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateAsync([FromBody] CreateIngredientCommand request)
+        public async Task<IActionResult> CreateAsync([FromBody] CreateShiftCommand request)
         {
             var result = await _sender.Send(request);
             return Ok(new ApiResponse
@@ -34,7 +33,7 @@ namespace Pizza4Ps.PizzaService.API.Controllers
         }
 
         [HttpGet()]
-        public async Task<IActionResult> GetListAsync([FromQuery] GetListIngredientQuery query)
+        public async Task<IActionResult> GetListAsync([FromQuery] GetListShiftQuery query)
         {
             var result = await _sender.Send(query);
             return Ok(new ApiResponse
@@ -48,7 +47,7 @@ namespace Pizza4Ps.PizzaService.API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetSingleByIdAsync([FromRoute] Guid id)
         {
-            var result = await _sender.Send(new GetIngredientByIdQuery { Id = id });
+            var result = await _sender.Send(new GetShiftByIdQuery { Id = id });
             return Ok(new ApiResponse
             {
                 Result = result,

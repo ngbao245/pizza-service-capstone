@@ -12,12 +12,12 @@ namespace Pizza4Ps.PizzaService.Domain.Services
     public class ReservationService : DomainService, IReservationService
 	{
 		private readonly IUnitOfWork _unitOfWork;
-        private readonly IBookingSlotRepository _bookingSlotRepository;
+        private readonly IReservationSlotRepository _bookingSlotRepository;
         private readonly IReservationRepository _bookingRepository;
 		private readonly ITableRepository _tableRepository;
 
 		public ReservationService(IUnitOfWork unitOfWork, IReservationRepository bookingRepository
-			, IBookingSlotRepository bookingSlotRepository, ITableRepository tableRepository)
+			, IReservationSlotRepository bookingSlotRepository, ITableRepository tableRepository)
 		{
 			_unitOfWork = unitOfWork;
             _bookingSlotRepository = bookingSlotRepository;

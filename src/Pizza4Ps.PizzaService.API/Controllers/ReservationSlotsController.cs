@@ -20,7 +20,7 @@ namespace Pizza4Ps.PizzaService.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateAsync([FromBody] CreateBookingSlotCommand request)
+        public async Task<IActionResult> CreateAsync([FromBody] CreateReservationSlotCommand request)
         {
             var result = await _sender.Send(request);
             return Ok(new ApiResponse

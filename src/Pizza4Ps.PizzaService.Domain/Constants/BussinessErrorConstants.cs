@@ -8,6 +8,11 @@
             public const string ADDITIONAL_FEE_NOT_FOUND = "Phụ phí không tìm thấy";
         }
 
+        public class ShiftErrorConstant
+        {
+            public const string SHIFT_NOT_FOUND = "Ca làm không tìm thấy";
+        }
+
         public class CurrentOrderIdExisted
         {
             public const string CURRENT_ORDER_ID_EXISTED = "Bàn đã tồn tại mã đơn hàng";
@@ -17,6 +22,12 @@
         {
             public const string PRODUCTOPTION_NOT_FOUND = "Product option không tìm thấy";
         }
+
+        public class DayErrorConstant
+        {
+            public const string DAY_NOT_FOUND = "Không tìm thấy ngày trong tuần";
+        }
+
         public class StaffScheduleErrorConstant
         {
             public const string STAFFSCHEDULE_NOT_FOUND = "Lịch làm việc nhân viên không tìm thấy";

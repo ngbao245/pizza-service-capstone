@@ -4,11 +4,11 @@ using Pizza4Ps.PizzaService.Domain.Abstractions.Services;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.BookingSlots.Commands.CreateBookingSlot
 {
-    public class CreateBookingSlotCommandHandler : IRequestHandler<CreateReservationSlotCommand, ResultDto<Guid>>
+    public class CreateReservationSlotCommandHandler : IRequestHandler<CreateReservationSlotCommand, ResultDto<Guid>>
     {
-        private readonly IBookingSlotService _bookingSlotService;
+        private readonly IReservationSlotService _bookingSlotService;
 
-        public CreateBookingSlotCommandHandler(IBookingSlotService bookingSlotService)
+        public CreateReservationSlotCommandHandler(IReservationSlotService bookingSlotService)
         {
             _bookingSlotService = bookingSlotService;
         }

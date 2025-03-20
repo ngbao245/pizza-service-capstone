@@ -12,6 +12,7 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
     public partial class CheckIn : Migration
 
     public partial class migrateentity : Migration
+
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
