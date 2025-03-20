@@ -66,7 +66,7 @@ namespace Pizza4Ps.PizzaService.API.Controllers
 		{
 			var result = await _sender.Send(new GetFeedbackByIdQuery { Id = id });
 			return Ok(new ApiResponse
-			{
+			{	
 				Result = result,
 				Message = Message.GET_SUCCESS,
 				StatusCode = StatusCodes.Status200OK

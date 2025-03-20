@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Pizza4Ps.PizzaService.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class mergeworkshop : Migration
+    public partial class migrateentity : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -182,6 +182,25 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Config", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Day",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    ModifiedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeletedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    DeletedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Day", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -825,7 +844,7 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Rating = table.Column<int>(type: "int", nullable: false),
                     Comments = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    FeedbackDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     OrderId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreatedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     ModifiedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
@@ -1160,6 +1179,20 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "Day",
+                columns: new[] { "Id", "CreatedBy", "CreatedDate", "DeletedAt", "DeletedBy", "IsDeleted", "ModifiedBy", "ModifiedDate", "Name" },
+                values: new object[,]
+                {
+                    { new Guid("1afe24bd-4d62-480b-a501-692bdd375bcb"), null, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, null, false, null, null, "Thursday" },
+                    { new Guid("24a0e861-15b0-4d60-ac54-adf5ee0f1ccd"), null, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, null, false, null, null, "Wednesday" },
+                    { new Guid("478fcc2b-4839-4fc2-baff-db273aa9e0b4"), null, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, null, false, null, null, "Monday" },
+                    { new Guid("4c37288c-3a9c-4d6e-9565-4302a5a28669"), null, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, null, false, null, null, "Saturday" },
+                    { new Guid("93e1d6e5-b144-4099-be3c-833f7ef87fa3"), null, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, null, false, null, null, "Friday" },
+                    { new Guid("c6f2594b-71f8-46ff-9584-c62c2e02151e"), null, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, null, false, null, null, "Sunday" },
+                    { new Guid("f8dec225-dbb2-4961-9be6-9f11eac723ab"), null, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, null, false, null, null, "Tuesday" }
+                });
+
+            migrationBuilder.InsertData(
                 table: "Size",
                 columns: new[] { "Id", "CreatedBy", "CreatedDate", "DeletedAt", "DeletedBy", "Description", "DiameterCm", "IsDeleted", "ModifiedBy", "ModifiedDate", "Name" },
                 values: new object[,]
@@ -1440,6 +1473,9 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "Config");
+
+            migrationBuilder.DropTable(
+                name: "Day");
 
             migrationBuilder.DropTable(
                 name: "FeedBack");

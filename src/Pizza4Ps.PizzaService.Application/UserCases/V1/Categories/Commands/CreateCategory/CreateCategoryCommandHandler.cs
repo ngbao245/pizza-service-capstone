@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Http;
 using Pizza4Ps.PizzaService.Application.Abstractions;
 using Pizza4Ps.PizzaService.Domain.Abstractions.Services;
 

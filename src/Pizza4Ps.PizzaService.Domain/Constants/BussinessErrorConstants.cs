@@ -8,6 +8,11 @@
             public const string ADDITIONAL_FEE_NOT_FOUND = "Phụ phí không tìm thấy";
         }
 
+        public class ShiftErrorConstant
+        {
+            public const string SHIFT_NOT_FOUND = "Ca làm không tìm thấy";
+        }
+
         public class CurrentOrderIdExisted
         {
             public const string CURRENT_ORDER_ID_EXISTED = "Bàn đã tồn tại mã đơn hàng";
