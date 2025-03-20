@@ -2,7 +2,7 @@
 
 namespace Pizza4Ps.PizzaService.Domain.Abstractions.Services
 {
-    public interface IBookingSlotService : IDomainService
+    public interface IReservationSlotService : IDomainService
     {
         Task<Guid> CreateAsync(TimeSpan startTime, TimeSpan endTime, int capacity);
     }

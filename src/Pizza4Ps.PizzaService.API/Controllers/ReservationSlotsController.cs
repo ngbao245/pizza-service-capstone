@@ -6,14 +6,14 @@ using Pizza4Ps.PizzaService.Application.UserCases.V1.BookingSlots.Commands.Creat
 
 namespace Pizza4Ps.PizzaService.API.Controllers
 {
-    [Route("api/booking-slot-config")]
+    [Route("api/reservation-slot-config")]
     [ApiController]
-    public class BookingSlotsController : ControllerBase
+    public class ReservationSlotsController : ControllerBase
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ISender _sender;
 
-        public BookingSlotsController(IHttpContextAccessor httpContextAccessor, ISender sender)
+        public ReservationSlotsController(IHttpContextAccessor httpContextAccessor, ISender sender)
         {
             _httpContextAccessor = httpContextAccessor;
             _sender = sender;

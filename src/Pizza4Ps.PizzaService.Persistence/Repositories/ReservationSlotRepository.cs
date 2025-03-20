@@ -3,9 +3,9 @@ using Pizza4Ps.PizzaService.Domain.Entities;
 
 namespace Pizza4Ps.PizzaService.Persistence.Repositories
 {
-    public class BookingSlotRepository : RepositoryBase<BookingSlot, Guid>, IBookingSlotRepository
+    public class ReservationSlotRepository : RepositoryBase<ReservationSlot, Guid>, IReservationSlotRepository
     {
-        public BookingSlotRepository(ApplicationDBContext dBContext) : base(dBContext)
+        public ReservationSlotRepository(ApplicationDBContext dBContext) : base(dBContext)
         {
         }
     }

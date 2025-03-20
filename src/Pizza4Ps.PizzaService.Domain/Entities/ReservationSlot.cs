@@ -2,17 +2,17 @@
 
 namespace Pizza4Ps.PizzaService.Domain.Entities
 {
-    public class BookingSlot : EntityAuditBase<Guid>
+    public class ReservationSlot : EntityAuditBase<Guid>
     {
         public TimeSpan StartTime { get; set; } // Ví dụ: 08:00
         public TimeSpan EndTime { get; set; }   // Ví dụ: 10:00
         public int Capacity { get; set; }       // Số khách tối đa của slot
 
-        public BookingSlot()
+        public ReservationSlot()
         {
             
         }
-        public BookingSlot(TimeSpan startTime, TimeSpan endTime, int capacity)
+        public ReservationSlot(TimeSpan startTime, TimeSpan endTime, int capacity)
         {
             Id = Guid.NewGuid();
             StartTime = startTime;

@@ -6,12 +6,12 @@ using Pizza4Ps.PizzaService.Domain.Services.ServiceBase;
 
 namespace Pizza4Ps.PizzaService.Domain.Services
 {
-    public class BookingSlotService : DomainService, IBookingSlotService
+    public class ReservationSlotService : DomainService, IReservationSlotService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IBookingSlotRepository _bookingSlotRepository;
+        private readonly IReservationSlotRepository _bookingSlotRepository;
 
-        public BookingSlotService(IBookingSlotRepository bookingSlotRepository,
+        public ReservationSlotService(IReservationSlotRepository bookingSlotRepository,
             IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
@@ -20,7 +20,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
 
         public async Task<Guid> CreateAsync(TimeSpan startTime, TimeSpan endTime, int capacity)
         {
-            var entity = new BookingSlot(
+            var entity = new ReservationSlot(
                 startTime: startTime,
                 endTime: endTime,
                 capacity: capacity

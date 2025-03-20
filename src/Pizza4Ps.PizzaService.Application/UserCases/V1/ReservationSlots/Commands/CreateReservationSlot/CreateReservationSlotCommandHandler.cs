@@ -4,7 +4,7 @@ using Pizza4Ps.PizzaService.Domain.Abstractions.Services;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.BookingSlots.Commands.CreateBookingSlot
 {
-    public class CreateBookingSlotCommandHandler : IRequestHandler<CreateBookingSlotCommand, ResultDto<Guid>>
+    public class CreateBookingSlotCommandHandler : IRequestHandler<CreateReservationSlotCommand, ResultDto<Guid>>
     {
         private readonly IBookingSlotService _bookingSlotService;
 
@@ -12,7 +12,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.BookingSlots.Commands.C
         {
             _bookingSlotService = bookingSlotService;
         }
-        public async Task<ResultDto<Guid>> Handle(CreateBookingSlotCommand request, CancellationToken cancellationToken)
+        public async Task<ResultDto<Guid>> Handle(CreateReservationSlotCommand request, CancellationToken cancellationToken)
         {
             var result = await _bookingSlotService.CreateAsync(request.StartTime, request.EndTime, request.Capacity);
             return new ResultDto<Guid>
