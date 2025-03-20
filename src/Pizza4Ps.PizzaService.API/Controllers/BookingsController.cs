@@ -9,6 +9,7 @@ using Pizza4Ps.PizzaService.Application.UserCases.V1.Bookings.Commands.UpdateBoo
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Bookings.Queries.GetBookingById;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Bookings.Queries.GetListBooking;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Bookings.Queries.GetListBookingIgnoreQueryFilter;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Feedbacks.Queries.GetFeedbackById;
 
 namespace Pizza4Ps.PizzaService.API.Controllers
 {
@@ -38,6 +39,7 @@ namespace Pizza4Ps.PizzaService.API.Controllers
         }
 
         [HttpGet("ignore-filter")]
+        [ApiExplorerSettings(IgnoreApi = true)]
         public async Task<IActionResult> GetListIgnoreQueryFilterAsync([FromQuery] GetListBookingIgnoreQueryFilterQuery query)
         {
             var result = await _sender.Send(query);
@@ -62,7 +64,8 @@ namespace Pizza4Ps.PizzaService.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetSingleByIdAsync([FromRoute] Guid id)
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public async Task<IActionResult> GetByCustomerCodeAsync([FromRoute] Guid id)
         {
             var result = await _sender.Send(new GetBookingByIdQuery { Id = id });
             return Ok(new ApiResponse

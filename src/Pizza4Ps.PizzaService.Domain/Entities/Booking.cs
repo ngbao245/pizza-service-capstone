@@ -24,7 +24,7 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
             PhoneNumber = phoneNumber;
             BookingTime = bookingTime;
             NumberOfPeople = numberOfPeople;
-            BookingStatus = BookingStatusEnum.Confirmed;
+            BookingStatus = BookingStatusEnum.CheckedIn;
         }
 
         public void Cancel()

@@ -3,6 +3,7 @@
     public enum BookingStatusEnum
     {
         Cancelled,
-        Confirmed
+        Created,
+        CheckedIn
     }
 }

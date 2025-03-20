@@ -2,12 +2,11 @@
 {
     public class BookingDto
     {
-        public Guid Id { get; set; }
-        public DateTime BookingDate { get; set; }
-        public int GuestCount { get; set; }
-        public string Status { get; set; }
-        public Guid CustomerId { get; set; }
-
-        public virtual CustomerDto Customer { get; set; }
+        public Guid? CustomerCode { get; set; }
+        public string CustomerName { get; set; }
+        public string PhoneNumber { get; set; }
+        public DateTime BookingTime { get; set; } // Giờ khách hàng chọn đến
+        public int NumberOfPeople { get; set; }
+        public string BookingStatus { get; private set; }
     }
 }

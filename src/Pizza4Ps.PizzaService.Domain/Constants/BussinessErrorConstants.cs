@@ -17,6 +17,12 @@
         {
             public const string PRODUCTOPTION_NOT_FOUND = "Product option không tìm thấy";
         }
+
+        public class DayErrorConstant
+        {
+            public const string DAY_NOT_FOUND = "Không tìm thấy ngày trong tuần";
+        }
+
         public class StaffScheduleErrorConstant
         {
             public const string STAFFSCHEDULE_NOT_FOUND = "Lịch làm việc nhân viên không tìm thấy";
@@ -51,6 +57,7 @@
         {
             public const string BOOKING_NOT_FOUND = "Bàn đặt không tìm thấy";
             public const string BOOKING_SLOT_FULL = "Hiện tại đã không còn bàn trống";
+            public const string INVALID_BOOKING_STATUS = "Trạng thái đặt bàn không phù hợp";
         }
         public class BookingSlotErrorConstant
         {

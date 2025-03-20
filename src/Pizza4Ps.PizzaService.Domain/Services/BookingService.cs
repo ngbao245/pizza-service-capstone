@@ -34,7 +34,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
 				=> x.BookingTime.Date == bookingTime.Date &&
 					x.BookingTime.TimeOfDay >= slot.StartTime &&
 					x.BookingTime.TimeOfDay < slot.EndTime &&
-					x.BookingStatus == BookingStatusEnum.Confirmed).ToListAsync();
+					x.BookingStatus == BookingStatusEnum.CheckedIn).ToListAsync();
             // Chỉ lấy các booking có BookingTime thuộc slot của cùng ngày
             int total = existingBookings.Sum(b => b.NumberOfPeople);
             if (total + numberOfPeople > slot.Capacity) throw new BusinessException(BussinessErrorConstants.BookingErrorConstant.BOOKING_SLOT_FULL);
