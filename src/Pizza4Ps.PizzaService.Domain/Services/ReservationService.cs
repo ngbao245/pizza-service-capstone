@@ -81,7 +81,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
 			{
 				return false;
 			}
-			if (existingTable.Status != TableStatusEnum.Opening)
+			if (existingTable.Status == TableStatusEnum.Reserved || existingTable.Status == TableStatusEnum.Locked)
 			{
 				throw new BusinessException(BussinessErrorConstants.TableErrorConstant.INVALID_TABLE_STATUS);
 			}
@@ -93,11 +93,6 @@ namespace Pizza4Ps.PizzaService.Domain.Services
 			if (existingReservation.BookingStatus == ReservationStatusEnum.Cancelled)
 			{
 				throw new BusinessException(BussinessErrorConstants.BookingErrorConstant.INVALID_BOOKING_STATUS);
-			}
-			if (existingTable.Capacity != existingReservation.NumberOfPeople)
-			{
-				throw new BusinessException(BussinessErrorConstants.BookingErrorConstant.INVALID_BOOKING_CAPACITY);
-
 			}
 
 			existingReservation.TableId = existingTable.Id;
@@ -128,7 +123,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             {
                 return false;
             }
-            if (existingTable.Status != TableStatusEnum.Booked)
+            if (existingTable.Status != TableStatusEnum.Reserved)
             {
                 throw new BusinessException(BussinessErrorConstants.TableErrorConstant.INVALID_TABLE_STATUS);
             }
