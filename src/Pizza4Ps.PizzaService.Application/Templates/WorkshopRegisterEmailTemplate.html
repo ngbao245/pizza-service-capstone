@@ -1,0 +1,36 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        .container {
+            width: 600px;
+            margin: auto;
+            font-family: Arial, sans-serif;
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .qr-code {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+            .qr-code img {
+                max-width: 200px;
+            }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Xin chào {{CustomerName}},</h2>
+        <p>Bạn đã đăng ký thành công Workshop <strong>{{WorkshopName}}</strong>.</p>
+        <p>Mã đăng ký của bạn là: <strong>{{RegistrationCode}}</strong></p>
+        <div class="qr-code">
+            <img src="cid:qrCodeImage" alt="QR Code">
+        </div>
+        <p>Vui lòng mang mã này đến sự kiện để check-in.</p>
+        <p>Cảm ơn bạn!</p>
+    </div>
+</body>
+</html>

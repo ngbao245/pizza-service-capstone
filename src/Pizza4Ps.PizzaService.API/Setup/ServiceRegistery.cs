@@ -45,6 +45,7 @@ namespace Pizza4Ps.PizzaService.API.Setup
             services.AddServicesFromAssembly();
             services.AddAutoMapperService();
             services.AddMediatRService();
+            services.AddMailService();
         }
 
         private static void RegisterPersistenceServices(IServiceCollection services)
