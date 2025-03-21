@@ -5,32 +5,29 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
 {
     public class Staff : EntityAuditBase<Guid>
     {
-        public string Code { get; set; }
-        public string Name { get; set; }
+        public string FullName { get; set; }
         public string Phone { get; set; }
         public string Email { get; set; }
-        public StaffTypeEnum.StaffType StaffType { get; set; }
-        public StaffTypeEnum.StaffStatus Status { get; set; }
+        public StaffTypeEnum StaffType { get; set; }
+        public StaffStatusEnum Status { get; set; }
 
         public Staff()
         {
         }
 
-        public Staff(Guid id, string code, string name, string phone, string email, StaffTypeEnum.StaffType staffType, StaffTypeEnum.StaffStatus status)
+        public Staff(Guid id, string fullName, string phone, string email, StaffTypeEnum staffType, StaffStatusEnum status)
         {
             Id = id;
-            Code = code;
-            Name = name;
+            FullName = fullName;
             Phone = phone;
             Email = email;
             StaffType = staffType;
             Status = status;
         }
 
-        public void UpdateStaff(string code, string name, string phone, string email, StaffTypeEnum.StaffType staffType, StaffTypeEnum.StaffStatus status)
+        public void UpdateStaff(string fullName, string phone, string email, StaffTypeEnum staffType, StaffStatusEnum status)
         {
-            Code = code;
-            Name = name;
+            FullName = fullName;
             Phone = phone;
             Email = email;
             StaffType = staffType;

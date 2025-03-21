@@ -11,9 +11,6 @@ namespace Pizza4Ps.PizzaService.Persistence.Configurations
         {
             builder.ToTable(TableNames.Staff);
             builder.HasKey(x => x.Id);
-
-            builder.HasIndex(x => x.Code)
-                .IsUnique();
         }
     }
 }

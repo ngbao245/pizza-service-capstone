@@ -9,7 +9,7 @@ namespace Pizza4Ps.PizzaService.Application.DTOs
         public string Name { get; set; }
         public string Phone { get; set; }
         public string Email { get; set; }
-        public StaffTypeEnum.StaffType StaffType { get; set; }
-        public StaffTypeEnum.StaffStatus Status { get; set; }
+        public string StaffType { get; set; }
+        public string Status { get; set; }
     }
 }

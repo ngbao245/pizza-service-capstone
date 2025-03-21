@@ -19,8 +19,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Staffs.Commands.CreateS
 		public async Task<ResultDto<Guid>> Handle(CreateStaffCommand request, CancellationToken cancellationToken)
 		{
 			var result = await _staffService.CreateAsync(
-				request.Code,
-				request.Name,
+				request.FullName,
 				request.Phone,
 				request.Email,
 				request.StaffType,

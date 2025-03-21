@@ -8,6 +8,11 @@
             public const string ADDITIONAL_FEE_NOT_FOUND = "Phụ phí không tìm thấy";
         }
 
+        public class RoleErrorConstant
+        {
+            public const string ROLE_NOT_FOUND = "Không tìm thấy vị trí";
+        }
+
         public class ShiftErrorConstant
         {
             public const string SHIFT_NOT_FOUND = "Ca làm không tìm thấy";
@@ -64,6 +69,7 @@
             public const string BOOKING_SLOT_FULL = "Hiện tại đã không còn bàn trống";
             public const string INVALID_BOOKING_STATUS = "Trạng thái đặt bàn không phù hợp";
         }
+
         public class BookingSlotErrorConstant
         {
             public const string BOOKING_SLOT_NOT_FOUND = "Không thể đặt bàn vào thời gian này";
@@ -129,6 +135,8 @@
         public class StaffErrorConstant
         {
             public const string STAFF_NOT_FOUND = "Nhân viên không tìm thấy";
+            public const string INVALID_STAFF_STATUS = "Trạng thái nhân viên không phù hợp";
+            public const string INVALID_STAFF_TYPE = "Loại nhân viên không phù hợp";
         }
 
         public class OptionErrorConstant

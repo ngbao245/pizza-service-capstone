@@ -25,7 +25,13 @@ namespace Pizza4Ps.PizzaService.API.Controllers
 			_sender = sender;
 		}
 
-		[HttpPost]
+        /// <summary>
+        /// StaffType: 0-Staff, 1-Manager, 2-Cheff ||
+        /// StaffStatus: 0-PartTime, 1-FullTime
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpPost]
 		public async Task<IActionResult> CreateAsync([FromBody] CreateStaffCommand request)
 		{
 			var result = await _sender.Send(request);
@@ -38,7 +44,8 @@ namespace Pizza4Ps.PizzaService.API.Controllers
 		}
 
 		[HttpGet("ignore-filter")]
-		public async Task<IActionResult> GetListIgnoreQueryFilterAsync([FromQuery] GetListStaffIgnoreQueryFilterQuery query)
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public async Task<IActionResult> GetListIgnoreQueryFilterAsync([FromQuery] GetListStaffIgnoreQueryFilterQuery query)
 		{
 			var result = await _sender.Send(query);
 			return Ok(new ApiResponse
