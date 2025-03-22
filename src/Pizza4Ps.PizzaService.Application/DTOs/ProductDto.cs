@@ -13,6 +13,6 @@ namespace Pizza4Ps.PizzaService.Application.DTOs
         public string ProductType { get; set; }
 
         public virtual CategoryDto Category { get; set; }
-        public virtual ICollection<ProductOptionDto> ProductOptions { get; set; } = new List<ProductOptionDto>();
+        public virtual ICollection<OptionDto> ProductOptions { get; set; } = new List<OptionDto>();
     }
 }

@@ -2,8 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Pizza4Ps.PizzaService.API.Constants;
 using Pizza4Ps.PizzaService.API.Models;
-using Pizza4Ps.PizzaService.Application.Abstractions;
-using Pizza4Ps.PizzaService.Application.DTOs;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Options.Queries.GetListOptionByProduct;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Commands.CreateProduct;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Commands.DeleteProduct;

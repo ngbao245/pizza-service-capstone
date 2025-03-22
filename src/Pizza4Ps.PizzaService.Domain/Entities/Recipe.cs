@@ -5,19 +5,13 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
     public class Recipe : EntityAuditBase<Guid>
     {
         public string Unit { get; set; }
+        public string Name { get; set; }
 
-        public Guid ProductId { get; set; }
-        public Guid IngredientId { get; set; }
-
-        public virtual Product Product { get; set; }
-        public virtual Ingredient Ingredient { get; set; }
-
-        public Recipe(Guid id, string unit, Guid productId, Guid ingredientId)
+        public Recipe(Guid id, string unit, string name)
         {
             Id = id;
             Unit = unit;
-            ProductId = productId;
-            IngredientId = ingredientId;
+            Name = name;
         }
     }
 }
