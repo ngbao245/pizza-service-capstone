@@ -20,9 +20,9 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             _staffZoneScheduleRepository = staffZoneScheduleRepository;
         }
 
-        public async Task<Guid> CreateAsync(int dayofWeek, TimeOnly shiftStart, TimeOnly shiftEnd, string note, Guid staffId, Guid zoneId, Guid workingtimeId)
+        public async Task<Guid> CreateAsync(Guid staffId, Guid zoneId, Guid workingSlotId)
         {
-            var entity = new StaffZoneSchedule(Guid.NewGuid(), dayofWeek, shiftStart, shiftEnd, note, staffId, zoneId, workingtimeId);
+            var entity = new StaffZoneSchedule(Guid.NewGuid(), staffId, zoneId, workingSlotId);
             _staffZoneScheduleRepository.Add(entity);
             await _unitOfWork.SaveChangeAsync();
             return entity.Id;
@@ -59,10 +59,11 @@ namespace Pizza4Ps.PizzaService.Domain.Services
 
         public async Task<Guid> UpdateAsync(Guid id, int dayofWeek, TimeOnly shiftStart, TimeOnly shiftEnd, string note, Guid staffId, Guid zoneId, Guid workingtimeId)
         {
-            var entity = await _staffZoneScheduleRepository.GetSingleByIdAsync(id);
-            entity.UpdateStaffZoneSchedule(dayofWeek, shiftStart, shiftEnd, note, staffId, zoneId, workingtimeId);
-            await _unitOfWork.SaveChangeAsync();
-            return entity.Id;
+            //var entity = await _staffZoneScheduleRepository.GetSingleByIdAsync(id);
+            //entity. UpdateStaffZoneSchedule(staffId, zoneId, workingtimeId);
+            //await _unitOfWork.SaveChangeAsync();
+            //return entity.Id;
+            throw new NotImplementedException();
         }
     }
 }

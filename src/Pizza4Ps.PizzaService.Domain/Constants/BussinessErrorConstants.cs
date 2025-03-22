@@ -8,9 +8,29 @@
             public const string ADDITIONAL_FEE_NOT_FOUND = "Phụ phí không tìm thấy";
         }
 
+        public class WorkingSlotRegisterErrorConstant
+        {
+            public const string INVALID_WORKING_SLOT_REGISTER_STATUS = "Trạng thái đăng ký lịch làm việc không tìm thấy";
+            public const string WORKING_SLOT_REGISTER_NOT_FOUND = "Không tìm thấy đơn đăng ký lịch làm việc";
+            public const string WORKING_SLOT_REGISTER_ALREADY_APPROVED = "Đơn đăng ký lịch làm việc đã được duyệt";
+            public const string WORKING_SLOT_REGISTER_ALREADY_REJECTED = "Đơn đăng ký lịch làm việc đã bị từ chối";
+        }
+
+        public class ConfigErrorConstant
+        {
+            public const string CONFIG_NOT_FOUND = "Không tìm thấy config";
+            public const string CONFIG_INVALID = "Config không hợp lệ";
+        }
+
         public class RoleErrorConstant
         {
             public const string ROLE_NOT_FOUND = "Không tìm thấy vị trí";
+        }
+
+        public class WorkingSlotErrorConstant
+        {
+            public const string WORKING_SLOT_NOT_FOUND = "Không tìm thấy slot làm việc";
+            public const string ALREADY_REGISTERED = "Nhân viên đã đăng ký ca làm việc này";
         }
 
         public class ShiftErrorConstant

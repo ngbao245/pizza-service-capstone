@@ -93,7 +93,7 @@ namespace Pizza4Ps.PizzaService.API.Controllers
         }
 
         [HttpPut("serving/{id}")]
-        public async Task<IActionResult> ServAsync([FromRoute] Guid id)
+        public async Task<IActionResult> ServingAsync([FromRoute] Guid id)
         {
             await _sender.Send(new UpdateStatusToServingCommand
             {

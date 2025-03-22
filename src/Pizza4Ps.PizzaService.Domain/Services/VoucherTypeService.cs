@@ -3,7 +3,6 @@ using Pizza4Ps.PizzaService.Domain.Abstractions.Services;
 using Pizza4Ps.PizzaService.Domain.Abstractions;
 using Pizza4Ps.PizzaService.Domain.Services.ServiceBase;
 using Pizza4Ps.PizzaService.Domain.Entities;
-using Pizza4Ps.PizzaService.Domain.Enums;
 
 namespace Pizza4Ps.PizzaService.Domain.Services
 {

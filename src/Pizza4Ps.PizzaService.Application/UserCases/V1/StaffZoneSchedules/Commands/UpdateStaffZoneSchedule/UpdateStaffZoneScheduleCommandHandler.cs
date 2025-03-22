@@ -14,16 +14,17 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.StaffZoneSchedules.Comm
 
         public async Task Handle(UpdateStaffZoneScheduleCommand request, CancellationToken cancellationToken)
         {
-            var result = await _StaffZoneScheduleService.UpdateAsync(
-                request.Id!.Value,
-                request.DayofWeek,
-                request.ShiftStart,
-                request.ShiftEnd,
-                request.Note,
-                request.StaffId,
-                request.ZoneId,
-                request.WorkingTimeId
-                );
+            throw new NotImplementedException();
+            //var result = await _StaffZoneScheduleService.UpdateAsync(
+            //    request.Id!.Value,
+            //    request.DayofWeek,
+            //    request.ShiftStart,
+            //    request.ShiftEnd,
+            //    request.Note,
+            //    request.StaffId,
+            //    request.ZoneId,
+            //    request.WorkingTimeId
+            //    );
         }
     }
 }

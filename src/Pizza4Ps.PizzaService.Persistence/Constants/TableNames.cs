@@ -61,5 +61,7 @@ namespace Pizza4Ps.PizzaService.Persistence.Constants
         internal const string Day = nameof(Day);
         internal const string Shift = nameof(Shift);
         internal const string Role = nameof(Role);
+        internal const string WorkingSlot = nameof(WorkingSlot);
+        internal const string WorkingSlotRegister = nameof(WorkingSlotRegister);
     }
 }

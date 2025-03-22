@@ -4,45 +4,27 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
 {
     public class StaffZoneSchedule : EntityAuditBase<Guid>
     {
-        public int DayofWeek { get; set; }
-        public TimeOnly ShiftStart { get; set; }
-        public TimeOnly ShiftEnd { get; set; }
-        public string? Note { get; set; }
         public Guid StaffId { get; set; }
         public Guid ZoneId { get; set; }
-        public Guid WorkingTimeId { get; set; }
+        public Guid WorkingSlotId { get; set; }
 
 
         public virtual Staff Staff { get; set; }
         public virtual Zone Zone { get; set; }
-
-        public Guid Guid { get; }
+        public virtual WorkingSlot WorkingSlot { get; set; }
 
         public StaffZoneSchedule()
         {
         }
 
-        public StaffZoneSchedule(Guid id, int dayofWeek, TimeOnly shiftStart, TimeOnly shiftEnd, string note, Guid staffId, Guid zoneId, Guid workingtimeId)
+        public StaffZoneSchedule(Guid id, Guid staffId, Guid zoneId, Guid workingSlotId)
         {
             Id = id;
-            DayofWeek = dayofWeek;
-            ShiftStart = shiftStart;
-            ShiftEnd = shiftEnd;
-            Note = note;
             StaffId = staffId;
             ZoneId = zoneId;
-            WorkingTimeId = workingtimeId;
+            WorkingSlotId = workingSlotId;
         }
 
-        public void UpdateStaffZoneSchedule(int dayofWeek, TimeOnly shiftStart, TimeOnly shiftEnd, string note, Guid staffId, Guid zoneId, Guid workingtimeId)
-        {
-            DayofWeek = dayofWeek;
-            ShiftStart = shiftStart;
-            ShiftEnd = shiftEnd;
-            Note = note;
-            StaffId = staffId;
-            ZoneId = zoneId;
-            WorkingTimeId = workingtimeId;
-        }
+
     }
 }
