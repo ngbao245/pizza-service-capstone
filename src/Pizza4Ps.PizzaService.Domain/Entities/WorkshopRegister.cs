@@ -13,6 +13,8 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
 
         public Workshop Workshop { get; set; }
 
+        public string Code { get; set; }
+
         public WorkshopRegisterStatus WorkshopRegisterStatus { get; set; }
         
         public DateTime RegisteredAt { get; set; }
