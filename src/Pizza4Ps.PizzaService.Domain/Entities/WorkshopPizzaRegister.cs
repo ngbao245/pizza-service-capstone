@@ -25,11 +25,12 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
             
         }
 
-        public WorkshopPizzaRegister(Guid workshopRegisterId, Guid productId, decimal price, decimal totalPrice)
+        public WorkshopPizzaRegister(Guid workshopRegisterId, Guid productId, decimal price, decimal totalPrice, string name)
         {
             Id = Guid.NewGuid();
             WorkshopRegisterId = workshopRegisterId;
             ProductId = productId;
+            Name = name;
             Price = price;
             TotalPrice = totalPrice;
         }
