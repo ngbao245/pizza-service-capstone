@@ -15,7 +15,8 @@ namespace Pizza4Ps.PizzaService.Persistence.Configurations
 
             builder.HasOne(x => x.Zone)
                 .WithMany()
-                .HasForeignKey(x => x.ZoneId);
+                .HasForeignKey(x => x.ZoneId)
+                .OnDelete(DeleteBehavior.SetNull);
 
         }
     }

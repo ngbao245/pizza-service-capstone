@@ -1,5 +1,4 @@
-﻿using System.Xml.Linq;
-using Pizza4Ps.PizzaService.Domain.Abstractions;
+﻿using Pizza4Ps.PizzaService.Domain.Abstractions;
 using Pizza4Ps.PizzaService.Domain.Entities.Identity;
 
 namespace Pizza4Ps.PizzaService.Domain.Entities

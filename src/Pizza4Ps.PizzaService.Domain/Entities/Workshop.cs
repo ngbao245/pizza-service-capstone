@@ -1,6 +1,5 @@
 ﻿using Pizza4Ps.PizzaService.Domain.Abstractions;
 using Pizza4Ps.PizzaService.Domain.Enums;
-using System.Security.Cryptography.X509Certificates;
 
 namespace Pizza4Ps.PizzaService.Domain.Entities
 {
@@ -34,7 +33,7 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
 
         public WorkshopStatus WorkshopStatus { get; set; }  
 
-        public Guid ZoneId { get; set; }
+        public Guid? ZoneId { get; set; }
 
         public Zone Zone { get; set; }
 

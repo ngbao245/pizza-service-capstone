@@ -16,8 +16,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Staffs.Commands.UpdateS
 		{
 			var result = await _staffService.UpdateAsync(
 				request.Id!.Value,
-				request.Code,
-				request.Name,
+				request.FullName,
 				request.Phone,
 				request.Email,
 				request.StaffType,

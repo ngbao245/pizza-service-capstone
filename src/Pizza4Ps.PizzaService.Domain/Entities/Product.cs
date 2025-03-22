@@ -13,7 +13,8 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         public ProductTypeEnum ProductType { get; set; }
 
         public virtual Category Category { get; set; }
-        public virtual ICollection<Option> Options { get; set; } = new List<Option>();
+
+        public virtual ICollection<Option> Options { get; set; }
 
         public Product()
         {

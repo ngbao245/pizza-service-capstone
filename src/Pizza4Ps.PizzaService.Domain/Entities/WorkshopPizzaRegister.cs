@@ -8,7 +8,9 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
 
         public WorkshopRegister WorkshopRegister { get; set; }
 
-        public Guid ProductId { get; set; }
+        public string Name { get; set; }
+
+        public Guid? ProductId { get; set; }
 
         public Product Product { get; set; }    
         

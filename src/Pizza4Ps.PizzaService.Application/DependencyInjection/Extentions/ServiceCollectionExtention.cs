@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Pizza4Ps.PizzaService.Application.Helpers;
 using System.Reflection;
 
 namespace Pizza4Ps.PizzaService.Application.DependencyInjection.Extentions
@@ -30,6 +31,10 @@ namespace Pizza4Ps.PizzaService.Application.DependencyInjection.Extentions
 
             return services;
         }
+        public static void AddMailService(this IServiceCollection services)
+        {
+            services.AddTransient<EmailService>();
+        }   
         public static void AddAutoMapperService(this IServiceCollection services)
         {
             services.AddAutoMapper(AssemblyReference.Assembly);

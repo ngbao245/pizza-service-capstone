@@ -6,30 +6,25 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
 	{
 		public string Name { get; set; }
 		public decimal AdditionalPrice { get; set; }
-		public Guid OptionItemId { get; set; }
 		public Guid OrderItemId { get; set; }
-
-		public virtual OptionItem OptionItem { get; set; }
 		public virtual OrderItem OrderItem { get; set; }
 
 		public OrderItemDetail()
 		{
 		}
 
-		public OrderItemDetail(Guid id, string name, decimal additionalPrice, Guid optionItemId, Guid orderItemId)
+		public OrderItemDetail(Guid id, string name, decimal additionalPrice, Guid orderItemId)
 		{
 			Id = id;
 			Name = name;
 			AdditionalPrice = additionalPrice;
-			OptionItemId = optionItemId;
 			OrderItemId = orderItemId;
 		}
 
-		public void UpdateOptionItemOrderItem(string name, decimal additionalPrice, Guid optionItemId, Guid orderItemId)
+		public void UpdateOptionItemOrderItem(string name, decimal additionalPrice, Guid orderItemId)
 		{
 			Name = name;
 			AdditionalPrice = additionalPrice;
-			OptionItemId = optionItemId;
 			OrderItemId = orderItemId;
 		}
 	}

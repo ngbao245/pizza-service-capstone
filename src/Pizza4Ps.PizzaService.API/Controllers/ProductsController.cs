@@ -47,26 +47,13 @@ namespace Pizza4Ps.PizzaService.API.Controllers
 			});
 		}
 
-        [ApiExplorerSettings(IgnoreApi = true)]
         [HttpGet("menu")]
+        [ApiExplorerSettings(IgnoreApi = true)]
         public async Task<IActionResult> GetMenu([FromQuery] GetMenuQuery query)
         {
             var result = await _sender.Send(query);
             return Ok(new ApiResponse
 			{
-                Result = result,
-                Message = Message.GET_SUCCESS,
-                StatusCode = StatusCodes.Status200OK
-            });
-        }
-
-        [HttpGet("{productId}/options")]
-        public async Task<IActionResult> GetOptionsByProduct([FromRoute] Guid productId,[FromQuery] GetListOptionByProductQuery query)
-        {
-            query.ProductId = productId;
-            var result = await _sender.Send(query);
-            return Ok(new ApiResponse
-            {
                 Result = result,
                 Message = Message.GET_SUCCESS,
                 StatusCode = StatusCodes.Status200OK

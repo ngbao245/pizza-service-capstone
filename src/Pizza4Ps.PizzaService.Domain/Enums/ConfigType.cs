@@ -4,6 +4,5 @@
     {
         VAT,
         MAXIMUM_REGISTER_SLOT,
-        MAXIMUM_REGISTER_PIZZA
     }
 }

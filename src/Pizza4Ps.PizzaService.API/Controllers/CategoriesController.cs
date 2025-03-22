@@ -37,6 +37,7 @@ namespace Pizza4Ps.PizzaService.API.Controllers
                 StatusCode = StatusCodes.Status201Created
             });
         }
+
         [Authorize(Roles = "Staff")]
         [HttpGet("ignore-filter")]
         public async Task<IActionResult> GetListIgnoreQueryFilterAsync([FromQuery] GetListCategoryIgnoreQueryFilterQuery query)

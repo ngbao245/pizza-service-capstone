@@ -5,6 +5,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Options.Commands.Create
 {
     public class CreateOptionCommand : IRequest<ResultDto<Guid>>
 	{
+        public Guid ProductId { get; set; }
         public string Name { get; set; }
         public string? Description { get; set; }
     }

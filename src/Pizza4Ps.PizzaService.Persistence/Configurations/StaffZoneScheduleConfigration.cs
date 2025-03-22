@@ -19,6 +19,10 @@ namespace Pizza4Ps.PizzaService.Persistence.Configurations
             builder.HasOne(x => x.Zone)
                 .WithMany()
                 .HasForeignKey(x => x.ZoneId);
+
+            builder.HasOne(x => x.WorkingSlot)
+                .WithMany()
+                .HasForeignKey(x => x.WorkingSlotId);
         }
     }
 }

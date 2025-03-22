@@ -8,23 +8,31 @@
 
 	<ItemGroup>
 	  <Compile Remove="DependencyInjection\Options\**" />
+	  <Compile Remove="Models\**" />
+		<None Update="Templates\WorkshopRegisterEmailTemplate.html">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
 	  <EmbeddedResource Remove="DependencyInjection\Options\**" />
+	  <EmbeddedResource Remove="Models\**" />
 	  <None Remove="DependencyInjection\Options\**" />
+	  <None Remove="Models\**" />
 	</ItemGroup>
 
 	<ItemGroup>
+		<Folder Include="Templates\" />
 		<Folder Include="UserCases\V1\Tables\Queries\" />
 		<Folder Include="UserCases\V1\Tables\Queries\" />
 		<Folder Include="UserCases\V1\Tables\Queries\" />
 		<Folder Include="UserCases\V1\Tables\Queries\" />
-		<Folder Include="Models\" />
 		<Folder Include="Validators\" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="AutoMapper" Version="13.0.1" />
 		<PackageReference Include="FluentValidation" Version="11.10.0" />
+		<PackageReference Include="MailKit" Version="4.11.0" />
 		<PackageReference Include="MediatR" Version="12.4.0" />
+		<PackageReference Include="QRCoder" Version="1.6.0" />
 	</ItemGroup>
 
 	<ItemGroup>

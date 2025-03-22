@@ -117,7 +117,6 @@ namespace Pizza4Ps.PizzaService.Domain.Services
                         id: Guid.NewGuid(),
                         name: optionItem.Name,
                         additionalPrice: optionItem.AdditionalPrice,
-                        optionItemId: optionItemId,
                         orderItemId: orderItem.Id
                         );
                     //_optionItemOrderItemRepository.Add(orderDetail);

@@ -27,7 +27,6 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.OrderItems.Queries.GetO
             var items = await _orderItemRepository
                 .GetListAsTracking(x => x.OrderId == request.OrderId)
                 .Include(x => x.OrderItemDetails)
-                .ThenInclude(x => x.OptionItem)
                 .ToListAsync();
             if (!items.Any()) throw new BusinessException(BussinessErrorConstants.OrderItemErrorConstant.ORDER_ITEM_NOT_FOUND);
 

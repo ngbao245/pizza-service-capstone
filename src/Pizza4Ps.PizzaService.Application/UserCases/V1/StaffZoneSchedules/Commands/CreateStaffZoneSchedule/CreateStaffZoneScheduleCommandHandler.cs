@@ -18,20 +18,21 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.StaffZoneSchedules.Comm
 
         public async Task<ResultDto<Guid>> Handle(CreateStaffZoneScheduleCommand request, CancellationToken cancellationToken)
         {
-            var result = await _StaffZoneScheduleService.CreateAsync(
-                request.DayofWeek,
-                request.ShiftStart,
-                request.ShiftEnd,
-                request.Note,
-                request.StaffId,
-                request.ZoneId,
-                request.WorkingTimeId
+            //var result = await _StaffZoneScheduleService.CreateAsync(
+            //    request.DayofWeek,
+            //    request.ShiftStart,
+            //    request.ShiftEnd,
+            //    request.Note,
+            //    request.StaffId,
+            //    request.ZoneId,
+            //    request.WorkingTimeId
 
-                );
-            return new ResultDto<Guid>
-            {
-                Id = result
-            };
+            //    );
+            //return new ResultDto<Guid>
+            //{
+            //    Id = result
+            //};
+        throw new NotImplementedException();
         }
     }
 }
