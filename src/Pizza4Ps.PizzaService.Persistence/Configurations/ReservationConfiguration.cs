@@ -9,7 +9,7 @@ namespace Pizza4Ps.PizzaService.Persistence.Configurations
 	{
 		public void Configure(EntityTypeBuilder<Reservation> builder)
 		{
-			builder.ToTable(TableNames.Booking);
+			builder.ToTable(TableNames.Reservation);
 			builder.HasKey(x => x.Id);
 		}
 	}

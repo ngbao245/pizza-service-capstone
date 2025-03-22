@@ -24,8 +24,8 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.ProductSizes.Queries.Ge
         public async Task<PaginatedResultDto<ProductSizeDto>> Handle(GetListProductSizeQuery request, CancellationToken cancellationToken)
         {
             var query = _productSizeRepository.GetListAsNoTracking(
-                x => (request.ProductId == null || x.ProductId.Contains(request.ProductId))
-                && (request.RecipeId == null || x.RecipeId.Contains(request.RecipeId))
+                x => (request.ProductId == null || x.ProductId == request.ProductId)
+                && (request.RecipeId == null || x.RecipeId == request.RecipeId)
                 && (request.SizeId == null || x.SizeId == request.SizeId)
                 ,
                 includeProperties: request.IncludeProperties);

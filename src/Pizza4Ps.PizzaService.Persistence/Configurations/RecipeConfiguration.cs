@@ -12,9 +12,13 @@ namespace Pizza4Ps.PizzaService.Persistence.Configurations
             builder.ToTable(TableNames.Recipe);
             builder.HasKey(x => x.Id);
 
-            builder.HasOne(x => x.Ingredient)
-                .WithMany(x => x.Recipes)
-                .HasForeignKey(x => x.IngredientId);
+            builder.Property(x => x.Name)
+                .IsRequired()
+                .HasMaxLength(255);
+
+            builder.Property(x => x.Unit)
+                .IsRequired()
+                .HasMaxLength(100);
         }
     }
 }

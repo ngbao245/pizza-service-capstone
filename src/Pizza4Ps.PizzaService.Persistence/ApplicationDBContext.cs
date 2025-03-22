@@ -48,6 +48,9 @@ namespace Pizza4Ps.PizzaService.Persistence
 
         public DbSet<AdditionalFee> AdditionalFees{ get; set; }
         public DbSet<Reservation> Bookings { get; set; }
+        public DbSet<Recipe> Recipes { get; set; }
+        public DbSet<ProductSize> ProductSizes { get; set; }
+        public DbSet<Size> Sizes { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Config> Configs { get; set; }
         public DbSet<Customer> Customers { get; set; }

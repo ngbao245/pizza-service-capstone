@@ -5,9 +5,9 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.ProductSizes.Queries.Ge
 {
     public class GetListProductSizeQuery : PaginatedQuery<PaginatedResultDto<ProductSizeDto>>
     {
-        public string? ProductId { get; set; }
-        public string? RecipeId { get; set; }
-        public string? SizeId { get; set; }
+        public Guid? ProductId { get; set; }
+        public Guid? RecipeId { get; set; }
+        public Guid? SizeId { get; set; }
 
     }
 }

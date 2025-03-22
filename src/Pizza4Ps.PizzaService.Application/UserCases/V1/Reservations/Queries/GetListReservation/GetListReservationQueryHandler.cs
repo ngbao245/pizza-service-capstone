@@ -11,23 +11,23 @@ using System.Linq.Dynamic.Core;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Bookings.Queries.GetListBooking
 {
-    public class GetListBookingQueryHandler : IRequestHandler<GetListBookingQuery, PaginatedResultDto<BookingDto>>
+    public class GetListBookingQueryHandler : IRequestHandler<GetListReservationQuery, PaginatedResultDto<ReservationDto>>
     {
         private readonly IMapper _mapper;
-        private readonly IBookingRepository _BookingRepository;
+        private readonly IReservationRepository _BookingRepository;
 
-        public GetListBookingQueryHandler(IMapper mapper, IBookingRepository BookingRepository)
+        public GetListBookingQueryHandler(IMapper mapper, IReservationRepository BookingRepository)
         {
             _mapper = mapper;
             _BookingRepository = BookingRepository;
         }
 
-        public async Task<PaginatedResultDto<BookingDto>> Handle(GetListBookingQuery request, CancellationToken cancellationToken)
+        public async Task<PaginatedResultDto<ReservationDto>> Handle(GetListReservationQuery request, CancellationToken cancellationToken)
         {
-            BookingStatusEnum? bookingStatus = null;
+            ReservationStatusEnum? bookingStatus = null;
             if (!string.IsNullOrEmpty(request.BookingStatus))
             {
-                if (!Enum.TryParse(request.BookingStatus, true, out BookingStatusEnum parsedStatus))
+                if (!Enum.TryParse(request.BookingStatus, true, out ReservationStatusEnum parsedStatus))
                 {
                     throw new BusinessException(BussinessErrorConstants.BookingErrorConstant.INVALID_BOOKING_STATUS);
                 }
@@ -45,9 +45,9 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Bookings.Queries.GetLis
                 .Skip(request.SkipCount).Take(request.TakeCount).ToListAsync();
             if (!entities.Any())
                 throw new BusinessException(BussinessErrorConstants.BookingErrorConstant.BOOKING_NOT_FOUND);
-            var result = _mapper.Map<List<BookingDto>>(entities);
+            var result = _mapper.Map<List<ReservationDto>>(entities);
             var totalCount = await query.CountAsync();
-            return new PaginatedResultDto<BookingDto>(result, totalCount);
+            return new PaginatedResultDto<ReservationDto>(result, totalCount);
         }
     }
 }

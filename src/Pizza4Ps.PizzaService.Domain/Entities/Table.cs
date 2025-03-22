@@ -61,7 +61,7 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         }
         public void SetBooked()
         {
-            Status = TableStatusEnum.Booked;
+            Status = TableStatusEnum.Reserved;
         }
 
         internal void UpdateTable(string code, int capacity, TableStatusEnum status, Guid zoneId)

@@ -1,18 +1,31 @@
-﻿using Pizza4Ps.PizzaService.Domain.Abstractions.Services;
+﻿using Pizza4Ps.PizzaService.Domain.Abstractions.Repositories;
+using Pizza4Ps.PizzaService.Domain.Abstractions;
+using Pizza4Ps.PizzaService.Domain.Abstractions.Services;
 using Pizza4Ps.PizzaService.Domain.Services.ServiceBase;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Pizza4Ps.PizzaService.Domain.Entities;
+using static System.Net.Mime.MediaTypeNames;
+using System.Diagnostics;
+using System.Xml.Linq;
 
 namespace Pizza4Ps.PizzaService.Domain.Services
 {
     public class ProductSizeService : DomainService, IProductSizeService
     {
-        public Task<Guid> CreateAsync(string productId, string recipeId, string sizeId)
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IProductSizeRepository _productSizeRepository;
+
+        public ProductSizeService(IUnitOfWork unitOfWork, IProductSizeRepository productSizeRepository)
         {
-            throw new NotImplementedException();
+            _unitOfWork = unitOfWork;
+            _productSizeRepository = productSizeRepository;
+        }
+
+        public async Task<Guid> CreateAsync(Guid productId, Guid recipeId, Guid sizeId)
+        {
+            var entity = new ProductSize(Guid.NewGuid(), productId, recipeId, sizeId);
+            _productSizeRepository.Add(entity);
+            await _unitOfWork.SaveChangeAsync();
+            return entity.Id;
         }
     }
 }

@@ -91,6 +91,11 @@
             public const string PRODUCTSIZE_NOT_FOUND = "Kích cỡ Món ăn không tìm thấy";
         }
 
+        public class RecipeErrorConstant
+        {
+            public const string RECIPE_NOT_FOUND = "Công thức không tìm thấy";
+        }
+
         public class OrderItemErrorConstant
         {
             public const string INVALID_ORDER_ITEM_STATUS = "Trạng thái món ăn không phù hợp";

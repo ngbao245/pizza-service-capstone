@@ -7,6 +7,6 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Options.Queries.GetList
     {
         public Guid ProductId { get; set; }
         public string? Name { get; set; }
-        public string? Description { get; set; }
+        public decimal? AdditionalPrice { get; set; }
     }
 }

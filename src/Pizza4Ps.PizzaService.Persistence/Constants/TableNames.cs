@@ -21,7 +21,7 @@ namespace Pizza4Ps.PizzaService.Persistence.Constants
 
         internal const string AppUserCustomer = nameof(AppUserCustomer);
         internal const string AdditionalFee = nameof(AdditionalFee);
-        internal const string Booking = nameof(Booking);
+        internal const string Reservation = nameof(Reservation);
         internal const string BookingSlot = nameof(BookingSlot);
         internal const string Category = nameof(Category);
         internal const string Config = nameof(Config);

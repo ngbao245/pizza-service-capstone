@@ -1,17 +1,12 @@
 ﻿using MediatR;
 using Pizza4Ps.PizzaService.Application.Abstractions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.ProductSizes.Commands.CreateProductSize
 {
     public class CreateProductSizeCommand: IRequest<ResultDto<Guid>>
     {
-        public string ProductId { get; set; }
-        public string RecipeId { get; set; }
-        public string SizeId { get; set; }
+        public Guid ProductId { get; set; }
+        public Guid RecipeId { get; set; }
+        public Guid SizeId { get; set; }
     }
 }

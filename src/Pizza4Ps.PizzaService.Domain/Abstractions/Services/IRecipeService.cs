@@ -2,8 +2,8 @@
 
 namespace Pizza4Ps.PizzaService.Domain.Abstractions.Services
 {
-    public interface IProductSizeService: IDomainService
+    public interface IRecipeService : IDomainService
     {
-        Task<Guid> CreateAsync(Guid productId, Guid recipeId, Guid sizeId);
+        Task<Guid> CreateAsync(string unit, string name);
     }
 }
