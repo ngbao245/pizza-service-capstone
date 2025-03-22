@@ -6,17 +6,19 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
     {
         public string Name { get; set; }
         public string? Description { get; set; }
-        public virtual ICollection<ProductOption> ProductOptions { get; set; }
+        public Guid ProductId { get; set; }
+        public virtual Product Product { get; set; }
         public virtual ICollection<OptionItem> OptionItems { get; set; }
 
         public Option()
         {
         }
 
-        public Option(Guid id,string name, string description)
+        public Option(Guid id, Guid productId,string name, string? description)
         {
             Id = id;
             Name = name;
+            ProductId = productId;
             Description = description;
         }
 

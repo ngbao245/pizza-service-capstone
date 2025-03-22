@@ -18,7 +18,6 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.OptionItemOrderItems.Co
 				request.Id!.Value,
 				request.Name,
 				request.AdditionalPrice,
-				request.OptionItemId,
 				request.OrderItemId);
 		}
 	}

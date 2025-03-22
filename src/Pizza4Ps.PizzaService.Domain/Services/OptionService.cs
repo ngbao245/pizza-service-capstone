@@ -20,9 +20,9 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             _optionRepository = optionRepository;
         }
 
-        public async Task<Guid> CreateAsync(string name, string description)
+        public async Task<Guid> CreateAsync(Guid productId, string name, string? description)
         {
-            var entity = new Option(Guid.NewGuid(), name, description);
+            var entity = new Option(Guid.NewGuid(), productId, name, description);
             _optionRepository.Add(entity);
             await _unitOfWork.SaveChangeAsync();
             return entity.Id;

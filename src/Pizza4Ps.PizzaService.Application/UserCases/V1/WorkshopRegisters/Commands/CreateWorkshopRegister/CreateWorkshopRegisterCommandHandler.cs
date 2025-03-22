@@ -88,7 +88,8 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.WorkshopRegisters.Comma
                     var workshopPizzaRegisterDetail = new WorkshopPizzaRegisterDetail(
                         workshopPizzaRegisterId: workshopPizzaRegister.Id,
                         additionalPrice: optionItem.AdditionalPrice,
-                        optionItemId: optionItemId
+                        optionItemId: optionItemId,
+                        name: optionItem.Name
                         );
                     totalPrice += optionItem.AdditionalPrice;
                     workshopPizzaRegisterDetails.Add(workshopPizzaRegisterDetail);

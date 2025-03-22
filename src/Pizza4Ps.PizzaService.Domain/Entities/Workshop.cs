@@ -33,7 +33,7 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
 
         public WorkshopStatus WorkshopStatus { get; set; }  
 
-        public Guid ZoneId { get; set; }
+        public Guid? ZoneId { get; set; }
 
         public Zone Zone { get; set; }
 

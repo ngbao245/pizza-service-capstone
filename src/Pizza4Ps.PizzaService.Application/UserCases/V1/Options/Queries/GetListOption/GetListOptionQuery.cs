@@ -8,6 +8,6 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Options.Queries.GetList
         public string? Name { get; set; }
         public string? Description { get; set; }
 
-        //public Guid? ProductId { get; set; }
+        public Guid? ProductId { get; set; }
     }
 }

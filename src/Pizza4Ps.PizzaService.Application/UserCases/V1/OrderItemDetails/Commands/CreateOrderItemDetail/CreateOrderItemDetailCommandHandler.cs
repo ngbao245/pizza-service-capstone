@@ -21,7 +21,6 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.OptionItemOrderItems.Co
 			var result = await _orderItemDetailService.CreateAsync(
 				request.Name,
 				request.AdditionalPrice,
-				request.OptionItemId,
 				request.OrderItemId);
 			return new ResultDto<Guid>
 			{

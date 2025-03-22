@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-using System.Xml.Linq;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Pizza4Ps.PizzaService.Domain.Abstractions;
 using Pizza4Ps.PizzaService.Domain.Abstractions.Repositories;
 using Pizza4Ps.PizzaService.Domain.Abstractions.Services;
@@ -11,7 +9,7 @@ using Pizza4Ps.PizzaService.Domain.Services.ServiceBase;
 
 namespace Pizza4Ps.PizzaService.Domain.Services
 {
-	public class OrderItemDetailService : DomainService, IOrderItemDetailService
+    public class OrderItemDetailService : DomainService, IOrderItemDetailService
 	{
 		private readonly IUnitOfWork _unitOfWork;
 		private readonly IOrderItemDetailRepository _orderItemDetailRepository;
@@ -22,9 +20,9 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             _orderItemDetailRepository = orderItemDetailRepository;
         }
 
-        public async Task<Guid> CreateAsync(string name, decimal additionalPrice, Guid optionItemId, Guid orderItemId)
+        public async Task<Guid> CreateAsync(string name, decimal additionalPrice, Guid orderItemId)
 		{
-			var entity = new OrderItemDetail(Guid.NewGuid(), name, additionalPrice, optionItemId, orderItemId);
+			var entity = new OrderItemDetail(Guid.NewGuid(), name, additionalPrice, orderItemId);
             _orderItemDetailRepository.Add(entity);
 			await _unitOfWork.SaveChangeAsync();
 			return entity.Id;
@@ -59,10 +57,10 @@ namespace Pizza4Ps.PizzaService.Domain.Services
 			await _unitOfWork.SaveChangeAsync();
 		}
 
-		public async Task<Guid> UpdateAsync(Guid id, string name, decimal additionalPrice, Guid optionItemId, Guid orderItemId)
+		public async Task<Guid> UpdateAsync(Guid id, string name, decimal additionalPrice, Guid orderItemId)
 		{
 			var entity = await _orderItemDetailRepository.GetSingleByIdAsync(id);
-			entity.UpdateOptionItemOrderItem(name, additionalPrice, optionItemId, orderItemId);
+			entity.UpdateOptionItemOrderItem(name, additionalPrice, orderItemId);
 			await _unitOfWork.SaveChangeAsync();
 			return entity.Id;
 		}

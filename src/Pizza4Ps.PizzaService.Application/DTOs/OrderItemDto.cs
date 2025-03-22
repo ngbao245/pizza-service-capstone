@@ -1,4 +1,6 @@
-﻿namespace Pizza4Ps.PizzaService.Application.DTOs
+﻿using Pizza4Ps.PizzaService.Domain.Entities;
+
+namespace Pizza4Ps.PizzaService.Application.DTOs
 {
     public class OrderItemDto
     {
@@ -15,6 +17,6 @@
         public string OrderItemStatus { get; set; }
         public virtual OrderDto Order { get; set; }
         public virtual ProductDto Product { get; set; }
-        public virtual ICollection<OrderItemDetailDto> OrderItemDetails { get; set; } = new List<OrderItemDetailDto>();
+        public virtual ICollection<OrderItemDetailDto> OrderItemDetails { get; set; }
     }
 }
