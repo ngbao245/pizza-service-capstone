@@ -4,6 +4,8 @@ using Pizza4Ps.PizzaService.API.Constants;
 using Pizza4Ps.PizzaService.API.Models;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.AuthCustomer.Commands.LoginCustomer;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.AuthCustomer.Commands.RegisterCustomer;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.AuthCustomer.Commands.SendCodeVerifyEmail;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.AuthCustomer.Commands.VerifyEmail;
 
 namespace Pizza4Ps.PizzaService.API.Controllers
 {
@@ -28,6 +30,26 @@ namespace Pizza4Ps.PizzaService.API.Controllers
                 StatusCode = StatusCodes.Status201Created
             });
         }
+        [HttpPost("send-verify-code")]
+        public async Task<IActionResult> SendVerifyCodeAsync([FromBody] SendCodeVerifyEmailCommand request)
+        {
+            await _sender.Send(request);
+            return Ok(new ApiResponse
+            {
+                Message = Message.CREATED_SUCCESS,
+                StatusCode = StatusCodes.Status201Created
+            });
+        }
+        [HttpPost("verify-email")]
+        public async Task<IActionResult> VerifyEmailAsync([FromBody] VerifyEmailCommand request)
+        {
+            await _sender.Send(request);
+            return Ok(new ApiResponse
+            {
+                Message = Message.CREATED_SUCCESS,
+                StatusCode = StatusCodes.Status201Created
+            });
+        }
         [HttpPost("login")]
         public async Task<IActionResult> LoginCustomerAsync([FromBody] LoginCustomerCommand request)
         {
@@ -35,7 +57,7 @@ namespace Pizza4Ps.PizzaService.API.Controllers
             return Ok(new ApiResponse
             {
                 Result = result,
-                Message = Message.CREATED_SUCCESS,
+                Message = "Login successfully",
                 StatusCode = StatusCodes.Status201Created
             });
         }

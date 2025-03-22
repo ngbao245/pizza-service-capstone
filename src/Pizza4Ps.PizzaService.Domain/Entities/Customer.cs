@@ -11,6 +11,10 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
 
         public string? Address { get;set; }
 
+        public string? VerifiedCodeEmail { get; set; }   
+
+        public bool IsVerifiedEmail { get; set; }
+
         public bool? Gender { get;set; }
 
         public DateTime? DateOfBirth { get; set; }
@@ -32,7 +36,9 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
             Phone = phone;
         }
 
-        public Customer(string? fullName, string? phone, string? address, bool? gender, DateTime? dateOfBirth, string? email, Guid? appUserCustomerId)
+        public Customer(string? fullName, string? phone,
+            string? address, bool? gender, DateTime? dateOfBirth,
+            string? email, Guid? appUserCustomerId)
         {
             FullName = fullName;
             Phone = phone;
@@ -41,8 +47,17 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
             DateOfBirth = dateOfBirth;
             Email = email;
             AppUserCustomerId = appUserCustomerId;
+            IsVerifiedEmail = false;
         }
 
+        public void SetVerifiedCodeEmail(string verifiedCodeEmail)
+        {
+            VerifiedCodeEmail = verifiedCodeEmail;
+        }
+        public void SetIsVerifiedEmail()
+        {
+            IsVerifiedEmail = true;
+        }
         public void SetAppUserCustomerId(Guid? appUserCustomerId)
         {
             AppUserCustomerId = appUserCustomerId;

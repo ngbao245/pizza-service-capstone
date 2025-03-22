@@ -62,10 +62,12 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.WorkshopRegisters.Comma
             {
                 throw new BusinessException($"You cannot register over {workshop.MaxPizzaPerRegister} participants");
             }
+            var workshopCode = RegistrationCodeGenerator.GenerateCode();
             var workshopRegister = new WorkshopRegister(
                 customerId: customerId!.Value,
                 workshopId: request.WorkshopId,
                 registeredAt: DateTime.Now,
+                code: workshopCode,
                 totalParticipant: request.TotalParticipant);
             var workshopPizzaRegisters = new List<WorkshopPizzaRegister>();
             var workshopPizzaRegisterDetails = new List<WorkshopPizzaRegisterDetail>();
@@ -78,6 +80,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.WorkshopRegisters.Comma
                     workshopRegisterId: workshopRegister.Id,
                     productId: product.ProductId,
                     price: productEntity.Price,
+                    name: productEntity.Name,
                     totalPrice: productEntity.Price);
                 decimal? totalPrice = productEntity.Price;
                 foreach (var optionItemId in product.OptionItemIds)
