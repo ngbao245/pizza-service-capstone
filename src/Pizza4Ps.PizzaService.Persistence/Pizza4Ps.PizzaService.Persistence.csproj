@@ -24,8 +24,4 @@
     <ProjectReference Include="..\Pizza4Ps.PizzaService.Domain\Pizza4Ps.PizzaService.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Migrations\" />
-  </ItemGroup>
-
 </Project>
