@@ -50,6 +50,14 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
             IsVerifiedEmail = false;
         }
 
+        public void SetVerifiedCodeEmail(string verifiedCodeEmail)
+        {
+            VerifiedCodeEmail = verifiedCodeEmail;
+        }
+        public void SetIsVerifiedEmail()
+        {
+            IsVerifiedEmail = true;
+        }
         public void SetAppUserCustomerId(Guid? appUserCustomerId)
         {
             AppUserCustomerId = appUserCustomerId;
