@@ -87,7 +87,10 @@
         {
             public const string BOOKING_NOT_FOUND = "Bàn đặt không tìm thấy";
             public const string BOOKING_SLOT_FULL = "Hiện tại đã không còn bàn trống";
-            public const string INVALID_BOOKING_STATUS = "Trạng thái đặt bàn không phù hợp";
+            public const string INVALID_BOOKING_STATUS = "Trạng thái giữ chỗ không hợp lệ";
+            public const string INVALID_BOOKING_CAPACITY = "Số lượng người không phù hợp với khả năng bàn giữ chỗ";
+            public const string NOT_ASSIGNED_TABLE = "Chưa được xếp bàn ngồi";
+
         }
 
         public class BookingSlotErrorConstant
@@ -107,6 +110,16 @@
         public class ProductErrorConstant
         {
             public const string PRODUCT_NOT_FOUND = "Món ăn không tìm thấy";
+        }
+
+        public class ProductSizeErrorConstant
+        {
+            public const string PRODUCTSIZE_NOT_FOUND = "Kích cỡ Món ăn không tìm thấy";
+        }
+
+        public class RecipeErrorConstant
+        {
+            public const string RECIPE_NOT_FOUND = "Công thức không tìm thấy";
         }
 
         public class OrderItemErrorConstant

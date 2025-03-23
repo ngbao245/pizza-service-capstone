@@ -19,7 +19,8 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Options.Commands.Create
 		public async Task<ResultDto<Guid>> Handle(CreateOptionCommand request, CancellationToken cancellationToken)
 		{
 			var result = await _optionService.CreateAsync(
-				request.Name,
+				request.ProductId,
+                request.Name,
 				request.Description);
 			return new ResultDto<Guid>
             {

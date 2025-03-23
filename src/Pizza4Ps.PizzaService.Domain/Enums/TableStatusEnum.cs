@@ -5,7 +5,7 @@
         Opening, // bàn mở sẵn sàng phục vụ
         Closing, // bàn đóng 
         //Paid, // bàn đã thanh toán
-        Booked, // bàn được đặt
+        Reserved, // bàn được đặt
         Locked // đã khóa
     }
 }

@@ -5,9 +5,9 @@ using Pizza4Ps.PizzaService.Persistence.Constants;
 
 namespace Pizza4Ps.PizzaService.Persistence.Configurations
 {
-    public class BookingSlotConfiguration : IEntityTypeConfiguration<BookingSlot>
+    public class BookingSlotConfiguration : IEntityTypeConfiguration<ReservationSlot>
     {
-        public void Configure(EntityTypeBuilder<BookingSlot> builder)
+        public void Configure(EntityTypeBuilder<ReservationSlot> builder)
         {
             builder.ToTable(TableNames.BookingSlot);
             builder.HasKey(x => x.Id);

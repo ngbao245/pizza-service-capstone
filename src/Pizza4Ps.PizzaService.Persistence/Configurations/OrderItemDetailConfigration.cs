@@ -15,9 +15,6 @@ namespace Pizza4Ps.PizzaService.Persistence.Configurations
 			builder.Property(x => x.AdditionalPrice)
 				.HasColumnType("decimal(18, 2)");
 
-			builder.HasOne(x => x.OptionItem)
-				.WithMany()
-				.HasForeignKey(x => x.OptionItemId);
 
 			builder.HasOne(x => x.OrderItem)
 				.WithMany(x => x.OrderItemDetails)

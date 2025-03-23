@@ -34,9 +34,9 @@ namespace Pizza4Ps.PizzaService.Application.DTOs
 
         public string WorkshopStatus { get; set; }
 
-        public Guid ZoneId { get; set; }
+        public Guid? ZoneId { get; set; }
 
-        public Zone Zone { get; set; }
+        public ZoneDto Zone { get; set; }
 
         public string ZoneName { get; set; }
 

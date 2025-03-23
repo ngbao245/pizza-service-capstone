@@ -18,6 +18,6 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.AuthCustomer.Commands.R
 
         public DateTime? DateOfBirth { get; set; }
 
-        public string? Email { get; set; }
+        public string Email { get; set; }
     }
 }

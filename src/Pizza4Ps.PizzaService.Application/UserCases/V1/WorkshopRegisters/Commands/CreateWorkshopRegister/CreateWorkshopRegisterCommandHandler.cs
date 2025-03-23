@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Http;
 using Pizza4Ps.PizzaService.Application.Abstractions;
+using Pizza4Ps.PizzaService.Application.Helpers;
 using Pizza4Ps.PizzaService.Domain.Abstractions.Repositories;
 using Pizza4Ps.PizzaService.Domain.Abstractions.Services;
 using Pizza4Ps.PizzaService.Domain.Entities;
@@ -13,6 +14,8 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.WorkshopRegisters.Comma
 {
     public class CreateWorkshopRegisterCommandHandler : IRequestHandler<CreateWorkshopRegisterCommand, ResultDto<Guid>>
     {
+        private readonly EmailService _emailService;
+        private readonly ICustomerRepository _customerRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IWorkshopRegisterService _workshopRegisterService;
         private readonly IOptionItemRepository _optionItemRepository;
@@ -25,8 +28,11 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.WorkshopRegisters.Comma
             IWorkshopRepository workshopRepository, IZoneRepository zoneRepository,
             IWorkshopRegisterRepository workshopRegisterRepository,
             IProductRepository productRepository, IOptionItemRepository optionItemRepository,
-            IWorkshopRegisterService workshopRegisterService, IHttpContextAccessor httpContextAccessor)
+            IWorkshopRegisterService workshopRegisterService, IHttpContextAccessor httpContextAccessor,
+            ICustomerRepository customerRepository, EmailService emailService)
         {
+            _emailService = emailService;
+            _customerRepository = customerRepository;
             _httpContextAccessor = httpContextAccessor;
             _workshopRegisterService = workshopRegisterService;
             _optionItemRepository = optionItemRepository;
@@ -38,6 +44,11 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.WorkshopRegisters.Comma
         public async Task<ResultDto<Guid>> Handle(CreateWorkshopRegisterCommand request, CancellationToken cancellationToken)
         {
             var customerId = HttpContextHelper.GetCustomerId(_httpContextAccessor.HttpContext);
+            var customer = await _customerRepository.GetSingleAsync(x => x.Id == customerId);
+            if (customer == null)
+            {
+                throw new BusinessException("Customer is not found");
+            }
             var workshop = await _workshopRepository.GetSingleByIdAsync(request.WorkshopId);
             if (workshop == null)
             {
@@ -51,10 +62,12 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.WorkshopRegisters.Comma
             {
                 throw new BusinessException($"You cannot register over {workshop.MaxPizzaPerRegister} participants");
             }
+            var workshopCode = RegistrationCodeGenerator.GenerateCode();
             var workshopRegister = new WorkshopRegister(
                 customerId: customerId!.Value,
                 workshopId: request.WorkshopId,
                 registeredAt: DateTime.Now,
+                code: workshopCode,
                 totalParticipant: request.TotalParticipant);
             var workshopPizzaRegisters = new List<WorkshopPizzaRegister>();
             var workshopPizzaRegisterDetails = new List<WorkshopPizzaRegisterDetail>();
@@ -67,6 +80,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.WorkshopRegisters.Comma
                     workshopRegisterId: workshopRegister.Id,
                     productId: product.ProductId,
                     price: productEntity.Price,
+                    name: productEntity.Name,
                     totalPrice: productEntity.Price);
                 decimal? totalPrice = productEntity.Price;
                 foreach (var optionItemId in product.OptionItemIds)
@@ -77,7 +91,8 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.WorkshopRegisters.Comma
                     var workshopPizzaRegisterDetail = new WorkshopPizzaRegisterDetail(
                         workshopPizzaRegisterId: workshopPizzaRegister.Id,
                         additionalPrice: optionItem.AdditionalPrice,
-                        optionItemId: optionItemId
+                        optionItemId: optionItemId,
+                        name: optionItem.Name
                         );
                     totalPrice += optionItem.AdditionalPrice;
                     workshopPizzaRegisterDetails.Add(workshopPizzaRegisterDetail);
@@ -86,6 +101,10 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.WorkshopRegisters.Comma
                 workshopPizzaRegisters.Add(workshopPizzaRegister);
             }
             await _workshopRegisterService.RegisterAsync(workshopRegister, workshopPizzaRegisters, workshopPizzaRegisterDetails);
+            if (customer.Email != null)
+            {
+                await _emailService.SendWorkshopEmail(customer.Email, customer.FullName ?? "Quý khách", workshop.Name, workshopRegister.Code);
+            }
             return new ResultDto<Guid>()
             {
                 Id = workshopRegister.Id,

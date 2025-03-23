@@ -13,6 +13,8 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
 
         public Workshop Workshop { get; set; }
 
+        public string Code { get; set; }
+
         public WorkshopRegisterStatus WorkshopRegisterStatus { get; set; }
         
         public DateTime RegisteredAt { get; set; }
@@ -30,10 +32,11 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
             
         }
 
-        public WorkshopRegister(Guid customerId, Guid workshopId, DateTime registeredAt, int totalParticipant)
+        public WorkshopRegister(Guid customerId, Guid workshopId, DateTime registeredAt, int totalParticipant, string code)
         {
             Id = Guid.NewGuid();
             CustomerId = customerId;
+            Code = code;
             WorkshopId = workshopId;
             RegisteredAt = registeredAt;
             TotalParticipant = totalParticipant;

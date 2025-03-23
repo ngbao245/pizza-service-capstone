@@ -30,10 +30,11 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Options.Queries.GetList
                 predicate: p => p.Id == request.ProductId,
                 includeProperties: "ProductOptions.Option.OptionItems");
 
-            var options = product.ProductOptions
-                .Select(po => po.Option)
+            var options = product.Options
+
+                .SelectMany(po => po.OptionItems)
                 .AsQueryable()
-                .Where(o =>(request.Name == null || o.Name.Contains(request.Name))&&(request.Description == null || o.Description.Contains(request.Description)));
+                .Where(o =>(request.Name == null || o.Name.Contains(request.Name))&&(request.AdditionalPrice == null || o.AdditionalPrice == request.AdditionalPrice));
 
             var pagedOptions = options
                 .OrderBy(request.SortBy)

@@ -1,8 +1,8 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Pizza4Ps.PizzaService.API.Constants;
 using Pizza4Ps.PizzaService.API.Models;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Sizes.Commands.CreateSize;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Sizes.Queries.GetListSize;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Sizes.Queries.GetSizeById;
 
@@ -19,6 +19,18 @@ namespace Pizza4Ps.PizzaService.API.Controllers
         {
             _httpContextAccessor = httpContextAccessor;
             _sender = sender;
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateAsync([FromBody] CreateSizeCommand request)
+        {
+            var result = await _sender.Send(request);
+            return Ok(new ApiResponse
+            {
+                Result = result,
+                Message = Message.CREATED_SUCCESS,
+                StatusCode = StatusCodes.Status201Created
+            });
         }
 
         [HttpGet()]
@@ -44,5 +56,7 @@ namespace Pizza4Ps.PizzaService.API.Controllers
                 StatusCode = StatusCodes.Status200OK
             });
         }
+
+
     }
 }
