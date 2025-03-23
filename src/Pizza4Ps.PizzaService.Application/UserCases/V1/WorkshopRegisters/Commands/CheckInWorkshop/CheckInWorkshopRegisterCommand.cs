@@ -2,8 +2,8 @@
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.WorkshopRegisters.Commands.CheckInWorkshop
 {
-    public class CheckInWorkshopCommand : IRequest
+    public class CheckInWorkshopRegisterCommand : IRequest
     {
-        //public 
+        public Guid WorkshopRegisterId { get; set; }
     }
 }

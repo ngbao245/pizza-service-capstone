@@ -1,4 +1,5 @@
-﻿using Pizza4Ps.PizzaService.Domain.Abstractions;
+﻿using Microsoft.EntityFrameworkCore.Infrastructure;
+using Pizza4Ps.PizzaService.Domain.Abstractions;
 using Pizza4Ps.PizzaService.Domain.Enums;
 
 namespace Pizza4Ps.PizzaService.Domain.Entities
@@ -10,6 +11,8 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         public Customer Customer { get; set; }
 
         public Guid WorkshopId { get; set; }
+
+        public decimal TotalFee { get; set; }
 
         public Workshop Workshop { get; set; }
 
@@ -38,7 +41,7 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
             
         }
 
-        public WorkshopRegister(Guid customerId, Guid workshopId, DateTime registeredAt, int totalParticipant, string code)
+        public WorkshopRegister(Guid customerId, Guid workshopId, DateTime registeredAt, int totalParticipant, string code, decimal totalFee)
         {
             Id = Guid.NewGuid();
             CustomerId = customerId;
@@ -47,6 +50,12 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
             RegisteredAt = registeredAt;
             TotalParticipant = totalParticipant;
             WorkshopRegisterStatus = WorkshopRegisterStatus.Registered;
+            TotalFee = totalFee;
+        }
+
+        public void CheckIn()
+        {
+            WorkshopRegisterStatus = WorkshopRegisterStatus.Attended;
         }
     }
 }

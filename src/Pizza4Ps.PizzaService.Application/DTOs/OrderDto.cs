@@ -1,4 +1,6 @@
-﻿namespace Pizza4Ps.PizzaService.Application.DTOs
+﻿using Pizza4Ps.PizzaService.Domain.Entities;
+
+namespace Pizza4Ps.PizzaService.Application.DTOs
 {
     public class OrderDto
     {
@@ -15,7 +17,8 @@
         public Guid TableId { get; set; }
 
         public virtual TableDto Table { get; set; }
-        public virtual ICollection<AdditionalFeeDto> AdditionalFees { get; set; } = new List<AdditionalFeeDto>();
+        public virtual ICollection<AdditionalFeeDto> AdditionalFees { get; set; } 
+        public virtual ICollection<OrderItemDto> OrderItems { get; set; }
     }
 }
 
