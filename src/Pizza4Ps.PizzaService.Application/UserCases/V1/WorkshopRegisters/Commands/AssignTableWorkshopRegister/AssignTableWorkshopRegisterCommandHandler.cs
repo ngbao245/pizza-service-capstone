@@ -55,7 +55,6 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.WorkshopRegisters.Comma
                 throw new BusinessException("Table is taken");
             }
             var orderItems = new List<OrderItem>();
-            var orderItemsDetails = new List<OrderItemDetail>();
             var order = new Order(
                 id: Guid.NewGuid(),
                 tableId: table.Id,
@@ -84,8 +83,10 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.WorkshopRegisters.Comma
                         additionalPrice: workshopPizzaRegisterDetail.AdditionalPrice,
                         orderItemId: orderItem.Id
                     );
-                    orderItemsDetails.Add(orderItemDetail);
+                    //_optionItemOrderItemRepository.Add(orderDetail);
+                    orderItem.OrderItemDetails.Add(orderItemDetail);
                 }
+                orderItem.SetTotalPrice();
             }
             var additionalFee = new AdditionalFee(
                 id: Guid.NewGuid(),
@@ -94,13 +95,14 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.WorkshopRegisters.Comma
                 value: workshopRegister.TotalFee,
                 orderId: order.Id
                 );
+            workshopRegister.AssignTableOrder(table.Id, order.Id);
             table.SetOpening();
             table.SetCurrentOrderId(order.Id);
             _orderRepository.Add(order);
             _orderItemRepository.AddRange(orderItems);
-            _orderItemDetailRepository.AddRange(orderItemsDetails);
             _additionalFeeRepository.Add(additionalFee);
             _tableRepository.Update(table);
+            _workshopRegisterRepository.Update(workshopRegister);
             await _unitOfWork.SaveChangeAsync();
         }
     }

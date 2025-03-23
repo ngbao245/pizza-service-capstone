@@ -18,7 +18,7 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         public OrderItemStatus OrderItemStatus { get; set; }
         public virtual Order Order { get; set; }
         public virtual Product Product { get; set; }
-        public virtual ICollection<OrderItemDetail> OrderItemDetails { get; set; } 
+        public virtual ICollection<OrderItemDetail> OrderItemDetails { get; set; } = new List<OrderItemDetail>();
 
 
         public OrderItem()

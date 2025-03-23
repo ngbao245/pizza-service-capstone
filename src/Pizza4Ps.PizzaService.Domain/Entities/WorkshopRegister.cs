@@ -53,6 +53,12 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
             TotalFee = totalFee;
         }
 
+        public void AssignTableOrder(Guid tableId, Guid orderId)
+        {
+            TableId = tableId;
+            OrderId = orderId;
+        }
+
         public void CheckIn()
         {
             WorkshopRegisterStatus = WorkshopRegisterStatus.Attended;
