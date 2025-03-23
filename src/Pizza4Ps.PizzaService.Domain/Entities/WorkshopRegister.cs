@@ -21,6 +21,12 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
 
         public int TotalParticipant { get; set; }
 
+        public Guid? TableId { get; set; }
+
+        public string? TableCode { get; set; }
+
+        public Table Table { get; set; }
+
         public Guid? OrderId { get; set; }
 
         public Order Order { get; set; }
