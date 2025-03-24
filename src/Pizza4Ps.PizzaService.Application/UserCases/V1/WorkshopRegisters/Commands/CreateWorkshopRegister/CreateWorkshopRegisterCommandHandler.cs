@@ -67,6 +67,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.WorkshopRegisters.Comma
                 customerId: customerId!.Value,
                 workshopId: request.WorkshopId,
                 registeredAt: DateTime.Now,
+                totalFee: workshop.TotalFee,
                 code: workshopCode,
                 totalParticipant: request.TotalParticipant);
             var workshopPizzaRegisters = new List<WorkshopPizzaRegister>();

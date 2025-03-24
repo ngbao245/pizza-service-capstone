@@ -9,7 +9,7 @@ namespace Pizza4Ps.PizzaService.Application.DTOs
         public string Name { get; set; }
         public decimal AdditionalPrice { get; set; }
         public Guid OrderItemId { get; set; }
-        [JsonIgnore]
-        public virtual OrderItemDto OrderItem { get; set; }
+        //[JsonIgnore]
+        //public virtual OrderItemDto OrderItem { get; set; }
     }
 }

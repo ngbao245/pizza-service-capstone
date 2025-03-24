@@ -71,9 +71,9 @@ namespace Pizza4Ps.PizzaService.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetSingleByIdAsync([FromRoute] Guid id)
+        public async Task<IActionResult> GetSingleByIdAsync([FromRoute] Guid id, string includeProperties = "")
         {
-            var result = await _sender.Send(new GetOrderByIdQuery { Id = id });
+            var result = await _sender.Send(new GetOrderByIdQuery { Id = id, includeProperties = includeProperties });
             return Ok(new ApiResponse
             {
                 Result = result,

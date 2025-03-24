@@ -28,10 +28,10 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
 
         private decimal ValidateValue(decimal value)
         {
-            if (value < 0)
-            {
-                throw new BusinessException(BussinessErrorConstants.AdditionalFeeErrorConstant.VALUE_INVALID);
-            }
+            //if (value < 0)
+            //{
+            //    throw new BusinessException(BussinessErrorConstants.AdditionalFeeErrorConstant.VALUE_INVALID);
+            //}
             return value;
         }
 
