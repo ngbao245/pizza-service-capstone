@@ -24,11 +24,10 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.WorkingSlots.Queries.Ge
         public async Task<PaginatedResultDto<WorkingSlotDto>> Handle(GetListWorkingSlotQuery request, CancellationToken cancellationToken)
         {
             var query = _WorkingSlotRepository.GetListAsNoTracking(
-                x => (request.ShiftStart == null || request.ShiftEnd == null
-                    ? (request.ShiftStart != null ? x.ShiftStart >= request.ShiftStart : x.ShiftEnd <= request.ShiftEnd)
-                    : (x.ShiftStart >= request.ShiftStart && x.ShiftEnd <= request.ShiftEnd)) &&
-                (request.DayId == null || x.DayId == request.DayId) &&
-                (request.ShiftId == null || x.ShiftId == request.ShiftId),
+        x => (request.ShiftStart != null && request.ShiftEnd == null) ? x.ShiftStart >= request.ShiftStart :
+                (request.ShiftEnd != null && request.ShiftStart == null) ? x.ShiftEnd <= request.ShiftEnd :
+                (request.ShiftStart != null && request.ShiftEnd != null) ? (x.ShiftStart >= request.ShiftStart && x.ShiftEnd <= request.ShiftEnd) :
+                true && (request.DayId == null || x.DayId == request.DayId) && (request.ShiftId == null || x.ShiftId == request.ShiftId),
                 includeProperties: request.IncludeProperties);
             var entities = await query
                 .OrderBy(request.SortBy)

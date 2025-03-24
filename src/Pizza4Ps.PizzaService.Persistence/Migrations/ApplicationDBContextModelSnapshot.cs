@@ -1711,6 +1711,9 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                     b.Property<DateTimeOffset>("CreatedDate")
                         .HasColumnType("datetimeoffset");
 
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
                     b.Property<DateTimeOffset?>("DeletedAt")
                         .HasColumnType("datetimeoffset");
 
@@ -1744,6 +1747,64 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                     b.HasIndex("ZoneId");
 
                     b.ToTable("StaffZoneSchedule", (string)null);
+                });
+
+            modelBuilder.Entity("Pizza4Ps.PizzaService.Domain.Entities.SwapWorkingSlot", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<DateTimeOffset?>("DeletedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("DeletedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("EmployeeFromId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("EmployeeToId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset?>("ModifiedDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<DateTime>("RequestDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("WorkingSlotFromId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("WorkingSlotToId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmployeeFromId");
+
+                    b.HasIndex("EmployeeToId");
+
+                    b.HasIndex("WorkingSlotFromId");
+
+                    b.HasIndex("WorkingSlotToId");
+
+                    b.ToTable("SwapWorkingSlot", (string)null);
                 });
 
             modelBuilder.Entity("Pizza4Ps.PizzaService.Domain.Entities.Table", b =>
@@ -2581,6 +2642,41 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                     b.Navigation("WorkingSlot");
 
                     b.Navigation("Zone");
+                });
+
+            modelBuilder.Entity("Pizza4Ps.PizzaService.Domain.Entities.SwapWorkingSlot", b =>
+                {
+                    b.HasOne("Pizza4Ps.PizzaService.Domain.Entities.Staff", "StaffFrom")
+                        .WithMany()
+                        .HasForeignKey("EmployeeFromId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("Pizza4Ps.PizzaService.Domain.Entities.Staff", "StaffTo")
+                        .WithMany()
+                        .HasForeignKey("EmployeeToId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("Pizza4Ps.PizzaService.Domain.Entities.WorkingSlot", "WorkingSlotFrom")
+                        .WithMany()
+                        .HasForeignKey("WorkingSlotFromId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("Pizza4Ps.PizzaService.Domain.Entities.WorkingSlot", "WorkingSlotTo")
+                        .WithMany()
+                        .HasForeignKey("WorkingSlotToId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("StaffFrom");
+
+                    b.Navigation("StaffTo");
+
+                    b.Navigation("WorkingSlotFrom");
+
+                    b.Navigation("WorkingSlotTo");
                 });
 
             modelBuilder.Entity("Pizza4Ps.PizzaService.Domain.Entities.Table", b =>

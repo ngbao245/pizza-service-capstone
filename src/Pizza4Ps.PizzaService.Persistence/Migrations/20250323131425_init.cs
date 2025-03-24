@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Pizza4Ps.PizzaService.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class migrateentity : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -263,6 +263,25 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Role",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    ModifiedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeletedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    DeletedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Role", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ScheduleConfig",
                 columns: table => new
                 {
@@ -278,6 +297,26 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ScheduleConfig", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Shift",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    ModifiedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeletedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    DeletedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Shift", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -306,8 +345,7 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Code = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FullName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     StaffType = table.Column<int>(type: "int", nullable: false),
@@ -579,6 +617,41 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "WorkingSlot",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ShiftStart = table.Column<TimeSpan>(type: "time", nullable: false),
+                    ShiftEnd = table.Column<TimeSpan>(type: "time", nullable: false),
+                    Capacity = table.Column<int>(type: "int", nullable: false),
+                    DayId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ShiftId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreatedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    ModifiedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeletedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    DeletedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_WorkingSlot", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_WorkingSlot_Day_DayId",
+                        column: x => x.DayId,
+                        principalTable: "Day",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_WorkingSlot_Shift_ShiftId",
+                        column: x => x.ShiftId,
+                        principalTable: "Shift",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Voucher",
                 columns: table => new
                 {
@@ -613,7 +686,7 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ShiftStart = table.Column<TimeOnly>(type: "time", nullable: false),
                     ShiftEnd = table.Column<TimeOnly>(type: "time", nullable: false),
-                    Note = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     StaffId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ZoneId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreatedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
@@ -635,43 +708,6 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_StaffZone_Zone_ZoneId",
-                        column: x => x.ZoneId,
-                        principalTable: "Zone",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "StaffZoneSchedule",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    DayofWeek = table.Column<int>(type: "int", nullable: false),
-                    ShiftStart = table.Column<TimeOnly>(type: "time", nullable: false),
-                    ShiftEnd = table.Column<TimeOnly>(type: "time", nullable: false),
-                    Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    StaffId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ZoneId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    WorkingTimeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CreatedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    ModifiedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    DeletedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
-                    DeletedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_StaffZoneSchedule", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_StaffZoneSchedule_Staff_StaffId",
-                        column: x => x.StaffId,
-                        principalTable: "Staff",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_StaffZoneSchedule_Zone_ZoneId",
                         column: x => x.ZoneId,
                         principalTable: "Zone",
                         principalColumn: "Id",
@@ -779,6 +815,124 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                         name: "FK_Recipe_Product_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Product",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "StaffZoneSchedule",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    StaffId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ZoneId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    WorkingSlotId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreatedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    ModifiedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeletedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    DeletedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StaffZoneSchedule", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_StaffZoneSchedule_Staff_StaffId",
+                        column: x => x.StaffId,
+                        principalTable: "Staff",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_StaffZoneSchedule_WorkingSlot_WorkingSlotId",
+                        column: x => x.WorkingSlotId,
+                        principalTable: "WorkingSlot",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_StaffZoneSchedule_Zone_ZoneId",
+                        column: x => x.ZoneId,
+                        principalTable: "Zone",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SwapWorkingSlot",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    RequestDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EmployeeFromId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    EmployeeToId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    WorkingSlotFromId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    WorkingSlotToId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreatedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    ModifiedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeletedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    DeletedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SwapWorkingSlot", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SwapWorkingSlot_Staff_EmployeeFromId",
+                        column: x => x.EmployeeFromId,
+                        principalTable: "Staff",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_SwapWorkingSlot_Staff_EmployeeToId",
+                        column: x => x.EmployeeToId,
+                        principalTable: "Staff",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_SwapWorkingSlot_WorkingSlot_WorkingSlotFromId",
+                        column: x => x.WorkingSlotFromId,
+                        principalTable: "WorkingSlot",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_SwapWorkingSlot_WorkingSlot_WorkingSlotToId",
+                        column: x => x.WorkingSlotToId,
+                        principalTable: "WorkingSlot",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "WorkingSlotRegister",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    RegisterDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    StaffId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    WorkingSlotId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreatedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    ModifiedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeletedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    DeletedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_WorkingSlotRegister", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_WorkingSlotRegister_Staff_StaffId",
+                        column: x => x.StaffId,
+                        principalTable: "Staff",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_WorkingSlotRegister_WorkingSlot_WorkingSlotId",
+                        column: x => x.WorkingSlotId,
+                        principalTable: "WorkingSlot",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -1179,6 +1333,15 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "Config",
+                columns: new[] { "Id", "ConfigType", "CreatedBy", "CreatedDate", "DeletedAt", "DeletedBy", "IsDeleted", "Key", "ModifiedBy", "ModifiedDate", "Value" },
+                values: new object[,]
+                {
+                    { new Guid("738eda23-9323-4db9-b36b-73adb8e942ef"), 0, null, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, null, false, "VAT", null, null, "0.08" },
+                    { new Guid("e0d7298b-5cd8-47e4-939c-e42e4e5a42e5"), 1, null, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, null, false, "MAXIMUM_REGISTER_SLOT", null, null, "3" }
+                });
+
+            migrationBuilder.InsertData(
                 table: "Day",
                 columns: new[] { "Id", "CreatedBy", "CreatedDate", "DeletedAt", "DeletedBy", "IsDeleted", "ModifiedBy", "ModifiedDate", "Name" },
                 values: new object[,]
@@ -1190,6 +1353,15 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                     { new Guid("93e1d6e5-b144-4099-be3c-833f7ef87fa3"), null, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, null, false, null, null, "Friday" },
                     { new Guid("c6f2594b-71f8-46ff-9584-c62c2e02151e"), null, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, null, false, null, null, "Sunday" },
                     { new Guid("f8dec225-dbb2-4961-9be6-9f11eac723ab"), null, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, null, false, null, null, "Tuesday" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Role",
+                columns: new[] { "Id", "CreatedBy", "CreatedDate", "DeletedAt", "DeletedBy", "IsDeleted", "ModifiedBy", "ModifiedDate", "Name" },
+                values: new object[,]
+                {
+                    { new Guid("14fdb4d8-8d9f-4f83-a27b-19028ff03996"), null, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, null, false, null, null, "Chef" },
+                    { new Guid("a2a52be7-cbe7-4d40-bfcc-cfa7549ad415"), null, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, null, false, null, null, "Staff" }
                 });
 
             migrationBuilder.InsertData(
@@ -1314,12 +1486,6 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Staff_Code",
-                table: "Staff",
-                column: "Code",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
                 name: "IX_StaffZone_StaffId",
                 table: "StaffZone",
                 column: "StaffId");
@@ -1335,9 +1501,34 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                 column: "StaffId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_StaffZoneSchedule_WorkingSlotId",
+                table: "StaffZoneSchedule",
+                column: "WorkingSlotId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_StaffZoneSchedule_ZoneId",
                 table: "StaffZoneSchedule",
                 column: "ZoneId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SwapWorkingSlot_EmployeeFromId",
+                table: "SwapWorkingSlot",
+                column: "EmployeeFromId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SwapWorkingSlot_EmployeeToId",
+                table: "SwapWorkingSlot",
+                column: "EmployeeToId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SwapWorkingSlot_WorkingSlotFromId",
+                table: "SwapWorkingSlot",
+                column: "WorkingSlotFromId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SwapWorkingSlot_WorkingSlotToId",
+                table: "SwapWorkingSlot",
+                column: "WorkingSlotToId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Table_CurrentOrderId",
@@ -1364,6 +1555,26 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                 name: "IX_Voucher_VoucherTypeId",
                 table: "Voucher",
                 column: "VoucherTypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WorkingSlot_DayId",
+                table: "WorkingSlot",
+                column: "DayId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WorkingSlot_ShiftId",
+                table: "WorkingSlot",
+                column: "ShiftId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WorkingSlotRegister_StaffId",
+                table: "WorkingSlotRegister",
+                column: "StaffId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WorkingSlotRegister_WorkingSlotId",
+                table: "WorkingSlotRegister",
+                column: "WorkingSlotId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Workshop_ZoneId",
@@ -1475,9 +1686,6 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                 name: "Config");
 
             migrationBuilder.DropTable(
-                name: "Day");
-
-            migrationBuilder.DropTable(
                 name: "FeedBack");
 
             migrationBuilder.DropTable(
@@ -1499,6 +1707,9 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                 name: "Recipe");
 
             migrationBuilder.DropTable(
+                name: "Role");
+
+            migrationBuilder.DropTable(
                 name: "ScheduleConfig");
 
             migrationBuilder.DropTable(
@@ -1512,6 +1723,12 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "StaffZoneSchedule");
+
+            migrationBuilder.DropTable(
+                name: "SwapWorkingSlot");
+
+            migrationBuilder.DropTable(
+                name: "WorkingSlotRegister");
 
             migrationBuilder.DropTable(
                 name: "WorkshopFoodDetail");
@@ -1538,6 +1755,9 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                 name: "Staff");
 
             migrationBuilder.DropTable(
+                name: "WorkingSlot");
+
+            migrationBuilder.DropTable(
                 name: "OptionItem");
 
             migrationBuilder.DropTable(
@@ -1545,6 +1765,12 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "VoucherType");
+
+            migrationBuilder.DropTable(
+                name: "Day");
+
+            migrationBuilder.DropTable(
+                name: "Shift");
 
             migrationBuilder.DropTable(
                 name: "Option");
