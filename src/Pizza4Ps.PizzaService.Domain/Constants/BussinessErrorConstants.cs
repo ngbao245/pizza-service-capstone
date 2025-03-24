@@ -16,6 +16,16 @@
             public const string WORKING_SLOT_REGISTER_ALREADY_REJECTED = "Đơn đăng ký lịch làm việc đã bị từ chối";
         }
 
+        public class SwapWorkingSlotErrorConstant
+        {
+
+            public const string SWAP_WORKING_SLOT_ALREADY_REJECTED = "Đơn đổi ca làm việc đã bị từ chối";
+            public const string SWAP_WORKING_SLOT_ALREADY_PENDING_APPROVE = " đổi ca làm việc đang chờ được manager duyệt";
+            public const string SWAP_WORKING_SLOT_ALREADY_APPROVED = "Đơn đổi ca làm việc đã được duyệt";
+            public const string SWAP_WORKING_SLOT_NOT_FOUND = "Không tìm thấy đơn đổi ca làm việc";
+            public const string SWAP_WORKING_SLOT_INVALID_STATE = "Cannot reject a request that is not pending";
+        }
+
         public class ConfigErrorConstant
         {
             public const string CONFIG_NOT_FOUND = "Không tìm thấy config";
@@ -65,7 +75,7 @@
 
         public class StaffZoneScheduleErrorConstant
         {
-            public const string STAFFZONESCHEDULE_NOT_FOUND = "Lịch làm việc nhân viên theo khu vực không tìm thấy";
+            public const string STAFF_ZONE_SCHEDULE_NOT_FOUND = "Lịch làm việc nhân viên theo khu vực không tìm thấy";
         }
 
         public class WorkingTimeErrorConstant

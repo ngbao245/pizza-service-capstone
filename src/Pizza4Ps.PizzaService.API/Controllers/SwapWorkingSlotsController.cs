@@ -1,29 +1,33 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Pizza4Ps.PizzaService.API.Constants;
 using Pizza4Ps.PizzaService.API.Models;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.OrderItems.Commands.UpdateStatusToServed;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.WorkingSlotRegisters.Commands.RegisterWorkingSlot;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.WorkingSlotRegisters.Commands.UpdateStatusToApproved;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.WorkingSlotRegisters.Commands.UpdateStatusToRejected;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Options.Commands.CreateOption;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.SwapWorkingSlots.Commands.CreateSwapWorkingSlot;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.SwapWorkingSlots.Commands.UpdateStatusToApproved;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.SwapWorkingSlots.Commands.UpdateStatusToPendingApprove;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.SwapWorkingSlots.Commands.UpdateStatusToRejected;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.SwapWorkingSlots.Queries.GetListSwapWorkingSlot;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.SwapWorkingSlots.Queries.GetSwapWorkingSlotById;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.WorkingSlotRegisters.Queries.GetListWorkingSlotRegister;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.WorkingSlotRegisters.Queries.GetWorkingSlotRegisterById;
 
 namespace Pizza4Ps.PizzaService.API.Controllers
 {
-    [Route("api/working-slot-registers")]
+    [Route("api/swap-working-slots")]
     [ApiController]
-    public class WorkingSlotRegistersController : ControllerBase
+    public class SwapWorkingSlotsController : ControllerBase
     {
         private readonly ISender _sender;
 
-        public WorkingSlotRegistersController(ISender sender)
+        public SwapWorkingSlotsController(ISender sender)
         {
             _sender = sender;
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateAsync([FromBody] RegisterWorkingSlotCommand request)
+        public async Task<IActionResult> CreateAsync([FromBody] CreateSwapWorkingSlotCommand request)
         {
             var result = await _sender.Send(request);
             return Ok(new ApiResponse
@@ -34,10 +38,10 @@ namespace Pizza4Ps.PizzaService.API.Controllers
             });
         }
 
-        [HttpPut("rejected/{id}")]
-        public async Task<IActionResult> RejectedAsync([FromRoute] Guid id)
+        [HttpPut("pending-approved/{id}")]
+        public async Task<IActionResult> PendingApproveAsync([FromRoute] Guid id)
         {
-            await _sender.Send(new UpdateStatusToRejectedCommand
+            await _sender.Send(new UpdateStatusToPendingApproveCommand
             {
                 Id = id
             });
@@ -66,8 +70,26 @@ namespace Pizza4Ps.PizzaService.API.Controllers
             });
         }
 
+
+        [HttpPut("rejected/{id}")]
+        public async Task<IActionResult> RejectedAsync([FromRoute] Guid id)
+        {
+            await _sender.Send(new UpdateStatusToRejectedCommand
+            {
+                Id = id
+            });
+
+            return Ok(new ApiResponse
+            {
+                Success = true,
+                Message = Message.UPDATED_SUCCESS,
+                StatusCode = StatusCodes.Status200OK
+            });
+        }
+
+
         [HttpGet()]
-        public async Task<IActionResult> GetListAsync([FromQuery] GetListWorkingSlotRegisterQuery query)
+        public async Task<IActionResult> GetListAsync([FromQuery] GetListSwapWorkingSlotQuery query)
         {
             var result = await _sender.Send(query);
             return Ok(new ApiResponse
@@ -81,7 +103,7 @@ namespace Pizza4Ps.PizzaService.API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetSingleByIdAsync([FromRoute] Guid id)
         {
-            var result = await _sender.Send(new GetWorkingSlotRegisterByIdQuery { Id = id });
+            var result = await _sender.Send(new GetSwapWorkingSlotByIdQuery { Id = id });
             return Ok(new ApiResponse
             {
                 Result = result,
