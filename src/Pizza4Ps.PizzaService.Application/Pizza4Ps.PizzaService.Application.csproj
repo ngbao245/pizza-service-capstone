@@ -7,7 +7,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <Compile Remove="DependencyInjection\Options\**" />
 	  <Compile Remove="Models\**" />
 		<None Update="Templates\WorkshopRegisterEmailTemplate.html">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -15,9 +14,7 @@
 		<None Update="Templates\CustomerRegisterEmail.html">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
-	  <EmbeddedResource Remove="DependencyInjection\Options\**" />
 	  <EmbeddedResource Remove="Models\**" />
-	  <None Remove="DependencyInjection\Options\**" />
 	  <None Remove="Models\**" />
 	</ItemGroup>
 
@@ -31,6 +28,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="AutoMapper" Version="13.0.1" />
+		<PackageReference Include="CloudinaryDotNet" Version="1.27.5" />
 		<PackageReference Include="FluentValidation" Version="11.10.0" />
 		<PackageReference Include="MailKit" Version="4.11.0" />
 		<PackageReference Include="MediatR" Version="12.4.0" />

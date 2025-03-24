@@ -9,6 +9,8 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         public string? Description { get; set; }
         public decimal Price { get; set; }
         public byte[]? Image { get; set; }
+        public string? ImageUrl { get; set; } // URL ảnh trên Cloudinary
+        public string? ImagePublicId { get; set; } // Public ID của ảnh trên Cloudinary
         public Guid CategoryId { get; set; }
         public ProductTypeEnum ProductType { get; set; }
 
@@ -19,7 +21,10 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         {
         }
 
-        public Product(Guid id, string name, decimal price, byte[]? image, string description, Guid categoryId, ProductTypeEnum productType)
+        public Product(Guid id, string name, decimal price,
+            byte[]? image, string? description,
+            Guid categoryId, ProductTypeEnum productType,
+            string? imageUrl, string? imagePublicId)
         {
             Id = Id;
             Name = SetName(name);
@@ -28,9 +33,11 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
             CategoryId = categoryId;
             ProductType = productType;
             Image = image;
+            ImageUrl = imageUrl;
+            ImagePublicId = imagePublicId;
         }
 
-        public void UpdateProduct(string name, decimal price, byte[]? image, string description, Guid categoryId, ProductTypeEnum productType)
+        public void UpdateProduct(string name, decimal price, byte[]? image, string description, Guid categoryId, ProductTypeEnum productType, string? imageUrl, string? imagePublicId)
         {
             Name = SetName(name);
             Price = price;
@@ -38,6 +45,8 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
             CategoryId = categoryId;
             ProductType = productType;
             Image = image;
+            if (imageUrl != null) ImageUrl = imageUrl;
+            if (imagePublicId != null) ImagePublicId = imagePublicId;
         }
         private string SetName(string name)
         {
