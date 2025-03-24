@@ -26,7 +26,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Ingredients.Queries.Get
             var query = _IngredientRepository.GetListAsNoTracking(
                 x => (request.Name == null || x.Name.Contains(request.Name))
                 && (request.Description == null || x.Description.Contains(request.Description))
-                && (request.Price == null || x.Price == (request.Price)),
+                ,
                 includeProperties: request.IncludeProperties);
             var entities = await query
                 .OrderBy(request.SortBy)

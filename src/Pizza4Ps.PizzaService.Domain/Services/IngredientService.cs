@@ -6,20 +6,20 @@ using Pizza4Ps.PizzaService.Domain.Abstractions.Repositories;
 
 namespace Pizza4Ps.PizzaService.Domain.Services
 {
-    public class IngredientgService : DomainService, IIngredientService
+    public class IngredientService : DomainService, IIngredientService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IIngredientRepository _ingredientRepository;
 
-        public IngredientgService(IUnitOfWork unitOfWork, IIngredientRepository ingredientRepository)
+        public IngredientService(IUnitOfWork unitOfWork, IIngredientRepository ingredientRepository)
         {
             _unitOfWork = unitOfWork;
             _ingredientRepository = ingredientRepository;
         }
 
-        public async Task<Guid> CreateAsync(string name, string description, decimal price)
+        public async Task<Guid> CreateAsync(string name, string description)
         {
-            var entity = new Ingredient(Guid.NewGuid(), name, description, price);
+            var entity = new Ingredient(Guid.NewGuid(), name, description);
             _ingredientRepository.Add(entity);
             await _unitOfWork.SaveChangeAsync();
             return entity.Id;

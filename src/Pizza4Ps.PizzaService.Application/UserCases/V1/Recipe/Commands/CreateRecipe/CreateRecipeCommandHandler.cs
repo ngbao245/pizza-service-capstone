@@ -19,9 +19,11 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Recipe.Commands.CreateR
         public async Task<ResultDto<Guid>> Handle(CreateRecipeCommand request, CancellationToken cancellationToken)
         {
             var result = await _recipeService.CreateAsync(
+                request.ProductSizeId,
+                request.IngredientId,
                 request.Unit,
-                request.Name
-);
+                request.Quantity
+                );
             return new ResultDto<Guid>
             {
                 Id = result

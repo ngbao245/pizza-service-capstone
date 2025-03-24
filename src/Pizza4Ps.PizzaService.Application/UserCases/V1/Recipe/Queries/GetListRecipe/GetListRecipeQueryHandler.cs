@@ -24,8 +24,10 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Recipe.Queries.GetListR
         public async Task<PaginatedResultDto<RecipeDto>> Handle(GetListRecipeQuery request, CancellationToken cancellationToken)
         {
             var query = _recipeRepository.GetListAsNoTracking(
-                x => (request.Unit == null || x.Unit.Contains(request.Unit))
-                && (request.Name == null || x.Name.Contains(request.Name))
+                x => (request.ProductSizeId == null || x.ProductSizeId == request.ProductSizeId)
+                && (request.IngredientId == null || x.IngredientId == request.IngredientId)
+                && (request.Unit == null || x.Unit == request.Unit)
+                && (request.Quantity == null || x.Quantity == request.Quantity)
                 ,
                 includeProperties: request.IncludeProperties);
             var entities = await query

@@ -17,8 +17,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Ingredients.Commands.Cr
         {
             var result = await _IngredientService.CreateAsync(
                 request.Name,
-                request.Description,
-                request.Price);
+                request.Description);
             return new ResultDto<Guid>
             {
                 Id = result

@@ -5,6 +5,7 @@ using Pizza4Ps.PizzaService.API.Models;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Queries.GetProductById;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.ProductSizes.Commands.CreateProductSize;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.ProductSizes.Queries.GetListProductSize;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.ProductSizes.Queries.GetProductSizesByProduct;
 
 namespace Pizza4Ps.PizzaService.API.Controllers
 {
@@ -49,6 +50,18 @@ namespace Pizza4Ps.PizzaService.API.Controllers
         public async Task<IActionResult> GetSingleByIdAsync([FromRoute] Guid id)
         {
             var result = await _sender.Send(new GetProductByIdQuery { Id = id });
+            return Ok(new ApiResponse
+            {
+                Result = result,
+                Message = Message.GET_SUCCESS,
+                StatusCode = StatusCodes.Status200OK
+            });
+        }
+
+        [HttpGet("get-productsizes-by-product")]
+        public async Task<IActionResult> GetByProductId([FromQuery] Guid productId)
+        {
+            var result = await _sender.Send(new GetProductSizesByProductQuery { ProductId = productId });
             return Ok(new ApiResponse
             {
                 Result = result,

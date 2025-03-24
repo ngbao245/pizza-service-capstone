@@ -1,9 +1,10 @@
 ﻿using Pizza4Ps.PizzaService.Domain.Abstractions.Services.ServiceBase;
+using Pizza4Ps.PizzaService.Domain.Enums;
 
 namespace Pizza4Ps.PizzaService.Domain.Abstractions.Services
 {
     public interface IRecipeService : IDomainService
     {
-        Task<Guid> CreateAsync(string unit, string name);
+        Task<Guid> CreateAsync(Guid productSizeId, Guid ingredientId, UnitOfMeasurementType unit, decimal quantity);
     }
 }

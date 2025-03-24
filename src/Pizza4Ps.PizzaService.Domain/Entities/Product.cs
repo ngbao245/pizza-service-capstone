@@ -15,6 +15,7 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         public virtual Category Category { get; set; }
 
         public virtual ICollection<Option> Options { get; set; }
+        public virtual ICollection<ProductSize> ProductSizes { get; set; }
 
         public Product()
         {

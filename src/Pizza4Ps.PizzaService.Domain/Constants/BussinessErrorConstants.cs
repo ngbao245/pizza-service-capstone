@@ -115,6 +115,8 @@
         public class ProductSizeErrorConstant
         {
             public const string PRODUCTSIZE_NOT_FOUND = "Kích cỡ Món ăn không tìm thấy";
+            public const string PRODUCTSIZE_EXISTED = "Kích cỡ Món ăn đã tồn tại";
+
         }
 
         public class RecipeErrorConstant
