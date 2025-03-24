@@ -20,9 +20,15 @@ namespace Pizza4Ps.PizzaService.Persistence.Configurations
                 .WithMany(x => x.WorkshopRegisters)
                 .HasForeignKey(x => x.WorkshopId);
 
+            builder.HasOne(x => x.Table)
+                .WithMany()
+                .HasForeignKey(x => x.TableId)
+                .OnDelete(DeleteBehavior.NoAction);
+
             builder.HasOne(x => x.Order)
                 .WithMany()
-                .HasForeignKey(x => x.OrderId);
+                .HasForeignKey(x => x.OrderId)
+                .OnDelete(DeleteBehavior.SetNull);
 
         }
     }
