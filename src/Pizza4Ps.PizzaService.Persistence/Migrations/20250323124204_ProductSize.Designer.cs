@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Pizza4Ps.PizzaService.Persistence;
 
@@ -11,9 +12,11 @@ using Pizza4Ps.PizzaService.Persistence;
 namespace Pizza4Ps.PizzaService.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20250323124204_ProductSize")]
+    partial class ProductSize
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1239,14 +1242,9 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                     b.Property<Guid>("ProductId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("ProductId1")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ProductId");
-
-                    b.HasIndex("ProductId1");
 
                     b.ToTable("ProductSize", (string)null);
                 });
@@ -1272,6 +1270,9 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                     b.Property<Guid>("IngredientId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("IngredientId1")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -1294,6 +1295,8 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("IngredientId");
+
+                    b.HasIndex("IngredientId1");
 
                     b.HasIndex("ProductSizeId");
 
@@ -2552,23 +2555,23 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Pizza4Ps.PizzaService.Domain.Entities.Product", null)
-                        .WithMany("ProductSizes")
-                        .HasForeignKey("ProductId1");
-
                     b.Navigation("Product");
                 });
 
             modelBuilder.Entity("Pizza4Ps.PizzaService.Domain.Entities.Recipe", b =>
                 {
                     b.HasOne("Pizza4Ps.PizzaService.Domain.Entities.Ingredient", "Ingredient")
-                        .WithMany("Recipes")
+                        .WithMany()
                         .HasForeignKey("IngredientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Pizza4Ps.PizzaService.Domain.Entities.ProductSize", "ProductSize")
+                    b.HasOne("Pizza4Ps.PizzaService.Domain.Entities.Ingredient", null)
                         .WithMany("Recipes")
+                        .HasForeignKey("IngredientId1");
+
+                    b.HasOne("Pizza4Ps.PizzaService.Domain.Entities.ProductSize", "ProductSize")
+                        .WithMany()
                         .HasForeignKey("ProductSizeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -2841,13 +2844,6 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
             modelBuilder.Entity("Pizza4Ps.PizzaService.Domain.Entities.Product", b =>
                 {
                     b.Navigation("Options");
-
-                    b.Navigation("ProductSizes");
-                });
-
-            modelBuilder.Entity("Pizza4Ps.PizzaService.Domain.Entities.ProductSize", b =>
-                {
-                    b.Navigation("Recipes");
                 });
 
             modelBuilder.Entity("Pizza4Ps.PizzaService.Domain.Entities.Workshop", b =>

@@ -3,8 +3,9 @@
     public class ProductSizeDto
     {
         public Guid Id { get; set; }
-        public string ProductId { get; set; }
-        public string RecipeId { get; set; }
-        public string SizeId { get; set; }
+        public string Name { get; set; }
+        public decimal Diameter { get; set; }
+        public string? Description { get; set; }
+        public Guid ProductId { get; set; }
     }
 }

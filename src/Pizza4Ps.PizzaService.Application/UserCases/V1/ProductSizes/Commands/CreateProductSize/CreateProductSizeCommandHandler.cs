@@ -19,9 +19,11 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.ProductSizes.Commands.C
         public async Task<ResultDto<Guid>> Handle(CreateProductSizeCommand request, CancellationToken cancellationToken)
         {
             var result = await _productSizeService.CreateAsync(
-                request.ProductId,
-                request.RecipeId,
-                request.SizeId);
+                request.Name,
+                request.Diameter,
+                request.Description,
+                request.ProductId
+                );
             return new ResultDto<Guid>
             {
                 Id = result

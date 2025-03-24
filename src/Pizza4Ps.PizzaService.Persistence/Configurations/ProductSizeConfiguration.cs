@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Pizza4Ps.PizzaService.Persistence.Constants;
 using Pizza4Ps.PizzaService.Domain.Entities;
 
@@ -12,17 +12,20 @@ namespace Pizza4Ps.PizzaService.Persistence.Configurations
             builder.ToTable(TableNames.ProductSize);
             builder.HasKey(x => x.Id);
 
-            builder.HasOne(ps => ps.Products)
+            builder.Property(x => x.Name)
+                   .IsRequired()
+                   .HasMaxLength(255);
+
+            builder.Property(x => x.Diameter)
+                   .IsRequired();
+
+            builder.Property(x => x.Description)
+                   .HasMaxLength(500);
+
+            // Corrected relationship mapping
+            builder.HasOne(ps => ps.Product)
                    .WithMany()
                    .HasForeignKey(ps => ps.ProductId);
-
-            builder.HasOne(ps => ps.Recipe)
-                   .WithMany()
-                   .HasForeignKey(ps => ps.RecipeId);
-
-            builder.HasOne(ps => ps.Size)
-                   .WithMany()
-                   .HasForeignKey(ps => ps.SizeId);
         }
     }
 }

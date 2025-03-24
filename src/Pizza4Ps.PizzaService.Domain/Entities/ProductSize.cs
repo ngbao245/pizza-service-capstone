@@ -4,20 +4,20 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
 {
     public class ProductSize : EntityAuditBase<Guid>
     {
+        public string Name { get; set; }
+        public decimal Diameter { get; set; }
+        public string? Description { get; set; }
         public Guid ProductId { get; set; }
-        public Guid RecipeId { get; set; }
-        public Guid SizeId { get; set; }
+        public Product Product { get; set; }
+        public virtual ICollection<Recipe> Recipes { get; set; }
 
-        public virtual Recipe Recipe { get; set; }
-        public virtual Size Size { get; set; }
-        public virtual Product Products { get; set;}
-
-        public ProductSize(Guid id ,Guid productId, Guid recipeId, Guid sizeId)
+        public ProductSize(Guid id, string name, decimal diameter, string description, Guid productId)
         {
             Id = id;
+            Name = name;
+            Diameter = diameter;
+            Description = description;
             ProductId = productId;
-            RecipeId = recipeId;
-            SizeId = sizeId;
         }
     }
 }
