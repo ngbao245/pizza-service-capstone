@@ -30,10 +30,11 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.ProductSizes.Queries.Ge
                 throw new BusinessException(BussinessErrorConstants.ProductErrorConstant.PRODUCT_NOT_FOUND);
             }
 
-            var productSizes = await _productSizeRepository.GetListAsNoTracking(
-            ps => ps.ProductId == request.ProductId,
-            includeProperties: "Recipes.Ingredient"
-            ).ToListAsync(cancellationToken);
+            var productSizes = await _productSizeRepository.GetListAsNoTracking(ps => ps.ProductId == request.ProductId)
+                .Include(ps => ps.Recipes)
+                    .ThenInclude(r => r.Ingredient)
+                .ToListAsync(cancellationToken);
+
 
 
             if (!productSizes.Any())
