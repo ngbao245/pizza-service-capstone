@@ -59,6 +59,42 @@ namespace Pizza4Ps.PizzaService.Application.Helpers
             await client.SendAsync(message);
             await client.DisconnectAsync(true);
         }
+        public async Task SendVerifiedCodeEmail(string customerEmail, string customerName, string registrationCode)
+        {
+            var emailSettings = _config.GetSection("EmailSettings");
+
+            var message = new MimeMessage();
+            message.From.Add(new MailboxAddress(emailSettings["SenderName"], emailSettings["SenderEmail"]));
+            message.To.Add(new MailboxAddress(customerName, customerEmail));
+            message.Subject = "Xác nhận email của bạn";
+
+            // Đọc template email với đường dẫn chính xác
+            var basePath = AppDomain.CurrentDomain.BaseDirectory;
+            var templatePath = Path.Combine(basePath, "Templates", "CustomerRegisterEmail.html");
+
+            if (!File.Exists(templatePath))
+            {
+                throw new FileNotFoundException($"Template not found: {templatePath}");
+            }
+
+            string body = await File.ReadAllTextAsync(templatePath);
+
+            // Thay thế placeholder bằng mã xác nhận thực tế
+            body = body.Replace("{{VerificationCode}}", registrationCode);
+
+            // Thiết lập nội dung email dưới dạng HTML
+            message.Body = new TextPart("html")
+            {
+                Text = body
+            };
+
+            // Gửi email
+            using var client = new SmtpClient();
+            await client.ConnectAsync(emailSettings["SmtpServer"], int.Parse(emailSettings["SmtpPort"]), false);
+            await client.AuthenticateAsync(emailSettings["SenderEmail"], emailSettings["Password"]);
+            await client.SendAsync(message);
+            await client.DisconnectAsync(true);
+        }
         private byte[] GenerateQrCode(string text)
         {
             using var qrGenerator = new QRCodeGenerator();

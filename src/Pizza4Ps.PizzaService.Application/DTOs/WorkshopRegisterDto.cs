@@ -23,5 +23,15 @@
         public OrderDto Order { get; set; }
 
         public List<WorkshopPizzaRegisterDto> WorkshopPizzaRegisters { get; set; }
+
+        public decimal TotalFee { get; set; }
+
+        public string Code { get; set; }
+
+        public Guid? TableId { get; set; }
+
+        public string? TableCode { get; set; }
+
+        public TableDto Table { get; set; }
     }
 }

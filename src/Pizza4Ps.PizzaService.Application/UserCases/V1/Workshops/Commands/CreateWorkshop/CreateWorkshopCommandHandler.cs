@@ -5,17 +5,20 @@ using Pizza4Ps.PizzaService.Domain.Abstractions.Services;
 using Pizza4Ps.PizzaService.Domain.Constants;
 using Pizza4Ps.PizzaService.Domain.Entities;
 using Pizza4Ps.PizzaService.Domain.Exceptions;
+using Pizza4Ps.PizzaService.Persistence.Repositories;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Workshops.Commands.CreateWorkshop
 {
     public class CreateWorkshopCommandHandler : IRequestHandler<CreateWorkshopCommand, ResultDto<Guid>>
     {
+        private readonly IProductRepository _productRepository;
         private readonly IZoneRepository _zoneRepository;
         private readonly IWorkshopService _workshopService;
 
         public CreateWorkshopCommandHandler(
-            IWorkshopService workshopService, IZoneRepository zoneRepository)
+            IWorkshopService workshopService, IZoneRepository zoneRepository, IProductRepository productRepository)
         {
+            _productRepository = productRepository;
             _zoneRepository = zoneRepository;
             _workshopService = workshopService;
         }
@@ -26,6 +29,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Workshops.Commands.Crea
             {
                 throw new BusinessException(BussinessErrorConstants.ZoneErrorConstant.ZONE_NOT_FOUND);
             }
+            var products = _productRepository.GetListAsTracking(x => request.ProductIds.Contains(x.Id));
             var workshop = new Workshop(
                 name: request.Name, header: request.Header,
                 description: request.Description,
@@ -44,7 +48,12 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Workshops.Commands.Crea
             var workshopFoodDetails = new List<WorkshopFoodDetail>();
             foreach(var item in request.ProductIds)
             {
-                var workshopFoodDetail = new WorkshopFoodDetail(workshopId: workshop.Id, productId: item);
+                var product = products.FirstOrDefault(x => x.Id == item);
+                if (product == null)
+                {
+                    throw new BusinessException(BussinessErrorConstants.ProductErrorConstant.PRODUCT_NOT_FOUND);
+                }
+                var workshopFoodDetail = new WorkshopFoodDetail(workshopId: workshop.Id, productId: item, name: product.Name, price: product.Price);
                 workshopFoodDetails.Add(workshopFoodDetail);
             }
             await _workshopService.CreateAsync(workshop, workshopFoodDetails);

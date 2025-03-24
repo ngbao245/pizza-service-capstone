@@ -12,6 +12,9 @@
 		<None Update="Templates\WorkshopRegisterEmailTemplate.html">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
+		<None Update="Templates\CustomerRegisterEmail.html">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
 	  <EmbeddedResource Remove="DependencyInjection\Options\**" />
 	  <EmbeddedResource Remove="Models\**" />
 	  <None Remove="DependencyInjection\Options\**" />
@@ -19,7 +22,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Folder Include="Templates\" />
 		<Folder Include="UserCases\V1\Tables\Queries\" />
 		<Folder Include="UserCases\V1\Tables\Queries\" />
 		<Folder Include="UserCases\V1\Tables\Queries\" />

@@ -39,7 +39,7 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
             return capacity;
         }
 
-        internal void SetCurrentOrderId(Guid currentOrderId)
+        public void SetCurrentOrderId(Guid currentOrderId)
         {
             CurrentOrderId = currentOrderId;
         }

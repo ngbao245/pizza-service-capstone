@@ -8,9 +8,11 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
 
         public WorkshopPizzaRegister WorkshopPizzaRegister { get; set; }
 
+        public string Name { get; set; }
+
         public decimal AdditionalPrice { get; set; }
 
-        public Guid OptionItemId { get;set; }
+        public Guid? OptionItemId { get;set; }
 
         public OptionItem OptionItem { get; set; }
         public WorkshopPizzaRegisterDetail()
@@ -18,12 +20,13 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
             
         }
 
-        public WorkshopPizzaRegisterDetail(Guid workshopPizzaRegisterId, decimal additionalPrice, Guid optionItemId)
+        public WorkshopPizzaRegisterDetail(Guid workshopPizzaRegisterId, decimal additionalPrice, Guid optionItemId, string name)
         {
             Id = Guid.NewGuid();
             WorkshopPizzaRegisterId = workshopPizzaRegisterId;
             AdditionalPrice = additionalPrice;
             OptionItemId = optionItemId;
+            Name = name;
         }
     }
 }

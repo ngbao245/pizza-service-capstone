@@ -19,7 +19,8 @@ namespace Pizza4Ps.PizzaService.Persistence.Configurations
 
             builder.HasOne(x => x.OptionItem)
                 .WithMany()
-                .HasForeignKey(x => x.OptionItemId);
+                .HasForeignKey(x => x.OptionItemId)
+                .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

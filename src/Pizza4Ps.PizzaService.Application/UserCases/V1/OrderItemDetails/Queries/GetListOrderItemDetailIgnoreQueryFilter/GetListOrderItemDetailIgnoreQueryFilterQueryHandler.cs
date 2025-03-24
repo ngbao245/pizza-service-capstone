@@ -25,7 +25,6 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.OptionItemOrderItems.Qu
 				.Where(
 					x => (request.Name == null || x.Name.Contains(request.Name))
 					&& (request.AdditionalPrice == null || x.AdditionalPrice == request.AdditionalPrice)
-					&& (request.OptionItemId == null || x.OptionItemId == request.OptionItemId)
 					&& (request.OrderItemId == null || x.OrderItemId == request.OrderItemId)
 					&& x.IsDeleted == request.IsDeleted);
 			var entities = await query

@@ -117,7 +117,6 @@ namespace Pizza4Ps.PizzaService.Domain.Services
                         id: Guid.NewGuid(),
                         name: optionItem.Name,
                         additionalPrice: optionItem.AdditionalPrice,
-                        optionItemId: optionItemId,
                         orderItemId: orderItem.Id
                         );
                     //_optionItemOrderItemRepository.Add(orderDetail);
@@ -145,7 +144,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
         public async Task CheckOutOrder(Guid orderId)
         {
             decimal totalPrice = 0;
-            var order = await _orderRepository.GetSingleByIdAsync(orderId, "OrderItems");
+            var order = await _orderRepository.GetSingleByIdAsync(orderId, "OrderItems,AdditionalFees");
             if (order == null)
                 throw new BusinessException(BussinessErrorConstants.OrderErrorConstant.ORDER_NOT_FOUND);
             if (order.Status != OrderStatusEnum.Unpaid)
@@ -154,6 +153,10 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             foreach (var orderItem in order.OrderItems)
             {
                 totalPrice += orderItem.TotalPrice;
+            }
+            foreach (var additionalFee in order.AdditionalFees)
+            {
+                totalPrice += additionalFee.Value;
             }
             order.SetCheckOut();
             order.SetTotalPrice(totalPrice);

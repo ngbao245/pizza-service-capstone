@@ -30,8 +30,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Options.Queries.GetList
                 predicate: p => p.Id == request.ProductId,
                 includeProperties: "ProductOptions.Option.OptionItems");
 
-            var options = product.ProductOptions
-                .Select(po => po.Option)
+            var options = product.Options
                 .AsQueryable()
                 .Where(o =>(request.Name == null || o.Name.Contains(request.Name))&&(request.Description == null || o.Description.Contains(request.Description)));
 
