@@ -38,7 +38,7 @@ namespace Pizza4Ps.PizzaService.API.Controllers
 		/// </remarks>
 		/// <returns></returns>
 		[HttpPost]
-		public async Task<IActionResult> CreateAsync([FromBody] CreateProductCommand request)
+		public async Task<IActionResult> CreateAsync([FromForm] CreateProductCommand request)
 		{
 			var result = await _sender.Send(request);
 			return Ok(new ApiResponse
@@ -99,7 +99,7 @@ namespace Pizza4Ps.PizzaService.API.Controllers
 		}
 
 		[HttpPut("{id}")]
-		public async Task<IActionResult> UpdateAsync([FromRoute] Guid id, [FromBody] UpdateProductCommand request)
+		public async Task<IActionResult> UpdateAsync([FromRoute] Guid id, [FromForm] UpdateProductCommand request)
 		{
             request.Id = id;
             await _sender.Send(request);

@@ -1,7 +1,4 @@
-﻿using Pizza4Ps.PizzaService.Domain.Entities;
-using Pizza4Ps.PizzaService.Domain.Enums;
-
-namespace Pizza4Ps.PizzaService.Application.DTOs
+﻿namespace Pizza4Ps.PizzaService.Application.DTOs
 {
     public class ProductDto
     {
@@ -9,6 +6,8 @@ namespace Pizza4Ps.PizzaService.Application.DTOs
         public string Name { get; set; }
         public decimal Price { get; set; }
         public byte[]? Image { get; set; }
+        public string? ImageUrl { get; set; } // URL ảnh trên Cloudinary
+        public string? ImagePublicId { get; set; } // Public ID của ảnh trên Cloudinary
         public string? Description { get; set; }
         public Guid CategoryId { get; set; }
         public string ProductType { get; set; }
