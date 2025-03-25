@@ -1,5 +1,6 @@
 ﻿using Pizza4Ps.PizzaService.Domain.Enums;
 using Pizza4Ps.PizzaService.Domain.Abstractions;
+using Pizza4Ps.PizzaService.Domain.Entities.Identity;
 
 namespace Pizza4Ps.PizzaService.Domain.Entities
 {
@@ -10,6 +11,9 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         public string Email { get; set; }
         public StaffTypeEnum StaffType { get; set; }
         public StaffStatusEnum Status { get; set; }
+
+        public Guid? AppUserId { get; set; }
+        public AppUser AppUser { get; set; }
 
         public Staff()
         {

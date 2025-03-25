@@ -11,6 +11,10 @@ namespace Pizza4Ps.PizzaService.Persistence.Configurations
         {
             builder.ToTable(TableNames.Staff);
             builder.HasKey(x => x.Id);
+
+            builder.HasOne(x => x.AppUser)
+                .WithOne(x => x.Staff)
+                .HasForeignKey<Staff>(x => x.AppUserId);
         }
     }
 }

@@ -25,7 +25,7 @@ namespace Pizza4Ps.PizzaService.Persistence
             }
             catch
             {
-                throw new ServerException(SAVECHANGE_ERROR.SAVE_FAILED);
+                throw new Exception(SAVECHANGE_ERROR.SAVE_FAILED);
             }
         }
     }

@@ -12,10 +12,6 @@ namespace Pizza4Ps.PizzaService.Persistence.Configurations.Identity
             builder.ToTable(TableNames.AppUsers);
 
             builder.HasKey(x => x.Id);
-            builder.Property(x => x.IsDirector).HasDefaultValue(false);
-            builder.Property(x => x.IsHeadOfDepartment).HasDefaultValue(false);
-            builder.Property(x => x.ManagerId).HasDefaultValue(null);
-            builder.Property(x => x.IsReceipient).HasDefaultValue(-1);
 
             // Each user can have many UserClaims
             builder.HasMany(e => e.Claims)

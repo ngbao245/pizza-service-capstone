@@ -6,6 +6,7 @@ using Pizza4Ps.PizzaService.Application.UserCases.V1.AuthCustomer.Commands.Login
 using Pizza4Ps.PizzaService.Application.UserCases.V1.AuthCustomer.Commands.RegisterCustomer;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.AuthCustomer.Commands.SendCodeVerifyEmail;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.AuthCustomer.Commands.VerifyEmail;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.AuthStaff.Commands.LoginStaff;
 
 namespace Pizza4Ps.PizzaService.API.Controllers
 {
