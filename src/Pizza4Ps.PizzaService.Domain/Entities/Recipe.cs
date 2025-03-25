@@ -8,11 +8,11 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         public Guid ProductSizeId { get; set; }
         public Guid IngredientId { get; set; }
         public UnitOfMeasurementType Unit {  get; set; }
-        public Decimal Quantity { get; set; }
+        public decimal Quantity { get; set; }
 
 
-        public Ingredient Ingredient { get; set; }
-        public ProductSize ProductSize { get; set; }
+        public virtual Ingredient Ingredient { get; set; }
+        public virtual ProductSize ProductSize { get; set; }
 
         public Recipe(Guid id, Guid productSizeId, Guid ingredientId, UnitOfMeasurementType unit, decimal quantity)
         {
