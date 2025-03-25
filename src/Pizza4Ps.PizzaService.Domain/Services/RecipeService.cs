@@ -36,15 +36,15 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             {
                 throw new BusinessException(BussinessErrorConstants.RecipeErrorConstant.RECIPE_NOT_INCLUDED_INGREDIENT);
             }
-            if (ingredientId != null)
-            {
-                var existingIngredient = await _ingredientRepository.GetSingleByIdAsync(ingredientId.Value);
-                if (existingIngredient == null) 
-                {
-                    throw new BusinessException(BussinessErrorConstants.IngredientErrorConstant.INGREDIENT_NOT_FOUND);
-                }
-                ingredientName = existingIngredient.Name;
-            }
+            //if (ingredientId != null)
+            //{
+            //    var existingIngredient = await _ingredientRepository.GetSingleByIdAsync(ingredientId.Value);
+            //    if (existingIngredient == null) 
+            //    {
+            //        throw new BusinessException(BussinessErrorConstants.IngredientErrorConstant.INGREDIENT_NOT_FOUND);
+            //    }
+            //    ingredientName = existingIngredient.Name;
+            //}
             
 
             var entity = new Recipe(Guid.NewGuid(), productSizeId, ingredientId, ingredientName, unit, quantity);
