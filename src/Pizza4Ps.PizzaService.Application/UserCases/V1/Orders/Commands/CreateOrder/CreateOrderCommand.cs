@@ -7,6 +7,5 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Orders.Commands.CreateO
     public class CreateOrderCommand : IRequest<ResultDto<Guid>>
 	{
         public Guid TableId { get; set; }
-        public OrderTypeEnum OrderTypeEnum { get; set; }
     }
 }

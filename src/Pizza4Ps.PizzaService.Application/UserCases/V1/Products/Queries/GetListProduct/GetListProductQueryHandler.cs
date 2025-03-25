@@ -29,7 +29,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Queries.GetLis
                 && (request.Price == null || x.Price == request.Price)
                 && (request.CategoryId == null || x.CategoryId == request.CategoryId)
                 && (request.ProductType == null || x.ProductType.Equals(request.ProductType)),
-                includeProperties: request.IncludeProperties);
+                includeProperties: request.IncludeProperties).AsSplitQuery();
             var entities = await query
                 .OrderBy(request.SortBy)
                 .Skip(request.SkipCount).Take(request.TakeCount).ToListAsync();

@@ -33,6 +33,8 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
 
         public WorkshopStatus WorkshopStatus { get; set; }  
 
+        public long totalRegisteredParticipant { get; set; }
+
         public Guid? ZoneId { get; set; }
 
         public Zone Zone { get; set; }
@@ -73,8 +75,12 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
             ZoneId = zoneId;
             ZoneName = zoneName;
             WorkshopStatus = WorkshopStatus.Scheduled;
+            totalRegisteredParticipant = 0;
         }
 
-
+        public void AddWorkshopRegister()
+        {
+            totalRegisteredParticipant += 1;
+        }
     }
 }

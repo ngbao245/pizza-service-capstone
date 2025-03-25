@@ -29,8 +29,6 @@ namespace Pizza4Ps.PizzaService.API.Controllers
         }
 
         /// <summary>
-        /// 0: Order - Khách tới ăn
-        /// 1: Workshop - Khách tới tham gia workshop
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>

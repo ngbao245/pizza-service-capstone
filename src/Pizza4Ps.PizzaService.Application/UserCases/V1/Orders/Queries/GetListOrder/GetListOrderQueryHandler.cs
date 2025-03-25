@@ -5,6 +5,7 @@ using Pizza4Ps.PizzaService.Application.Abstractions;
 using Pizza4Ps.PizzaService.Application.DTOs;
 using Pizza4Ps.PizzaService.Domain.Abstractions.Repositories;
 using Pizza4Ps.PizzaService.Domain.Constants;
+using Pizza4Ps.PizzaService.Domain.Enums;
 using Pizza4Ps.PizzaService.Domain.Exceptions;
 using System.Linq.Dynamic.Core;
 
@@ -22,12 +23,31 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Orders.Queries.GetListO
 		}
 
 		public async Task<PaginatedResultDto<OrderDto>> Handle(GetListOrderQuery request, CancellationToken cancellationToken)
-		{
-			var query = _orderRepository.GetListAsNoTracking(
+        {
+            OrderStatusEnum? orderStatusEnum = null;
+            if (!string.IsNullOrEmpty(request.Status))
+            {
+                if (!Enum.TryParse(request.Status, true, out OrderStatusEnum parsedStatus))
+                {
+                    throw new BusinessException(BussinessErrorConstants.OrderItemErrorConstant.INVALID_ORDER_ITEM_STATUS);
+                }
+                orderStatusEnum = parsedStatus;
+            }
+            OrderTypeEnum? orderTypeEnum = null;
+            if (!string.IsNullOrEmpty(request.Type))
+            {
+                if (!Enum.TryParse(request.Type, true, out OrderTypeEnum parsedStatus))
+                {
+                    throw new BusinessException(BussinessErrorConstants.OrderItemErrorConstant.INVALID_ORDER_ITEM_STATUS);
+                }
+                orderTypeEnum = parsedStatus;
+            }
+            var query = _orderRepository.GetListAsNoTracking(
 				x => (request.StartTime == null || x.StartTime == request.StartTime)
 				&& (request.EndTime == null || x.EndTime == request.EndTime)
-				&& (request.Status == null || x.Status.Equals(request.Status))
-				&& (request.TableId == null || x.TableId == request.TableId),
+				&& (orderStatusEnum == null || x.Status == orderStatusEnum)
+				&& (orderTypeEnum == null || x.Type == orderTypeEnum)
+                && (request.TableId == null || x.TableId == request.TableId),
 				includeProperties: request.IncludeProperties);
 			var entities = await query
 				.OrderBy(request.SortBy)

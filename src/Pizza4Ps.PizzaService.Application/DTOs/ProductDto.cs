@@ -12,7 +12,7 @@
         public Guid CategoryId { get; set; }
         public string ProductType { get; set; }
         public virtual CategoryDto Category { get; set; }
-
+        public virtual ICollection<ProductSizeDto> ProductSizes { get; set; }
         public virtual ICollection<OptionDto> Options { get; set; }
 
     }

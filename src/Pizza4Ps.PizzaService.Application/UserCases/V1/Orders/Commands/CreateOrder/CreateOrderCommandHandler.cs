@@ -19,7 +19,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Orders.Commands.CreateO
         public async Task<ResultDto<Guid>> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
         {
             var result = await _orderService.CreateAsync(
-                request.TableId, request.OrderTypeEnum);
+                request.TableId, Domain.Enums.OrderTypeEnum.Order);
             return new ResultDto<Guid>
             {
                 Id = result

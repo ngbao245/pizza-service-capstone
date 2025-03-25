@@ -1,4 +1,5 @@
 ﻿using Pizza4Ps.PizzaService.Domain.Entities;
+using System.Text.Json.Serialization;
 
 namespace Pizza4Ps.PizzaService.Application.DTOs
 {
@@ -9,6 +10,7 @@ namespace Pizza4Ps.PizzaService.Application.DTOs
         public decimal AdditionalPrice { get; set; }
 
         public Guid OptionID { get; set; }
+        [JsonIgnore]
         public OptionDto Option { get; set; }
         //public Guid OptionId { get; set; }
 

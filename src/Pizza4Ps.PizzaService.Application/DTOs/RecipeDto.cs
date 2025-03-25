@@ -1,4 +1,5 @@
-﻿using Pizza4Ps.PizzaService.Domain.Enums;
+﻿using Pizza4Ps.PizzaService.Domain.Entities;
+using Pizza4Ps.PizzaService.Domain.Enums;
 
 namespace Pizza4Ps.PizzaService.Application.DTOs
 {
@@ -7,7 +8,8 @@ namespace Pizza4Ps.PizzaService.Application.DTOs
         public Guid ProductSizeId { get; set; }
         public Guid? IngredientId { get; set; }
         public string IngredientName { get; set; }
-        public UnitOfMeasurementType Unit { get; set; }
+        public string Unit { get; set; }
         public Decimal Quantity { get; set; }
+        public virtual IngredientDto Ingredient { get; set; }
     }
 }

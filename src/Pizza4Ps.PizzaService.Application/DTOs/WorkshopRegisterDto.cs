@@ -1,4 +1,6 @@
-﻿namespace Pizza4Ps.PizzaService.Application.DTOs
+﻿using System.Text.Json.Serialization;
+
+namespace Pizza4Ps.PizzaService.Application.DTOs
 {
     public class WorkshopRegisterDto
     {

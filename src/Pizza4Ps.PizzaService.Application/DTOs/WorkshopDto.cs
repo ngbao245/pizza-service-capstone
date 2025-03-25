@@ -32,6 +32,8 @@ namespace Pizza4Ps.PizzaService.Application.DTOs
 
         public int MaxParticipantPerRegister { get; set; }
 
+        public long totalRegisteredParticipant { get; set; }
+        
         public string WorkshopStatus { get; set; }
 
         public Guid? ZoneId { get; set; }
@@ -41,6 +43,6 @@ namespace Pizza4Ps.PizzaService.Application.DTOs
         public string ZoneName { get; set; }
 
         public List<WorkshopFoodDetailDto> WorkshopFoodDetails { get; set; }
-        //public ICollection<WorkshopRegister> WorkshopRegisters { get; set; }
+        public List<WorkshopRegisterDto> WorkshopRegisters { get; set; }
     }
 }

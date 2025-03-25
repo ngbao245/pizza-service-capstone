@@ -1,11 +1,7 @@
 ﻿using AutoMapper;
 using Pizza4Ps.PizzaService.Application.DTOs;
 using Pizza4Ps.PizzaService.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Pizza4Ps.PizzaService.Domain.Enums;
 
 namespace Pizza4Ps.PizzaService.Application.Mappers
 {
@@ -14,9 +10,8 @@ namespace Pizza4Ps.PizzaService.Application.Mappers
         public RecipeProfile()
         {
             CreateMap<Recipe, RecipeDto>()
-                // Handle null IngredientId case
-                .ForMember(dest => dest.IngredientId,
-                    opt => opt.MapFrom(src => src.IngredientId ?? Guid.Empty));
+                .ForMember(dest => dest.Unit, opt => opt.MapFrom(src => Enum.GetName(typeof(UnitOfMeasurementType), src.Unit)));
+
 
         }
     }

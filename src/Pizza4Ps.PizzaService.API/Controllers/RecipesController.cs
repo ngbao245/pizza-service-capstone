@@ -21,6 +21,20 @@ namespace Pizza4Ps.PizzaService.API.Controllers
             _sender = sender;
         }
 
+        /// <summary>
+        /// Tạo món ăn
+        /// </summary>
+        /// <remarks>
+        ///Milligram,
+        ///Gram,
+        ///Kilogram,
+        ///Milliliter,
+        ///Liter,
+        ///Piece,
+        ///Teaspoon,
+        ///Tablespoon
+        /// </remarks>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> CreateAsync([FromBody] CreateRecipeCommand request)
         {

@@ -8,6 +8,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Orders.Queries.GetListO
         public DateTimeOffset? StartTime { get; set; }
         public DateTimeOffset? EndTime { get; set; }
         public string? Status { get; set; }
+        public string? Type { get; set; }
         public Guid? TableId { get; set; }
     }
 }
