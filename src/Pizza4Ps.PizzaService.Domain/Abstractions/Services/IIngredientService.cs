@@ -4,6 +4,6 @@ namespace Pizza4Ps.PizzaService.Domain.Abstractions.Services
 {
     public interface IIngredientService : IDomainService
     {
-        Task<Guid> CreateAsync(string name, string description, decimal price);
+        Task<Guid> CreateAsync(string name, string description);
     }
 }

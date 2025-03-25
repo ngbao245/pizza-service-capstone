@@ -6,12 +6,13 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.StaffZoneSchedules.Quer
 {
     public class GetListStaffZoneScheduleQuery : PaginatedQuery<PaginatedResultDto<StaffZoneScheduleDto>>
     {
-        public int? DayofWeek { get; set; }
-        public TimeOnly? ShiftStart { get; set; }
-        public TimeOnly? ShiftEnd { get; set; }
-        public string? Note { get; set; }
+        //public int? DayofWeek { get; set; }
+        //public TimeOnly? ShiftStart { get; set; }
+        //public TimeOnly? ShiftEnd { get; set; }
+        //public string? Note { get; set; }
+        public DateTime Date { get; set; }
         public Guid? StaffId { get; set; }
         public Guid? ZoneId { get; set; }
-        public Guid? WorkingTimeId { get; set; }
+        public Guid? WorkingSlotId { get; set; }
     }
 }

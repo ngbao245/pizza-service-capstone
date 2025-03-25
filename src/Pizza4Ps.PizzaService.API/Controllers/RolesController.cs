@@ -1,9 +1,7 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Pizza4Ps.PizzaService.API.Constants;
 using Pizza4Ps.PizzaService.API.Models;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.AdditionalFees.Queries.GetListAdditionalFee;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Roles.Queries.GetListRole;
 
 namespace Pizza4Ps.PizzaService.API.Controllers

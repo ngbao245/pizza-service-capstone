@@ -25,7 +25,7 @@ namespace Pizza4Ps.PizzaService.API.Controllers
             _sender = sender;
         }
 
-        [Authorize(Roles = "Customer")]
+        //[Authorize(Roles = "Customer")]
         [HttpPost]
         public async Task<IActionResult> CreateAsync([FromBody] CreateCategoryCommand request)
         {

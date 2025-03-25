@@ -6,20 +6,16 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
     {
         public string Name { get; set; }
         public string? Description { get; set; }
-        public decimal Price { get; set; }
-
-        public virtual ICollection<Recipe> Recipes { get; set; }
 
         public Ingredient()
         {
         }
 
-        public Ingredient(Guid id, string name, string description, decimal price)
+        public Ingredient(Guid id, string name, string description)
         {
             Id = id;
             Name = name;
             Description = description;
-            Price = price;
         }
     }
 }

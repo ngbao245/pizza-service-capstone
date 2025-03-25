@@ -9,6 +9,7 @@
         internal const string GET_SUCCESS = "Item query successfully";
         internal const string ID_URL_ERROR = "ID in URL and body do not match";
         internal const string CREATED_FAILED = "Item created failed";
+        internal const string UPDATE_FAILED = "Item update failed";
 
     }
 }

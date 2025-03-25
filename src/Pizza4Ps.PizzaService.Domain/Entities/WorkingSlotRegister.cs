@@ -27,14 +27,14 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
             WorkingSlotId = workingSlotId;
         }
 
-        public void setApprove()
+        public void setApproved()
         {
             if (Status == WorkingSlotRegisterStatusEnum.Approved)
                 throw new BusinessException(BussinessErrorConstants.WorkingSlotRegisterErrorConstant.WORKING_SLOT_REGISTER_ALREADY_APPROVED);
             Status = WorkingSlotRegisterStatusEnum.Approved;
         }
 
-        public void setReject()
+        public void setRejected()
         {
             if (Status == WorkingSlotRegisterStatusEnum.Rejected)
                 throw new BusinessException(BussinessErrorConstants.WorkingSlotRegisterErrorConstant.WORKING_SLOT_REGISTER_ALREADY_REJECTED);

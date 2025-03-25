@@ -7,6 +7,5 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Ingredients.Commands.Cr
     {
         public string Name { get; set; }
         public string? Description { get; set; }
-        public decimal Price { get; set; }
     }
 }

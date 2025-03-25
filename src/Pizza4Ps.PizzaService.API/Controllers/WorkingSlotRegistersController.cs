@@ -35,7 +35,7 @@ namespace Pizza4Ps.PizzaService.API.Controllers
         }
 
         [HttpPut("rejected/{id}")]
-        public async Task<IActionResult> rejectedAsync([FromRoute] Guid id)
+        public async Task<IActionResult> RejectedAsync([FromRoute] Guid id)
         {
             await _sender.Send(new UpdateStatusToRejectedCommand
             {
@@ -51,7 +51,7 @@ namespace Pizza4Ps.PizzaService.API.Controllers
         }
 
         [HttpPut("approved/{id}")]
-        public async Task<IActionResult> approvedAsync([FromRoute] Guid id)
+        public async Task<IActionResult> ApprovedAsync([FromRoute] Guid id)
         {
             await _sender.Send(new UpdateStatusToApprovedCommand
             {
