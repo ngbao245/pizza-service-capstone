@@ -21,6 +21,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Recipe.Commands.CreateR
             var result = await _recipeService.CreateAsync(
                 request.ProductSizeId,
                 request.IngredientId,
+                request.IngredientName,
                 request.Unit,
                 request.Quantity
                 );

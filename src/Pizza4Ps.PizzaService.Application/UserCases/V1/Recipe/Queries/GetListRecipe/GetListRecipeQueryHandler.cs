@@ -26,6 +26,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Recipe.Queries.GetListR
             var query = _recipeRepository.GetListAsNoTracking(
                 x => (request.ProductSizeId == null || x.ProductSizeId == request.ProductSizeId)
                 && (request.IngredientId == null || x.IngredientId == request.IngredientId)
+                && (request.IngredientName== null || x.IngredientName == request.IngredientName)
                 && (request.Unit == null || x.Unit == request.Unit)
                 && (request.Quantity == null || x.Quantity == request.Quantity)
                 ,

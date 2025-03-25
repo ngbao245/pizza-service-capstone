@@ -5,6 +5,6 @@ namespace Pizza4Ps.PizzaService.Domain.Abstractions.Services
 {
     public interface IRecipeService : IDomainService
     {
-        Task<Guid> CreateAsync(Guid productSizeId, Guid ingredientId, UnitOfMeasurementType unit, decimal quantity);
+        Task<Guid> CreateAsync(Guid productSizeId, Guid? ingredientId, string ingredientName, UnitOfMeasurementType unit, decimal quantity);
     }
 }

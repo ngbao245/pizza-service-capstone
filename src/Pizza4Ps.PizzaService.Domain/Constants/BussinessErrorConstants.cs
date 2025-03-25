@@ -132,6 +132,8 @@
         public class RecipeErrorConstant
         {
             public const string RECIPE_NOT_FOUND = "Công thức không tìm thấy";
+            public const string RECIPE_NOT_INCLUDED_INGREDIENT = "There were not both ingredientid or ingredientnam";
+
         }
 
         public class OrderItemErrorConstant

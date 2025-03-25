@@ -81,7 +81,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
 			{
 				return false;
 			}
-			if (existingTable.Status != TableStatusEnum.Locked)
+			if (existingTable.Status == TableStatusEnum.Locked)
 			{
 				throw new BusinessException(BussinessErrorConstants.TableErrorConstant.INVALID_TABLE_STATUS);
 			}

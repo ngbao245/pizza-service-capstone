@@ -150,7 +150,12 @@ namespace Pizza4Ps.PizzaService.API.Controllers
             });
         }
 
-        [HttpPost("check-in")]
+        /// <summary>
+        /// Note: Trạng thái bàn: Created -> Reserved -> Opening
+        /// </summary>
+        /// <param name="command"></param>
+        /// <returns></returns>
+        [HttpPut("check-in")]
         public async Task<IActionResult> CheckInAsync([FromBody] CheckInReservationCommand command)
         {
             var result = await _sender.Send(command);
