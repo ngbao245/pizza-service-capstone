@@ -1,6 +1,9 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using CloudinaryDotNet;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Pizza4Ps.PizzaService.Application.DependencyInjection.Options;
 using Pizza4Ps.PizzaService.Application.Helpers;
-using System.Reflection;
+using Pizza4Ps.PizzaService.Domain.DependencyInjection.Options;
 
 namespace Pizza4Ps.PizzaService.Application.DependencyInjection.Extentions
 {
@@ -34,7 +37,24 @@ namespace Pizza4Ps.PizzaService.Application.DependencyInjection.Extentions
         public static void AddMailService(this IServiceCollection services)
         {
             services.AddTransient<EmailService>();
-        }   
+        }
+        public static IServiceCollection AddCloudinaryService(this IServiceCollection services)
+        {
+            var serviceProvider = services.BuildServiceProvider();
+            var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+            var cloudinaryCongif = new CloudinaryConfig();
+            configuration.GetSection(nameof(CloudinaryConfig)).Bind(cloudinaryCongif);
+
+            // Parse từ CLOUDINARY_URL
+            // Đăng ký Cloudinary vào DI container
+            var cloudinary = new Cloudinary(new Account(
+                cloudinaryCongif.CloudName,
+                cloudinaryCongif.ApiKey,
+                cloudinaryCongif.ApiSecret
+            ));
+            services.AddSingleton(cloudinary);
+            return services;
+        }
         public static void AddAutoMapperService(this IServiceCollection services)
         {
             services.AddAutoMapper(AssemblyReference.Assembly);
