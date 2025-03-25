@@ -16,6 +16,7 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         public Guid OrderId { get; set; }   
         public Guid? ProductId { get; set; }
         public OrderItemStatus OrderItemStatus { get; set; }
+        public OrderTypeEnum Type { get; set; }
         public virtual Order Order { get; set; }
         public virtual Product Product { get; set; }
         public virtual ICollection<OrderItemDetail> OrderItemDetails { get; set; } = new List<OrderItemDetail>();
@@ -25,7 +26,7 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         {
         }
 
-        public OrderItem(Guid id, string name, int quantity, decimal price, Guid orderId, Guid? productId, string tableCode, string? note, DateTimeOffset startTime)
+        public OrderItem(Guid id, string name, int quantity, decimal price, Guid orderId, Guid? productId, string tableCode, string? note, DateTimeOffset startTime, OrderTypeEnum type)
         {
             Id = id;
             Name = name;
@@ -37,6 +38,7 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
             StartTime = startTime;
             TableCode = tableCode;
             Note = note;
+            Type = type;
         }
 
         public void SetTotalPrice()

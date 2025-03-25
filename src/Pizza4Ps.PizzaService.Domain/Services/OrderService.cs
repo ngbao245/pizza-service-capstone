@@ -106,6 +106,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
                     productId: product.Id,
                     tableCode: order.TableCode,
                     note: item.note,
+                    type: OrderTypeEnum.Order,
                     startTime: createTime);
                 _orderItemRepository.Add(orderItem);
                 var optionItems = await _optionItemRepository.GetListAsTracking(x => item.optionItemIds.Contains(x.Id)).ToListAsync();

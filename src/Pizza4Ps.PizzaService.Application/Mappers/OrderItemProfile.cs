@@ -10,7 +10,8 @@ namespace Pizza4Ps.PizzaService.Application.Mappers
 		public OrderItemProfile()
 		{
 			CreateMap<OrderItemDto, OrderItem>().ReverseMap()
-                .ForMember(dest => dest.OrderItemStatus, opt => opt.MapFrom(src => Enum.GetName(typeof(OrderItemStatus), src.OrderItemStatus)));
+                .ForMember(dest => dest.OrderItemStatus, opt => opt.MapFrom(src => Enum.GetName(typeof(OrderItemStatus), src.OrderItemStatus)))
+                .ForMember(dest => dest.Type, opt => opt.MapFrom(src => Enum.GetName(typeof(OrderTypeEnum), src.Type)));
         }
-	}
+    }
 }
