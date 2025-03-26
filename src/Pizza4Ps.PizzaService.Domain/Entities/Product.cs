@@ -28,7 +28,7 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
             Guid categoryId, ProductTypeEnum productType,
             string? imageUrl, string? imagePublicId)
         {
-            Id = Id;
+            Id = id;
             Name = SetName(name);
             Price = price;
             Description = description;
@@ -54,6 +54,18 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         {
             //    if (Name == null) throw new ValidationException("Invalid name");
             return name;
+        }
+
+        public void UpdateImage(string? imageUrl, string? imagePublicId)
+        {
+            if (imageUrl != null)
+            {
+                ImageUrl = imageUrl;
+            }
+            if (imagePublicId != null)
+            {
+                ImagePublicId = imagePublicId;
+            }
         }
     }
 }
