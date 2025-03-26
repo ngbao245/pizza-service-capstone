@@ -2,14 +2,14 @@
 using Microsoft.AspNetCore.Mvc;
 using Pizza4Ps.PizzaService.API.Constants;
 using Pizza4Ps.PizzaService.API.Models;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Queries.GetProductById;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.ProductSizes.Commands.CreateProductSize;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.ProductSizes.Queries.GetListProductSize;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.ProductSizes.Queries.GetProductSizeById;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.ProductSizes.Queries.GetProductSizesByProduct;
 
 namespace Pizza4Ps.PizzaService.API.Controllers
 {
-    [Route("api/productsizes")]
+    [Route("api/product-sizes")]
     [ApiController]
     public class ProductSizesController : ControllerBase
     {
@@ -49,7 +49,7 @@ namespace Pizza4Ps.PizzaService.API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetSingleByIdAsync([FromRoute] Guid id)
         {
-            var result = await _sender.Send(new GetProductByIdQuery { Id = id });
+            var result = await _sender.Send(new GetProductSizeByIdQuery { Id = id });
             return Ok(new ApiResponse
             {
                 Result = result,
