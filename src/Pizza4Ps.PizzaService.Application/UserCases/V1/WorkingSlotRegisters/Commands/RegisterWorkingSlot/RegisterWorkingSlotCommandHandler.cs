@@ -16,6 +16,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.WorkingSlotRegisters.Co
         public async Task<ResultDto<Guid>> Handle(RegisterWorkingSlotCommand request, CancellationToken cancellationToken)
         {
             var result = await _workingSlotRegisterService.RegisterWorkingSlotAsync(
+                request.WorkingDate,
                 request.StaffId, 
                 request.WorkingSlotId);
             return new ResultDto<Guid>

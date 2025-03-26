@@ -5,7 +5,7 @@ namespace Pizza4Ps.PizzaService.Domain.Abstractions.Services
 {
     public interface IWorkingSlotRegisterService : IDomainService
     {
-        Task<Guid> RegisterWorkingSlotAsync(Guid staffId, Guid workingSlotId);
+        Task<Guid> RegisterWorkingSlotAsync(DateTime workingDate, Guid staffId, Guid workingSlotId);
         Task UpdateStatusToApprovedAsync(Guid id);
         Task UpdateStatusToRejectedAsync(Guid id);
     }

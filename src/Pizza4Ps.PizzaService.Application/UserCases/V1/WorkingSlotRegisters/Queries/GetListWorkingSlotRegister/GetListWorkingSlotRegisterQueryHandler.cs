@@ -3,9 +3,6 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Pizza4Ps.PizzaService.Application.Abstractions;
 using Pizza4Ps.PizzaService.Application.DTOs;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.Bookings.Queries.GetListBooking;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.Vouchers.Queries.GetListVoucher;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.WorkingSlotRegisters.Queries.GetListWorkingSlotRegister;
 using Pizza4Ps.PizzaService.Domain.Abstractions.Repositories;
 using Pizza4Ps.PizzaService.Domain.Constants;
 using Pizza4Ps.PizzaService.Domain.Enums;
@@ -38,7 +35,8 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.WorkingSlotRegisters.Qu
             }
 
             var query = _WorkingSlotRegisterRepository.GetListAsNoTracking(
-                x => (workingSlotRegisterStatus == null || x.Status == workingSlotRegisterStatus)
+                x => (request.WorkingDate == null || x.WorkingDate == request.WorkingDate)
+                && (workingSlotRegisterStatus == null || x.Status == workingSlotRegisterStatus)
                 && (request.StaffId == null || x.StaffId.Equals(request.StaffId))
                 && (request.WorkingSlotId == null || x.WorkingSlotId.Equals(request.WorkingSlotId)),
                 includeProperties: request.IncludeProperties);

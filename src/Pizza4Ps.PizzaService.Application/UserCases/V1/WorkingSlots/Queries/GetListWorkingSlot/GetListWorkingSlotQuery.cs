@@ -5,6 +5,8 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.WorkingSlots.Queries.Ge
 {
     public class GetListWorkingSlotQuery : PaginatedQuery<PaginatedResultDto<WorkingSlotDto>>
     {
+        public string? ShiftName { get; set; }
+        public string? DayName { get; set; }
         public TimeSpan? ShiftStart { get; set; } // Ví dụ: 08:00
         public TimeSpan? ShiftEnd { get; set; }   // Ví dụ: 12:00
         public Guid? DayId { get; set; }
