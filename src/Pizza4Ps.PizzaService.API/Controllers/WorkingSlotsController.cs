@@ -19,6 +19,11 @@ namespace Pizza4Ps.PizzaService.API.Controllers
             _sender = sender;
         }
 
+        /// <remarks>
+        /// **time format**:
+        /// - "shiftStart": "08:00:00"
+        /// - "shiftEnd": "13:00:00"
+        /// </remarks>
         [HttpPost]
         public async Task<IActionResult> CreateAsync([FromBody] CreateWorkingSlotCommand request)
         {

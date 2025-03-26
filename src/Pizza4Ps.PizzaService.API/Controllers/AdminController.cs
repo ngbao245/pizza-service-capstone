@@ -24,7 +24,7 @@ namespace Pizza4Ps.PizzaService.API.Controllers
         /// **StaffType**:
         /// - Staff
         /// - Manager
-        /// - Chef
+        /// - Cheff
         /// 
         /// **StaffStatus**:
         /// - PartTime

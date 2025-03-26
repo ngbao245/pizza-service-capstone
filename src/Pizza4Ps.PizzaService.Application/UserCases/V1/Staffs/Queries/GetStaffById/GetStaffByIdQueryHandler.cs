@@ -16,9 +16,11 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Staffs.Queries.GetStaff
 			_staffRepository = staffRepository;
 		}
 
-		public async Task<StaffDto> Handle(GetStaffByIdQuery request, CancellationToken cancellationToken)
+
+        public async Task<StaffDto> Handle(GetStaffByIdQuery request, CancellationToken cancellationToken)
 		{
-			var entity = await _staffRepository.GetSingleByIdAsync(request.Id, request.includeProperties);
+            var includeProperties = string.IsNullOrEmpty(request.includeProperties) ? "AppUser" : $"{request.includeProperties},AppUser";
+            var entity = await _staffRepository.GetSingleByIdAsync(request.Id, includeProperties);
 			var result = _mapper.Map<StaffDto>(entity);
 			return result;
 		}
