@@ -21,9 +21,6 @@ namespace Pizza4Ps.PizzaService.API.Controllers
             _sender = sender;
         }
 
-        /// <summary>
-        /// Tạo món ăn
-        /// </summary>
         /// <remarks>
         ///Milligram,
         ///Gram,
@@ -47,6 +44,17 @@ namespace Pizza4Ps.PizzaService.API.Controllers
             });
         }
 
+        /// <remarks>
+        ///Milligram,
+        ///Gram,
+        ///Kilogram,
+        ///Milliliter,
+        ///Liter,
+        ///Piece,
+        ///Teaspoon,
+        ///Tablespoon
+        /// </remarks>
+        /// <returns></returns>
         [HttpGet()]
         public async Task<IActionResult> GetListAsync([FromQuery] GetListRecipeQuery query)
         {
