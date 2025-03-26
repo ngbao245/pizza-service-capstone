@@ -4,222 +4,218 @@
     {
         public class AdditionalFeeErrorConstant
         {
-            public const string VALUE_INVALID = "Giá tiền không được âm";
-            public const string ADDITIONAL_FEE_NOT_FOUND = "Phụ phí không tìm thấy";
+            public const string VALUE_INVALID = "Amount cannot be negative";
+            public const string ADDITIONAL_FEE_NOT_FOUND = "Additional fee not found";
         }
 
         public class WorkingSlotRegisterErrorConstant
         {
-            public const string INVALID_WORKING_SLOT_REGISTER_STATUS = "Trạng thái đăng ký lịch làm việc không tìm thấy";
-            public const string WORKING_SLOT_REGISTER_NOT_FOUND = "Không tìm thấy đơn đăng ký lịch làm việc";
-            public const string WORKING_SLOT_REGISTER_ALREADY_APPROVED = "Đơn đăng ký lịch làm việc đã được duyệt";
-            public const string WORKING_SLOT_REGISTER_ALREADY_REJECTED = "Đơn đăng ký lịch làm việc đã bị từ chối";
+            public const string INVALID_WORKING_SLOT_REGISTER_STATUS = "Working slot register status is invalid";
+            public const string WORKING_SLOT_REGISTER_NOT_FOUND = "Working slot register not found";
+            public const string WORKING_SLOT_REGISTER_ALREADY_APPROVED = "Working slot register has already been approved";
+            public const string WORKING_SLOT_REGISTER_ALREADY_REJECTED = "Working slot register has already been rejected";
         }
 
         public class SwapWorkingSlotErrorConstant
         {
-
-            public const string SWAP_WORKING_SLOT_ALREADY_REJECTED = "Đơn đổi ca làm việc đã bị từ chối";
-            public const string SWAP_WORKING_SLOT_ALREADY_PENDING_APPROVE = " đổi ca làm việc đang chờ được manager duyệt";
-            public const string SWAP_WORKING_SLOT_ALREADY_APPROVED = "Đơn đổi ca làm việc đã được duyệt";
-            public const string SWAP_WORKING_SLOT_NOT_FOUND = "Không tìm thấy đơn đổi ca làm việc";
+            public const string SWAP_WORKING_SLOT_ALREADY_REJECTED = "Swap working slot request has already been rejected";
+            public const string SWAP_WORKING_SLOT_ALREADY_PENDING_APPROVE = "Swap working slot request is pending manager approval";
+            public const string SWAP_WORKING_SLOT_ALREADY_APPROVED = "Swap working slot request has already been approved";
+            public const string SWAP_WORKING_SLOT_NOT_FOUND = "Swap working slot request not found";
             public const string SWAP_WORKING_SLOT_INVALID_STATE = "Cannot reject a request that is not pending";
         }
 
         public class ConfigErrorConstant
         {
-            public const string CONFIG_NOT_FOUND = "Không tìm thấy config";
-            public const string CONFIG_INVALID = "Config không hợp lệ";
+            public const string CONFIG_NOT_FOUND = "Config not found";
+            public const string CONFIG_INVALID = "Config is invalid";
         }
 
         public class RoleErrorConstant
         {
-            public const string ROLE_NOT_FOUND = "Không tìm thấy vị trí";
+            public const string ROLE_NOT_FOUND = "Role not found";
         }
 
         public class WorkingSlotErrorConstant
         {
-            public const string WORKING_SLOT_NOT_FOUND = "Không tìm thấy slot làm việc";
-            public const string ALREADY_REGISTERED = "Nhân viên đã đăng ký ca làm việc này";
+            public const string WORKING_SLOT_NOT_FOUND = "Working slot not found";
+            public const string ALREADY_REGISTERED = "Employee has already registered for this working slot";
         }
 
         public class ShiftErrorConstant
         {
-            public const string SHIFT_NOT_FOUND = "Ca làm không tìm thấy";
+            public const string SHIFT_NOT_FOUND = "Shift not found";
         }
 
         public class CurrentOrderIdExisted
         {
-            public const string CURRENT_ORDER_ID_EXISTED = "Bàn đã tồn tại mã đơn hàng";
+            public const string CURRENT_ORDER_ID_EXISTED = "Table already has an existing order ID";
         }
 
         public class ProductOptionErrorConstant
         {
-            public const string PRODUCTOPTION_NOT_FOUND = "Product option không tìm thấy";
+            public const string PRODUCTOPTION_NOT_FOUND = "Product option not found";
         }
 
         public class DayErrorConstant
         {
-            public const string DAY_NOT_FOUND = "Không tìm thấy ngày trong tuần";
+            public const string DAY_NOT_FOUND = "Day of week not found";
         }
 
         public class StaffScheduleErrorConstant
         {
-            public const string STAFFSCHEDULE_NOT_FOUND = "Lịch làm việc nhân viên không tìm thấy";
+            public const string STAFFSCHEDULE_NOT_FOUND = "Staff schedule not found";
         }
 
         public class IngredientErrorConstant
         {
-            public const string INGREDIENT_NOT_FOUND = "Nguyên liệu không tìm thấy";
+            public const string INGREDIENT_NOT_FOUND = "Ingredient not found";
         }
 
         public class StaffZoneScheduleErrorConstant
         {
-            public const string STAFF_ZONE_SCHEDULE_NOT_FOUND = "Lịch làm việc nhân viên theo khu vực không tìm thấy";
+            public const string STAFF_ZONE_SCHEDULE_NOT_FOUND = "Staff zone schedule not found";
         }
 
         public class WorkingTimeErrorConstant
         {
-            public const string WORKINGTIME_NOT_FOUND = "Working time không tìm thấy";
+            public const string WORKINGTIME_NOT_FOUND = "Working time not found";
         }
-
         public class TableBookingErrorConstant
         {
-            public const string TABLEBOOKING_NOT_FOUND = "Table booking không tìm thấy";
+            public const string TABLEBOOKING_NOT_FOUND = "Table booking not found";
         }
 
         public class SizeErrorConstant
         {
-            public const string SIZE_NOT_FOUND = "Kích thước bánh pizza không tìm thấy";
+            public const string SIZE_NOT_FOUND = "Pizza size not found";
         }
 
         public class BookingErrorConstant
         {
-            public const string BOOKING_NOT_FOUND = "Bàn đặt không tìm thấy";
-            public const string BOOKING_SLOT_FULL = "Hiện tại đã không còn bàn trống";
-            public const string INVALID_BOOKING_STATUS = "Trạng thái giữ chỗ không hợp lệ";
-            public const string INVALID_BOOKING_CAPACITY = "Số lượng người không phù hợp với khả năng bàn giữ chỗ";
-            public const string NOT_ASSIGNED_TABLE = "Chưa được xếp bàn ngồi";
-
+            public const string BOOKING_NOT_FOUND = "Reservation not found";
+            public const string BOOKING_SLOT_FULL = "No available tables at this time";
+            public const string INVALID_BOOKING_STATUS = "Invalid reservation status";
+            public const string INVALID_BOOKING_CAPACITY = "Guest count exceeds table capacity";
+            public const string NOT_ASSIGNED_TABLE = "Table not yet assigned";
         }
 
         public class BookingSlotErrorConstant
         {
-            public const string BOOKING_SLOT_NOT_FOUND = "Không thể đặt bàn vào thời gian này";
+            public const string BOOKING_SLOT_NOT_FOUND = "This time slot is unavailable for booking";
         }
+
         public class OrderVoucherErrorConstant
         {
-            public const string ORDERVOUCHER_NOT_FOUND = "Order voucher không tìm thấy";
+            public const string ORDERVOUCHER_NOT_FOUND = "Order voucher not found";
         }
 
         public class CategoryErrorConstant
         {
-            public const string CATEGORY_NOT_FOUND = "Danh mục không tìm thấy";
+            public const string CATEGORY_NOT_FOUND = "Category not found";
         }
 
         public class ProductErrorConstant
         {
-            public const string PRODUCT_NOT_FOUND = "Món ăn không tìm thấy";
+            public const string PRODUCT_NOT_FOUND = "Product not found";
         }
 
         public class ProductSizeErrorConstant
         {
-            public const string PRODUCTSIZE_NOT_FOUND = "Kích cỡ Món ăn không tìm thấy";
-            public const string PRODUCTSIZE_EXISTED = "Kích cỡ Món ăn đã tồn tại";
-
+            public const string PRODUCTSIZE_NOT_FOUND = "Product size not found";
+            public const string PRODUCTSIZE_EXISTED = "Product size already exists";
         }
 
         public class RecipeErrorConstant
         {
-            public const string RECIPE_NOT_FOUND = "Công thức không tìm thấy";
-            public const string RECIPE_NOT_INCLUDED_INGREDIENT = "There were not both ingredientid or ingredientnam";
-            public const string RECIPE_UNIT_INVALID = "Đơn vị không hợp lệ";
+            public const string RECIPE_NOT_FOUND = "Recipe not found";
+            public const string RECIPE_NOT_INCLUDED_INGREDIENT = "Recipe must include either ingredient ID or name";
+            public const string RECIPE_UNIT_INVALID = "Invalid unit of measurement";
         }
 
         public class OrderItemErrorConstant
         {
-            public const string INVALID_ORDER_ITEM_STATUS = "Trạng thái món ăn không phù hợp";
-            public const string ORDER_ITEM_CANNOT_DONE = "Order item không tìm thấy";
-            public const string ORDER_ITEM_CANNOT_SERVED = "Món ăn không thể được phục vụ";
-            public const string ORDER_ITEM_NOT_FOUND = "Món ăn không thể hoàn thành";
-
+            public const string INVALID_ORDER_ITEM_STATUS = "Invalid order item status";
+            public const string ORDER_ITEM_CANNOT_DONE = "Order item cannot be completed";
+            public const string ORDER_ITEM_CANNOT_SERVED = "Order item cannot be served";
+            public const string ORDER_ITEM_NOT_FOUND = "Order item not found";
         }
 
         public class OrderItemDetailErrorConstant
         {
-            public const string ORDER_ITEM_DETAIL_NOT_FOUND = "Order Item Detail không tìm thấy";
+            public const string ORDER_ITEM_DETAIL_NOT_FOUND = "Order item detail not found";
         }
 
         public class OptionItemErrorConstant
         {
-            public const string OPTION_ITEM_NOT_FOUND = "lựa chọn không tìm thấy";
+            public const string OPTION_ITEM_NOT_FOUND = "Option item not found";
         }
 
         public class PaymentErrorConstant
         {
-            public const string PAYMENT_NOT_FOUND = "Payment không tìm thấy";
+            public const string PAYMENT_NOT_FOUND = "Payment not found";
         }
 
         public class CustomerErrorConstant
         {
-            public const string CUSTOMER_NOT_FOUND = "Khách hàng không tìm thấy";
+            public const string CUSTOMER_NOT_FOUND = "Customer not found";
         }
 
         public class FeedbackErrorConstant
         {
-            public const string FEEDBACK_NOT_FOUND = "Feedback không tìm thấy";
+            public const string FEEDBACK_NOT_FOUND = "Feedback not found";
         }
 
         public class OrderErrorConstant
         {
-            public const string ORDER_NOT_FOUND = "Đơn hàng không tìm thấy";
-            public const string ORDER_CANNOT_CHECK_OUT = "Đơn hàng đã được xuất hoá đơn hoặc thanh toán";
-            public const string ORDER_CANNOT_CANCEL_CHECK_OUT = "Đơn hàng chưa được xuất hoá đơn hoặc thanh toán";
-            public const string ORDER_CANNOT_PAY = "Đơn hàng chưa được check out hoặc đã được thanh toán";
-            public const string ORDER_STATUS_INVALID_TO_ORDER = "Đơn hàng đã được xuất hoá đơn hoặc được thanh toán";
+            public const string ORDER_NOT_FOUND = "Order not found";
+            public const string ORDER_CANNOT_CHECK_OUT = "Order has already been invoiced or paid";
+            public const string ORDER_CANNOT_CANCEL_CHECK_OUT = "Order has not been invoiced or paid yet";
+            public const string ORDER_CANNOT_PAY = "Order has not been checked out or has already been paid";
+            public const string ORDER_STATUS_INVALID_TO_ORDER = "Order has already been invoiced or paid";
         }
 
         public class StaffErrorConstant
         {
-            public const string STAFF_NOT_FOUND = "Nhân viên không tìm thấy";
-            public const string INVALID_STAFF_STATUS = "Trạng thái nhân viên không phù hợp";
-            public const string INVALID_STAFF_TYPE = "Loại nhân viên không phù hợp";
+            public const string STAFF_NOT_FOUND = "Staff not found";
+            public const string INVALID_STAFF_STATUS = "Invalid staff status";
+            public const string INVALID_STAFF_TYPE = "Invalid staff type";
         }
 
         public class OptionErrorConstant
         {
-            public const string OPTION_NOT_FOUND = "Option không tìm thấy";
+            public const string OPTION_NOT_FOUND = "Option not found";
         }
 
         public class StaffZoneErrorConstant
         {
-            public const string STAFFZONE_NOT_FOUND = "Khu vực nhân viên không tìm thấy";
+            public const string STAFFZONE_NOT_FOUND = "Staff zone not found";
         }
 
         public class TableErrorConstant
         {
-            public const string TABLE_NOT_FOUND = "Bàn không tìm thấy";
-            public const string TABLE_NOT_HAVE_ORDER = "Bàn không có đơn hàng nào";
-            public const string TABLE_ORDER_NOT_HAVE_ORDER_ITEM = "Đơn hàng không có món ăn nào";
-            public const string INVALID_TABLE_STATUS = "Trạng thái bàn không hợp lệ";
-            public const string TABLE_ORDER_NOT_HAVE_TOTAL_PRICE = "Đơn hàng chưa được tính tổng tiền";
-            public const string CAPACITY_INVALID = "Tổng chổ ngồi phải lớn hơn 0";
+            public const string TABLE_NOT_FOUND = "Table not found";
+            public const string TABLE_NOT_HAVE_ORDER = "Table has no active order";
+            public const string TABLE_ORDER_NOT_HAVE_ORDER_ITEM = "Order contains no items";
+            public const string INVALID_TABLE_STATUS = "Invalid table status";
+            public const string TABLE_ORDER_NOT_HAVE_TOTAL_PRICE = "Order total has not been calculated";
+            public const string CAPACITY_INVALID = "Table capacity must be greater than 0";
         }
 
         public class VoucherErrorConstant
         {
-            public const string VOUCHER_NOT_FOUND = "Voucher không tìm thấy";
+            public const string VOUCHER_NOT_FOUND = "Voucher not found";
         }
 
         public class VoucherTypeErrorConstant
         {
-            public const string TOTAL_QUANTITY_INVALID = "Tổng số lượng phải lớn hơn 0";
-            public const string VOUCHER_TYPE_NOT_FOUND = "Kiểu khuyến mãi không tìm thấy";
+            public const string TOTAL_QUANTITY_INVALID = "Total quantity must be greater than 0";
+            public const string VOUCHER_TYPE_NOT_FOUND = "Voucher type not found";
         }
 
         public class ZoneErrorConstant
         {
-            public const string ZONE_NOT_FOUND = "Khu vực không tìm thấy";
+            public const string ZONE_NOT_FOUND = "Zone not found";
         }
     }
 }
