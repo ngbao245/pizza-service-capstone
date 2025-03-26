@@ -2,6 +2,7 @@
 using MediatR;
 using Pizza4Ps.PizzaService.Application.Abstractions;
 using Pizza4Ps.PizzaService.Domain.Abstractions.Services;
+using Pizza4Ps.PizzaService.Domain.Entities;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.OptionItems.Commands.CreateOptionItem
 {

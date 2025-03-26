@@ -1,23 +1,40 @@
 ﻿using AutoMapper;
-using CloudinaryDotNet.Actions;
 using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
 using MediatR;
 using Pizza4Ps.PizzaService.Application.Abstractions;
+using Pizza4Ps.PizzaService.Domain.Abstractions;
+using Pizza4Ps.PizzaService.Domain.Abstractions.Repositories;
 using Pizza4Ps.PizzaService.Domain.Abstractions.Services;
-using Pizza4Ps.PizzaService.Domain.Exceptions;
-using Microsoft.EntityFrameworkCore;
+using Pizza4Ps.PizzaService.Domain.Constants;
 using Pizza4Ps.PizzaService.Domain.Entities;
+using Pizza4Ps.PizzaService.Domain.Enums;
+using Pizza4Ps.PizzaService.Domain.Exceptions;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Commands.CreateProduct
 {
     public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand, ResultDto<Guid>>
     {
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IProductRepository _productRepository;
+        private readonly IOptionItemRepository _optionItemRepository;
+        private readonly IOptionRepository _optionRepository;
         private readonly Cloudinary _cloudinary;
         private readonly IMapper _mapper;
         private readonly IProductService _productService;
 
-        public CreateProductCommandHandler(IMapper mapper, IProductService productService, Cloudinary cloudinary)
+        public CreateProductCommandHandler(IMapper mapper,
+            IProductService productService,
+            IOptionRepository optionRepository,
+            IOptionItemRepository optionItemRepository,
+            IProductRepository productRepository,
+            IUnitOfWork unitOfWork,
+            Cloudinary cloudinary)
         {
+            _unitOfWork = unitOfWork;
+            _productRepository = productRepository;
+            _optionItemRepository = optionItemRepository;
+            _optionRepository = optionRepository;
             _cloudinary = cloudinary;
             _mapper = mapper;
             _productService = productService;
@@ -25,41 +42,37 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Commands.Creat
 
         public async Task<ResultDto<Guid>> Handle(CreateProductCommand request, CancellationToken cancellationToken)
         {
-            string? imageUrl = null;
-            string? imagePublicId = null;
-            if (request.file != null && request.file.Length != 0)
+            if (!Enum.TryParse(request.ProductType, true, out ProductTypeEnum productTypeEnum))
             {
-                using var stream = request.file.OpenReadStream();
-                var uploadParams = new ImageUploadParams
-                {
-                    File = new FileDescription(request.file.FileName, stream),
-                    UseFilename = true,
-                    UniqueFilename = false,
-                    Overwrite = true
-                };
-                var uploadResult = await _cloudinary.UploadAsync(uploadParams);
-
-                if (uploadResult.Error != null)
-                    throw new BusinessException("Upload image failed");
-                // Cập nhật product với ảnh mới
-                imageUrl = uploadResult.SecureUrl.ToString();
-                imagePublicId = uploadResult.PublicId;
+                throw new BusinessException(BussinessErrorConstants.RecipeErrorConstant.RECIPE_NOT_INCLUDED_INGREDIENT);
             }
-
-            var result = await _productService.CreateAsync(
-                request.Name,
-                request.Price,
-                request.Image,
-                request.Description,
-                request.CategoryId,
-                request.ProductType, 
-                imageUrl,
-                imagePublicId);
-
-
+            var product = new Product(Guid.NewGuid(),
+                name: request.Name,
+                price: request.Price,
+                null,
+                description: request.Description,
+                categoryId: request.CategoryId,
+                productType: productTypeEnum,
+                imageUrl: null,
+                imagePublicId: null);
+            var options = new List<Option>();
+            var optionItems = new List<OptionItem>();
+            foreach (var optionModel in request.ProductOptionModels)
+            {
+                var option = new Option(Guid.NewGuid(), product.Id, optionModel.Name, optionModel.Description);
+                options.Add(option);
+                foreach (var optionItem in option.OptionItems)
+                {
+                    optionItems.Add(new OptionItem(Guid.NewGuid(), optionItem.Name, optionItem.AdditionalPrice, option.Id));
+                }
+            }
+            _productRepository.Add(product);
+            _optionRepository.AddRange(options);
+            _optionItemRepository.AddRange(optionItems);
+            await _unitOfWork.SaveChangeAsync();
             return new ResultDto<Guid>
             {
-                Id = result
+                Id = product.Id,
             };
         }
     }

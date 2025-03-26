@@ -21,5 +21,7 @@ namespace Pizza4Ps.PizzaService.Application.DTOs
         public DateTime? DateOfBirth { get; set; }
 
         public string? Email { get; set; }
+
+        public Guid? AppUserCustomerId { get; set; }
     }
 }

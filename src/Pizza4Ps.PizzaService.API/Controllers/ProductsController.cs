@@ -6,6 +6,7 @@ using Pizza4Ps.PizzaService.Application.UserCases.V1.Options.Queries.GetListOpti
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Commands.CreateProduct;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Commands.DeleteProduct;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Commands.RestoreProduct;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Commands.UpdateImageProduct;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Commands.UpdateProduct;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Queries.GetListProduct;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Queries.GetListProductIgnoreQueryFilter;
@@ -36,7 +37,7 @@ namespace Pizza4Ps.PizzaService.API.Controllers
 		/// </remarks>
 		/// <returns></returns>
 		[HttpPost]
-		public async Task<IActionResult> CreateAsync([FromForm] CreateProductCommand request)
+		public async Task<IActionResult> CreateAsync([FromBody] CreateProductCommand request)
 		{
 			var result = await _sender.Send(request);
 			return Ok(new ApiResponse
@@ -46,6 +47,16 @@ namespace Pizza4Ps.PizzaService.API.Controllers
 				StatusCode = StatusCodes.Status201Created
 			});
 		}
+        [HttpPut("upload-image")]
+        public async Task<IActionResult> UpdateImageProduct([FromForm] UpdateImageProductCommand request)
+        {
+            await _sender.Send(request);
+            return Ok(new ApiResponse
+            {
+                Message = Message.CREATED_SUCCESS,
+                StatusCode = StatusCodes.Status201Created
+            });
+        }
 
         [HttpGet("menu")]
         [ApiExplorerSettings(IgnoreApi = true)]
@@ -121,9 +132,9 @@ namespace Pizza4Ps.PizzaService.API.Controllers
 		}
 
 		[HttpDelete()]
-		public async Task<IActionResult> DeleteManyAsync(List<Guid> ids, bool isHardDeleted = false)
+		public async Task<IActionResult> DeleteManyAsync([FromBody]DeleteProductCommand deleteProductCommand)
 		{
-			await _sender.Send(new DeleteProductCommand { Ids = ids, isHardDelete = isHardDeleted });
+			await _sender.Send(deleteProductCommand);
 			return Ok(new ApiResponse
 			{
 				Message = Message.DELETED_SUCCESS,
