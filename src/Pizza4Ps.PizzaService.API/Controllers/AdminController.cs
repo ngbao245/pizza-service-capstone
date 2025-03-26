@@ -16,6 +16,20 @@ namespace Pizza4Ps.PizzaService.API.Controllers
         {
             _sender = sender;
         }
+
+        /// <summary>
+        /// Staff information, including type and status.
+        /// </summary>
+        /// <remarks>
+        /// **StaffType**:
+        /// - Staff
+        /// - Manager
+        /// - Chef
+        /// 
+        /// **StaffStatus**:
+        /// - PartTime
+        /// - FullTime
+        /// </remarks>
         [HttpPost("create-staff")]
         public async Task<IActionResult> CreateStaffAsync([FromBody] CreateStaffAccountCommand request)
         {

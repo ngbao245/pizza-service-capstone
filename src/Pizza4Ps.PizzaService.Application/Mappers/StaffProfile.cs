@@ -11,7 +11,8 @@ namespace Pizza4Ps.PizzaService.Application.Mappers
         {
             CreateMap<StaffDto, Staff>().ReverseMap()
             .ForMember(dest => dest.StaffType, opt => opt.MapFrom(src => Enum.GetName(typeof(StaffTypeEnum), src.StaffType)))
-            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => Enum.GetName(typeof(StaffStatusEnum), src.Status)));
+            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => Enum.GetName(typeof(StaffStatusEnum), src.Status)))
+            .ForMember(dest => dest.Username, opt => opt.MapFrom(src => src.AppUser.UserName));
         }
     }
 }

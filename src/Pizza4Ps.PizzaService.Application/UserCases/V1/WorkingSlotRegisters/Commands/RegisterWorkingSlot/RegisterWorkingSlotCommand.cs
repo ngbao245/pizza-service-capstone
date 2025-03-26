@@ -5,6 +5,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.WorkingSlotRegisters.Co
 {
     public class RegisterWorkingSlotCommand : IRequest<ResultDto<Guid>>
     {
+        public DateTime WorkingDate { get; set; }
         public Guid StaffId { get; set; }
         public Guid WorkingSlotId { get; set; }
     }

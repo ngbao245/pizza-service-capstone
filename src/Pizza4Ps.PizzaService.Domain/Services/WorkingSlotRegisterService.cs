@@ -28,7 +28,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             _workingSlotRepository = workingSlotRepository;
         }
 
-        public async Task<Guid> RegisterWorkingSlotAsync(Guid staffId, Guid workingSlotId)
+        public async Task<Guid> RegisterWorkingSlotAsync(DateTime workingDate, Guid staffId, Guid workingSlotId)
         {
             var existingRegistration = await _workingSlotRegisterRepository.GetSingleAsync(
                 x => x.StaffId == staffId && x.WorkingSlotId == workingSlotId);
@@ -56,7 +56,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
                 status = WorkingSlotRegisterStatusEnum.Approved;
             }
 
-            var registration = new WorkingSlotRegister(DateTime.Now, status, staffId, workingSlotId);
+            var registration = new WorkingSlotRegister(workingDate, DateTime.Now, status, staffId, workingSlotId);
             _workingSlotRegisterRepository.Add(registration);
 
             await _unitOfWork.SaveChangeAsync();

@@ -5,6 +5,7 @@ using Pizza4Ps.PizzaService.Application.Abstractions;
 using Pizza4Ps.PizzaService.Application.DTOs;
 using Pizza4Ps.PizzaService.Domain.Abstractions.Repositories;
 using Pizza4Ps.PizzaService.Domain.Constants;
+using Pizza4Ps.PizzaService.Domain.Enums;
 using Pizza4Ps.PizzaService.Domain.Exceptions;
 using System.Linq.Dynamic.Core;
 
@@ -23,13 +24,22 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Recipe.Queries.GetListR
 
         public async Task<PaginatedResultDto<RecipeDto>> Handle(GetListRecipeQuery request, CancellationToken cancellationToken)
         {
+            UnitOfMeasurementType? unitType = null;
+            if (!string.IsNullOrEmpty(request.Unit))
+            {
+                if (!Enum.TryParse(request.Unit, true, out UnitOfMeasurementType parsedType))
+                {
+                    throw new BusinessException(BussinessErrorConstants.RecipeErrorConstant.RECIPE_UNIT_INVALID);
+                }
+                unitType = parsedType;
+            }
+
             var query = _recipeRepository.GetListAsNoTracking(
                 x => (request.ProductSizeId == null || x.ProductSizeId == request.ProductSizeId)
                 && (request.IngredientId == null || x.IngredientId == request.IngredientId)
                 && (request.IngredientName== null || x.IngredientName == request.IngredientName)
-                && (request.Unit == null || x.Unit == request.Unit)
-                && (request.Quantity == null || x.Quantity == request.Quantity)
-                ,
+                && (unitType == null || x.Unit == unitType)
+                && (request.Quantity == null || x.Quantity == request.Quantity),
                 includeProperties: request.IncludeProperties);
             var entities = await query
                 .OrderBy(request.SortBy)

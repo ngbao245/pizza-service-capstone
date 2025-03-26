@@ -32,7 +32,8 @@ namespace Pizza4Ps.PizzaService.API.Controllers
         /// <param name="request"></param>
         /// <returns></returns>
         [HttpPost]
-		public async Task<IActionResult> CreateAsync([FromBody] CreateStaffCommand request)
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public async Task<IActionResult> CreateAsync([FromBody] CreateStaffCommand request)
 		{
 			var result = await _sender.Send(request);
 			return Ok(new ApiResponse

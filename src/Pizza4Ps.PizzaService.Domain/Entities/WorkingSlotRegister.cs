@@ -7,6 +7,7 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
 {
     public class WorkingSlotRegister : EntityAuditBase<Guid>
     {
+        public DateTime WorkingDate { get; set; }
         public DateTime RegisterDate { get; set; }
         public WorkingSlotRegisterStatusEnum Status { get; set; }
         public Guid StaffId { get; set; }
@@ -19,8 +20,9 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         {
         }
 
-        public WorkingSlotRegister(DateTime registerDate, WorkingSlotRegisterStatusEnum status, Guid staffId, Guid workingSlotId)
+        public WorkingSlotRegister(DateTime workingDate, DateTime registerDate, WorkingSlotRegisterStatusEnum status, Guid staffId, Guid workingSlotId)
         {
+            WorkingDate = workingDate;
             RegisterDate = registerDate;
             Status = status;
             StaffId = staffId;
