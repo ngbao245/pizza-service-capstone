@@ -44,13 +44,15 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Staffs.Queries.GetListS
                 staffStatus = parsedStatus;
             }
 
+            var includeProperties = string.IsNullOrEmpty(request.IncludeProperties) ? "AppUser" : $"{request.IncludeProperties},AppUser";
+
             var query = _staffRepository.GetListAsNoTracking(
                 x => (request.FullName == null || x.FullName.Contains(request.FullName))
                 && (request.Phone == null || x.Phone.Contains(request.Phone))
                 && (request.Email == null || x.Email.Contains(request.Email))
                 && (staffType == null || x.StaffType == staffType)
                 && (staffStatus == null || x.Status == staffStatus),
-                includeProperties: request.IncludeProperties);
+                includeProperties: includeProperties);
             var entities = await query
                 .OrderBy(request.SortBy)
                 .Skip(request.SkipCount).Take(request.TakeCount).ToListAsync();
