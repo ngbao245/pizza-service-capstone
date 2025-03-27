@@ -44,7 +44,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Commands.Creat
         {
             if (!Enum.TryParse(request.ProductType, true, out ProductTypeEnum productTypeEnum))
             {
-                throw new BusinessException(BussinessErrorConstants.RecipeErrorConstant.RECIPE_NOT_INCLUDED_INGREDIENT);
+                throw new BusinessException(BussinessErrorConstants.ProductErrorConstant.INVALID_PRODUCT_TYPE);
             }
             var product = new Product(Guid.NewGuid(),
                 name: request.Name,
