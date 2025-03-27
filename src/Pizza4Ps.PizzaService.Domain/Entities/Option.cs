@@ -8,13 +8,13 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         public string? Description { get; set; }
         public Guid ProductId { get; set; }
         public virtual Product Product { get; set; }
-        public virtual ICollection<OptionItem> OptionItems { get; set; }
+        public virtual ICollection<OptionItem> OptionItems { get; set; } = new List<OptionItem>();
 
         public Option()
         {
         }
 
-        public Option(Guid id, Guid productId,string name, string? description)
+        public Option(Guid id, Guid productId, string name, string? description)
         {
             Id = id;
             Name = name;
@@ -22,10 +22,10 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
             Description = description;
         }
 
-		public void UpdateOption(string name, string description)
-		{
-			Name = name;
-			Description = description;
-		}
-	}
+        public void UpdateOption(string name, string description)
+        {
+            Name = name;
+            Description = description;
+        }
+    }
 }
