@@ -118,6 +118,7 @@
         public class ProductErrorConstant
         {
             public const string PRODUCT_NOT_FOUND = "Product not found";
+            public const string INVALID_PRODUCT_TYPE= "Invalid product type";
         }
 
         public class ProductSizeErrorConstant
