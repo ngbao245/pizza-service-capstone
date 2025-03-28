@@ -26,18 +26,39 @@ namespace Pizza4Ps.PizzaService.API.Controllers
 		{
 			_httpContextAccessor = httpContextAccessor;
 			_sender = sender;
-		}
+        }
 
-		/// <summary>
-		/// Tạo món ăn
-		/// </summary>
-		/// <remarks>
-		/// - Thông tin
-		/// - CategoryId là id của category
-		/// </remarks>
-		/// <returns></returns>
-		[HttpPost]
-		public async Task<IActionResult> CreateAsync([FromBody] CreateProductCommand request)
+        /// <summary>
+        /// Tạo món ăn
+        /// </summary>
+        /// <remarks>
+        /// - Dữ liệu gửi theo định dạng multipart/form-data.
+        /// - ProductOptionModels: Chuỗi JSON chứa danh sách option, theo mẫu sau:
+        ///   [
+        ///     {
+        ///       "name": "Size",
+        ///       "description": "Choose your size",
+        ///       "productOptionItemModels": [
+        ///         { "name": "Small", "additionalPrice": 0 },
+        ///         { "name": "Medium", "additionalPrice": 2 },
+        ///         { "name": "Large", "additionalPrice": 4 }
+        ///       ]
+        ///     },
+        ///     {
+        ///       "name": "Dough",
+        ///       "description": "Choose your dough type",
+        ///       "productOptionItemModels": [
+        ///         { "name": "Thin", "additionalPrice": 0 },
+        ///         { "name": "Thick", "additionalPrice": 3 }
+        ///       ]
+        ///     }
+        ///   ]
+        /// 
+        /// - Lưu ý: Trường "ProductOptionModels" là một chuỗi JSON, FE cần chuyển đổi danh sách option sang JSON string trước khi gửi.
+        /// </remarks>
+        /// <returns></returns>
+        [HttpPost]
+		public async Task<IActionResult> CreateAsync([FromForm] CreateProductCommand request)
 		{
 			var result = await _sender.Send(request);
 			return Ok(new ApiResponse

@@ -2,6 +2,8 @@
 using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
 using MediatR;
+using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 using Pizza4Ps.PizzaService.Application.Abstractions;
 using Pizza4Ps.PizzaService.Domain.Abstractions;
 using Pizza4Ps.PizzaService.Domain.Abstractions.Repositories;
@@ -10,6 +12,7 @@ using Pizza4Ps.PizzaService.Domain.Constants;
 using Pizza4Ps.PizzaService.Domain.Entities;
 using Pizza4Ps.PizzaService.Domain.Enums;
 using Pizza4Ps.PizzaService.Domain.Exceptions;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Commands.CreateProduct
 {
@@ -42,38 +45,92 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Commands.Creat
 
         public async Task<ResultDto<Guid>> Handle(CreateProductCommand request, CancellationToken cancellationToken)
         {
-            if (!Enum.TryParse(request.ProductType, true, out ProductTypeEnum productTypeEnum))
+            string? imageUrl = null;
+            string? imagePublicId = null;
+            try
             {
-                throw new BusinessException(BussinessErrorConstants.ProductErrorConstant.INVALID_PRODUCT_TYPE);
-            }
-            var product = new Product(Guid.NewGuid(),
-                name: request.Name,
-                price: request.Price,
-                null,
-                description: request.Description,
-                categoryId: request.CategoryId,
-                productType: productTypeEnum,
-                imageUrl: null,
-                imagePublicId: null);
-            var options = new List<Option>();
-            var optionItems = new List<OptionItem>();
-            foreach (var optionModel in request.ProductOptionModels)
-            {
-                var option = new Option(Guid.NewGuid(), product.Id, optionModel.Name, optionModel.Description);
-                options.Add(option);
-                foreach (var optionItem in option.OptionItems)
+                // Upload ảnh nếu có
+                if (request.file != null && request.file.Length > 0)
                 {
-                    optionItems.Add(new OptionItem(Guid.NewGuid(), optionItem.Name, optionItem.AdditionalPrice, option.Id));
+                    using var stream = request.file.OpenReadStream();
+                    var uploadParams = new ImageUploadParams
+                    {
+                        File = new FileDescription(request.file.FileName, stream),
+                        UseFilename = true,
+                        UniqueFilename = false,
+                        Overwrite = true
+                    };
+                    var uploadResult = await _cloudinary.UploadAsync(uploadParams);
+                    if (uploadResult.Error != null)
+                        throw new BusinessException("Upload image failed");
+
+                    imageUrl = uploadResult.SecureUrl.ToString();
+                    imagePublicId = uploadResult.PublicId;
                 }
+
+                // Validate product type
+                if (!Enum.TryParse(request.ProductType, true, out ProductTypeEnum productTypeEnum))
+                {
+                    throw new BusinessException(BussinessErrorConstants.ProductErrorConstant.INVALID_PRODUCT_TYPE);
+                }
+
+                // Deserialize JSON chứa danh sách Option
+                var productOptions = JsonConvert.DeserializeObject<List<CreateProductOptionModel>>(request.ProductOptionModels);
+                if (productOptions == null || productOptions.Count == 0)
+                {
+                    throw new BusinessException(BussinessErrorConstants.ProductErrorConstant.INVALID_PRODUCT_OPTION);
+                }
+
+                // Tạo product entity
+                var product = new Product(
+                    Guid.NewGuid(),
+                    name: request.Name,
+                    price: request.Price,
+                    null,
+                    description: request.Description,
+                    categoryId: request.CategoryId,
+                    productType: productTypeEnum,
+                    imageUrl: imageUrl,
+                    imagePublicId: imagePublicId
+                );
+
+                var options = new List<Option>();
+                var optionItems = new List<OptionItem>();
+
+                foreach (var optionModel in productOptions)
+                {
+                    var option = new Option(Guid.NewGuid(), product.Id, optionModel.Name, optionModel.Description);
+                    options.Add(option);
+                    foreach (var optionItem in optionModel.ProductOptionItemModels)
+                    {
+                        optionItems.Add(new OptionItem(Guid.NewGuid(), optionItem.Name, optionItem.AdditionalPrice, option.Id));
+                    }
+                }
+
+                // Thêm product, option và option item vào repository
+                _productRepository.Add(product);
+                _optionRepository.AddRange(options);
+                _optionItemRepository.AddRange(optionItems);
+
+                await _unitOfWork.SaveChangeAsync(cancellationToken);
+
+                return new ResultDto<Guid>
+                {
+                    Id = product.Id,
+                };
             }
-            _productRepository.Add(product);
-            _optionRepository.AddRange(options);
-            _optionItemRepository.AddRange(optionItems);
-            await _unitOfWork.SaveChangeAsync();
-            return new ResultDto<Guid>
+            catch (Exception)
             {
-                Id = product.Id,
-            };
+                // Nếu có lỗi, xóa ảnh đã upload (nếu có)
+                if (!string.IsNullOrEmpty(imagePublicId))
+                {
+                    await _cloudinary.DeleteResourcesAsync(new DelResParams
+                    {
+                        PublicIds = new List<string> { imagePublicId }
+                    });
+                }
+                throw;
+            }
         }
     }
 }
