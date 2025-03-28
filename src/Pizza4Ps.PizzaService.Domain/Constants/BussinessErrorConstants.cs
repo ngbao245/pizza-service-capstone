@@ -113,6 +113,7 @@
         {
             public const string PRODUCT_NOT_FOUND = "Không tìm thấy món ăn";
             public const string INVALID_PRODUCT_TYPE = "Loại món ăn không hợp lệ";
+            public const string INVALID_PRODUCT_OPTION = "Tùy chọn của món ăn không hợp lệ";
         }
 
         public class ProductSizeErrorConstant

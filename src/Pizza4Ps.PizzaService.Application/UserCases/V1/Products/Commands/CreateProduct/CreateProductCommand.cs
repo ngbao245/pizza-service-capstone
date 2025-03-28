@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Http;
 using Pizza4Ps.PizzaService.Application.Abstractions;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Commands.CreateProduct
@@ -7,10 +8,11 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Commands.Creat
     {
         public string Name { get; set; }
         public decimal Price { get; set; }
+        public IFormFile? file { get; set; }
         public string? Description { get; set; }
         public Guid CategoryId { get; set; }
         public string ProductType { get; set; }
-        public List<CreateProductOptionModel> ProductOptionModels { get; set; } = new List<CreateProductOptionModel>();
+        public string ProductOptionModels { get; set; }
     }
     public class CreateProductOptionModel
     {

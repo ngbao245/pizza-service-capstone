@@ -6,7 +6,7 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
 	{
 		public string Name { get; set; }
 		public decimal AdditionalPrice { get; set; }
-		public Guid OrderItemId { get; set; }
+		public Guid? OrderItemId { get; set; }
 		public virtual OrderItem OrderItem { get; set; }
 
 		public OrderItemDetail()
