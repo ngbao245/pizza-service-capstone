@@ -47,7 +47,7 @@ namespace Pizza4Ps.PizzaService.Persistence.Constants
         internal const string Table = nameof(Table);
         internal const string TableBooking = nameof(TableBooking);
         internal const string Voucher = nameof(Voucher);
-        internal const string VoucherType = nameof(VoucherType);
+        internal const string VoucherBatch = nameof(VoucherBatch);
         internal const string WorkingTime = nameof(WorkingTime);
         internal const string Zone = nameof(Zone);
         internal const string Ingredient = nameof(Ingredient);

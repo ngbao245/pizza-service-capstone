@@ -15,9 +15,10 @@ namespace Pizza4Ps.PizzaService.Persistence.Configurations
             builder.HasIndex(x => x.Code)
                 .IsUnique();
 
-            builder.HasOne(x => x.VoucherType)
-                .WithMany()
-                .HasForeignKey(x => x.VoucherTypeId);
+            builder.HasOne(x => x.VoucherBatch)
+                .WithMany(x => x.Vouchers)
+                .HasForeignKey(x => x.VoucherBatchId)
+                .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

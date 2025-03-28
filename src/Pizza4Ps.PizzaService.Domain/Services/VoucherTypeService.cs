@@ -19,10 +19,11 @@ namespace Pizza4Ps.PizzaService.Domain.Services
 
         public async Task<Guid> CreateAsync(string name, string description, int totalQuantity)
         {
-            var entity = new VoucherType(Guid.NewGuid(), name, description, totalQuantity);
-            _voucherTypeRepository.Add(entity);
-            await _unitOfWork.SaveChangeAsync();
-            return entity.Id;
+            throw new NotImplementedException();
+            //var entity = new VoucherBatch(Guid.NewGuid(), name, description, totalQuantity);
+            //_voucherTypeRepository.Add(entity);
+            //await _unitOfWork.SaveChangeAsync();
+            //return entity.Id;
         }
     }
 }

@@ -8,7 +8,7 @@ namespace Pizza4Ps.PizzaService.Application.Mappers
     {
         public VoucherTypeProfile()
         {
-            CreateMap<VoucherTypeDto, VoucherType>().ReverseMap();
+            CreateMap<VoucherTypeDto, VoucherBatch>().ReverseMap();
         }
     }
 }
