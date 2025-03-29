@@ -152,10 +152,14 @@ namespace Pizza4Ps.PizzaService.API.Controllers
 			});
 		}
 
-		[HttpDelete()]
-		public async Task<IActionResult> DeleteManyAsync([FromBody]DeleteProductCommand deleteProductCommand)
+		[HttpDelete("{id}")]
+		public async Task<IActionResult> DeleteManyAsync([FromRoute]Guid id, bool isHardDeleted = false)
 		{
-			await _sender.Send(deleteProductCommand);
+			await _sender.Send(new DeleteProductCommand
+			{
+				Ids = new List<Guid> { id},
+                isHardDelete = isHardDeleted
+            });
 			return Ok(new ApiResponse
 			{
 				Message = Message.DELETED_SUCCESS,
