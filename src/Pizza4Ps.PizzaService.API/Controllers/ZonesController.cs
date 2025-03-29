@@ -25,6 +25,12 @@ namespace Pizza4Ps.PizzaService.API.Controllers
             _sender = sender;
         }
 
+        /// <remarks>
+        /// **type**:
+        ///DininingArea,
+        ///KitchenArea,
+        ///WorkshopArea
+        /// </remarks>
         [HttpPost]
         public async Task<IActionResult> CreateAsync([FromBody] CreateZoneCommand request)
         {

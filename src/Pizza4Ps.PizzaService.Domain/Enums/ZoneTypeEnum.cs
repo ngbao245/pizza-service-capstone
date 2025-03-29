@@ -2,8 +2,8 @@
 {
     public enum ZoneTypeEnum
     {
-        Available,
-        Unavailable,
-        //Pending
+        DininingArea,
+        KitchenArea,
+        WorkshopArea
     }
 }

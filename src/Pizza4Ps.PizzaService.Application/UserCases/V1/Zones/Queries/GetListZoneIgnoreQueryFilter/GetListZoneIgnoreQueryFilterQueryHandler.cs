@@ -25,7 +25,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Zones.Queries.GetListZo
 				.Where(
 					x => (request.Name == null || x.Name.Contains(request.Name))
 					&& (request.Description == null || x.Description.Contains(request.Description))
-					&& (request.Status == null || x.Status.Equals(request.Status))
+					&& (request.Type == null || x.Type.Equals(request.Type))
                     && x.IsDeleted == request.IsDeleted);
 			var entities = await query
 				.OrderBy(request.SortBy)

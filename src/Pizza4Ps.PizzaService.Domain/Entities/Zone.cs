@@ -7,7 +7,7 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
     {
         public string Name { get; set; }
         public string? Description { get; set; }
-        public ZoneTypeEnum Status { get; set; }
+        public ZoneTypeEnum Type { get; set; }
 
         public virtual ICollection<Table> Tables { get; set; }
 
@@ -15,19 +15,19 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         {
         }
 
-        public Zone(Guid id, string name, string description)
+        public Zone(Guid id, string name, string description, ZoneTypeEnum type)
         {
             Id = id;
             Name = name;
             Description = description;
-            Status = ZoneTypeEnum.Available;
+            Type = type;
         }
 
-        public void UpdateZone(string name, string description, ZoneTypeEnum status)
+        public void UpdateZone(string name, string description, ZoneTypeEnum type)
         {
             Name = name;
             Description = description;
-            Status = status;
+            Type = type;
         }
     }
 }

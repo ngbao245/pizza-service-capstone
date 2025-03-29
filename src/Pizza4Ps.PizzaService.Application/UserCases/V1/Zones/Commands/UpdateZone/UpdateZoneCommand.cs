@@ -8,6 +8,6 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Zones.Commands.UpdateZo
         public Guid? Id { get; set; }
         public string Name { get; set; }
         public string? Description { get; set; }
-        public ZoneTypeEnum Status { get; set; } = ZoneTypeEnum.Available;
+        public string Type { get; set; }
     }
 }

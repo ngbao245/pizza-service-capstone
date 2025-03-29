@@ -3,6 +3,9 @@ using Azure;
 using MediatR;
 using Pizza4Ps.PizzaService.Application.Abstractions;
 using Pizza4Ps.PizzaService.Domain.Abstractions.Services;
+using Pizza4Ps.PizzaService.Domain.Constants;
+using Pizza4Ps.PizzaService.Domain.Enums;
+using Pizza4Ps.PizzaService.Domain.Exceptions;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Zones.Commands.CreateZone
 {
@@ -19,9 +22,15 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Zones.Commands.CreateZo
 
         public async Task<ResultDto<Guid>> Handle(CreateZoneCommand request, CancellationToken cancellationToken)
         {
+            if (!Enum.TryParse(request.Type, true, out ZoneTypeEnum zoneType))
+            {
+                throw new BusinessException(BussinessErrorConstants.ZoneErrorConstant.INVALID_ZONE_TYPE);
+            }
+
             var result = await _zoneService.CreateAsync(
                 request.Name,
-                request.Description);
+                request.Description,
+                zoneType);
             return new ResultDto<Guid>
             {
                 Id = result
