@@ -24,20 +24,26 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Zones.Queries.GetListZo
 
         public async Task<PaginatedResultDto<ZoneDto>> Handle(GetListZoneQuery request, CancellationToken cancellationToken)
         {
-            ZoneTypeEnum? zoneType = null;
-            if (!string.IsNullOrEmpty(request.Type))
+            List<ZoneTypeEnum>? zoneTypes = null;
+            if (request.Type != null)
             {
-                if (!Enum.TryParse(request.Type, true, out ZoneTypeEnum parsedType))
+                zoneTypes = request.Type
+                    .Select(type => Enum.TryParse<ZoneTypeEnum>(type, true, out var parsedType) ? parsedType : (ZoneTypeEnum?)null)
+                    .Where(type => type.HasValue)
+                    .Select(type => type.Value)
+                    .ToList();
+
+                if (zoneTypes == null)
                 {
                     throw new BusinessException(BussinessErrorConstants.ZoneErrorConstant.INVALID_ZONE_TYPE);
                 }
-                zoneType = parsedType;
             }
 
             var query = _zoneRepository.GetListAsNoTracking(
                 x => (request.Name == null || x.Name.Contains(request.Name))
                 && (request.Description == null || x.Description.Contains(request.Description))
-                && (zoneType == null || x.Type == zoneType),
+                && (zoneTypes == null || zoneTypes.Contains(x.Type)),
+
                 includeProperties: request.IncludeProperties);
             var entities = await query
                 .OrderBy(request.SortBy)
