@@ -17,6 +17,8 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
 
         public bool? Gender { get;set; }
 
+        public decimal? TotalPoint { get; set; }
+
         public DateTime? DateOfBirth { get; set; }
 
         public string? Email { get; set; }
@@ -49,6 +51,7 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
             Email = email;
             AppUserCustomerId = appUserCustomerId;
             IsVerifiedEmail = false;
+            TotalPoint = 0;
         }
 
         public void SetVerifiedCodeEmail(string verifiedCodeEmail)
