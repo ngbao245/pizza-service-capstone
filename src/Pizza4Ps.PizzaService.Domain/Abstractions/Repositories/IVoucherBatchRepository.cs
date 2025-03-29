@@ -3,7 +3,7 @@ using Pizza4Ps.PizzaService.Domain.Entities;
 
 namespace Pizza4Ps.PizzaService.Domain.Abstractions.Repositories
 {
-    public interface IVoucherTypeRepository : IRepositoryBase<VoucherBatch, Guid>
+    public interface IVoucherBatchRepository : IRepositoryBase<VoucherBatch, Guid>
     {
     }
 }

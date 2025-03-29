@@ -1,25 +1,21 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Pizza4Ps.PizzaService.API.Constants;
 using Pizza4Ps.PizzaService.API.Models;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.VoucherTypes.Commands.CreateVoucherType;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.VoucherTypes.Queries.GetListVoucherType;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.VoucherTypes.Queries.GetVoucherTypeById;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.Zones.Commands.CreateZone;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.Zones.Queries.GetListZone;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.Zones.Queries.GetZoneById;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.VoucherBatchs.Commands.CreateVoucherBatch;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.VoucherBatchs.Queries.GetListVoucherBatch;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.VoucherBatchs.Queries.GetVoucherBatchById;
 
 namespace Pizza4Ps.PizzaService.API.Controllers
 {
     [Route("api/voucher-types")]
     [ApiController]
-    public class VoucherTypesController : ControllerBase
+    public class VoucherBatchsController : ControllerBase
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ISender _sender;
 
-        public VoucherTypesController(IHttpContextAccessor httpContextAccessor, ISender sender)
+        public VoucherBatchsController(IHttpContextAccessor httpContextAccessor, ISender sender)
         {
             _httpContextAccessor = httpContextAccessor;
             _sender = sender;
@@ -27,7 +23,7 @@ namespace Pizza4Ps.PizzaService.API.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> CreateAsync([FromBody] CreateVoucherTypeCommand request)
+        public async Task<IActionResult> CreateAsync([FromBody] CreateVoucherBatchCommand request)
         {
             var result = await _sender.Send(request);
             return Ok(new ApiResponse
@@ -39,7 +35,7 @@ namespace Pizza4Ps.PizzaService.API.Controllers
         }
 
         [HttpGet()]
-        public async Task<IActionResult> GetListAsync([FromQuery] GetListVoucherTypeQuery query)
+        public async Task<IActionResult> GetListAsync([FromQuery] GetListVoucherBatchQuery query)
         {
             var result = await _sender.Send(query);
             return Ok(new ApiResponse
@@ -53,7 +49,7 @@ namespace Pizza4Ps.PizzaService.API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetSingleByIdAsync([FromRoute] Guid id)
         {
-            var result = await _sender.Send(new GetVoucherTypeByIdQuery { Id = id });
+            var result = await _sender.Send(new GetVoucherBatchByIdQuery { Id = id });
             return Ok(new ApiResponse
             {
                 Result = result,

@@ -5,11 +5,11 @@ using Pizza4Ps.PizzaService.Domain.Enums;
 
 namespace Pizza4Ps.PizzaService.Application.Mappers
 {
-    public class VoucherProfile : Profile
+    public class VoucherBatchProfile : Profile
     {
-        public VoucherProfile()
+        public VoucherBatchProfile()
         {
-            CreateMap<VoucherDto, Voucher>().ReverseMap()
+            CreateMap<VoucherBatchDto, VoucherBatch>().ReverseMap()
                 .ForMember(dest => dest.DiscountType, opt => opt.MapFrom(src => Enum.GetName(typeof(DiscountTypeEnum), src.DiscountType)));
         }
     }
