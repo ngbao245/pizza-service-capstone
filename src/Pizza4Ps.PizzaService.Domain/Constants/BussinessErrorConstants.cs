@@ -203,10 +203,11 @@
             public const string VOUCHER_NOT_FOUND = "Không tìm thấy voucher";
         }
 
-        public class VoucherTypeErrorConstant
+        public class VoucherBatchErrorConstant
         {
             public const string TOTAL_QUANTITY_INVALID = "Số lượng tổng phải lớn hơn 0";
             public const string VOUCHER_TYPE_NOT_FOUND = "Không tìm thấy loại voucher";
+            public const string VOUCHER_BATCH_INVALID_DISCOUNT_TYPE = "Không tìm thấy loại khuyến mãi";
         }
 
         public class ZoneErrorConstant

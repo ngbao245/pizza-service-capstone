@@ -67,20 +67,11 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Commands.Creat
                     imageUrl = uploadResult.SecureUrl.ToString();
                     imagePublicId = uploadResult.PublicId;
                 }
-
                 // Validate product type
                 if (!Enum.TryParse(request.ProductType, true, out ProductTypeEnum productTypeEnum))
                 {
                     throw new BusinessException(BussinessErrorConstants.ProductErrorConstant.INVALID_PRODUCT_TYPE);
                 }
-
-                // Deserialize JSON chứa danh sách Option
-                var productOptions = JsonConvert.DeserializeObject<List<CreateProductOptionModel>>(request.ProductOptionModels);
-                if (productOptions == null || productOptions.Count == 0)
-                {
-                    throw new BusinessException(BussinessErrorConstants.ProductErrorConstant.INVALID_PRODUCT_OPTION);
-                }
-
                 // Tạo product entity
                 var product = new Product(
                     Guid.NewGuid(),
@@ -93,27 +84,31 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Commands.Creat
                     imageUrl: imageUrl,
                     imagePublicId: imagePublicId
                 );
-
-                var options = new List<Option>();
-                var optionItems = new List<OptionItem>();
-
-                foreach (var optionModel in productOptions)
+                // Deserialize JSON chứa danh sách Option
+                if (!string.IsNullOrEmpty(request.ProductOptionModels))
                 {
-                    var option = new Option(Guid.NewGuid(), product.Id, optionModel.Name, optionModel.Description);
-                    options.Add(option);
-                    foreach (var optionItem in optionModel.ProductOptionItemModels)
+                    var productOptions = JsonConvert.DeserializeObject<List<CreateProductOptionModel>>(request.ProductOptionModels);
+                    if (productOptions == null || productOptions.Count == 0)
                     {
-                        optionItems.Add(new OptionItem(Guid.NewGuid(), optionItem.Name, optionItem.AdditionalPrice, option.Id));
+                        throw new BusinessException(BussinessErrorConstants.ProductErrorConstant.INVALID_PRODUCT_OPTION);
                     }
+                    var options = new List<Option>();
+                    var optionItems = new List<OptionItem>();
+                    foreach (var optionModel in productOptions)
+                    {
+                        var option = new Option(Guid.NewGuid(), product.Id, optionModel.Name, optionModel.Description);
+                        options.Add(option);
+                        foreach (var optionItem in optionModel.ProductOptionItemModels)
+                        {
+                            optionItems.Add(new OptionItem(Guid.NewGuid(), optionItem.Name, optionItem.AdditionalPrice, option.Id));
+                        }
+                    }
+                    _optionRepository.AddRange(options);
+                    _optionItemRepository.AddRange(optionItems);
                 }
-
                 // Thêm product, option và option item vào repository
                 _productRepository.Add(product);
-                _optionRepository.AddRange(options);
-                _optionItemRepository.AddRange(optionItems);
-
                 await _unitOfWork.SaveChangeAsync(cancellationToken);
-
                 return new ResultDto<Guid>
                 {
                     Id = product.Id,

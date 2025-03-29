@@ -3,9 +3,9 @@ using Pizza4Ps.PizzaService.Domain.Entities;
 
 namespace Pizza4Ps.PizzaService.Persistence.Repositories
 {
-    public class VoucherTypeRepository : RepositoryBase<VoucherBatch, Guid>, IVoucherTypeRepository
+    public class VoucherBatchRepository : RepositoryBase<VoucherBatch, Guid>, IVoucherBatchRepository
     {
-        public VoucherTypeRepository(ApplicationDBContext dBContext) : base(dBContext)
+        public VoucherBatchRepository(ApplicationDBContext dBContext) : base(dBContext)
         {
         }
     }

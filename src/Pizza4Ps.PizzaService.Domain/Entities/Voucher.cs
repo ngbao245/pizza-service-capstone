@@ -23,6 +23,17 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         {
         }
 
+        public Voucher(string code, DiscountTypeEnum discountType, decimal discountValue, Guid? voucherBatchId)
+        {
+            Id = Guid.NewGuid();
+            Code = code;
+            DiscountType = discountType;
+            DiscountValue = discountValue;
+            VoucherBatchId = voucherBatchId;
+            IsClaimed = false;
+        }
+
+
 
 
         /// <summary>
