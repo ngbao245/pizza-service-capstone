@@ -5,11 +5,11 @@ using Pizza4Ps.PizzaService.Persistence.Constants;
 
 namespace Pizza4Ps.PizzaService.Persistence.Configurations
 {
-    public class VoucherTypeConfigration : IEntityTypeConfiguration<VoucherType>
+    public class VoucherBatchConfigration : IEntityTypeConfiguration<VoucherBatch>
     {
-        public void Configure(EntityTypeBuilder<VoucherType> builder)
+        public void Configure(EntityTypeBuilder<VoucherBatch> builder)
         {
-            builder.ToTable(TableNames.VoucherType);
+            builder.ToTable(TableNames.VoucherBatch);
             builder.HasKey(x => x.Id);
         }
     }

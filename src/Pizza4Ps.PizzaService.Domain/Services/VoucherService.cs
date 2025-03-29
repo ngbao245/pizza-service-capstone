@@ -23,10 +23,11 @@ namespace Pizza4Ps.PizzaService.Domain.Services
 
         public async Task<Guid> CreateAsync(string code, DiscountTypeEnum discountType, DateTime expiryDate, Guid voucherTypeId)
         {
-            var entity = new Voucher(Guid.NewGuid(), code, discountType, expiryDate, voucherTypeId);
-            _voucherRepository.Add(entity);
-            await _unitOfWork.SaveChangeAsync();
-            return entity.Id;
+            throw new NotImplementedException();
+            //var entity = new Voucher(Guid.NewGuid(), code, discountType, expiryDate, voucherTypeId);
+            //_voucherRepository.Add(entity);
+            //await _unitOfWork.SaveChangeAsync();
+            //return entity.Id;
         }
 
         public async Task DeleteAsync(List<Guid> ids, bool IsHardDeleted = false)
@@ -60,10 +61,11 @@ namespace Pizza4Ps.PizzaService.Domain.Services
 
         public async Task<Guid> UpdateAsync(Guid id, string code, DiscountTypeEnum discountType, DateTime expiryDate, Guid voucherTypeId)
         {
-            var entity = await _voucherRepository.GetSingleByIdAsync(id);
-            entity.UpdateVoucher(code, discountType, expiryDate, voucherTypeId);
-            await _unitOfWork.SaveChangeAsync();
-            return entity.Id;
+            throw new NotImplementedException();
+            //var entity = await _voucherRepository.GetSingleByIdAsync(id);
+            //entity.UpdateVoucher(code, discountType, expiryDate, voucherTypeId);
+            //await _unitOfWork.SaveChangeAsync();
+            //return entity.Id;
         }
     }
 }
