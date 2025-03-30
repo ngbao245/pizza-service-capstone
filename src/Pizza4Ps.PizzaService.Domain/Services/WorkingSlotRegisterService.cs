@@ -76,7 +76,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
                 x => x.ConfigType == ConfigType.MAXIMUM_REGISTER_SLOT);
             var maxSlots = int.Parse(maxSlotsConfig.Value);
 
-            var currentRegistrations = await _workingSlotRegisterRepository.CountAsync(x => x.WorkingSlotId == workingSlotId);
+            var currentRegistrations = await _workingSlotRegisterRepository.CountAsync(x => x.WorkingSlotId == workingSlotId && x.WorkingDate == workingDate);
             var slotCapacity = workingSlot.Capacity;
 
             var status = WorkingSlotRegisterStatusEnum.Onhold;
