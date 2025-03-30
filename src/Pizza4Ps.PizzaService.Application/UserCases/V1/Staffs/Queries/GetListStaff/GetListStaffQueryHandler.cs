@@ -56,8 +56,6 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Staffs.Queries.GetListS
             var entities = await query
                 .OrderBy(request.SortBy)
                 .Skip(request.SkipCount).Take(request.TakeCount).ToListAsync();
-            if (!entities.Any())
-                throw new BusinessException(BussinessErrorConstants.StaffErrorConstant.STAFF_NOT_FOUND);
             var result = _mapper.Map<List<StaffDto>>(entities);
             var totalCount = await query.CountAsync();
             return new PaginatedResultDto<StaffDto>(result, totalCount);

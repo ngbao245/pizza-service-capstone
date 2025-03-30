@@ -31,8 +31,6 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.OptionItemOrderItems.Qu
 			var entities = await query
 				.OrderBy(request.SortBy)
 				.Skip(request.SkipCount).Take(request.TakeCount).ToListAsync();
-			if (!entities.Any())
-				throw new BusinessException(BussinessErrorConstants.OrderItemDetailErrorConstant.ORDER_ITEM_DETAIL_NOT_FOUND);
 			var result = _mapper.Map<List<OrderItemDetailDto>>(entities);
 			var totalCount = await query.CountAsync();
             return new PaginatedResultDto<OrderItemDetailDto>(result, totalCount);

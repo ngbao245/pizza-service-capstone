@@ -31,8 +31,6 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Shifts.Queries.GetListS
             var entities = await query
                 .OrderBy(request.SortBy)
                 .Skip(request.SkipCount).Take(request.TakeCount).ToListAsync();
-            if (!entities.Any())
-                throw new BusinessException(BussinessErrorConstants.ShiftErrorConstant.SHIFT_NOT_FOUND);
             var result = _mapper.Map<List<ShiftDto>>(entities);
             var totalCount = await query.CountAsync();
             return new PaginatedResultDto<ShiftDto>(result, totalCount);

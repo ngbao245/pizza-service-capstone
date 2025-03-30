@@ -43,8 +43,6 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Bookings.Queries.GetLis
             var entities = await query
                 .OrderBy(request.SortBy)
                 .Skip(request.SkipCount).Take(request.TakeCount).ToListAsync();
-            if (!entities.Any())
-                throw new BusinessException(BussinessErrorConstants.BookingErrorConstant.BOOKING_NOT_FOUND);
             var result = _mapper.Map<List<ReservationDto>>(entities);
             var totalCount = await query.CountAsync();
             return new PaginatedResultDto<ReservationDto>(result, totalCount);

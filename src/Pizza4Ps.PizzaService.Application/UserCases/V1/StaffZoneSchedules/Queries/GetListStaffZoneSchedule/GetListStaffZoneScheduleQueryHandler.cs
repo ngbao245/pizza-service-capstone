@@ -34,8 +34,6 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.StaffZoneSchedules.Quer
             var entities = await query
                 .OrderBy(request.SortBy)
                 .Skip(request.SkipCount).Take(request.TakeCount).ToListAsync();
-            if (!entities.Any())
-                throw new BusinessException(BussinessErrorConstants.StaffZoneScheduleErrorConstant.STAFF_ZONE_SCHEDULE_NOT_FOUND);
             var result = _mapper.Map<List<StaffZoneScheduleDto>>(entities);
             var totalCount = await query.CountAsync();
             return new PaginatedResultDto<StaffZoneScheduleDto>(result, totalCount);

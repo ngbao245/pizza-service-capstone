@@ -29,8 +29,6 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Days.Queries.GetListDay
             var entities = await query
                 .OrderBy(request.SortBy)
                 .Skip(request.SkipCount).Take(request.TakeCount).ToListAsync();
-            if (!entities.Any())
-                throw new BusinessException(BussinessErrorConstants.DayErrorConstant.DAY_NOT_FOUND);
             var result = _mapper.Map<List<DayDto>>(entities);
             var totalCount = await query.CountAsync();
             return new PaginatedResultDto<DayDto>(result, totalCount);

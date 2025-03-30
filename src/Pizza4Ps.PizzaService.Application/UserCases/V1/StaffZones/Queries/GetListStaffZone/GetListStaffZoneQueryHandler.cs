@@ -33,8 +33,6 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.StaffZones.Queries.GetL
             var entities = await query
                 .OrderBy(request.SortBy)
                 .Skip(request.SkipCount).Take(request.TakeCount).ToListAsync();
-            if (!entities.Any())
-                throw new BusinessException(BussinessErrorConstants.StaffZoneErrorConstant.STAFFZONE_NOT_FOUND);
             var result = _mapper.Map<List<StaffZoneDto>>(entities);
             var totalCount = await query.CountAsync();
             return new PaginatedResultDto<StaffZoneDto>(result, totalCount);

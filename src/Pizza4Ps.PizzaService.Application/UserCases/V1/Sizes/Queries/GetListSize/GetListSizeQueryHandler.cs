@@ -31,8 +31,6 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Sizes.Queries.GetListSi
             var entities = await query
                 .OrderBy(request.SortBy)
                 .Skip(request.SkipCount).Take(request.TakeCount).ToListAsync();
-            if (!entities.Any())
-                throw new BusinessException(BussinessErrorConstants.SizeErrorConstant.SIZE_NOT_FOUND);
             var result = _mapper.Map<List<SizeDto>>(entities);
             var totalCount = await query.CountAsync();
             return new PaginatedResultDto<SizeDto>(result, totalCount);

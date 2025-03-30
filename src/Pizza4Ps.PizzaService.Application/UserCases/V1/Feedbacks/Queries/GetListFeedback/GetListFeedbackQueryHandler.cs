@@ -31,8 +31,6 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Feedbacks.Queries.GetLi
 			var entities = await query
 				.OrderBy(request.SortBy)
 				.Skip(request.SkipCount).Take(request.TakeCount).ToListAsync();
-			if (!entities.Any())
-				throw new BusinessException(BussinessErrorConstants.FeedbackErrorConstant.FEEDBACK_NOT_FOUND);
 			var result = _mapper.Map<List<FeedbackDto>>(entities);
 			var totalCount = await query.CountAsync();
             return new PaginatedResultDto<FeedbackDto>(result, totalCount);

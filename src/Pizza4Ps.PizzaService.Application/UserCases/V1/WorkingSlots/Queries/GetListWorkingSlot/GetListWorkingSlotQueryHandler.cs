@@ -34,8 +34,6 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.WorkingSlots.Queries.Ge
             var entities = await query
                 .OrderBy(request.SortBy)
                 .Skip(request.SkipCount).Take(request.TakeCount).ToListAsync();
-            if (!entities.Any())
-                throw new BusinessException(BussinessErrorConstants.WorkingSlotErrorConstant.WORKING_SLOT_NOT_FOUND);
             var result = _mapper.Map<List<WorkingSlotDto>>(entities);
             var totalCount = await query.CountAsync();
             return new PaginatedResultDto<WorkingSlotDto>(result, totalCount);

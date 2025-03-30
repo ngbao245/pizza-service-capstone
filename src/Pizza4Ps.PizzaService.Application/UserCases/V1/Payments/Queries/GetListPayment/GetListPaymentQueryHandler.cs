@@ -31,8 +31,6 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Payments.Queries.GetLis
             var entities = await query
                 .OrderBy(request.SortBy)
                 .Skip(request.SkipCount).Take(request.TakeCount).ToListAsync();
-            if (!entities.Any())
-                throw new BusinessException(BussinessErrorConstants.PaymentErrorConstant.PAYMENT_NOT_FOUND);
             var result = _mapper.Map<List<PaymentDto>>(entities);
             var totalCount = await query.CountAsync();
             return new PaginatedResultDto<PaymentDto>(result, totalCount);

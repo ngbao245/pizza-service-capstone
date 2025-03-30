@@ -31,8 +31,6 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.AdditionalFees.Queries.
             var entities = await query
                 .OrderBy(request.SortBy)
                 .Skip(request.SkipCount).Take(request.TakeCount).ToListAsync();
-            if (!entities.Any())
-                throw new BusinessException(BussinessErrorConstants.AdditionalFeeErrorConstant.ADDITIONAL_FEE_NOT_FOUND);
             var result = _mapper.Map<List<AdditionalFeeDto>>(entities);
             var totalCount = await query.CountAsync();
             return new PaginatedResultDto<AdditionalFeeDto>(result, totalCount);

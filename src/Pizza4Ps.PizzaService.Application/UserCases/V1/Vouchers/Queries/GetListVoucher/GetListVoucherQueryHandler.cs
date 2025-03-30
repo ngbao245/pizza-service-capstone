@@ -29,8 +29,6 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Vouchers.Queries.GetLis
 			var entities = await query
 				.OrderBy(request.SortBy)
 				.Skip(request.SkipCount).Take(request.TakeCount).ToListAsync();
-			if (!entities.Any())
-				throw new BusinessException(BussinessErrorConstants.VoucherErrorConstant.VOUCHER_NOT_FOUND);
 			var result = _mapper.Map<List<VoucherDto>>(entities);
 			var totalCount = await query.CountAsync();
 			return new PaginatedResultDto<VoucherDto>(result, totalCount);

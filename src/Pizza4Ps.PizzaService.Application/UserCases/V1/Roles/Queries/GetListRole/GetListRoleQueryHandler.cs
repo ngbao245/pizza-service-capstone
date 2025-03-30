@@ -29,8 +29,6 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Roles.Queries.GetListRo
             var entities = await query
                 .OrderBy(request.SortBy)
                 .Skip(request.SkipCount).Take(request.TakeCount).ToListAsync();
-            if (!entities.Any())
-                throw new BusinessException(BussinessErrorConstants.RoleErrorConstant.ROLE_NOT_FOUND);
             var result = _mapper.Map<List<RoleDto>>(entities);
             var totalCount = await query.CountAsync();
             return new PaginatedResultDto<RoleDto>(result, totalCount);
