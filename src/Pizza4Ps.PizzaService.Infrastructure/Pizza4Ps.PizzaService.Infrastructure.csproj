@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Pizza4Ps.PizzaService.Application.Contract\Pizza4Ps.PizzaService.Application.Contract.csproj" />
+    <ProjectReference Include="..\Pizza4Ps.PizzaService.Application\Pizza4Ps.PizzaService.Application.csproj" />
     <ProjectReference Include="..\Pizza4Ps.PizzaService.Domain\Pizza4Ps.PizzaService.Domain.csproj" />
   </ItemGroup>
 
