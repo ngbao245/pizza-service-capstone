@@ -212,6 +212,7 @@
 
         public class ZoneErrorConstant
         {
+            public const string ZONE_EXISTED = "Tên khu vực đã tồn tại";
             public const string ZONE_NOT_FOUND = "Không tìm thấy khu vực";
             public const string INVALID_ZONE_TYPE= "Khu vực không hợp lệ";
         }

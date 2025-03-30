@@ -59,6 +59,19 @@ namespace Pizza4Ps.PizzaService.Persistence.DependencyInjection.Extentions
                     IssuerSigningKey = new SymmetricSecurityKey(key),
                     ValidateIssuer = false,
                     ValidateAudience = false,
+                };    // Cấu hình lấy token từ query string khi dùng WebSocket
+                options.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        // Nếu không tìm thấy token trong header, hãy thử lấy từ query string
+                        var accessToken = context.Request.Query["access_token"];
+                        if (!string.IsNullOrEmpty(accessToken))
+                        {
+                            context.Token = accessToken;
+                        }
+                        return Task.CompletedTask;
+                    }
                 };
             });
         }

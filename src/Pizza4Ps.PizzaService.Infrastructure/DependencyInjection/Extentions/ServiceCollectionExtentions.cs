@@ -2,9 +2,10 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Pizza4Ps.PizzaService.Application.Contract.Abstractions.Services.IExternalServiceBase;
+using Pizza4Ps.PizzaService.Domain.Abstractions;
 using Pizza4Ps.PizzaService.Infrastructure.Abstractions.BackgroundJobs;
+using Pizza4Ps.PizzaService.Infrastructure.Services;
 using Pizza4Ps.PizzaService.Infrastructure.Services.BackgroundJobs;
-using Pizza4Ps.PizzaService.Infrastructure.Services.ExternalServiceBase;
 
 namespace Pizza4Ps.PizzaService.Infrastructure.DependencyInjection.Extentions
 {
@@ -41,9 +42,10 @@ namespace Pizza4Ps.PizzaService.Infrastructure.DependencyInjection.Extentions
             return services;
         }
 
-        public static IServiceCollection AddHttpClientSendApiService(this IServiceCollection services)
+        public static IServiceCollection AddSignalRService(this IServiceCollection services)
         {
-            services.AddHttpClient<ISendApiService, SendApiService>();
+            services.AddSignalR();
+            services.AddScoped<IRealTimeNotifier, RealTimeNotifier>();
             return services;
         }
     }

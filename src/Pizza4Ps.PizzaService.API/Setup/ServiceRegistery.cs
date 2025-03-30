@@ -71,7 +71,7 @@ namespace Pizza4Ps.PizzaService.API.Setup
             services.AddHangfireServices();
             services.AddBackgroundJobServices();
             services.AddExternalServices();
-            services.AddHttpClientSendApiService();
+            services.AddSignalRService();
             //services.AddTokenTenantService();
         }
     }

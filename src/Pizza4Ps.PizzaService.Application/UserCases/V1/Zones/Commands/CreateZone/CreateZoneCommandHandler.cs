@@ -2,10 +2,12 @@
 using Azure;
 using MediatR;
 using Pizza4Ps.PizzaService.Application.Abstractions;
+using Pizza4Ps.PizzaService.Domain.Abstractions.Repositories;
 using Pizza4Ps.PizzaService.Domain.Abstractions.Services;
 using Pizza4Ps.PizzaService.Domain.Constants;
 using Pizza4Ps.PizzaService.Domain.Enums;
 using Pizza4Ps.PizzaService.Domain.Exceptions;
+using Pizza4Ps.PizzaService.Persistence.Repositories;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Zones.Commands.CreateZone
 {
@@ -26,7 +28,6 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Zones.Commands.CreateZo
             {
                 throw new BusinessException(BussinessErrorConstants.ZoneErrorConstant.INVALID_ZONE_TYPE);
             }
-
             var result = await _zoneService.CreateAsync(
                 request.Name,
                 request.Description,
