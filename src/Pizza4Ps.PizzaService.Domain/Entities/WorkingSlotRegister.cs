@@ -9,7 +9,7 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
     {
         public string StaffName { get; set; }
         public DateOnly WorkingDate { get; set; }
-        public DateTime RegisterDate { get; set; }
+        public DateTimeOffset RegisterDate { get; set; }
         public WorkingSlotRegisterStatusEnum Status { get; set; }
         public Guid StaffId { get; set; }
         public Guid WorkingSlotId { get; set; }
@@ -21,7 +21,7 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         {
         }
 
-        public WorkingSlotRegister(Guid id, string staffName, DateOnly workingDate, DateTime registerDate, WorkingSlotRegisterStatusEnum status, Guid staffId, Guid workingSlotId)
+        public WorkingSlotRegister(Guid id, string staffName, DateOnly workingDate, DateTimeOffset registerDate, WorkingSlotRegisterStatusEnum status, Guid staffId, Guid workingSlotId)
         {
             Id = id;
             StaffName = staffName;

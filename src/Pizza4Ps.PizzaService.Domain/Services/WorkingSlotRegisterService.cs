@@ -85,7 +85,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
                 status = WorkingSlotRegisterStatusEnum.Approved;
             }
 
-            var workingSlotRegister = new WorkingSlotRegister(Guid.NewGuid(), staff.FullName, workingDate, DateTime.Now, status, staffId, workingSlotId);
+            var workingSlotRegister = new WorkingSlotRegister(Guid.NewGuid(), staff.FullName, workingDate, DateTimeOffset.Now, status, staffId, workingSlotId);
             _workingSlotRegisterRepository.Add(workingSlotRegister);
             await _unitOfWork.SaveChangeAsync();
             return workingSlotRegister.Id;
