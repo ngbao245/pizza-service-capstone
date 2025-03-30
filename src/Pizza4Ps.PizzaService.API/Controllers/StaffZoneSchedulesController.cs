@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Pizza4Ps.PizzaService.API.Constants;
 using Pizza4Ps.PizzaService.API.Models;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.StaffZoneSchedules.Commands.AutoAssignZone;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.StaffZoneSchedules.Commands.CreateStaffZoneSchedule;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.StaffZoneSchedules.Commands.DeleteStaffZoneSchedule;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.StaffZoneSchedules.Commands.RestoreStaffZoneSchedule;
@@ -32,6 +33,17 @@ namespace Pizza4Ps.PizzaService.API.Controllers
             return Ok(new ApiResponse
             {
                 Result = result,
+                Message = Message.CREATED_SUCCESS,
+                StatusCode = StatusCodes.Status201Created
+            });
+        }
+
+        [HttpPost("auto-assign")]
+        public async Task<IActionResult> AutoAssignZoneAsync([FromBody] AutoAssignZoneCommand request)
+        {
+            await _sender.Send(request);
+            return Ok(new ApiResponse
+            {
                 Message = Message.CREATED_SUCCESS,
                 StatusCode = StatusCodes.Status201Created
             });

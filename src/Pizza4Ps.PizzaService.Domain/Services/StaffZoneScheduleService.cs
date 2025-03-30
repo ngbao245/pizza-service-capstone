@@ -65,8 +65,90 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             {
                 workingSlotRegister.Status = WorkingSlotRegisterStatusEnum.Approved;
             }
+            workingSlotRegister.ZoneId = zoneId;
             await _unitOfWork.SaveChangeAsync();
             return staffZoneSchedule.Id;
+        }
+
+        public async Task AutoAssignZoneAsync(DateOnly workingDate)
+        {
+            var workingSlotRegisters = await _workingSlotRegisterRepository.GetListAsTracking(
+                x => x.WorkingDate == workingDate && x.Status == WorkingSlotRegisterStatusEnum.Approved)
+                .Include(x => x.Staff)
+                .Include(x => x.WorkingSlot)
+                .ToListAsync();
+
+            if (workingSlotRegisters == null) throw new BusinessException(BussinessErrorConstants.WorkingSlotRegisterErrorConstant.WORKING_SLOT_REGISTER_NOT_FOUND);
+
+            var zones = await _zoneRepository.GetListAsTracking().ToListAsync();
+            if (zones == null) throw new BusinessException(BussinessErrorConstants.ZoneErrorConstant.ZONE_NOT_FOUND);
+
+            var diningAreas = zones.Where(x => x.Type == ZoneTypeEnum.DininingArea).ToList();
+            if (diningAreas == null) throw new BusinessException("DiningArea chưa được thiết lập!");
+            var kitchenAreas = zones.Where(x => x.Type == ZoneTypeEnum.KitchenArea).ToList();
+            if (kitchenAreas == null) throw new BusinessException("KitchenArea chưa được thiết lập!");
+
+            var approvedStaffList = workingSlotRegisters
+                .Where(x => x.Status == WorkingSlotRegisterStatusEnum.Approved && x.Staff.StaffType == StaffTypeEnum.Staff)
+                .ToList();
+            var approvedChefList = workingSlotRegisters
+                .Where(x => x.Status == WorkingSlotRegisterStatusEnum.Approved && x.Staff.StaffType == StaffTypeEnum.Cheff)
+                .ToList();
+
+            var onHoldStaffList = workingSlotRegisters
+                .Where(x => x.Status == WorkingSlotRegisterStatusEnum.Onhold && x.Staff.StaffType == StaffTypeEnum.Staff)
+                .ToList();
+            var onHoldChefList = workingSlotRegisters
+                .Where(x => x.Status == WorkingSlotRegisterStatusEnum.Onhold && x.Staff.StaffType == StaffTypeEnum.Cheff)
+                .ToList();
+
+            var staffZoneSchedules = new List<StaffZoneSchedule>();
+            var workingSlotCapacity = new Dictionary<Guid, int>();
+
+            AssignZones(approvedStaffList, diningAreas, staffZoneSchedules, workingSlotCapacity, workingDate);
+            AssignZones(approvedChefList, kitchenAreas, staffZoneSchedules, workingSlotCapacity, workingDate);
+
+            _staffZoneScheduleRepository.AddRange(staffZoneSchedules);
+            await _unitOfWork.SaveChangeAsync();
+        }
+
+        private void AssignZones(List<WorkingSlotRegister> staffList,
+            List<Zone> availableZones,
+            List<StaffZoneSchedule> staffZoneSchedules,
+            Dictionary<Guid, int> workingSlotCapacity,
+            DateOnly workingDate)
+        {
+            if (staffList == null) return;
+
+            int zoneIndex = 0;
+            foreach (var register in staffList)
+            {
+                var staff = register.Staff;
+                var workingSlot = register.WorkingSlot;
+
+                if (!workingSlotCapacity.ContainsKey(workingSlot.Id))
+                {
+                    workingSlotCapacity[workingSlot.Id] = 0;
+                }
+
+                if (workingSlotCapacity[workingSlot.Id] >= workingSlot.Capacity)
+                {
+                    return;
+                }
+
+                var assignedZone = availableZones[zoneIndex];
+                staffZoneSchedules.Add(new StaffZoneSchedule(
+                    Guid.NewGuid(),
+                    staff.FullName,
+                    assignedZone.Name,
+                    workingDate,
+                    staff.Id,
+                    assignedZone.Id,
+                    workingSlot.Id));
+
+                workingSlotCapacity[workingSlot.Id]++;
+                zoneIndex = (zoneIndex + 1) % availableZones.Count;
+            }
         }
 
         public async Task DeleteAsync(List<Guid> ids, bool IsHardDeleted = false)
