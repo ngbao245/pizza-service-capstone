@@ -9,6 +9,7 @@ namespace Pizza4Ps.PizzaService.Application.DTOs
         public DateOnly WorkingDate { get; set; }
         public DateTimeOffset RegisterDate { get; set; }
         public string Status { get; set; }
+        public Guid? ZoneId { get; set; }
         public Guid StaffId { get; set; }
         public Guid WorkingSlotId { get; set; }
 

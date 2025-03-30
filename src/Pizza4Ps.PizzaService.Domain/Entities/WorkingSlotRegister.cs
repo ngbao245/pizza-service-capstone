@@ -11,6 +11,7 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         public DateOnly WorkingDate { get; set; }
         public DateTimeOffset RegisterDate { get; set; }
         public WorkingSlotRegisterStatusEnum Status { get; set; }
+        public Guid? ZoneId { get; set; }
         public Guid StaffId { get; set; }
         public Guid WorkingSlotId { get; set; }
 
