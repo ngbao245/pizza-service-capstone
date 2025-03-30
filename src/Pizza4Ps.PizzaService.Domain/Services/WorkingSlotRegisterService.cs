@@ -37,7 +37,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             if (staff == null) throw new BusinessException(BussinessErrorConstants.StaffErrorConstant.STAFF_NOT_FOUND);
 
             var existingRegistration = await _workingSlotRegisterRepository.GetSingleAsync(
-                x => x.StaffId == staffId && x.WorkingSlotId == workingSlotId);
+                x => x.StaffId == staffId && x.WorkingSlotId == workingSlotId && x.WorkingDate == workingDate);
             if (existingRegistration != null) throw new BusinessException(BussinessErrorConstants.WorkingSlotErrorConstant.ALREADY_REGISTERED);
 
             var workingSlot = await _workingSlotRepository.GetSingleByIdAsync(workingSlotId);
@@ -62,7 +62,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
 
             var maxRegisterDaysConfig = await _configRepository.GetSingleAsync(
                 x => x.ConfigType == ConfigType.REGISTRATION_WEEK_LIMIT);
-            int maxRegisterDays = int.Parse(maxRegisterDaysConfig.Value)*7;
+            int maxRegisterDays = int.Parse(maxRegisterDaysConfig.Value) * 7;
 
             DateOnly startOfNextWeek = DateOnly.FromDateTime(DateTime.UtcNow.Date)
                 .AddDays(7 - (int)DateTime.UtcNow.DayOfWeek + (int)DayOfWeek.Monday);
@@ -70,7 +70,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             if (workingDate > maxRegisterDate)
             {
                 throw new BusinessException($"Bạn chỉ có thể đăng ký trước tối đa {maxRegisterDays} ngày từ ngày {startOfNextWeek:yyyy-MM-dd}. Hạn đăng ký cho ngày {workingDate:yyyy-MM-dd} đã vượt quá giới hạn.");
-            }   
+            }
 
             var maxSlotsConfig = await _configRepository.GetSingleAsync(
                 x => x.ConfigType == ConfigType.MAXIMUM_REGISTER_SLOT);
