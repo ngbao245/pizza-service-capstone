@@ -9,7 +9,7 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         public DateOnly WorkingDate { get; set; }
         public Guid StaffId { get; set; }
         public Guid ZoneId { get; set; }
-        public Guid WorkingSlotId { get; set; }
+        public Guid? WorkingSlotId { get; set; }
 
 
         public virtual Staff Staff { get; set; }
@@ -20,7 +20,7 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         {
         }
 
-        public StaffZoneSchedule(Guid id, string staffName, string zoneName, DateOnly workingDate, Guid staffId, Guid zoneId, Guid workingSlotId)
+        public StaffZoneSchedule(Guid id, string staffName, string zoneName, DateOnly workingDate, Guid staffId, Guid zoneId, Guid? workingSlotId)
         {
             Id = id;
             StaffName = staffName;

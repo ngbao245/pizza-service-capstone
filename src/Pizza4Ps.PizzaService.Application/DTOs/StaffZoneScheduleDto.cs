@@ -8,7 +8,7 @@
         public DateOnly WorkingDate { get; set; }
         public Guid StaffId { get; set; }
         public Guid ZoneId { get; set; }
-        public Guid WorkingSlotId { get; set; }
+        public Guid? WorkingSlotId { get; set; }
 
         public virtual StaffDto Staff { get; set; }
         public virtual ZoneDto Zone { get; set; }
