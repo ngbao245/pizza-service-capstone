@@ -44,6 +44,16 @@ namespace Pizza4Ps.PizzaService.Persistence.Helpers
             Guid.TryParse(currentUserId, out var userId);
             return userId;
         }
+        public static Guid? GetStaffId(this HttpContext context)
+        {
+            var currentUserId = context.User.FindFirstValue("StaffId");
+            if (currentUserId == null)
+            {
+                return null;
+            }
+            Guid.TryParse(currentUserId, out var userId);
+            return userId;
+        }
         public static Guid? GetAppUserCustomerIdId(this HttpContext context)
         {
             var currentUserId = context.User.FindFirstValue("AppUserCustomerId");

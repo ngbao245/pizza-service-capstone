@@ -23,6 +23,8 @@ namespace Pizza4Ps.PizzaService.Domain.Services
 
         public async Task<Guid> CreateAsync(string name, string description, ZoneTypeEnum type)
         {
+            var zoneExited = await _zoneRepository.GetSingleAsync(x => x.Name == name);
+            if (zoneExited != null) throw new BusinessException(BussinessErrorConstants.ZoneErrorConstant.ZONE_EXISTED);
             var entity = new Zone(Guid.NewGuid(), name, description, type);
             _zoneRepository.Add(entity);
             await _unitOfWork.SaveChangeAsync();

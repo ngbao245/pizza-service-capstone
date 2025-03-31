@@ -1,4 +1,5 @@
 ﻿using Pizza4Ps.PizzaService.API.Middlewares;
+using Pizza4Ps.PizzaService.Infrastructure.Services;
 
 namespace Pizza4Ps.PizzaService.API.Setup
 {
@@ -6,16 +7,32 @@ namespace Pizza4Ps.PizzaService.API.Setup
     {
         public static IApplicationBuilder MiddlewareRegisteryMethod(this IApplicationBuilder app)
         {
-            //app.UseCors("AllowAll");
+            app.UseRouting();
+
+            // Đăng ký CORS sau UseRouting
+            app.UseCors("AllowAll");
+
+            // Đăng ký xác thực và ủy quyền
+            app.UseAuthentication();
+            app.UseAuthorization();
+
+            // Đăng ký middleware xử lý lỗi
+            app.UseMiddleware<ExceptionHandler>();
+
+            // Đăng ký các endpoint như SignalR hubs và controllers
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapHub<NotificationHub>("/notificationHub");
+                endpoints.MapControllers();
+            });
+
+            // Đăng ký Swagger UI
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
                 c.RoutePrefix = "swagger"; // Cấu hình để Swagger UI chạy tại /swagger
             });
-            app.UseAuthentication();
-            app.UseAuthorization();
-            app.UseMiddleware<ExceptionHandler>();
-            app.UseCors("AllowAll");
+
             return app;
         }
     }
