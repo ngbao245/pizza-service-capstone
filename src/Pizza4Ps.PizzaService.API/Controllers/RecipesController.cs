@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Pizza4Ps.PizzaService.API.Constants;
 using Pizza4Ps.PizzaService.API.Models;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Recipe.Commands.CreateRecipe;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Recipe.Commands.DeleteRecipe;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Recipe.Commands.RestoreRecipe;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Recipe.Queries.GetListRecipe;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Recipe.Queries.GetRecipeById;
 
@@ -75,6 +77,32 @@ namespace Pizza4Ps.PizzaService.API.Controllers
             {
                 Result = result,
                 Message = Message.GET_SUCCESS,
+                StatusCode = StatusCodes.Status200OK
+            });
+        }
+
+        [HttpPut("restore")]
+        public async Task<IActionResult> RestoreManyAsync(List<Guid> ids)
+        {
+            await _sender.Send(new RestoreRecipeCommand { Ids = ids });
+            return Ok(new ApiResponse
+            {
+                Message = Message.RESTORE_SUCCESS,
+                StatusCode = StatusCodes.Status200OK
+            });
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteManyAsync([FromRoute] Guid id, bool isHardDeleted = false)
+        {
+            await _sender.Send(new DeleteRecipeCommand
+            {
+                Ids = new List<Guid> { id },
+                isHardDelete = isHardDeleted
+            });
+            return Ok(new ApiResponse
+            {
+                Message = Message.DELETED_SUCCESS,
                 StatusCode = StatusCodes.Status200OK
             });
         }
