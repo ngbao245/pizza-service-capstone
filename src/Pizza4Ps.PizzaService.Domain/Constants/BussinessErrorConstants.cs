@@ -79,6 +79,7 @@
         public class StaffZoneScheduleErrorConstant
         {
             public const string STAFF_ZONE_SCHEDULE_NOT_FOUND = "Không tìm thấy lịch làm việc theo khu vực của nhân viên";
+            public const string ZONE_ALREADY_ASSIGNED = "Nhân viên đã được phân vào khu vực này";
         }
 
         public class SizeErrorConstant
@@ -215,7 +216,7 @@
         {
             public const string ZONE_EXISTED = "Tên khu vực đã tồn tại";
             public const string ZONE_NOT_FOUND = "Không tìm thấy khu vực";
-            public const string INVALID_ZONE_TYPE= "Khu vực không hợp lệ";
+            public const string INVALID_ZONE_TYPE = "Khu vực không hợp lệ";
             public const string KITCHEN_ZONE_NOT_FOUND = "Không có khu vực bếp nào để gán đầu bếp";
             public const string DINING_ZONE_NOT_FOUND = "Không có khu vực ăn nào để gán nhân viên phục vụ";
         }

@@ -7,6 +7,7 @@ using Pizza4Ps.PizzaService.Application.UserCases.V1.StaffZoneSchedules.Commands
 using Pizza4Ps.PizzaService.Application.UserCases.V1.StaffZoneSchedules.Commands.DeleteStaffZoneSchedule;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.StaffZoneSchedules.Commands.RestoreStaffZoneSchedule;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.StaffZoneSchedules.Commands.UpdateStaffZoneSchedule;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.StaffZoneSchedules.Commands.UpdateZone;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.StaffZoneSchedules.Queries.GetListStaffZoneSchedule;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.StaffZoneSchedules.Queries.GetListStaffZoneScheduleIgnoreQueryFilter;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.StaffZoneSchedules.Queries.GetStaffZoneScheduleById;
@@ -86,6 +87,21 @@ namespace Pizza4Ps.PizzaService.API.Controllers
             });
         }
 
+
+        [HttpPut("update-zone{id}")]
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public async Task<IActionResult> UpdateZoneAsync([FromRoute] Guid id, [FromBody] UpdateZoneCommand request)
+        {
+            request.Id = id;
+            await _sender.Send(request);
+            return Ok(new ApiResponse
+            {
+                Success = true,
+                Message = Message.UPDATED_SUCCESS,
+                StatusCode = StatusCodes.Status200OK
+            });
+        }
+
         [HttpPut("{id}")]
         [ApiExplorerSettings(IgnoreApi = true)]
         public async Task<IActionResult> UpdateAsync([FromRoute] Guid id, [FromBody] UpdateStaffZoneScheduleCommand request)
@@ -113,9 +129,9 @@ namespace Pizza4Ps.PizzaService.API.Controllers
         }
 
         [HttpDelete()]
-        public async Task<IActionResult> DeleteManyAsync(List<Guid> ids, bool isHardDeleted = false)
+        public async Task<IActionResult> DeleteManyAsync([FromBody] DeleteStaffZoneScheduleCommand command)
         {
-            await _sender.Send(new DeleteStaffZoneScheduleCommand { Ids = ids, isHardDelete = isHardDeleted });
+            await _sender.Send(command);
             return Ok(new ApiResponse
             {
                 Message = Message.DELETED_SUCCESS,

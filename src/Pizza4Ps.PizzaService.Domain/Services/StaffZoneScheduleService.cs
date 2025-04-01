@@ -7,7 +7,7 @@ using Pizza4Ps.PizzaService.Domain.Services.ServiceBase;
 using Pizza4Ps.PizzaService.Domain.Abstractions.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Pizza4Ps.PizzaService.Domain.Enums;
-using System.Net.WebSockets;
+using System.Xml.Linq;
 
 namespace Pizza4Ps.PizzaService.Domain.Services
 {
@@ -211,11 +211,23 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             }
         }
 
+        public async Task<Guid> UpdateZoneAsync(Guid id, Guid zoneId)
+        {
+            var entity = await _staffZoneScheduleRepository.GetSingleByIdAsync(id);
+            if (entity == null) throw new BusinessException(BussinessErrorConstants.StaffZoneScheduleErrorConstant.STAFF_ZONE_SCHEDULE_NOT_FOUND);
+
+            var newZone = await _zoneRepository.GetSingleByIdAsync(zoneId);
+            if (newZone == null) throw new BusinessException(BussinessErrorConstants.ZoneErrorConstant.ZONE_NOT_FOUND);
+
+            entity.UpdateZone(newZone.Id, newZone.Name);
+            await _unitOfWork.SaveChangeAsync();
+            return entity.Id;
+        }
+
         public async Task DeleteAsync(List<Guid> ids, bool IsHardDeleted = false)
         {
             var entities = await _staffZoneScheduleRepository.GetListAsTracking(x => ids.Contains(x.Id)).IgnoreQueryFilters().ToListAsync();
-            if (!entities.Any()) throw new BusinessException(BussinessErrorConstants.StaffZoneScheduleErrorConstant.STAFF_ZONE_SCHEDULE_NOT_FOUND);
-
+            if (entities == null) throw new ServerException(ServerErrorConstants.NOT_FOUND);
             foreach (var entity in entities)
             {
                 if (IsHardDeleted)
@@ -239,15 +251,6 @@ namespace Pizza4Ps.PizzaService.Domain.Services
                 _staffZoneScheduleRepository.Restore(entity);
             }
             await _unitOfWork.SaveChangeAsync();
-        }
-
-        public async Task<Guid> UpdateAsync(Guid id, int dayofWeek, TimeOnly shiftStart, TimeOnly shiftEnd, string note, Guid staffId, Guid zoneId, Guid workingtimeId)
-        {
-            //var entity = await _staffZoneScheduleRepository.GetSingleByIdAsync(id);
-            //entity. UpdateStaffZoneSchedule(staffId, zoneId, workingtimeId);
-            //await _unitOfWork.SaveChangeAsync();
-            //return entity.Id;
-            throw new NotImplementedException();
         }
     }
 }
