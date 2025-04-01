@@ -43,16 +43,15 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             var workingSlot = await _workingSlotRepository.GetSingleByIdAsync(workingSlotId);
             if (workingSlot == null) throw new BusinessException(BussinessErrorConstants.WorkingSlotErrorConstant.WORKING_SLOT_NOT_FOUND);
 
-            var workingSlotRegister = await _workingSlotRegisterRepository.GetSingleAsync(
-                  x => x.StaffId == staffId && x.WorkingSlotId == workingSlotId);
-            if (workingSlotRegister == null) throw new BusinessException(BussinessErrorConstants.WorkingSlotRegisterErrorConstant.WORKING_SLOT_REGISTER_NOT_FOUND);
+            var workingSlotRegisters = await _workingSlotRegisterRepository.GetListAsTracking(
+                x => x.StaffId == staffId && x.WorkingDate == workingDate).ToListAsync();
+            if (workingSlotRegisters == null) throw new BusinessException(BussinessErrorConstants.WorkingSlotRegisterErrorConstant.WORKING_SLOT_REGISTER_NOT_FOUND);
 
-            if (workingSlotRegister.WorkingDate != workingDate)
-                throw new BusinessException($"Ngày làm việc {workingDate:yyyy-MM-dd} không khớp với ngày đăng ký {workingSlotRegister.WorkingDate:yyyy-MM-dd}");
+            var workingSlotRegister = workingSlotRegisters.FirstOrDefault(x => x.WorkingSlotId == workingSlotId);
+            if (workingSlotRegister == null) throw new BusinessException($"Nhân viên chưa đăng ký ca {workingSlot.ShiftName} vào ngày {workingDate:yyyy-MM-dd}");
 
             var zone = await _zoneRepository.GetSingleByIdAsync(zoneId);
             if (zone == null) throw new BusinessException(BussinessErrorConstants.ZoneErrorConstant.ZONE_NOT_FOUND);
-
 
             var existingSchedule = await _staffZoneScheduleRepository.GetSingleAsync(
                 x => x.StaffId == staffId && x.WorkingDate == workingDate && x.WorkingSlotId == workingSlotId && x.ZoneId == zoneId);
@@ -61,10 +60,6 @@ namespace Pizza4Ps.PizzaService.Domain.Services
 
             var staffZoneSchedule = new StaffZoneSchedule(Guid.NewGuid(), staff.FullName, zone.Name, workingDate, staffId, zoneId, workingSlotId);
             _staffZoneScheduleRepository.Add(staffZoneSchedule);
-            if (workingSlotRegister.Status == WorkingSlotRegisterStatusEnum.Onhold)
-            {
-                workingSlotRegister.Status = WorkingSlotRegisterStatusEnum.Approved;
-            }
             workingSlotRegister.ZoneId = zoneId;
             await _unitOfWork.SaveChangeAsync();
             return staffZoneSchedule.Id;
