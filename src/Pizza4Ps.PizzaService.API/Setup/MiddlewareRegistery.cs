@@ -10,7 +10,7 @@ namespace Pizza4Ps.PizzaService.API.Setup
             app.UseRouting();
 
             // Đăng ký CORS sau UseRouting
-            app.UseCors("AllowAll");
+            app.UseCors("AllowAllOrigins");
 
             // Đăng ký xác thực và ủy quyền
             app.UseAuthentication();
