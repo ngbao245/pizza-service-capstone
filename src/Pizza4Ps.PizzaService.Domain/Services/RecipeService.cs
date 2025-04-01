@@ -1,4 +1,5 @@
-﻿using Pizza4Ps.PizzaService.Domain.Abstractions;
+﻿using Microsoft.EntityFrameworkCore;
+using Pizza4Ps.PizzaService.Domain.Abstractions;
 using Pizza4Ps.PizzaService.Domain.Abstractions.Repositories;
 using Pizza4Ps.PizzaService.Domain.Abstractions.Services;
 using Pizza4Ps.PizzaService.Domain.Constants;
@@ -36,6 +37,35 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             _recipeRepository.Add(entity);
             await _unitOfWork.SaveChangeAsync();
             return entity.Id;
+        }
+
+        public async Task DeleteAsync(List<Guid> ids, bool isHardDelete)
+        {
+            var entities = await _recipeRepository.GetListAsTracking(x => ids.Contains(x.Id)).IgnoreQueryFilters().ToListAsync();
+            if (!entities.Any()) throw new ServerException(ServerErrorConstants.NOT_FOUND);
+            foreach (var entity in entities)
+            {
+                if (isHardDelete)
+                {
+                    _recipeRepository.HardDelete(entity);
+                }
+                else
+                {
+                    _recipeRepository.SoftDelete(entity);
+                }
+            }
+            await _unitOfWork.SaveChangeAsync();
+        }
+
+        public async Task RestoreAsync(List<Guid> ids)
+        {
+            var entities = await _recipeRepository.GetListAsTracking(x => ids.Contains(x.Id)).IgnoreQueryFilters().ToListAsync();
+            if (entities == null) throw new ServerException(ServerErrorConstants.NOT_FOUND);
+            foreach (var entity in entities)
+            {
+                _recipeRepository.Restore(entity);
+            }
+            await _unitOfWork.SaveChangeAsync();
         }
     }
 }
