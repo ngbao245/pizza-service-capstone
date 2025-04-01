@@ -38,9 +38,11 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.SwapWorkingSlots.Querie
             var query = _swapworkingslotRepository.GetListAsNoTracking(
                 x => (request.RequestDate == null || x.RequestDate == request.RequestDate)
                 && (swapWorkingSlotStatus == null || x.Status == swapWorkingSlotStatus)
+                && (request.WorkingDateFrom == null || x.WorkingDateFrom == request.WorkingDateFrom)
                 && (request.EmployeeFromId == null || x.EmployeeFromId.Equals(request.EmployeeFromId))
-                && (request.EmployeeToId == null || x.EmployeeToId.Equals(request.EmployeeToId))
                 && (request.WorkingSlotFromId == null || x.WorkingSlotFromId.Equals(request.WorkingSlotFromId))
+                && (request.WorkingDateTo == null || x.WorkingDateTo == request.WorkingDateTo)
+                && (request.EmployeeToId == null || x.EmployeeToId.Equals(request.EmployeeToId))
                 && (request.WorkingSlotToId == null || x.WorkingSlotToId.Equals(request.WorkingSlotToId))
                 , includeProperties: request.IncludeProperties);
             var entities = await query

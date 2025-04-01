@@ -27,12 +27,10 @@ namespace Pizza4Ps.PizzaService.Persistence.Configurations
                    .HasForeignKey(s => s.WorkingSlotFromId)
                    .OnDelete(DeleteBehavior.NoAction);
 
-
             builder.HasOne(s => s.WorkingSlotTo)
                    .WithMany()
                    .HasForeignKey(s => s.WorkingSlotToId)
                    .OnDelete(DeleteBehavior.NoAction);
-            ;
         }
     }
 }

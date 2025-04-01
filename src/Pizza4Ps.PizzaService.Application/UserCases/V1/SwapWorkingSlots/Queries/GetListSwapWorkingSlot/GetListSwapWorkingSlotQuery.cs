@@ -7,9 +7,11 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.SwapWorkingSlots.Querie
     {
         public DateTime? RequestDate { get; set; }
         public string? Status { get; set; }
+        public DateOnly? WorkingDateFrom { get; set; }
         public Guid? EmployeeFromId { get; set; }
-        public Guid? EmployeeToId { get; set; }
         public Guid? WorkingSlotFromId { get; set; }
+        public DateOnly? WorkingDateTo { get; set; }
+        public Guid? EmployeeToId { get; set; }
         public Guid? WorkingSlotToId { get; set; }
     }
 }

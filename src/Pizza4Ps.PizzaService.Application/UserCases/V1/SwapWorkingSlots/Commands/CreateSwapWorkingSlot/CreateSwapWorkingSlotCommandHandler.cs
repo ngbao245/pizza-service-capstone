@@ -19,8 +19,10 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.SwapWorkingSlots.Comman
         public async Task<ResultDto<Guid>> Handle(CreateSwapWorkingSlotCommand request, CancellationToken cancellationToken)
         {
             var result = await _swapWorkingSlotService.CreateAsync(
+                request.WorkingDateFrom,
                 request.EmployeeFromId,
                 request.WorkingSlotFromId,
+                request.WorkingDateTo,
                 request.EmployeeToId,
                 request.WorkingSlotToId);
             return new ResultDto<Guid>
