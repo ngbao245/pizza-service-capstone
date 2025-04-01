@@ -2,7 +2,8 @@
 {
     public interface ISwapWorkingSlotService
     {
-        Task<Guid> CreateAsync(Guid employeeFromId, Guid employeeToId, Guid workingSlotFromId, Guid workingSlotToId);
+        Task<Guid> CreateAsync(DateOnly workingDateFrom, Guid employeeFromId, Guid workingSlotFromId,
+                                DateOnly workingDateTo, Guid employeeToId, Guid workingSlotToId);
         Task UpdateStatusToPendingApproveAsync(Guid id);
         Task UpdateStatusToApprovedAsync(Guid id);
         Task UpdateStatusToRejectedAsync(Guid id);

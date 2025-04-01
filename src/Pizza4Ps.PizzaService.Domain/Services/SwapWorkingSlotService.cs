@@ -34,7 +34,8 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             _configRepository = configRepository;
         }
 
-        public async Task<Guid> CreateAsync(Guid employeeFromId, Guid workingSlotFromId, Guid employeeToId, Guid workingSlotToId)
+        public async Task<Guid> CreateAsync(DateOnly workingDateFrom, Guid employeeFromId, Guid workingSlotFromId,
+                                            DateOnly workingDateTo, Guid employeeToId, Guid workingSlotToId)
         {
             var employeeFrom = await _staffRepository.GetSingleByIdAsync(employeeFromId);
             var employeeTo = await _staffRepository.GetSingleByIdAsync(employeeToId);
@@ -44,16 +45,23 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             }
 
             var workingSlotRegisterFrom = await _workingSlotRegisterRepository.GetSingleAsync(
-              x => x.StaffId == employeeFromId && x.WorkingSlotId == workingSlotFromId && x.Status == WorkingSlotRegisterStatusEnum.Approved);
+              x => x.StaffId == employeeFromId
+              && x.WorkingDate == workingDateFrom
+              && x.WorkingSlotId == workingSlotFromId
+              && x.Status == WorkingSlotRegisterStatusEnum.Approved);
+
             var workingSlotRegisterTo = await _workingSlotRegisterRepository.GetSingleAsync(
-                x => x.StaffId == employeeToId && x.WorkingSlotId == workingSlotToId && x.Status == WorkingSlotRegisterStatusEnum.Approved);
+              x => x.StaffId == employeeToId
+              && x.WorkingDate == workingDateTo
+              && x.WorkingSlotId == workingSlotToId
+              && x.Status == WorkingSlotRegisterStatusEnum.Approved);
+
             if (workingSlotRegisterFrom == null || workingSlotRegisterTo == null)
             {
                 throw new BusinessException(BussinessErrorConstants.WorkingSlotRegisterErrorConstant.WORKING_SLOT_REGISTER_NOT_FOUND);
             }
 
-            if (workingSlotRegisterFrom.WorkingDate == workingSlotRegisterTo.WorkingDate &&
-                workingSlotRegisterFrom.WorkingSlotId == workingSlotRegisterTo.WorkingSlotId)
+            if (workingDateFrom == workingDateTo && workingSlotFromId == workingSlotToId)
             {
                 throw new BusinessException(BussinessErrorConstants.SwapWorkingSlotErrorConstant.SWAP_WORKING_SLOT_INVALID_WORKING_DATE);
             }
@@ -62,19 +70,26 @@ namespace Pizza4Ps.PizzaService.Domain.Services
                 x => x.ConfigType == ConfigType.SWAP_WORKING_SLOT_CUTOFF_DAY);
             int cutoffDays = int.Parse(cutoffConfig.Value);
 
-
-
             var today = DateOnly.FromDateTime(DateTime.Today);
-            var swapWorkingDate = workingSlotRegisterFrom.WorkingDate < workingSlotRegisterTo.WorkingDate
-                ? workingSlotRegisterFrom.WorkingDate
-                : workingSlotRegisterTo.WorkingDate;
+            var earliestWorkingDate = workingDateFrom < workingDateTo ? workingDateFrom : workingDateTo;
             var startOfWeek = today.AddDays(-(int)today.DayOfWeek + (int)DayOfWeek.Monday);
-            if (swapWorkingDate < today.AddDays(cutoffDays) || swapWorkingDate > startOfWeek.AddDays(7))
+
+            if (earliestWorkingDate < today.AddDays(cutoffDays) || earliestWorkingDate > startOfWeek.AddDays(7))
             {
                 throw new BusinessException($"Đơn đổi ca phải được tạo trước ít nhất {cutoffDays} ngày và trước thứ hai đầu tuần");
             }
 
-            var swapWorkingSlot = new SwapWorkingSlot(Guid.NewGuid(), employeeFrom.FullName, employeeFromId, workingSlotFromId, employeeTo.FullName, employeeToId, workingSlotToId);
+            var swapWorkingSlot = new SwapWorkingSlot(
+                id: Guid.NewGuid(),
+                workingDateFrom: workingDateFrom,
+                employeeFromName: employeeFrom.FullName,
+                employeeFromId: employeeFromId,
+                workingSlotFromId: workingSlotFromId,
+                workingDateTo: workingDateTo,
+                employeeToName: employeeTo.FullName,
+                employeeToId: employeeToId,
+                workingSlotToId: workingSlotToId
+            );
             _swapWorkingSlotRepository.Add(swapWorkingSlot);
             await _unitOfWork.SaveChangeAsync();
             return swapWorkingSlot.Id;
@@ -97,6 +112,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
                 x => x.StaffId == entity.EmployeeFromId && x.WorkingSlotId == entity.WorkingSlotFromId);
             var workingSlotRegisterTo = await _workingSlotRegisterRepository.GetSingleAsync(
                 x => x.StaffId == entity.EmployeeToId && x.WorkingSlotId == entity.WorkingSlotToId);
+
             if (workingSlotRegisterFrom == null || workingSlotRegisterTo == null)
             {
                 throw new BusinessException(BussinessErrorConstants.WorkingSlotRegisterErrorConstant.WORKING_SLOT_REGISTER_NOT_FOUND);
@@ -123,8 +139,9 @@ namespace Pizza4Ps.PizzaService.Domain.Services
 
             if (staffZoneScheduleFrom != null && staffZoneScheduleTo != null)
             {
+                var tempZoneId = staffZoneScheduleFrom.ZoneId;
                 staffZoneScheduleFrom.ZoneId = staffZoneScheduleTo.ZoneId;
-                staffZoneScheduleTo.ZoneId = staffZoneScheduleFrom.ZoneId;
+                staffZoneScheduleTo.ZoneId = tempZoneId;
 
                 staffZoneScheduleFrom.WorkingDate = workingSlotRegisterFrom.WorkingDate;
                 staffZoneScheduleTo.WorkingDate = workingSlotRegisterTo.WorkingDate;
@@ -132,6 +149,11 @@ namespace Pizza4Ps.PizzaService.Domain.Services
                 _staffZoneScheduleRepository.Update(staffZoneScheduleFrom);
                 _staffZoneScheduleRepository.Update(staffZoneScheduleTo);
             }
+
+            var tempWorkingDateFrom = entity.WorkingDateFrom;
+            entity.WorkingDateFrom = entity.WorkingDateTo;
+            entity.WorkingDateTo = tempWorkingDateFrom;
+
             entity.setApproved();
             await _unitOfWork.SaveChangeAsync();
         }
