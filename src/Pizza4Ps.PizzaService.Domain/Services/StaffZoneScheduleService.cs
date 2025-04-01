@@ -7,6 +7,7 @@ using Pizza4Ps.PizzaService.Domain.Services.ServiceBase;
 using Pizza4Ps.PizzaService.Domain.Abstractions.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Pizza4Ps.PizzaService.Domain.Enums;
+using System.Net.WebSockets;
 
 namespace Pizza4Ps.PizzaService.Domain.Services
 {
@@ -65,88 +66,148 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             return staffZoneSchedule.Id;
         }
 
-        public async Task AutoAssignZoneAsync(DateOnly workingDate)
+        public async Task AutoAssignZoneForWeekAsync(DateOnly startDate)
         {
-            // Lấy danh sách nhân viên part-time đã đăng ký ca
-            var workingSlotRegisters = await _workingSlotRegisterRepository.GetListAsTracking(
-                x => x.WorkingDate == workingDate && x.Status == WorkingSlotRegisterStatusEnum.Approved)
-                .Include(x => x.Staff)
-                .Include(x => x.WorkingSlot)
-                .ToListAsync();
-
-            // Lấy danh sách nhân viên full-time
-            var fullTimeStaffs = await _staffRepository.GetListAsTracking(
-                x => x.Status == StaffStatusEnum.FullTime).ToListAsync();
-
-            // Lấy danh sách khu vực làm việc
-            var zones = await _zoneRepository.GetListAsTracking().ToListAsync();
-            if (!zones.Any()) throw new BusinessException(BussinessErrorConstants.ZoneErrorConstant.ZONE_NOT_FOUND);
-
-            var diningAreas = zones.Where(x => x.Type == ZoneTypeEnum.DininingArea).ToList();
-            var kitchenAreas = zones.Where(x => x.Type == ZoneTypeEnum.KitchenArea).ToList();
-
-            // Nhóm nhân viên theo loại công việc
-            var approvedStaffList = workingSlotRegisters.Where(x => x.Staff.StaffType == StaffTypeEnum.Staff).ToList();
-            var approvedChefList = workingSlotRegisters.Where(x => x.Staff.StaffType == StaffTypeEnum.Cheff).ToList();
+            if (startDate.DayOfWeek != DayOfWeek.Monday) throw new BusinessException(BussinessErrorConstants.DayErrorConstant.INVALID_START_DATE);
 
             var staffZoneSchedules = new List<StaffZoneSchedule>();
+            var assignedZones = new Dictionary<Guid, Guid>();
+            var zoneCapacity = new Dictionary<Guid, int>();
 
-            // Lấy danh sách tất cả các ca trong ngày
-            var workingSlots = await _workingSlotRepository.GetListAsTracking().OrderBy(x => x.ShiftStart).ToListAsync();
-            foreach (var slot in workingSlots)
+            for (int i = 0; i < 7; i++)
             {
-                var previousAssignments = staffZoneSchedules
-                    .Where(x => x.WorkingDate == workingDate && x.WorkingSlotId != slot.Id)
-                    .GroupBy(x => x.StaffId)
-                    .ToDictionary(g => g.Key, g => g.OrderByDescending(s => s.WorkingSlotId).First().ZoneId);
+                var workingDate = startDate.AddDays(i);
+                var workingSlots = await _workingSlotRepository.GetListAsTracking().OrderBy(x => x.ShiftStart).ToListAsync();
+                if (!workingSlots.Any()) continue;
 
-                var partTimeStaffsInSlot = approvedStaffList.Where(x => x.WorkingSlotId == slot.Id).Select(x => x.Staff).ToList();
-                var chefsInSlot = approvedChefList.Where(x => x.WorkingSlotId == slot.Id).Select(x => x.Staff).ToList();
+                var zones = await _zoneRepository.GetListAsTracking().ToListAsync();
+                if (!zones.Any()) throw new BusinessException(BussinessErrorConstants.ZoneErrorConstant.ZONE_NOT_FOUND);
 
-                var fullTimeStaffsInSlot = fullTimeStaffs.Where(x => !staffZoneSchedules.Any(y => y.StaffId == x.Id)).ToList();
+                var diningAreas = zones.Where(x => x.Type == ZoneTypeEnum.DininingArea).ToList();
+                var kitchenAreas = zones.Where(x => x.Type == ZoneTypeEnum.KitchenArea).ToList();
 
-                // Phân công khu vực cho nhân viên phục vụ
-                AssignZones(partTimeStaffsInSlot.Concat(fullTimeStaffsInSlot).ToList(), diningAreas, staffZoneSchedules, workingDate, slot.Id, previousAssignments);
+                var fullTimeStaffs = await _staffRepository.GetListAsTracking(x => x.Status == StaffStatusEnum.FullTime).ToListAsync();
+                var partTimeRegistrations = await _workingSlotRegisterRepository.GetListAsTracking(
+                    x => x.WorkingDate == workingDate && x.Status == WorkingSlotRegisterStatusEnum.Approved)
+                    .Include(x => x.Staff)
+                    .Include(x => x.WorkingSlot)
+                    .ToListAsync();
 
-                // Phân công khu vực cho bếp trưởng
-                AssignZones(chefsInSlot.Concat(fullTimeStaffs.Where(x => x.StaffType == StaffTypeEnum.Cheff)).ToList(), kitchenAreas, staffZoneSchedules, workingDate, slot.Id, previousAssignments);
+                AssignFullTimeZones(fullTimeStaffs, diningAreas, kitchenAreas, assignedZones, zoneCapacity, staffZoneSchedules, workingDate);
+
+                foreach (var slot in workingSlots)
+                {
+                    AssignZones(partTimeRegistrations.Where(x => x.WorkingSlotId == slot.Id).Select(x => x.Staff).ToList(),
+                        diningAreas, kitchenAreas, staffZoneSchedules, assignedZones, zoneCapacity, workingDate, slot.Id);
+                }
+            }
+            _staffZoneScheduleRepository.AddRange(staffZoneSchedules);
+
+            foreach (var schedule in staffZoneSchedules)
+            {
+                var workingSlotRegister = await _workingSlotRegisterRepository.GetSingleAsync(
+                    x => x.StaffId == schedule.StaffId
+                      && x.WorkingDate == schedule.WorkingDate
+                      && x.WorkingSlotId == schedule.WorkingSlotId);
+
+                if (workingSlotRegister != null)
+                {
+                    workingSlotRegister.ZoneId = schedule.ZoneId;
+                }
             }
 
-            _staffZoneScheduleRepository.AddRange(staffZoneSchedules);
             await _unitOfWork.SaveChangeAsync();
+        }
+
+        private void AssignFullTimeZones(
+            List<Staff> fullTimeStaffs,
+            List<Zone> diningAreas,
+            List<Zone> kitchenAreas,
+            Dictionary<Guid, Guid> assignedZones,
+            Dictionary<Guid, int> zoneCapacity,
+            List<StaffZoneSchedule> staffZoneSchedules,
+            DateOnly workingDate)
+        {
+            int diningIndex = 0, kitchenIndex = 0;
+
+            foreach (var staff in fullTimeStaffs)
+            {
+                if (!assignedZones.ContainsKey(staff.Id))
+                {
+                    Guid assignedZoneId;
+                    if (staff.StaffType == StaffTypeEnum.Cheff)
+                    {
+                        assignedZoneId = kitchenAreas[kitchenIndex % kitchenAreas.Count].Id;
+                        kitchenIndex++;
+                    }
+                    else
+                    {
+                        assignedZoneId = diningAreas[diningIndex % diningAreas.Count].Id;
+                        diningIndex++;
+                    }
+                    assignedZones[staff.Id] = assignedZoneId;
+                    zoneCapacity[assignedZoneId] = zoneCapacity.GetValueOrDefault(assignedZoneId, 0) + 1;
+                }
+
+                if (!staffZoneSchedules.Any(s => s.StaffId == staff.Id && s.WorkingDate == workingDate))
+                {
+                    staffZoneSchedules.Add(new StaffZoneSchedule(
+                    id: Guid.NewGuid(),
+                    staffName: staff.FullName,
+                    zoneName: (staff.StaffType == StaffTypeEnum.Cheff ? kitchenAreas : diningAreas)
+                        .First(x => x.Id == assignedZones[staff.Id]).Name,
+                    workingDate: workingDate,
+                    staffId: staff.Id,
+                    zoneId: assignedZones[staff.Id],
+                    workingSlotId: null));
+                }
+            }
         }
 
         private void AssignZones(
             List<Staff> staffList,
-            List<Zone> availableZones,
+            List<Zone> diningAreas,
+            List<Zone> kitchenAreas,
             List<StaffZoneSchedule> staffZoneSchedules,
+            Dictionary<Guid, Guid> assignedZones,
+            Dictionary<Guid, int> zoneCapacity,
             DateOnly workingDate,
-            Guid workingSlotId,
-            Dictionary<Guid, Guid> previousAssignments)
+            Guid workingSlotId)
         {
             foreach (var staff in staffList)
             {
-                Guid assignedZoneId;
-
-                if (previousAssignments.TryGetValue(staff.Id, out assignedZoneId) && availableZones.Any(z => z.Id == assignedZoneId))
+                if (!assignedZones.ContainsKey(staff.Id))
                 {
-                    // Giữ nguyên khu vực từ ca trước nếu còn tồn tại
+                    Guid assignedZoneId;
+                    if (!kitchenAreas.Any() && staff.StaffType == StaffTypeEnum.Cheff)
+                        throw new BusinessException(BussinessErrorConstants.ZoneErrorConstant.KITCHEN_ZONE_NOT_FOUND);
+
+                    if (!diningAreas.Any() && staff.StaffType != StaffTypeEnum.Cheff)
+                        throw new BusinessException(BussinessErrorConstants.ZoneErrorConstant.DINING_ZONE_NOT_FOUND);
+
+                    if (staff.StaffType == StaffTypeEnum.Cheff)
+                    {
+                        assignedZoneId = kitchenAreas.OrderBy(x => zoneCapacity.GetValueOrDefault(x.Id, 0)).First().Id;
+                    }
+                    else
+                    {
+                        assignedZoneId = diningAreas.OrderBy(x => zoneCapacity.GetValueOrDefault(x.Id, 0)).First().Id;
+                    }
+                    assignedZones[staff.Id] = assignedZoneId;
+                    zoneCapacity[assignedZoneId] = zoneCapacity.GetValueOrDefault(assignedZoneId, 0) + 1;
                 }
-                else
+
+                if (!staffZoneSchedules.Any(s => s.StaffId == staff.Id && s.WorkingDate == workingDate && s.WorkingSlotId == workingSlotId))
                 {
-                    assignedZoneId = availableZones.OrderBy(z => staffZoneSchedules.Count(s => s.ZoneId == z.Id)).FirstOrDefault()?.Id ?? Guid.Empty;
-                }
-
-                if (assignedZoneId == Guid.Empty) continue;
-
-                staffZoneSchedules.Add(new StaffZoneSchedule(
-                    Guid.NewGuid(),
-                    staff.FullName,
-                    availableZones.First(z => z.Id == assignedZoneId).Name,
-                    workingDate,
-                    staff.Id,
-                    assignedZoneId,
+                    staffZoneSchedules.Add(new StaffZoneSchedule(
+                    id: Guid.NewGuid(),
+                    staffName: staff.FullName,
+                    zoneName: (staff.StaffType == StaffTypeEnum.Cheff ? kitchenAreas : diningAreas).First(x => x.Id == assignedZones[staff.Id]).Name,
+                    workingDate: workingDate,
+                    staffId: staff.Id,
+                    zoneId: assignedZones[staff.Id],
                     workingSlotId));
+                }
             }
         }
 

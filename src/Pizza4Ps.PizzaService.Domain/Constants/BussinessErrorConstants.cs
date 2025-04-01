@@ -63,6 +63,7 @@
         {
             public const string DAY_NOT_FOUND = "Không tìm thấy ngày trong tuần";
             public const string INVALID_DAY_OF_WEEK = "Ngày trong tuần không hợp lệ";
+            public const string INVALID_START_DATE = "Ngày bắt đầu phải là ngày Thứ hai";
         }
 
         public class StaffScheduleErrorConstant
@@ -215,6 +216,8 @@
             public const string ZONE_EXISTED = "Tên khu vực đã tồn tại";
             public const string ZONE_NOT_FOUND = "Không tìm thấy khu vực";
             public const string INVALID_ZONE_TYPE= "Khu vực không hợp lệ";
+            public const string KITCHEN_ZONE_NOT_FOUND = "Không có khu vực bếp nào để gán đầu bếp";
+            public const string DINING_ZONE_NOT_FOUND = "Không có khu vực ăn nào để gán nhân viên phục vụ";
         }
     }
 }

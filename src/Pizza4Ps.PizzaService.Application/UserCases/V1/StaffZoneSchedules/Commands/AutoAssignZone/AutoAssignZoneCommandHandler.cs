@@ -17,7 +17,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.StaffZoneSchedules.Comm
 
         public async Task Handle(AutoAssignZoneCommand request, CancellationToken cancellationToken)
         {
-            await _StaffZoneScheduleService.AutoAssignZoneAsync(request.WorkingDate);
+            await _StaffZoneScheduleService.AutoAssignZoneForWeekAsync(request.WorkingDate);
         }
     }
 }
