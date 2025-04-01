@@ -10,16 +10,18 @@ namespace Pizza4Ps.PizzaService.API.Setup
     {
         public static IServiceCollection ServiceRegisteryMethod(this IServiceCollection services)
         {
-            // Configure CORS to allow everything
             services.AddCors(options =>
             {
-                options.AddPolicy("AllowAll", policy =>
-                {
-                    policy.AllowAnyOrigin()
-                          .AllowAnyMethod()
-                          .AllowAnyHeader();
-                });
+                options.AddPolicy("AllowAllOrigins",
+                    builder =>
+                    {
+                        builder.SetIsOriginAllowed(_ => true) // Cho phép tất cả các origin
+                               .AllowCredentials() // Hỗ trợ credentials (cookies, tokens, etc.)
+                               .AllowAnyMethod()
+                               .AllowAnyHeader();
+                    });
             });
+
             // Add HttpContextAccessor
             services.AddHttpContextAccessor();
 
