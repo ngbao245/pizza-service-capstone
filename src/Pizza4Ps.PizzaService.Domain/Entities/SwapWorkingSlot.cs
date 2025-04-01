@@ -37,7 +37,7 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
             EmployeeFromName = employeeFromName;
             EmployeeFromId = employeeFromId;
             WorkingSlotFromId = workingSlotFromId;
-            WorkingSlotToId = workingSlotToId;
+            WorkingDateTo = workingDateTo;
             EmployeeToName = employeeToName;
             EmployeeToId = employeeToId;
             WorkingSlotToId = workingSlotToId;

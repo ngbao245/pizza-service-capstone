@@ -5,7 +5,7 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
 {
     public class Notification : EntityAuditBase<Guid>
     {
-        public int Id { get; set; }
+        //public int Id { get; set; }
         public NotificationType Type { get; set; }
         public string Title { get; set; }       // Tiêu đề thông báo
         public string Message { get; set; }     // Nội dung thông báo
