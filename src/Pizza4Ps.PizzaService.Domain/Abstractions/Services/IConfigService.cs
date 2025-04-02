@@ -5,6 +5,6 @@ namespace Pizza4Ps.PizzaService.Domain.Abstractions.Services
 {
     public interface IConfigService : IDomainService
     {
-        Task<Guid> UpdateValueAsync(Guid id, string value);
+        Task<Guid> UpdateAsync(Guid id, ConfigType configType, string key, string value);
     }
 }

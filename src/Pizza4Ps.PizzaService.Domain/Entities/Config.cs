@@ -27,10 +27,5 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
             Key = key;
             Value = value;
         }
-
-        public void UpdateValue(string value)
-        {
-            Value = value;
-        }
     }
 }
