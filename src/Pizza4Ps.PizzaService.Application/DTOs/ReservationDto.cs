@@ -9,6 +9,8 @@
         public string CustomerName { get; set; }
         public string Status { get; set; }
         public Guid? CustomerId { get; set; }
+        public Guid? TableId { get; set; }
+
 
         // Relations
         public virtual CustomerDto Customer { get; set; }
