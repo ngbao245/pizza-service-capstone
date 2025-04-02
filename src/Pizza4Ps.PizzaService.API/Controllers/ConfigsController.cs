@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Pizza4Ps.PizzaService.API.Constants;
 using Pizza4Ps.PizzaService.API.Models;
@@ -21,13 +22,13 @@ namespace Pizza4Ps.PizzaService.API.Controllers
             _sender = sender;
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAsync([FromRoute] Guid id, [FromBody] UpdateConfigCommand request)
+        [HttpPut("update-value")]
+        public async Task<IActionResult> UpdateAsync([FromForm] UpdateConfigCommand request)
         {
-            request.Id = id;
-            await _sender.Send(request);
+            var result = await _sender.Send(request);
             return Ok(new ApiResponse
             {
+                Result = result,
                 Success = true,
                 Message = Message.UPDATED_SUCCESS,
                 StatusCode = StatusCodes.Status200OK
