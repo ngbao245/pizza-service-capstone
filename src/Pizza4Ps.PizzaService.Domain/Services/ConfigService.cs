@@ -2,7 +2,8 @@
 using Pizza4Ps.PizzaService.Domain.Abstractions;
 using Pizza4Ps.PizzaService.Domain.Abstractions.Services;
 using Pizza4Ps.PizzaService.Domain.Services.ServiceBase;
-using Pizza4Ps.PizzaService.Domain.Enums;
+using Pizza4Ps.PizzaService.Domain.Exceptions;
+using Pizza4Ps.PizzaService.Domain.Constants;
 
 namespace Pizza4Ps.PizzaService.Domain.Services
 {
@@ -17,10 +18,11 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             _configRepository = configRepository;
         }
 
-        public async Task<Guid> UpdateAsync(Guid id, ConfigType configType, string key, string value)
+        public async Task<Guid> UpdateValueAsync(Guid id, string value)
         {
             var entity = await _configRepository.GetSingleByIdAsync(id);
-            entity.UpdateConfig(configType, key, value);
+            if (entity == null) throw new BusinessException(BussinessErrorConstants.ConfigErrorConstant.CONFIG_NOT_FOUND);
+            entity.UpdateValue(value);
             await _unitOfWork.SaveChangeAsync();
             return entity.Id;
         }
