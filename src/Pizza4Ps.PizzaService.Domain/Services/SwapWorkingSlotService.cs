@@ -125,15 +125,19 @@ namespace Pizza4Ps.PizzaService.Domain.Services
                 throw new BusinessException(BussinessErrorConstants.WorkingSlotRegisterErrorConstant.WORKING_SLOT_REGISTER_NOT_FOUND);
             }
 
-            //swap shift and workingDate
+            // Swap shift, working date and StaffId
             var tempWorkingSlotId = workingSlotRegisterFrom.WorkingSlotId;
             var tempWorkingDate = workingSlotRegisterFrom.WorkingDate;
+            var tempStaffId = workingSlotRegisterFrom.StaffId;
 
+            // Perform the swap
             workingSlotRegisterFrom.WorkingSlotId = workingSlotRegisterTo.WorkingSlotId;
             workingSlotRegisterFrom.WorkingDate = workingSlotRegisterTo.WorkingDate;
+            workingSlotRegisterFrom.StaffId = entity.EmployeeToId;
 
             workingSlotRegisterTo.WorkingSlotId = tempWorkingSlotId;
             workingSlotRegisterTo.WorkingDate = tempWorkingDate;
+            workingSlotRegisterTo.StaffId = entity.EmployeeFromId;
 
             _workingSlotRegisterRepository.Update(workingSlotRegisterFrom);
             _workingSlotRegisterRepository.Update(workingSlotRegisterTo);
@@ -148,18 +152,20 @@ namespace Pizza4Ps.PizzaService.Domain.Services
                      && x.WorkingSlotId == entity.WorkingSlotToId
                      && x.WorkingDate == entity.WorkingDateTo);
 
-            if (staffZoneScheduleFrom != null && staffZoneScheduleTo != null)
+            if (staffZoneScheduleFrom == null || staffZoneScheduleTo == null)
             {
-                var tempZoneId = staffZoneScheduleFrom.ZoneId;
-                staffZoneScheduleFrom.ZoneId = staffZoneScheduleTo.ZoneId;
-                staffZoneScheduleTo.ZoneId = tempZoneId;
-
-                staffZoneScheduleFrom.WorkingDate = workingSlotRegisterFrom.WorkingDate;
-                staffZoneScheduleTo.WorkingDate = workingSlotRegisterTo.WorkingDate;
-
-                _staffZoneScheduleRepository.Update(staffZoneScheduleFrom);
-                _staffZoneScheduleRepository.Update(staffZoneScheduleTo);
+                throw new BusinessException(BussinessErrorConstants.StaffZoneScheduleErrorConstant.STAFF_ZONE_SCHEDULE_NOT_FOUND);
             }
+
+            var tempZoneId = staffZoneScheduleFrom.ZoneId;
+            staffZoneScheduleFrom.ZoneId = staffZoneScheduleTo.ZoneId;
+            staffZoneScheduleTo.ZoneId = tempZoneId;
+
+            staffZoneScheduleFrom.WorkingDate = workingSlotRegisterFrom.WorkingDate;
+            staffZoneScheduleTo.WorkingDate = workingSlotRegisterTo.WorkingDate;
+
+            _staffZoneScheduleRepository.Update(staffZoneScheduleFrom);
+            _staffZoneScheduleRepository.Update(staffZoneScheduleTo);
 
             var tempWorkingDateFrom = entity.WorkingDateFrom;
             entity.WorkingDateFrom = entity.WorkingDateTo;
