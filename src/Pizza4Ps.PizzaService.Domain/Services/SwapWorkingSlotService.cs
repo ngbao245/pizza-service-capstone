@@ -76,8 +76,8 @@ namespace Pizza4Ps.PizzaService.Domain.Services
 
             var earliestWorkingDate = workingDateFrom < workingDateTo ? workingDateFrom : workingDateTo;
             var startOfWeek = earliestWorkingDate.AddDays(-(int)earliestWorkingDate.DayOfWeek + (int)DayOfWeek.Monday);
-
-            if (today > startOfWeek.AddDays(-cutoffDays))
+            var deadlineForRequest = startOfWeek.AddDays(-cutoffDays);
+            if (today > deadlineForRequest)
             {
                 throw new BusinessException($"Đơn đổi ca phải được tạo trước ít nhất {cutoffDays} ngày so với thứ hai của tuần có ngày làm việc sớm nhất ({startOfWeek}). Hạn chót tạo đơn là {deadlineForRequest}.");
             }
