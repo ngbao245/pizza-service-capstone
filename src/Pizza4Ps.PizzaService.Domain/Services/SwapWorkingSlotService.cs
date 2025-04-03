@@ -70,7 +70,9 @@ namespace Pizza4Ps.PizzaService.Domain.Services
                 x => x.ConfigType == ConfigType.SWAP_WORKING_SLOT_CUTOFF_DAY);
             int cutoffDays = int.Parse(cutoffConfig.Value);
 
-            var today = DateOnly.FromDateTime(DateTime.Today);
+            var utcNow = DateTime.UtcNow;
+            var vietnamTime = TimeZoneInfo.ConvertTimeBySystemTimeZoneId(utcNow, "SE Asia Standard Time");
+            var today = DateOnly.FromDateTime(vietnamTime);
             var earliestWorkingDate = workingDateFrom < workingDateTo ? workingDateFrom : workingDateTo;
             var startOfWeek = earliestWorkingDate.AddDays(-(int)earliestWorkingDate.DayOfWeek + (int)DayOfWeek.Monday);
             if (earliestWorkingDate < today.AddDays(cutoffDays) || earliestWorkingDate < startOfWeek)

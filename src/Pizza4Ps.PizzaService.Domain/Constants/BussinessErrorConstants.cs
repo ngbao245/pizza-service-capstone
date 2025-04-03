@@ -11,7 +11,7 @@
         public class WorkingSlotRegisterErrorConstant
         {
             public const string INVALID_WORKING_SLOT_REGISTER_STATUS = "Trạng thái đăng ký ca làm việc không hợp lệ";
-            public const string WORKING_SLOT_REGISTER_NOT_FOUND = "Không tìm thấy đăng ký ca làm việc";
+            public const string WORKING_SLOT_REGISTER_NOT_FOUND = "Không tìm thấy đơn đăng ký ca làm việc";
             public const string WORKING_SLOT_REGISTER_ALREADY_APPROVED = "Đăng ký ca làm việc đã được chấp thuận";
             public const string WORKING_SLOT_REGISTER_ALREADY_REJECTED = "Đăng ký ca làm việc đã bị từ chối";
         }
