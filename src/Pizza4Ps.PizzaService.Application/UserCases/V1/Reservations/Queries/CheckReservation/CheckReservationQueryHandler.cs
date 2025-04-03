@@ -23,7 +23,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Reservations.Queries.Ch
         {
             var query = _reservationRepository.GetListAsNoTracking(
                 r => r.PhoneNumber == request.PhoneNumber && r.BookingStatus == ReservationStatusEnum.Created,
-                includeProperties: "Table");
+                includeProperties: "Table.Zone");
 
             var totalCount = await query.CountAsync();
 
