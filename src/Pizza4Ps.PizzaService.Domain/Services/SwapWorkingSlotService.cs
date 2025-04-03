@@ -73,11 +73,13 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             var utcNow = DateTime.UtcNow;
             var vietnamTime = TimeZoneInfo.ConvertTimeBySystemTimeZoneId(utcNow, "SE Asia Standard Time");
             var today = DateOnly.FromDateTime(vietnamTime);
+
             var earliestWorkingDate = workingDateFrom < workingDateTo ? workingDateFrom : workingDateTo;
             var startOfWeek = earliestWorkingDate.AddDays(-(int)earliestWorkingDate.DayOfWeek + (int)DayOfWeek.Monday);
-            if (earliestWorkingDate < today.AddDays(cutoffDays) || earliestWorkingDate < startOfWeek)
+
+            if (today > startOfWeek.AddDays(-cutoffDays))
             {
-                throw new BusinessException($"Đơn đổi ca phải được tạo trước ít nhất {cutoffDays} ngày và trước thứ hai đầu tuần");
+                throw new BusinessException($"Đơn đổi ca phải được tạo trước ít nhất {cutoffDays} ngày so với thứ hai của tuần có ngày làm việc sớm nhất ({startOfWeek}). Hạn chót tạo đơn là {deadlineForRequest}.");
             }
 
             var swapWorkingSlot = new SwapWorkingSlot(
