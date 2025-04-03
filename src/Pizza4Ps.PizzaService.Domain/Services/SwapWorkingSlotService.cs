@@ -109,9 +109,13 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             if (entity == null) throw new BusinessException(BussinessErrorConstants.SwapWorkingSlotErrorConstant.SWAP_WORKING_SLOT_NOT_FOUND);
 
             var workingSlotRegisterFrom = await _workingSlotRegisterRepository.GetSingleAsync(
-                x => x.StaffId == entity.EmployeeFromId && x.WorkingSlotId == entity.WorkingSlotFromId);
+                x => x.StaffId == entity.EmployeeFromId
+                     && x.WorkingSlotId == entity.WorkingSlotFromId
+                     && x.WorkingDate == entity.WorkingDateFrom);
             var workingSlotRegisterTo = await _workingSlotRegisterRepository.GetSingleAsync(
-                x => x.StaffId == entity.EmployeeToId && x.WorkingSlotId == entity.WorkingSlotToId);
+                x => x.StaffId == entity.EmployeeToId
+                     && x.WorkingSlotId == entity.WorkingSlotToId
+                     && x.WorkingDate == entity.WorkingDateTo);
 
             if (workingSlotRegisterFrom == null || workingSlotRegisterTo == null)
             {
@@ -133,9 +137,13 @@ namespace Pizza4Ps.PizzaService.Domain.Services
 
             //swap zone
             var staffZoneScheduleFrom = await _staffZoneScheduleRepository.GetSingleAsync(
-                x => x.StaffId == entity.EmployeeFromId && x.WorkingSlotId == entity.WorkingSlotFromId);
+                x => x.StaffId == entity.EmployeeFromId
+                     && x.WorkingSlotId == entity.WorkingSlotFromId
+                     && x.WorkingDate == entity.WorkingDateFrom);
             var staffZoneScheduleTo = await _staffZoneScheduleRepository.GetSingleAsync(
-                x => x.StaffId == entity.EmployeeToId && x.WorkingSlotId == entity.WorkingSlotToId);
+                x => x.StaffId == entity.EmployeeToId
+                     && x.WorkingSlotId == entity.WorkingSlotToId
+                     && x.WorkingDate == entity.WorkingDateTo);
 
             if (staffZoneScheduleFrom != null && staffZoneScheduleTo != null)
             {
