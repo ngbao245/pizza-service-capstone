@@ -5,6 +5,7 @@ using Pizza4Ps.PizzaService.API.Models;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.StaffZones.Commands.CreateStaffZone;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.StaffZones.Commands.DeleteStaffZone;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.StaffZones.Commands.RestoreStaffZone;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.StaffZones.Commands.SyncStaffZones;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.StaffZones.Commands.UpdateStaffZone;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.StaffZones.Queries.GetListStaffZone;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.StaffZones.Queries.GetListStaffZoneIgnoreQueryFilter;
@@ -33,6 +34,17 @@ namespace Pizza4Ps.PizzaService.API.Controllers
             return Ok(new ApiResponse
             {
                 Result = result,
+                Message = Message.CREATED_SUCCESS,
+                StatusCode = StatusCodes.Status201Created
+            });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SyncStaffZonesAsync([FromBody] SyncStaffZonesCommand request)
+        {
+            await _sender.Send(request);
+            return Ok(new ApiResponse
+            {
                 Message = Message.CREATED_SUCCESS,
                 StatusCode = StatusCodes.Status201Created
             });
