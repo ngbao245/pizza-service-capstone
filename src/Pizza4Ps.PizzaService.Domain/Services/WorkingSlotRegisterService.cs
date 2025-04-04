@@ -36,6 +36,11 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             var staff = await _staffRepository.GetSingleByIdAsync(staffId);
             if (staff == null) throw new BusinessException(BussinessErrorConstants.StaffErrorConstant.STAFF_NOT_FOUND);
 
+            if (staff.Status != StaffStatusEnum.PartTime)
+            {
+                throw new BusinessException(BussinessErrorConstants.WorkingSlotRegisterErrorConstant.INVALID_STAFF_STATUS);
+            }
+
             var existingRegistration = await _workingSlotRegisterRepository.GetSingleAsync(
                 x => x.StaffId == staffId && x.WorkingSlotId == workingSlotId && x.WorkingDate == workingDate);
             if (existingRegistration != null) throw new BusinessException(BussinessErrorConstants.WorkingSlotErrorConstant.ALREADY_REGISTERED);
@@ -47,9 +52,12 @@ namespace Pizza4Ps.PizzaService.Domain.Services
                 x => x.ConfigType == ConfigType.REGISTRATION_CUTOFF_DAY);
             int cutoffDays = int.Parse(cutoffConfig.Value);
 
+            var utcNow = DateTime.UtcNow;
+            var vietnamTime = TimeZoneInfo.ConvertTimeBySystemTimeZoneId(utcNow, "SE Asia Standard Time");
+
             DateOnly startOfWeek = workingDate.AddDays(-(int)workingDate.DayOfWeek + (int)DayOfWeek.Monday);
             DateOnly cutoffDate = startOfWeek.AddDays(-cutoffDays);
-            if (DateTime.UtcNow.Date > cutoffDate.ToDateTime(TimeOnly.MinValue))
+            if (vietnamTime > cutoffDate.ToDateTime(TimeOnly.MinValue))
             {
                 throw new BusinessException($"Hạn đăng ký đã kết thúc vào ngày {cutoffDate:yyyy-MM-dd}, bạn phải đăng ký trước ngày {cutoffDays}");
             }
@@ -64,7 +72,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
                 x => x.ConfigType == ConfigType.REGISTRATION_WEEK_LIMIT);
             int maxRegisterDays = int.Parse(maxRegisterDaysConfig.Value) * 7;
 
-            DateOnly startOfNextWeek = DateOnly.FromDateTime(DateTime.UtcNow.Date)
+            DateOnly startOfNextWeek = DateOnly.FromDateTime(vietnamTime.Date)
                 .AddDays(7 - (int)DateTime.UtcNow.DayOfWeek + (int)DayOfWeek.Monday);
             DateOnly maxRegisterDate = startOfNextWeek.AddDays(maxRegisterDays - 1);
             if (workingDate > maxRegisterDate)
@@ -72,16 +80,27 @@ namespace Pizza4Ps.PizzaService.Domain.Services
                 throw new BusinessException($"Bạn chỉ có thể đăng ký trước tối đa {maxRegisterDays} ngày từ ngày {startOfNextWeek:yyyy-MM-dd}. Hạn đăng ký cho ngày {workingDate:yyyy-MM-dd} đã vượt quá giới hạn.");
             }
 
+            var registeredSlotsInWeek = await _workingSlotRegisterRepository.CountAsync(
+                x => x.StaffId == staffId && x.WorkingDate >= startOfWeek && x.WorkingDate <= startOfWeek.AddDays(6));
+
+            var maxRegisterPerStaffConfig = await _configRepository.GetSingleAsync(
+                x => x.ConfigType == ConfigType.MAXIMUM_REGISTER_PER_STAFF);
+            int maxRegisterPerStaff = int.Parse(maxRegisterPerStaffConfig.Value);
+
+            var status = (registeredSlotsInWeek >= maxRegisterPerStaff)
+                ? WorkingSlotRegisterStatusEnum.Onhold
+                : WorkingSlotRegisterStatusEnum.Approved;
+
             var maxSlotsConfig = await _configRepository.GetSingleAsync(
                 x => x.ConfigType == ConfigType.MAXIMUM_REGISTER_SLOT);
             var maxSlots = int.Parse(maxSlotsConfig.Value);
 
-            var currentRegistrations = await _workingSlotRegisterRepository.CountAsync(x => x.WorkingSlotId == workingSlotId && x.WorkingDate == workingDate);
+            var currentRegistrations = await _workingSlotRegisterRepository.CountAsync(
+                x => x.WorkingSlotId == workingSlotId && x.WorkingDate == workingDate);
 
-            var status = WorkingSlotRegisterStatusEnum.Onhold;
-            if (currentRegistrations < maxSlots)
+            if (currentRegistrations >= maxSlots)
             {
-                status = WorkingSlotRegisterStatusEnum.Approved;
+                status = WorkingSlotRegisterStatusEnum.Onhold;
             }
 
             var workingSlotRegister = new WorkingSlotRegister(Guid.NewGuid(), staff.FullName, workingDate, DateTimeOffset.Now, status, staffId, workingSlotId);

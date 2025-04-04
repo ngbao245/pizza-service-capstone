@@ -6,6 +6,7 @@ using Pizza4Ps.PizzaService.Domain.Enums;
 using Pizza4Ps.PizzaService.Domain.Constants;
 using Pizza4Ps.PizzaService.Domain.Exceptions;
 using Pizza4Ps.PizzaService.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Pizza4Ps.PizzaService.Domain.Services
 {
@@ -37,6 +38,21 @@ namespace Pizza4Ps.PizzaService.Domain.Services
         public async Task<Guid> CreateAsync(DateOnly workingDateFrom, Guid employeeFromId, Guid workingSlotFromId,
                                             DateOnly workingDateTo, Guid employeeToId, Guid workingSlotToId)
         {
+            // Kiểm tra xem đã có đơn đổi ca tồn tại chưa
+            var existingSwapRequest = await _swapWorkingSlotRepository.GetSingleAsync(
+                    x => (x.EmployeeFromId == employeeFromId && x.EmployeeToId == employeeToId
+                    && x.WorkingDateFrom == workingDateFrom && x.WorkingDateTo == workingDateTo
+                    && x.WorkingSlotFromId == workingSlotFromId && x.WorkingSlotToId == workingSlotToId)
+                    || (x.EmployeeFromId == employeeToId && x.EmployeeToId == employeeFromId
+                    && x.WorkingDateFrom == workingDateTo && x.WorkingDateTo == workingDateFrom
+                    && x.WorkingSlotFromId == workingSlotToId && x.WorkingSlotToId == workingSlotFromId));
+
+            if (existingSwapRequest != null)
+            {
+                throw new BusinessException("Đã tồn tại đơn đổi ca cho cặp nhân viên và ca làm này.");
+            }
+
+            // Kiểm tra nhân viên có tồn tại hay không
             var employeeFrom = await _staffRepository.GetSingleByIdAsync(employeeFromId);
             var employeeTo = await _staffRepository.GetSingleByIdAsync(employeeToId);
             if (employeeFrom == null || employeeTo == null)
@@ -44,6 +60,38 @@ namespace Pizza4Ps.PizzaService.Domain.Services
                 throw new BusinessException(BussinessErrorConstants.StaffErrorConstant.STAFF_NOT_FOUND);
             }
 
+            // Kiểm tra trạng thái nhân viên phải là partTime không
+            if (employeeFrom.Status != StaffStatusEnum.PartTime || employeeTo.Status != StaffStatusEnum.PartTime)
+            {
+                throw new BusinessException(BussinessErrorConstants.SwapWorkingSlotErrorConstant.SWAP_WORKING_SLOT_INVALID_STAFF_STATUS);
+            }
+
+            // Nếu một nhân viên có WorkingSlotRegister và nhân viên kia có StaffZoneSchedule thì không thể đổi ca
+            var hasWorkingSlotRegisterFrom = await _workingSlotRegisterRepository.GetSingleAsync(
+                x => x.StaffId == employeeFromId
+                && x.WorkingDate == workingDateFrom
+                && x.WorkingSlotId == workingSlotFromId);
+            var hasStaffZoneScheduleFrom = await _staffZoneScheduleRepository.GetSingleAsync(
+                x => x.StaffId == employeeFromId
+                && x.WorkingDate == workingDateFrom
+                && x.WorkingSlotId == workingSlotFromId);
+
+            var hasWorkingSlotRegisterTo = await _workingSlotRegisterRepository.GetSingleAsync(
+                x => x.StaffId == employeeToId
+                && x.WorkingDate == workingDateTo
+                && x.WorkingSlotId == workingSlotToId);
+            var hasStaffZoneScheduleTo = await _staffZoneScheduleRepository.GetSingleAsync(
+                x => x.StaffId == employeeToId
+                && x.WorkingDate == workingDateTo
+                && x.WorkingSlotId == workingSlotToId);
+
+            if ((hasWorkingSlotRegisterFrom != null && hasStaffZoneScheduleTo != null) ||
+                (hasWorkingSlotRegisterTo != null && hasStaffZoneScheduleFrom != null))
+            {
+                throw new BusinessException("Không thể đổi ca giữa nhân viên có WorkingSlotRegister và nhân viên có StaffZoneSchedule.");
+            }
+
+            // Kiểm tra đơn đổi ca đã duyệt
             var workingSlotRegisterFrom = await _workingSlotRegisterRepository.GetSingleAsync(
               x => x.StaffId == employeeFromId
               && x.WorkingDate == workingDateFrom
@@ -61,11 +109,13 @@ namespace Pizza4Ps.PizzaService.Domain.Services
                 throw new BusinessException(BussinessErrorConstants.WorkingSlotRegisterErrorConstant.WORKING_SLOT_REGISTER_NOT_FOUND);
             }
 
+            // Kiểm tra có trùng ngày trung ca làm việc không
             if (workingDateFrom == workingDateTo && workingSlotFromId == workingSlotToId)
             {
                 throw new BusinessException(BussinessErrorConstants.SwapWorkingSlotErrorConstant.SWAP_WORKING_SLOT_INVALID_WORKING_DATE);
             }
 
+            // Kiểm tra thời gian tạo đơn đổi ca
             var cutoffConfig = await _configRepository.GetSingleAsync(
                 x => x.ConfigType == ConfigType.SWAP_WORKING_SLOT_CUTOFF_DAY);
             int cutoffDays = int.Parse(cutoffConfig.Value);
