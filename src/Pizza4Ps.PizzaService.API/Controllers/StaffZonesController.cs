@@ -39,7 +39,7 @@ namespace Pizza4Ps.PizzaService.API.Controllers
             });
         }
 
-        [HttpPost]
+        [HttpPost("sync-staff-zone")]
         public async Task<IActionResult> SyncStaffZonesAsync([FromBody] SyncStaffZonesCommand request)
         {
             await _sender.Send(request);
