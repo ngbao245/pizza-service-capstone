@@ -190,6 +190,7 @@
         public class StaffZoneErrorConstant
         {
             public const string STAFFZONE_NOT_FOUND = "Không tìm thấy nhân viên trong khu vực theo thời gian thực";
+            public const string STAFF_NOT_FOUND = "Không tìm thấy nhân viên theo thời gian thực";
         }
 
         public class TableErrorConstant

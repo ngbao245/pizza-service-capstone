@@ -16,12 +16,10 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.StaffZones.Commands.Upd
         {
             var result = await _StaffZoneService.UpdateAsync(
                 request.Id!.Value,
-                request.ShiftStart,
-                request.ShiftEnd,
                 request.Note,
                 request.StaffId,
                 request.ZoneId
-                );
+            );
         }
     }
 }

@@ -23,10 +23,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.StaffZones.Queries.GetL
         {
             var query = _StaffZoneRepository.GetListAsNoTracking(includeProperties: request.IncludeProperties).IgnoreQueryFilters()
                 .Where(
-                x => (request.ShiftStart == null || x.ShiftStart == request.ShiftStart)
-                && (request.ShiftEnd == null || x.ShiftEnd == request.ShiftEnd)
-                && (request.Note == null || x.Note == request.Note)
-                && (request.StaffId == null || x.StaffId == request.StaffId)
+                x => (request.StaffId == null || x.StaffId == request.StaffId)
                 && (request.ZoneId == null || x.ZoneId == request.ZoneId)
                 && x.IsDeleted == request.IsDeleted);
             var entities = await query
