@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Pizza4Ps.PizzaService.Domain.Abstractions;
 using Pizza4Ps.PizzaService.Domain.Abstractions.Repositories;
 using Pizza4Ps.PizzaService.Domain.Constants;
@@ -8,8 +7,6 @@ using Pizza4Ps.PizzaService.Domain.Entities;
 using Pizza4Ps.PizzaService.Domain.Entities.Identity;
 using Pizza4Ps.PizzaService.Domain.Enums;
 using Pizza4Ps.PizzaService.Domain.Exceptions;
-using Pizza4Ps.PizzaService.Persistence;
-using Pizza4Ps.PizzaService.Persistence.Repositories;
 using System.Transactions;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.AdminManagers.Commands.CreateStaffAccount
