@@ -44,6 +44,11 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
             IsVerifiedPhone = false;
         }
 
+        public Customer(string? phone)
+        {
+            Phone = phone;
+        }
+
         public Customer(string? fullName, string? phone,
             string? address, bool? gender, DateTime? dateOfBirth,
             string? email, Guid? appUserCustomerId)
@@ -63,6 +68,10 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         public void SetVerifiedCodeEmail(string verifiedCodeEmail)
         {
             VerifiedCodeEmail = verifiedCodeEmail;
+        }
+        public void SetVerifiedCodePhone(string phoneOtp)
+        {
+            PhoneOtp = phoneOtp;
         }
         public void SetIsVerifiedEmail()
         {
