@@ -21,6 +21,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Bookings.Commands.Creat
 			var result = await _bookingService.CreateAsync(
 				customerName: request.CustomerName,
 				phoneNumber: request.PhoneNumber,
+				phoneOtp: request.PhoneOtp,
 				bookingTime: request.BookingTime, 
 				numberOfPeople: request.NumberOfPeople);
 			return new ResultDto<Guid>

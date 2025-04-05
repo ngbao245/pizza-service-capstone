@@ -67,7 +67,8 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.WorkshopRegisters.Comma
             }
             var workshopCode = RegistrationCodeGenerator.GenerateCode();
             var workshopRegister = new WorkshopRegister(
-                customerId: customer.Id,
+                customerName: request.CustomerName,
+                customerPhone: request.PhoneNumber,
                 workshopId: request.WorkshopId,
                 registeredAt: DateTime.Now,
                 totalFee: workshop.TotalFee,

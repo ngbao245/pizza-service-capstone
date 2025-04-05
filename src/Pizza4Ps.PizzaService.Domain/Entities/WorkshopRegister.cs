@@ -6,9 +6,9 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
 {
     public class WorkshopRegister : EntityAuditBase<Guid>
     {
-        public Guid CustomerId { get; set; }
+        public string CustomerPhone { get; set; }
 
-        public Customer Customer { get; set; }
+        public string CustomerName { get; set; }
 
         public Guid WorkshopId { get; set; }
 
@@ -41,10 +41,11 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
             
         }
 
-        public WorkshopRegister(Guid customerId, Guid workshopId, DateTime registeredAt, int totalParticipant, string code, decimal totalFee)
+        public WorkshopRegister(string customerName, string customerPhone, Guid workshopId, DateTime registeredAt, int totalParticipant, string code, decimal totalFee)
         {
             Id = Guid.NewGuid();
-            CustomerId = customerId;
+            CustomerName = customerName;
+            CustomerPhone = customerPhone;
             Code = code;
             WorkshopId = workshopId;
             RegisteredAt = registeredAt;

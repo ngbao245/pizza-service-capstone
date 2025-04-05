@@ -5,7 +5,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.WorkshopRegisters.Queri
 {
     public class GetWorkshopRegisterListQuery : PaginatedQuery<PaginatedResultDto<WorkshopRegisterDto>>
     {
-        public Guid? CustomerId { get; set; }
+        public string? PhoneNumber{ get; set; }
         public Guid? WorkshopId { get; set; }
     }
 }

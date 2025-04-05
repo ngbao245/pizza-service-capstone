@@ -5,6 +5,8 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.WorkshopRegisters.Comma
 {
     public class CreateWorkshopRegisterCommand : IRequest<ResultDto<Guid>>
     {
+        public string CustomerName { get; set; }
+
         public string PhoneNumber{ get; set; }
 
         public string PhoneOtp { get; set; }

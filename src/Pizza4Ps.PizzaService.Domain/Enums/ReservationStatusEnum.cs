@@ -2,9 +2,9 @@
 {
     public enum ReservationStatusEnum
     {
-        Cancelled,
-        //Confirmed,
         Created,
-        Checkedin
+        Confirmed,
+        Checkedin,
+        Cancelled,
     }
 }
