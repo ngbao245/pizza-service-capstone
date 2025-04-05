@@ -10,6 +10,7 @@ using Pizza4Ps.PizzaService.Application.UserCases.V1.Bookings.Queries.GetBooking
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Bookings.Queries.GetListBooking;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Bookings.Queries.GetListBookingIgnoreQueryFilter;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Reservations.Commands.AssignTableReservation;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Reservations.Commands.CancelReservation;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Reservations.Commands.CheckInReservation;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Reservations.Queries.CheckReservation;
 
@@ -177,5 +178,20 @@ namespace Pizza4Ps.PizzaService.API.Controllers
                 StatusCode = 200
             });
         }
+
+        [HttpPut("cancel/{id}")]
+        public async Task<IActionResult> CancelAsync([FromRoute] Guid id)
+        {
+            await _sender.Send(new CancelReservationCommand { ReservationId = id });
+
+            return Ok(new ApiResponse
+            {
+                Success = true,
+                Message = Message.UPDATED_SUCCESS,
+                StatusCode = StatusCodes.Status200OK
+            });
+        }
+
+
     }
 }

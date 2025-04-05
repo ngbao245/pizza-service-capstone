@@ -19,7 +19,16 @@ namespace Pizza4Ps.PizzaService.API.Controllers
             _sender = sender;
         }
 
-        [HttpPost]
+        /// <summary>
+        ///
+        ///  "startTime": "08:00:00",
+        ///  "endTime": "18:00:00",
+        ///  "capacity": 10
+        ///
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+    [HttpPost]
         public async Task<IActionResult> CreateAsync([FromBody] CreateReservationSlotCommand request)
         {
             var result = await _sender.Send(request);
