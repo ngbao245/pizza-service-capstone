@@ -105,10 +105,9 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.WorkshopRegisters.Comma
                 workshopPizzaRegisters.Add(workshopPizzaRegister);
             }
             await _workshopRegisterService.RegisterAsync(workshopRegister, workshopPizzaRegisters, workshopPizzaRegisterDetails);
-            if (customer.Email != null)
-            {
-                await _emailService.SendWorkshopEmail(customer.Email, customer.FullName ?? "Quý khách", workshop.Name, workshopRegister.Code);
-            }
+
+            await _emailService.SendWorkshopEmail(request.Email, customer.FullName ?? "Quý khách", workshop.Name, workshopRegister.Code);
+
             return new ResultDto<Guid>()
             {
                 Id = workshopRegister.Id,
