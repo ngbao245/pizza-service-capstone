@@ -15,6 +15,10 @@ namespace Pizza4Ps.PizzaService.Persistence.Configurations
 			builder.HasOne(x => x.AppUserCustomer)
 				.WithOne(o => o.Customer)
 				.HasForeignKey<Customer>(x => x.AppUserCustomerId);
+
+            builder
+                .HasIndex(x => x.Phone)
+                .IsUnique(); // Đánh unique index
         }
 	}
 }

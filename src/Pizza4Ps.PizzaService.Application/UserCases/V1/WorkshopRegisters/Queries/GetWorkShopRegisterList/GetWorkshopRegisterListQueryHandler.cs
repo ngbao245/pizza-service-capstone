@@ -24,7 +24,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.WorkshopRegisters.Queri
         public async Task<PaginatedResultDto<WorkshopRegisterDto>> Handle(GetWorkshopRegisterListQuery request, CancellationToken cancellationToken)
         {
             var query = _workshopRegisterRepository.GetListAsNoTracking(
-                x => (request.CustomerId == null || x.CustomerId == request.CustomerId)
+                x => (request.PhoneNumber == null || x.CustomerPhone == request.PhoneNumber)
                 && (request.WorkshopId == null || x.WorkshopId == request.WorkshopId),
                 includeProperties: request.IncludeProperties);
             var entities = await query

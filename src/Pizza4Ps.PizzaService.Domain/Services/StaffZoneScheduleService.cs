@@ -7,7 +7,6 @@ using Pizza4Ps.PizzaService.Domain.Services.ServiceBase;
 using Pizza4Ps.PizzaService.Domain.Abstractions.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Pizza4Ps.PizzaService.Domain.Enums;
-using System.Xml.Linq;
 
 namespace Pizza4Ps.PizzaService.Domain.Services
 {
@@ -74,6 +73,22 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             var assignedZones = new Dictionary<Guid, Guid>();
             var zoneCapacity = new Dictionary<Guid, int>();
 
+            //check duplicate
+            var endDate = startDate.AddDays(7);
+            var oldSchedules = await _staffZoneScheduleRepository
+                .GetListAsTracking(x => x.WorkingDate >= startDate && x.WorkingDate < endDate)
+                .ToListAsync();
+
+            if (oldSchedules.Any())
+            {
+                foreach (var oldSchedule in oldSchedules)
+                {
+                    _staffZoneScheduleRepository.SoftDelete(oldSchedule);
+                }
+            }
+
+            //
+
             for (int i = 0; i < 7; i++)
             {
                 var workingDate = startDate.AddDays(i);
@@ -132,6 +147,8 @@ namespace Pizza4Ps.PizzaService.Domain.Services
 
             foreach (var staff in fullTimeStaffs)
             {
+                if (staff.StaffType == StaffTypeEnum.Manager) continue;
+
                 if (!assignedZones.ContainsKey(staff.Id))
                 {
                     Guid assignedZoneId;
@@ -176,6 +193,8 @@ namespace Pizza4Ps.PizzaService.Domain.Services
         {
             foreach (var staff in staffList)
             {
+                if (staff.StaffType == StaffTypeEnum.Manager) continue;
+
                 if (!assignedZones.ContainsKey(staff.Id))
                 {
                     Guid assignedZoneId;

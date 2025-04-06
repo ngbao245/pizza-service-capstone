@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Pizza4Ps.PizzaService.API.Constants;
 using Pizza4Ps.PizzaService.API.Models;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.OrderItems.Commands.ApproveCookOrderItem;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.OrderItems.Commands.CreateOrderItem;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.OrderItems.Commands.DeleteOrderItem;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.OrderItems.Commands.RestoreOrderItem;
@@ -107,7 +108,21 @@ namespace Pizza4Ps.PizzaService.API.Controllers
                 StatusCode = StatusCodes.Status200OK
             });
         }
+        [HttpPut("cooking/{id}")]
+        public async Task<IActionResult> ApproveToCookingAsync([FromRoute] Guid id)
+        {
+            await _sender.Send(new ApproveCookOrderItemCommand
+            {
+                Id = id
+            });
 
+            return Ok(new ApiResponse
+            {
+                Success = true,
+                Message = Message.UPDATED_SUCCESS,
+                StatusCode = StatusCodes.Status200OK
+            });
+        }
         [HttpPut("done/{id}")]
         public async Task<IActionResult> DoneAsync([FromRoute] Guid id)
         {

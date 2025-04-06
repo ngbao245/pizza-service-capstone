@@ -43,11 +43,14 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.WorkshopRegisters.Comma
         }
         public async Task<ResultDto<Guid>> Handle(CreateWorkshopRegisterCommand request, CancellationToken cancellationToken)
         {
-            var customerId = HttpContextHelper.GetCustomerId(_httpContextAccessor.HttpContext);
-            var customer = await _customerRepository.GetSingleAsync(x => x.Id == customerId);
+            var customer = await _customerRepository.GetSingleAsync(x => x.Phone == request.PhoneNumber);
             if (customer == null)
             {
                 throw new BusinessException("Customer is not found");
+            }
+            if (customer.PhoneOtp != request.PhoneOtp)
+            {
+                throw new BusinessException("Phone OTP is not valid");
             }
             var workshop = await _workshopRepository.GetSingleByIdAsync(request.WorkshopId);
             if (workshop == null)
@@ -64,7 +67,8 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.WorkshopRegisters.Comma
             }
             var workshopCode = RegistrationCodeGenerator.GenerateCode();
             var workshopRegister = new WorkshopRegister(
-                customerId: customerId!.Value,
+                customerName: request.CustomerName,
+                customerPhone: request.PhoneNumber,
                 workshopId: request.WorkshopId,
                 registeredAt: DateTime.Now,
                 totalFee: workshop.TotalFee,
@@ -102,10 +106,9 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.WorkshopRegisters.Comma
                 workshopPizzaRegisters.Add(workshopPizzaRegister);
             }
             await _workshopRegisterService.RegisterAsync(workshopRegister, workshopPizzaRegisters, workshopPizzaRegisterDetails);
-            if (customer.Email != null)
-            {
-                await _emailService.SendWorkshopEmail(customer.Email, customer.FullName ?? "Quý khách", workshop.Name, workshopRegister.Code);
-            }
+
+            await _emailService.SendWorkshopEmail(request.Email, customer.FullName ?? "Quý khách", workshop.Name, workshopRegister.Code);
+
             return new ResultDto<Guid>()
             {
                 Id = workshopRegister.Id,

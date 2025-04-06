@@ -29,28 +29,35 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             _tableRepository = tableRepository;
         }
 
-        public async Task<Guid> CreateAsync(string customerName, string phoneNumber, DateTime bookingTime, int numberOfPeople)
+        public async Task<Guid> CreateAsync(string customerName, string phoneNumber, string phoneOtp, DateTime bookingTime, int numberOfPeople)
         {
-            var slot = await _bookingSlotRepository.GetListAsNoTracking(x
-                => x.StartTime <= bookingTime.TimeOfDay && x.EndTime > bookingTime.TimeOfDay).FirstOrDefaultAsync();
-            if (slot == null) throw new BusinessException(BussinessErrorConstants.BookingSlotErrorConstant.BOOKING_SLOT_NOT_FOUND);
-            // Lấy các booking đã được đặt cho slot đó trong ngày
-            var existingBookings = await _bookingRepository.GetListAsNoTracking(x
-                => x.BookingTime.Date == bookingTime.Date &&
-                    x.BookingTime.TimeOfDay >= slot.StartTime &&
-                    x.BookingTime.TimeOfDay < slot.EndTime &&
-                    x.BookingStatus == ReservationStatusEnum.Created).ToListAsync();
+            //var slot = await _bookingSlotRepository.GetListAsNoTracking(x
+            //    => x.StartTime <= bookingTime.TimeOfDay && x.EndTime > bookingTime.TimeOfDay).FirstOrDefaultAsync();
+            //if (slot == null) throw new BusinessException(BussinessErrorConstants.BookingSlotErrorConstant.BOOKING_SLOT_NOT_FOUND);
+            //// Lấy các booking đã được đặt cho slot đó trong ngày
+            //var existingBookings = await _bookingRepository.GetListAsNoTracking(x
+            //    => x.BookingTime.Date == bookingTime.Date &&
+            //        x.BookingTime.TimeOfDay >= slot.StartTime &&
+            //        x.BookingTime.TimeOfDay < slot.EndTime &&
+            //        x.BookingStatus == ReservationStatusEnum.Created).ToListAsync();
 
-            // Chỉ lấy các booking có BookingTime thuộc slot của cùng ngày
-            int total = existingBookings.Sum(b => b.NumberOfPeople);
-            if (total + numberOfPeople > slot.Capacity) throw new BusinessException(BussinessErrorConstants.BookingErrorConstant.BOOKING_SLOT_FULL);
-            // Nếu hợp lệ, tạo booking
+            //// Chỉ lấy các booking có BookingTime thuộc slot của cùng ngày
+            //int total = existingBookings.Sum(b => b.NumberOfPeople);
+            //if (total + numberOfPeople > slot.Capacity) throw new BusinessException(BussinessErrorConstants.BookingErrorConstant.BOOKING_SLOT_FULL);
+            //// Nếu hợp lệ, tạo booking
+
+
+
             var customer = await _customerRepository.GetSingleAsync(x => x.Phone == phoneNumber);
 
             if (customer == null)
             {
                 customer = new Customer(Guid.NewGuid(), customerName, phoneNumber);
                 _customerRepository.Add(customer);
+            }
+            if (customer.PhoneOtp != phoneOtp)
+            {
+                throw new BusinessException("Phone OTP is not valid");
             }
 
             var booking = new Reservation(
@@ -147,6 +154,29 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             _tableRepository.Update(existingTable);
             await _unitOfWork.SaveChangeAsync();
             return true;
+        }
+
+        public async Task ConfirmAsync(Guid reservationId)
+        {
+            var existingReservation = await _bookingRepository.GetSingleByIdAsync(reservationId);
+            if (existingReservation == null)
+            {
+                throw new BusinessException(BussinessErrorConstants.TableErrorConstant.TABLE_NOT_FOUND);
+            }
+            existingReservation.Confirm();
+            _bookingRepository.Update(existingReservation);
+            await _unitOfWork.SaveChangeAsync();
+        }
+        public async Task CancelAsync(Guid reservationId)
+        {
+            var existingReservation = await _bookingRepository.GetSingleByIdAsync(reservationId);
+            if (existingReservation == null)
+            {
+                throw new BusinessException(BussinessErrorConstants.TableErrorConstant.TABLE_NOT_FOUND);
+            }
+            existingReservation.Cancel();
+            _bookingRepository.Update(existingReservation);
+            await _unitOfWork.SaveChangeAsync();
         }
     }
 }

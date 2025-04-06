@@ -15,6 +15,10 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
 
         public bool IsVerifiedEmail { get; set; }
 
+        public bool IsVerifiedPhone { get; set; }
+
+        public string? PhoneOtp { get; set; } 
+
         public bool? Gender { get;set; }
 
         public decimal? TotalPoint { get; set; }
@@ -37,6 +41,12 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
             FullName = fullName;
             Phone = phone;
             IsVerifiedEmail = false;
+            IsVerifiedPhone = false;
+        }
+
+        public Customer(string? phone)
+        {
+            Phone = phone;
         }
 
         public Customer(string? fullName, string? phone,
@@ -51,12 +61,17 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
             Email = email;
             AppUserCustomerId = appUserCustomerId;
             IsVerifiedEmail = false;
-            TotalPoint = 0;
+            TotalPoint = 0; ;
+            IsVerifiedPhone = false;
         }
 
         public void SetVerifiedCodeEmail(string verifiedCodeEmail)
         {
             VerifiedCodeEmail = verifiedCodeEmail;
+        }
+        public void SetVerifiedCodePhone(string phoneOtp)
+        {
+            PhoneOtp = phoneOtp;
         }
         public void SetIsVerifiedEmail()
         {

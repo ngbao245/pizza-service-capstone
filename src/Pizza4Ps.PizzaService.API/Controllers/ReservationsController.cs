@@ -12,6 +12,7 @@ using Pizza4Ps.PizzaService.Application.UserCases.V1.Bookings.Queries.GetListBoo
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Reservations.Commands.AssignTableReservation;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Reservations.Commands.CancelReservation;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Reservations.Commands.CheckInReservation;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Reservations.Commands.ConfirmReservation;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Reservations.Queries.CheckReservation;
 
 namespace Pizza4Ps.PizzaService.API.Controllers
@@ -127,6 +128,28 @@ namespace Pizza4Ps.PizzaService.API.Controllers
                 StatusCode = StatusCodes.Status200OK
             });
         }
+        [HttpGet("confirm")]
+        public async Task<IActionResult> ConfirmAsync([FromQuery] ConfirmReservationCommand query, CancellationToken cancellationToken = default)
+        {
+            await _sender.Send(query, cancellationToken);
+
+            return Ok(new ApiResponse
+            {
+                Message = Message.GET_SUCCESS,
+                StatusCode = StatusCodes.Status200OK
+            });
+        }
+        [HttpGet("cancel")]
+        public async Task<IActionResult> CancelReservation([FromQuery] CancelReservationCommand query, CancellationToken cancellationToken = default)
+        {
+            await _sender.Send(query, cancellationToken);
+
+            return Ok(new ApiResponse
+            {
+                Message = Message.GET_SUCCESS,
+                StatusCode = StatusCodes.Status200OK
+            });
+        }
 
         [HttpPost("assign-table-reservation")]
         public async Task<IActionResult> AssignTableAsync([FromBody] AssignTableReservationCommand command)
@@ -152,7 +175,8 @@ namespace Pizza4Ps.PizzaService.API.Controllers
         }
 
         /// <summary>
-        /// Note: Trạng thái bàn: Created -> Reserved -> Opening
+        /// Note: Trạng thái bàn: Created -> confirm -> Checkin -> 
+        /// Note: Trạng thái bàn: Cancel
         /// </summary>
         /// <param name="command"></param>
         /// <returns></returns>

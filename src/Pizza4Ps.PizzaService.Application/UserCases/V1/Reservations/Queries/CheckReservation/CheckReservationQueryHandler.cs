@@ -22,10 +22,8 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Reservations.Queries.Ch
         public async Task<PaginatedResultDto<ReservationDto>> Handle(CheckReservationQuery request, CancellationToken cancellationToken)
         {
             var query = _reservationRepository.GetListAsNoTracking(
-                r =>(string.IsNullOrEmpty(request.PhoneNumber) || r.PhoneNumber == request.PhoneNumber)
-                && r.BookingTime.Date == (request.BookingDate.HasValue ? request.BookingDate.Value.Date : DateTime.UtcNow.Date),
-                includeProperties: "Table");
-
+                r => r.PhoneNumber == request.PhoneNumber && r.BookingStatus == ReservationStatusEnum.Created,
+                includeProperties: "Table.Zone");
 
             var totalCount = await query.CountAsync();
 

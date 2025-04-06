@@ -18,7 +18,7 @@ namespace Pizza4Ps.PizzaService.Application.DTOs
         public string OrderItemStatus { get; set; }
         public string Type { get; set; }
         //public virtual OrderDto Order { get; set; }
-        //public virtual ProductDto Product { get; set; }
+        public virtual ProductDto Product { get; set; }
         public virtual ICollection<OrderItemDetailDto> OrderItemDetails { get; set; }
     }
 }

@@ -48,6 +48,7 @@ namespace Pizza4Ps.PizzaService.API.Setup
             services.AddAutoMapperService();
             services.AddMediatRService();
             services.AddMailService();
+            services.AddTwilioSMS();
             services.AddCloudinaryService();
         }
 

@@ -13,19 +13,58 @@ namespace Pizza4Ps.PizzaService.Domain.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IStaffZoneRepository _staffZoneRepository;
+        private readonly IStaffZoneScheduleRepository _staffZoneScheduleRepository;
 
-        public StaffZoneService(IUnitOfWork unitOfWork, IStaffZoneRepository staffZoneRepository)
+        public StaffZoneService(IUnitOfWork unitOfWork, IStaffZoneRepository staffZoneRepository, IStaffZoneScheduleRepository staffZoneScheduleRepository)
         {
             _unitOfWork = unitOfWork;
             _staffZoneRepository = staffZoneRepository;
+            _staffZoneScheduleRepository = staffZoneScheduleRepository;
         }
 
-        public async Task<Guid> CreateAsync(TimeOnly shiftStart, TimeOnly shiftEnd, string note, Guid staffId, Guid zoneId)
+        public async Task<Guid> CreateAsync(string note, Guid staffId, Guid zoneId)
         {
-            var entity = new StaffZone(Guid.NewGuid(), shiftStart, shiftEnd, note, staffId, zoneId);
-            _staffZoneRepository.Add(entity);
+            var existingStaffZone = await _staffZoneRepository.GetSingleAsync(
+                x => x.StaffId == staffId && x.ZoneId == zoneId);
+
+            if (existingStaffZone != null)
+            {
+                throw new BusinessException(BussinessErrorConstants.StaffZoneErrorConstant.STAFF_NOT_FOUND);
+            }
+
+            var staffZone = new StaffZone(Guid.NewGuid(), note, staffId, zoneId);
+            _staffZoneRepository.Add(staffZone);
             await _unitOfWork.SaveChangeAsync();
-            return entity.Id;
+            return staffZone.Id;
+        }
+
+        public async Task SyncStaffZonesAsync(DateOnly workingDate, Guid workingSlotId)
+        {
+            var schedules = await _staffZoneScheduleRepository.GetListAsTracking(
+                x => x.WorkingDate == workingDate
+                && x.WorkingSlotId == workingSlotId)
+                .ToListAsync();
+
+            var newStaffZones = new List<StaffZone>();
+
+            foreach (var schedule in schedules)
+            {
+                var existingStaffZone = await _staffZoneRepository.GetSingleAsync(
+                    x => x.StaffId == schedule.StaffId
+                    && x.ZoneId == schedule.ZoneId);
+
+                if (existingStaffZone == null)
+                {
+                    newStaffZones.Add(new StaffZone(Guid.NewGuid(), null, schedule.StaffId, schedule.ZoneId));
+                }
+            }
+
+            if (newStaffZones.Any())
+            {
+                _staffZoneRepository.AddRange(newStaffZones);
+            }
+
+            await _unitOfWork.SaveChangeAsync();
         }
 
         public async Task DeleteAsync(List<Guid> ids, bool IsHardDeleted = false)
@@ -57,10 +96,10 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             await _unitOfWork.SaveChangeAsync();
         }
 
-        public async Task<Guid> UpdateAsync(Guid id, TimeOnly shiftStart, TimeOnly shiftEnd, string note, Guid staffId, Guid zoneId)
+        public async Task<Guid> UpdateAsync(Guid id, string note, Guid staffId, Guid zoneId)
         {
             var entity = await _staffZoneRepository.GetSingleByIdAsync(id);
-            entity.UpdateStaffZone(shiftStart, shiftEnd, note, staffId, zoneId);
+            entity.UpdateStaffZone(note, staffId, zoneId);
             await _unitOfWork.SaveChangeAsync();
             return entity.Id;
         }

@@ -8,17 +8,18 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         public ConfigType ConfigType { get; set; }
         public string Key { get; set; }
         public string Value { get; set; }
-
+        public string? Unit { get; set; } 
         public Config()
         {
         }
 
-        public Config(Guid id, ConfigType configType, string key, string value)
+        public Config(Guid id, ConfigType configType, string key, string value, string? unit)
         {
             Id = id;
             ConfigType = configType;
             Key = key;
             Value = value;
+            Unit = unit;
         }
 
         public void UpdateConfig(ConfigType configType, string key, string value)

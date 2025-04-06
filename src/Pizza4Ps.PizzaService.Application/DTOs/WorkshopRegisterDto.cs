@@ -4,11 +4,11 @@ namespace Pizza4Ps.PizzaService.Application.DTOs
 {
     public class WorkshopRegisterDto
     {
-        public Guid Id { get; set; }    
+        public Guid Id { get; set; }
 
-        public Guid CustomerId { get; set; }
+        public string CustomerPhone { get; set; }
 
-        public CustomerDto Customer { get; set; }
+        public string CustomerName { get; set; }
 
         public Guid WorkshopId { get; set; }
 

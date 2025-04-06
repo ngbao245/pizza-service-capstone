@@ -7,11 +7,17 @@
             public const string VALUE_INVALID = "Số tiền khấu trừ không thể vượt qua số tiền tổng";
             public const string ADDITIONAL_FEE_NOT_FOUND = "Không tìm thấy phụ phí";
         }
+        public class ReasonConfigErrorConstant
+        {
+            public const string REASON_CONFIG_INVALID = "Lý do không hợp lệ";
+            public const string REASON_CONFIG_TYPE_INVALID = "Loại lý do không hợp lệ";
+        }
 
         public class WorkingSlotRegisterErrorConstant
         {
             public const string INVALID_WORKING_SLOT_REGISTER_STATUS = "Trạng thái đăng ký ca làm việc không hợp lệ";
-            public const string WORKING_SLOT_REGISTER_NOT_FOUND = "Không tìm thấy đăng ký ca làm việc";
+            public const string INVALID_STAFF_STATUS = "Chỉ nhân viên part-time mới được phép đăng ký ca làm";
+            public const string WORKING_SLOT_REGISTER_NOT_FOUND = "Không tìm thấy đơn đăng ký ca làm việc";
             public const string WORKING_SLOT_REGISTER_ALREADY_APPROVED = "Đăng ký ca làm việc đã được chấp thuận";
             public const string WORKING_SLOT_REGISTER_ALREADY_REJECTED = "Đăng ký ca làm việc đã bị từ chối";
         }
@@ -24,6 +30,7 @@
             public const string SWAP_WORKING_SLOT_NOT_FOUND = "Không tìm thấy yêu cầu đổi ca làm việc";
             public const string SWAP_WORKING_SLOT_INVALID_WORKING_DATE = "Hai nhân viên có cùng ngày làm việc và cùng ca làm việc";
             public const string SWAP_WORKING_SLOT_INVALID_STATE = "Không thể từ chối yêu cầu không ở trạng thái chờ duyệt";
+            public const string SWAP_WORKING_SLOT_INVALID_STAFF_STATUS = "Chỉ nhân viên part-time mới có thể đổi ca";
         }
 
         public class ConfigErrorConstant
@@ -195,6 +202,7 @@
         public class StaffZoneErrorConstant
         {
             public const string STAFFZONE_NOT_FOUND = "Không tìm thấy nhân viên trong khu vực theo thời gian thực";
+            public const string STAFF_NOT_FOUND = "Không tìm thấy nhân viên theo thời gian thực";
         }
 
         public class TableErrorConstant

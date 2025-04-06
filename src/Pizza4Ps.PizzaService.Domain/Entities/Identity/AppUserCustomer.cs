@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Pizza4Ps.PizzaService.Domain.Abstractions;
-using Pizza4Ps.PizzaService.Domain.Abstractions.Entities;
+﻿using Pizza4Ps.PizzaService.Domain.Abstractions;
 
 namespace Pizza4Ps.PizzaService.Domain.Entities.Identity
 {

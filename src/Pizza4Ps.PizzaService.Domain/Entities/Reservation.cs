@@ -37,4 +37,9 @@ public class Reservation : EntityAuditBase<Guid>
     {
         BookingStatus = ReservationStatusEnum.Checkedin;
     }
+
+    public void Confirm()
+    {
+        BookingStatus = ReservationStatusEnum.Confirmed;
+    }
 }

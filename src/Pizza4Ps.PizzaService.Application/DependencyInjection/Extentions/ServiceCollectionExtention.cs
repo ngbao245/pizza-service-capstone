@@ -38,6 +38,10 @@ namespace Pizza4Ps.PizzaService.Application.DependencyInjection.Extentions
         {
             services.AddTransient<EmailService>();
         }
+        public static void AddTwilioSMS(this IServiceCollection services)
+        {
+            services.AddTransient<TwilioSmsService>();
+        }
         public static IServiceCollection AddCloudinaryService(this IServiceCollection services)
         {
             var serviceProvider = services.BuildServiceProvider();

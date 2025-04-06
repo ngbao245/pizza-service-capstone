@@ -5,5 +5,6 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.OrderItems.Commands.Upd
     public class UpdateStatusToCancelledCommand : IRequest
     {
         public Guid? Id { get; set; }
+        public string? Reason { get; set; }
     }
 }

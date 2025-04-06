@@ -19,12 +19,9 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.StaffZones.Commands.Cre
         public async Task<ResultDto<Guid>> Handle(CreateStaffZoneCommand request, CancellationToken cancellationToken)
         {
             var result = await _StaffZoneService.CreateAsync(
-                request.ShiftStart,
-                request.ShiftEnd,
                 request.Note,
                 request.StaffId,
-                request.ZoneId
-                );
+                request.ZoneId);
             return new ResultDto<Guid>
             {
                 Id = result

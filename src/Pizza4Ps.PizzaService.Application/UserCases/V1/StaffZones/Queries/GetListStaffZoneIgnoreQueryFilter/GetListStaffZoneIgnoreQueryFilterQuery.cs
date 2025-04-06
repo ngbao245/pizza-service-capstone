@@ -7,9 +7,6 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.StaffZones.Queries.GetL
     public class GetListStaffZoneIgnoreQueryFilterQuery : PaginatedQuery<PaginatedResultDto<StaffZoneDto>>
     {
         public bool IsDeleted { get; set; } = false;
-        public TimeOnly? ShiftStart { get; set; }
-        public TimeOnly? ShiftEnd { get; set; }
-        public string? Note { get; set; }
         public Guid? StaffId { get; set; }
         public Guid? ZoneId { get; set; }
     }

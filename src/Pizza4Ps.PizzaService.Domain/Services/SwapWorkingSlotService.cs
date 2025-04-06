@@ -6,6 +6,7 @@ using Pizza4Ps.PizzaService.Domain.Enums;
 using Pizza4Ps.PizzaService.Domain.Constants;
 using Pizza4Ps.PizzaService.Domain.Exceptions;
 using Pizza4Ps.PizzaService.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Pizza4Ps.PizzaService.Domain.Services
 {
@@ -37,6 +38,21 @@ namespace Pizza4Ps.PizzaService.Domain.Services
         public async Task<Guid> CreateAsync(DateOnly workingDateFrom, Guid employeeFromId, Guid workingSlotFromId,
                                             DateOnly workingDateTo, Guid employeeToId, Guid workingSlotToId)
         {
+            // Kiểm tra xem đã có đơn đổi ca tồn tại chưa
+            var existingSwapRequest = await _swapWorkingSlotRepository.GetSingleAsync(
+                    x => (x.EmployeeFromId == employeeFromId && x.EmployeeToId == employeeToId
+                    && x.WorkingDateFrom == workingDateFrom && x.WorkingDateTo == workingDateTo
+                    && x.WorkingSlotFromId == workingSlotFromId && x.WorkingSlotToId == workingSlotToId)
+                    || (x.EmployeeFromId == employeeToId && x.EmployeeToId == employeeFromId
+                    && x.WorkingDateFrom == workingDateTo && x.WorkingDateTo == workingDateFrom
+                    && x.WorkingSlotFromId == workingSlotToId && x.WorkingSlotToId == workingSlotFromId));
+
+            if (existingSwapRequest != null)
+            {
+                throw new BusinessException("Đã tồn tại đơn đổi ca cho cặp nhân viên và ca làm này.");
+            }
+
+            // Kiểm tra nhân viên có tồn tại hay không
             var employeeFrom = await _staffRepository.GetSingleByIdAsync(employeeFromId);
             var employeeTo = await _staffRepository.GetSingleByIdAsync(employeeToId);
             if (employeeFrom == null || employeeTo == null)
@@ -44,6 +60,38 @@ namespace Pizza4Ps.PizzaService.Domain.Services
                 throw new BusinessException(BussinessErrorConstants.StaffErrorConstant.STAFF_NOT_FOUND);
             }
 
+            // Kiểm tra trạng thái nhân viên phải là partTime không
+            if (employeeFrom.Status != StaffStatusEnum.PartTime || employeeTo.Status != StaffStatusEnum.PartTime)
+            {
+                throw new BusinessException(BussinessErrorConstants.SwapWorkingSlotErrorConstant.SWAP_WORKING_SLOT_INVALID_STAFF_STATUS);
+            }
+
+            // Nếu một nhân viên có WorkingSlotRegister và nhân viên kia có StaffZoneSchedule thì không thể đổi ca
+            var hasWorkingSlotRegisterFrom = await _workingSlotRegisterRepository.GetSingleAsync(
+                x => x.StaffId == employeeFromId
+                && x.WorkingDate == workingDateFrom
+                && x.WorkingSlotId == workingSlotFromId);
+            var hasStaffZoneScheduleFrom = await _staffZoneScheduleRepository.GetSingleAsync(
+                x => x.StaffId == employeeFromId
+                && x.WorkingDate == workingDateFrom
+                && x.WorkingSlotId == workingSlotFromId);
+
+            var hasWorkingSlotRegisterTo = await _workingSlotRegisterRepository.GetSingleAsync(
+                x => x.StaffId == employeeToId
+                && x.WorkingDate == workingDateTo
+                && x.WorkingSlotId == workingSlotToId);
+            var hasStaffZoneScheduleTo = await _staffZoneScheduleRepository.GetSingleAsync(
+                x => x.StaffId == employeeToId
+                && x.WorkingDate == workingDateTo
+                && x.WorkingSlotId == workingSlotToId);
+
+            if ((hasWorkingSlotRegisterFrom != null && hasStaffZoneScheduleTo != null) ||
+                (hasWorkingSlotRegisterTo != null && hasStaffZoneScheduleFrom != null))
+            {
+                throw new BusinessException("Không thể đổi ca giữa nhân viên có WorkingSlotRegister và nhân viên có StaffZoneSchedule.");
+            }
+
+            // Kiểm tra đơn đổi ca đã duyệt
             var workingSlotRegisterFrom = await _workingSlotRegisterRepository.GetSingleAsync(
               x => x.StaffId == employeeFromId
               && x.WorkingDate == workingDateFrom
@@ -61,22 +109,27 @@ namespace Pizza4Ps.PizzaService.Domain.Services
                 throw new BusinessException(BussinessErrorConstants.WorkingSlotRegisterErrorConstant.WORKING_SLOT_REGISTER_NOT_FOUND);
             }
 
+            // Kiểm tra có trùng ngày trung ca làm việc không
             if (workingDateFrom == workingDateTo && workingSlotFromId == workingSlotToId)
             {
                 throw new BusinessException(BussinessErrorConstants.SwapWorkingSlotErrorConstant.SWAP_WORKING_SLOT_INVALID_WORKING_DATE);
             }
 
+            // Kiểm tra thời gian tạo đơn đổi ca
             var cutoffConfig = await _configRepository.GetSingleAsync(
                 x => x.ConfigType == ConfigType.SWAP_WORKING_SLOT_CUTOFF_DAY);
             int cutoffDays = int.Parse(cutoffConfig.Value);
 
-            var today = DateOnly.FromDateTime(DateTime.Today);
-            var earliestWorkingDate = workingDateFrom < workingDateTo ? workingDateFrom : workingDateTo;
-            var startOfWeek = today.AddDays(-(int)today.DayOfWeek + (int)DayOfWeek.Monday);
+            var utcNow = DateTime.UtcNow;
+            var vietnamTime = TimeZoneInfo.ConvertTimeBySystemTimeZoneId(utcNow, "SE Asia Standard Time");
+            var today = DateOnly.FromDateTime(vietnamTime);
 
-            if (earliestWorkingDate < today.AddDays(cutoffDays) || earliestWorkingDate > startOfWeek.AddDays(7))
+            var earliestWorkingDate = workingDateFrom < workingDateTo ? workingDateFrom : workingDateTo;
+            var startOfWeek = earliestWorkingDate.AddDays(-(int)earliestWorkingDate.DayOfWeek + (int)DayOfWeek.Monday);
+            var deadlineForRequest = startOfWeek.AddDays(-cutoffDays);
+            if (today > deadlineForRequest)
             {
-                throw new BusinessException($"Đơn đổi ca phải được tạo trước ít nhất {cutoffDays} ngày và trước thứ hai đầu tuần");
+                throw new BusinessException($"Đơn đổi ca phải được tạo trước ít nhất {cutoffDays} ngày so với thứ hai của tuần có ngày làm việc sớm nhất ({startOfWeek}). Hạn chót tạo đơn là {deadlineForRequest}.");
             }
 
             var swapWorkingSlot = new SwapWorkingSlot(
@@ -109,46 +162,60 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             if (entity == null) throw new BusinessException(BussinessErrorConstants.SwapWorkingSlotErrorConstant.SWAP_WORKING_SLOT_NOT_FOUND);
 
             var workingSlotRegisterFrom = await _workingSlotRegisterRepository.GetSingleAsync(
-                x => x.StaffId == entity.EmployeeFromId && x.WorkingSlotId == entity.WorkingSlotFromId);
+                x => x.StaffId == entity.EmployeeFromId
+                     && x.WorkingSlotId == entity.WorkingSlotFromId
+                     && x.WorkingDate == entity.WorkingDateFrom);
             var workingSlotRegisterTo = await _workingSlotRegisterRepository.GetSingleAsync(
-                x => x.StaffId == entity.EmployeeToId && x.WorkingSlotId == entity.WorkingSlotToId);
+                x => x.StaffId == entity.EmployeeToId
+                     && x.WorkingSlotId == entity.WorkingSlotToId
+                     && x.WorkingDate == entity.WorkingDateTo);
 
             if (workingSlotRegisterFrom == null || workingSlotRegisterTo == null)
             {
                 throw new BusinessException(BussinessErrorConstants.WorkingSlotRegisterErrorConstant.WORKING_SLOT_REGISTER_NOT_FOUND);
             }
 
-            //swap shift and workingDate
+            // Swap shift, working date and StaffId
             var tempWorkingSlotId = workingSlotRegisterFrom.WorkingSlotId;
             var tempWorkingDate = workingSlotRegisterFrom.WorkingDate;
+            var tempStaffId = workingSlotRegisterFrom.StaffId;
 
+            // Perform the swap
             workingSlotRegisterFrom.WorkingSlotId = workingSlotRegisterTo.WorkingSlotId;
             workingSlotRegisterFrom.WorkingDate = workingSlotRegisterTo.WorkingDate;
+            workingSlotRegisterFrom.StaffId = entity.EmployeeToId;
 
             workingSlotRegisterTo.WorkingSlotId = tempWorkingSlotId;
             workingSlotRegisterTo.WorkingDate = tempWorkingDate;
+            workingSlotRegisterTo.StaffId = entity.EmployeeFromId;
 
             _workingSlotRegisterRepository.Update(workingSlotRegisterFrom);
             _workingSlotRegisterRepository.Update(workingSlotRegisterTo);
 
             //swap zone
             var staffZoneScheduleFrom = await _staffZoneScheduleRepository.GetSingleAsync(
-                x => x.StaffId == entity.EmployeeFromId && x.WorkingSlotId == entity.WorkingSlotFromId);
+                x => x.StaffId == entity.EmployeeFromId
+                     && x.WorkingSlotId == entity.WorkingSlotFromId
+                     && x.WorkingDate == entity.WorkingDateFrom);
             var staffZoneScheduleTo = await _staffZoneScheduleRepository.GetSingleAsync(
-                x => x.StaffId == entity.EmployeeToId && x.WorkingSlotId == entity.WorkingSlotToId);
+                x => x.StaffId == entity.EmployeeToId
+                     && x.WorkingSlotId == entity.WorkingSlotToId
+                     && x.WorkingDate == entity.WorkingDateTo);
 
-            if (staffZoneScheduleFrom != null && staffZoneScheduleTo != null)
+            if (staffZoneScheduleFrom == null || staffZoneScheduleTo == null)
             {
-                var tempZoneId = staffZoneScheduleFrom.ZoneId;
-                staffZoneScheduleFrom.ZoneId = staffZoneScheduleTo.ZoneId;
-                staffZoneScheduleTo.ZoneId = tempZoneId;
-
-                staffZoneScheduleFrom.WorkingDate = workingSlotRegisterFrom.WorkingDate;
-                staffZoneScheduleTo.WorkingDate = workingSlotRegisterTo.WorkingDate;
-
-                _staffZoneScheduleRepository.Update(staffZoneScheduleFrom);
-                _staffZoneScheduleRepository.Update(staffZoneScheduleTo);
+                throw new BusinessException(BussinessErrorConstants.StaffZoneScheduleErrorConstant.STAFF_ZONE_SCHEDULE_NOT_FOUND);
             }
+
+            var tempZoneId = staffZoneScheduleFrom.ZoneId;
+            staffZoneScheduleFrom.ZoneId = staffZoneScheduleTo.ZoneId;
+            staffZoneScheduleTo.ZoneId = tempZoneId;
+
+            staffZoneScheduleFrom.WorkingDate = workingSlotRegisterFrom.WorkingDate;
+            staffZoneScheduleTo.WorkingDate = workingSlotRegisterTo.WorkingDate;
+
+            _staffZoneScheduleRepository.Update(staffZoneScheduleFrom);
+            _staffZoneScheduleRepository.Update(staffZoneScheduleTo);
 
             var tempWorkingDateFrom = entity.WorkingDateFrom;
             entity.WorkingDateFrom = entity.WorkingDateTo;
