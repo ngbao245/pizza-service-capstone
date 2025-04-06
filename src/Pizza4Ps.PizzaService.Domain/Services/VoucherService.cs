@@ -172,7 +172,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             //decimal newTotal = orderSubtotal + existingOrder.AdditionalFees.Sum(fee => fee.Value);
             //existingOrder.SetTotalPrice(newTotal);
             _orderRepository.Update(existingOrder);
-            _unitOfWork.SaveChangeAsync();
+            await _unitOfWork.SaveChangeAsync();
             return true;
         }
 
