@@ -16,6 +16,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IOrderItemDetailRepository _orderItemDetailRepository;
         private readonly IOrderRepository _orderRepository;
+        private readonly IOrderVoucherRepository _orderVoucherRepository;
         private readonly ITableRepository _tableRepository;
         private readonly IProductRepository _productRepository;
         private readonly IOptionItemRepository _optionItemRepository;
@@ -27,7 +28,11 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             ITableRepository tableRepository,
             IProductRepository productRepository,
             IOptionItemRepository optionItemRepository,
-            IOrderItemRepository orderItemRepository)
+            IOrderItemRepository orderItemRepository,
+            IOrderVoucherRepository orderVoucherRepository
+
+
+            )
         {
             _unitOfWork = unitOfWork;
             _orderItemDetailRepository = orderItemDetailRepository;
@@ -36,6 +41,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             _productRepository = productRepository;
             _optionItemRepository = optionItemRepository;
             _orderItemRepository = orderItemRepository;
+            _orderVoucherRepository = orderVoucherRepository;
         }
 
         public async Task<Guid> CreateAsync(Guid tableId, OrderTypeEnum type)
@@ -161,6 +167,17 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             }
             order.SetCheckOut();
             order.SetTotalPrice(totalPrice);
+
+            var orderVouchers = await _orderVoucherRepository
+            .GetListAsTracking(ov => ov.OrderId == orderId)
+            .ToListAsync();
+
+            foreach (var ov in orderVouchers)
+            {
+                ov.SetUsed();
+                _orderVoucherRepository.Update(ov);
+            }
+
             await _unitOfWork.SaveChangeAsync();
         }
 
@@ -174,6 +191,17 @@ namespace Pizza4Ps.PizzaService.Domain.Services
                 throw new BusinessException(BussinessErrorConstants.OrderErrorConstant.ORDER_CANNOT_CHECK_OUT);
             order.SetTotalPrice(totalPrice);
             order.SetCancelCheckOut();
+
+            var orderVouchers = await _orderVoucherRepository
+            .GetListAsTracking(ov => ov.OrderId == orderId)
+            .ToListAsync();
+
+            foreach (var ov in orderVouchers)
+            {
+                ov.Cancel();
+                _orderVoucherRepository.Update(ov);
+            }
+
             await _unitOfWork.SaveChangeAsync();
         }
 

@@ -76,7 +76,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
 
         public async Task<bool> UserVoucherAsync(Guid orderId, string code)
         {
-            var existingOrder = await _orderRepository.GetSingleByIdAsync(orderId);
+            var existingOrder = await _orderRepository.GetSingleByIdAsync(orderId, "OrderItems,AdditionalFees");
             if (existingOrder == null)
             {
                 throw new BusinessException(BussinessErrorConstants.OrderErrorConstant.ORDER_NOT_FOUND);
@@ -85,6 +85,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             {
                 throw new BusinessException(BussinessErrorConstants.OrderErrorConstant.ORDER_INVALID_STATUS);
             }
+
 
             var existingVoucher = await _voucherRepository.GetSingleAsync(x => x.Code == code, "VoucherBatch");
             if (existingVoucher == null)
@@ -105,15 +106,29 @@ namespace Pizza4Ps.PizzaService.Domain.Services
                     throw new BusinessException(BussinessErrorConstants.VoucherErrorConstant.VOUCHER_EXPIRED);
                 }
 
-                // Check for duplicate voucher from the same batch on this order.
                 var duplicateVoucherExists = await _orderVoucherRepository
                     .GetListAsTracking(ov => ov.OrderId == orderId, "Voucher")
-                    .AnyAsync(ov => ov.Voucher.VoucherBatchId == existingVoucher.VoucherBatchId);
+                    .AnyAsync(ov => ov.Voucher.VoucherBatchId == existingVoucher.VoucherBatchId
+                                      && ov.Status != OrderVoucherStatusEnum.Cancelled);
                 if (duplicateVoucherExists)
                 {
                     throw new BusinessException(BussinessErrorConstants.VoucherErrorConstant.DUPLICATE_VOUCHER_FROM_BATCH);
                 }
+
             }
+            var duplicateNonBatchExists = await _orderVoucherRepository
+                .GetListAsTracking(ov => ov.OrderId == orderId, "Voucher")
+                .AnyAsync(ov => ov.Voucher.Id == existingVoucher.Id
+                                  && ov.Status != OrderVoucherStatusEnum.Cancelled);
+            if (duplicateNonBatchExists)
+            {
+                throw new BusinessException(BussinessErrorConstants.VoucherErrorConstant.DUPLICATE_VOUCHER_NONBATCH);
+            }
+
+            //if (existingOrder.OrderItems == null || !existingOrder.OrderItems.Any())
+            //{
+            //    throw new BusinessException(BussinessErrorConstants.OrderErrorConstant.ORDER_NO_ITEMS);
+            //}
 
             decimal orderSubtotal = existingOrder.OrderItems.Sum(item => item.TotalPrice);
 
@@ -131,6 +146,10 @@ namespace Pizza4Ps.PizzaService.Domain.Services
                 throw new BusinessException(BussinessErrorConstants.VoucherErrorConstant.INVALID_DISCOUNT_TYPE);
             }
 
+            if (discountValue > orderSubtotal)
+            {
+                throw new BusinessException(BussinessErrorConstants.VoucherErrorConstant.DISCOUNT_EXCEEDS_SUBTOTAL);
+            }
             var discountFee = new AdditionalFee(
                 Guid.NewGuid(),
                 $"Voucher: {existingVoucher.Code}",
@@ -138,6 +157,11 @@ namespace Pizza4Ps.PizzaService.Domain.Services
                 -discountValue,
                 existingOrder.Id
             );
+
+            if (discountFee.Value < -orderSubtotal)
+            {
+                throw new BusinessException(BussinessErrorConstants.AdditionalFeeErrorConstant.VALUE_INVALID);
+            }
             _additionalFeeRepository.Add(discountFee);
 
             existingOrder.AdditionalFees.Add(discountFee);
@@ -145,13 +169,12 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             var orderVoucher = new OrderVoucher(Guid.NewGuid(), existingOrder.Id, existingVoucher.Id);
             _orderVoucherRepository.Add(orderVoucher);
 
-            decimal newTotal = orderSubtotal + existingOrder.AdditionalFees.Sum(fee => fee.Value);
-            existingOrder.SetTotalPrice(newTotal);
+            //decimal newTotal = orderSubtotal + existingOrder.AdditionalFees.Sum(fee => fee.Value);
+            //existingOrder.SetTotalPrice(newTotal);
             _orderRepository.Update(existingOrder);
             _unitOfWork.SaveChangeAsync();
             return true;
         }
-
 
     }
 }
