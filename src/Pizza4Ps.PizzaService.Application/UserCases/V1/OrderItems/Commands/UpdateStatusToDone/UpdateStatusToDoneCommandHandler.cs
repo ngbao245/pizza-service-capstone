@@ -14,7 +14,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.OrderItems.Commands.Upd
 
         public async Task Handle(UpdateStatusToDoneCommand request, CancellationToken cancellationToken)
         {
-            await _orderItemService.UpdateStatusToDoneAsync(request.Id!.Value);
+            await _orderItemService.DoneServingAsync(request.Id!.Value);
         }
     }
 }

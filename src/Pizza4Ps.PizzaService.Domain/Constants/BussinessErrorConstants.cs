@@ -7,6 +7,11 @@
             public const string VALUE_INVALID = "Số tiền không thể là số âm";
             public const string ADDITIONAL_FEE_NOT_FOUND = "Không tìm thấy phụ phí";
         }
+        public class ReasonConfigErrorConstant
+        {
+            public const string REASON_CONFIG_INVALID = "Lý do không hợp lệ";
+            public const string REASON_CONFIG_TYPE_INVALID = "Loại lý do không hợp lệ";
+        }
 
         public class WorkingSlotRegisterErrorConstant
         {

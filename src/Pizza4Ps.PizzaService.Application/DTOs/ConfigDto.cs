@@ -8,5 +8,6 @@ namespace Pizza4Ps.PizzaService.Application.DTOs
         public string ConfigType { get; set; }
         public string Key { get; set; }
         public string Value { get; set; }
+        public string? Unit { get; set; }
     }
 }

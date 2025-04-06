@@ -12,7 +12,11 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         public decimal Price { get; set; }
         //Bao gồm order item và order items detail
         public decimal TotalPrice { get; set; }
-        public DateTimeOffset StartTime { get; set; }
+        public DateTime StartTime { get; set; }
+        public DateTime? StartTimeCooking { get; set; }
+        public DateTime? StartTimeServing { get; set; }
+        public DateTime? EndTime { get; set; }
+        public string? ReasonCancel { get; set; }
         public Guid OrderId { get; set; }   
         public Guid? ProductId { get; set; }
         public OrderItemStatus OrderItemStatus { get; set; }
@@ -26,7 +30,7 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         {
         }
 
-        public OrderItem(Guid id, string name, int quantity, decimal price, Guid orderId, Guid? productId, string tableCode, string? note, DateTimeOffset startTime, OrderTypeEnum type)
+        public OrderItem(Guid id, string name, int quantity, decimal price, Guid orderId, Guid? productId, string tableCode, string? note, DateTime startTime, OrderTypeEnum type)
         {
             Id = id;
             Name = name;
@@ -59,6 +63,16 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
             OrderItemStatus = orderItemStatus;
         }
 
+        public void SetCooking()
+        {
+            //if (OrderItemStatus != OrderItemStatus.Pending)
+            //{
+            //    throw new BusinessException(BussinessErrorConstants.OrderItemErrorConstant.ORDER_ITEM_CANNOT_COOKING);
+            //}
+            OrderItemStatus = OrderItemStatus.Cooking;
+            StartTimeCooking = DateTime.Now;
+        }
+
         public void setServing()
         {
             //if (OrderItemStatus != OrderItemStatus.Pending)
@@ -66,16 +80,19 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
             //    throw new BusinessException(BussinessErrorConstants.OrderItemErrorConstant.ORDER_ITEM_CANNOT_SERVED);
             //}
             OrderItemStatus = OrderItemStatus.Serving;
+            StartTimeServing = DateTime.Now;
         }
 
         public void setDone()
         {
             OrderItemStatus = OrderItemStatus.Done;
+            EndTime = DateTime.Now;
         }
 
-        public void setCancelled()
+        public void setCancelled(string? reason)
         {
             OrderItemStatus = OrderItemStatus.Cancelled;
+            ReasonCancel = reason;
         }
     }
 

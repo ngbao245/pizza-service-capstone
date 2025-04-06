@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Pizza4Ps.PizzaService.Persistence;
 
@@ -11,9 +12,11 @@ using Pizza4Ps.PizzaService.Persistence;
 namespace Pizza4Ps.PizzaService.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20250406052447_add-reasonconfig")]
+    partial class addreasonconfig
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -265,9 +268,6 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                     b.Property<DateTimeOffset?>("ModifiedDate")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<string>("Unit")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Value")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -284,8 +284,7 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             IsDeleted = false,
                             Key = "VAT",
-                            Unit = "%",
-                            Value = "80"
+                            Value = "0.08"
                         },
                         new
                         {
@@ -294,7 +293,6 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             IsDeleted = false,
                             Key = "MAXIMUM_REGISTER_SLOT",
-                            Unit = "Nhân viên",
                             Value = "3"
                         },
                         new
@@ -304,7 +302,6 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             IsDeleted = false,
                             Key = "REGISTRATION_CUTOFF_DAY",
-                            Unit = "Ngày",
                             Value = "2"
                         },
                         new
@@ -314,7 +311,6 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             IsDeleted = false,
                             Key = "REGISTRATION_WEEK_LIMIT",
-                            Unit = "Tuần",
                             Value = "2"
                         },
                         new
@@ -324,7 +320,6 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             IsDeleted = false,
                             Key = "SWAP_WORKING_SLOT_CUTOFF_DAY",
-                            Unit = "Ngày",
                             Value = "2"
                         },
                         new
@@ -334,7 +329,6 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             IsDeleted = false,
                             Key = "MAXIMUM_REGISTER_PER_STAFF",
-                            Unit = "Ca làm việc",
                             Value = "3"
                         });
                 });
@@ -980,9 +974,6 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                     b.Property<string>("DeletedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("EndTime")
-                        .HasColumnType("datetime2");
-
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -1014,17 +1005,8 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.Property<string>("ReasonCancel")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("StartTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("StartTimeCooking")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("StartTimeServing")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset>("StartTime")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("TableCode")
                         .IsRequired()
