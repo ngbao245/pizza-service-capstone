@@ -30,8 +30,6 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.WorkshopRegisters.Queri
             var entities = await query
                 .OrderBy(request.SortBy)
                 .Skip(request.SkipCount).Take(request.TakeCount).ToListAsync();
-            if (!entities.Any())
-                throw new BusinessException(BussinessErrorConstants.VoucherErrorConstant.VOUCHER_NOT_FOUND);
             var result = _mapper.Map<List<WorkshopRegisterDto>>(entities);
             var totalCount = await query.CountAsync();
             return new PaginatedResultDto<WorkshopRegisterDto>(result, totalCount);
