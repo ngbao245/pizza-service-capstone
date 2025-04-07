@@ -1,5 +1,5 @@
 ﻿using Hangfire;
-using Pizza4Ps.PizzaService.Infrastructure.Abstractions.BackgroundJobs;
+using Pizza4Ps.PizzaService.Domain.Abstractions.BackgroundJobs;
 
 namespace Pizza4Ps.PizzaService.Infrastructure.Services.BackgroundJobs
 {

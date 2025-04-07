@@ -1,4 +1,5 @@
 ﻿using Pizza4Ps.PizzaService.API.Middlewares;
+using Pizza4Ps.PizzaService.Infrastructure.DependencyInjection.Extentions;
 using Pizza4Ps.PizzaService.Infrastructure.Services;
 
 namespace Pizza4Ps.PizzaService.API.Setup
@@ -25,6 +26,8 @@ namespace Pizza4Ps.PizzaService.API.Setup
                 endpoints.MapHub<NotificationHub>("/notificationHub");
                 endpoints.MapControllers();
             });
+
+            app.UseScheduledBackgroundJobs();
 
             // Đăng ký Swagger UI
             app.UseSwaggerUI(c =>

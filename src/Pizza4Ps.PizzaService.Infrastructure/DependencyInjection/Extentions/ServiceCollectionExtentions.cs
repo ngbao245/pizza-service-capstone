@@ -3,7 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Pizza4Ps.PizzaService.Application.Contract.Abstractions.Services.IExternalServiceBase;
 using Pizza4Ps.PizzaService.Domain.Abstractions;
-using Pizza4Ps.PizzaService.Infrastructure.Abstractions.BackgroundJobs;
+using Pizza4Ps.PizzaService.Domain.Abstractions.BackgroundJobs;
 using Pizza4Ps.PizzaService.Infrastructure.Services;
 using Pizza4Ps.PizzaService.Infrastructure.Services.BackgroundJobs;
 

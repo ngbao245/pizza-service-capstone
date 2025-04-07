@@ -23,6 +23,10 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
 
         public DateTime EndRegisterDate { get; set; }
 
+        public string? OpenRegisterJobId { get; set; }
+
+        public string? CloseRegisterJobId { get; set; }
+
         public decimal TotalFee { get; set; }
 
         public int MaxRegister { get; set; }
@@ -82,5 +86,26 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         {
             totalRegisteredParticipant += 1;
         }
+
+        public void StartRegister()
+        {
+            WorkshopStatus = WorkshopStatus.Opening;
+        }
+
+        public void StopRegister()
+        {
+            WorkshopStatus = WorkshopStatus.Closed;
+        }
+
+        public void SetOpenRegisterJobId(string? openRegisterJobId)
+        {
+            OpenRegisterJobId = openRegisterJobId;
+        }
+
+        public void SetCloseRegisterJobId(string? closeRegisterJobId)
+        {
+            CloseRegisterJobId = closeRegisterJobId;
+        }
+
     }
 }

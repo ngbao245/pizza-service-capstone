@@ -4,8 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Pizza4Ps.PizzaService.Domain.Abstractions.Repositories;
 using Pizza4Ps.PizzaService.Persistence.Helpers;
-using Pizza4Ps.PizzaService.Persistence.Repositories;
-using System.Security.Claims;
 
 namespace Pizza4Ps.PizzaService.Infrastructure.Services
 {
