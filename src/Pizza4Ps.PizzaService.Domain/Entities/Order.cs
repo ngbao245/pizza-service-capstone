@@ -70,6 +70,7 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         public void SetPaid()
         {
             Status = OrderStatusEnum.Paid;
+            EndTime = DateTime.Now;
         }
 
 
