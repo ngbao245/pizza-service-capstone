@@ -23,7 +23,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
 
         public async Task<Guid> CreateAsync(string batchCode, string? description,
             DateTime startDate, DateTime endDate,
-            DateTime issuedAt, int totalQuantity, decimal discountValue, DiscountTypeEnum discountType)
+            DateTime issuedAt, int totalQuantity, decimal discountValue, DiscountTypeEnum discountType, decimal changePoint)
         {
             var batch = new VoucherBatch(batchCode: batchCode,
                 description: description,
@@ -32,7 +32,8 @@ namespace Pizza4Ps.PizzaService.Domain.Services
                 issuedAt: issuedAt,
                 totalQuantity: totalQuantity,
                 discountValue: discountValue,
-                discountType: discountType);
+                discountType: discountType,
+                changePoint: changePoint);
             // Sinh đồng loạt các voucher
             for (int i = 0; i < totalQuantity; i++)
             {
