@@ -140,11 +140,12 @@ namespace Pizza4Ps.PizzaService.API.Controllers
         }
 
         [HttpPut("cancelled/{id}")]
-        public async Task<IActionResult> CancelledAsync([FromRoute] Guid id)
+        public async Task<IActionResult> CancelledAsync([FromRoute] Guid id, [FromBody] string? Reason)
         {
             await _sender.Send(new UpdateStatusToCancelledCommand
             {
-                Id = id
+                Id = id,
+                Reason = Reason
             });
 
             return Ok(new ApiResponse

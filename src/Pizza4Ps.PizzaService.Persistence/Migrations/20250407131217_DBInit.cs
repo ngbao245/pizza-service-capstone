@@ -138,6 +138,7 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                     ConfigType = table.Column<int>(type: "int", nullable: false),
                     Key = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Value = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Unit = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     ModifiedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -213,6 +214,26 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Notification", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ReasonConfig",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Reason = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ReasonType = table.Column<int>(type: "int", nullable: false),
+                    CreatedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    ModifiedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeletedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    DeletedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ReasonConfig", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -323,6 +344,7 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                     IssuedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     TotalQuantity = table.Column<int>(type: "int", nullable: false),
                     RemainingQuantity = table.Column<int>(type: "int", nullable: false),
+                    ChangePoint = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     DiscountValue = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     DiscountType = table.Column<int>(type: "int", nullable: false),
                     CreatedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
@@ -386,10 +408,12 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     FullName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Phone = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     VerifiedCodeEmail = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsVerifiedEmail = table.Column<bool>(type: "bit", nullable: false),
+                    IsVerifiedPhone = table.Column<bool>(type: "bit", nullable: false),
+                    PhoneOtp = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Gender = table.Column<bool>(type: "bit", nullable: true),
                     TotalPoint = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -607,6 +631,8 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                     IsClaimed = table.Column<bool>(type: "bit", nullable: false),
                     ClaimedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     ClaimedByCustomerId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    ChangePoint = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    IsUsed = table.Column<bool>(type: "bit", nullable: false),
                     VoucherBatchId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     CreatedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     ModifiedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
@@ -641,6 +667,8 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                     WorkshopDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     StartRegisterDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndRegisterDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    OpenRegisterJobId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CloseRegisterJobId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     TotalFee = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     MaxRegister = table.Column<int>(type: "int", nullable: false),
                     MaxPizzaPerRegister = table.Column<int>(type: "int", nullable: false),
@@ -673,8 +701,6 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ShiftStart = table.Column<TimeOnly>(type: "time", nullable: false),
-                    ShiftEnd = table.Column<TimeOnly>(type: "time", nullable: false),
                     Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     StaffId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ZoneId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -1033,6 +1059,8 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                     StartTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     TotalPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    TotalOrderItemPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    TotalAdditionalFeePrice = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     Status = table.Column<int>(type: "int", nullable: false),
                     Type = table.Column<int>(type: "int", nullable: false),
                     Phone = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -1061,7 +1089,11 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                     Quantity = table.Column<int>(type: "int", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     TotalPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    StartTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    StartTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    StartTimeCooking = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    StartTimeServing = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    EndTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ReasonCancel = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     OrderId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     OrderItemStatus = table.Column<int>(type: "int", nullable: false),
@@ -1097,6 +1129,7 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     OrderId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     VoucherId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
                     CreatedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     ModifiedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -1251,7 +1284,8 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CustomerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CustomerPhone = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CustomerName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     WorkshopId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     TotalFee = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Code = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -1272,12 +1306,6 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_WorkshopRegister", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_WorkshopRegister_Customer_CustomerId",
-                        column: x => x.CustomerId,
-                        principalTable: "Customer",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_WorkshopRegister_Order_OrderId",
                         column: x => x.OrderId,
@@ -1377,14 +1405,15 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
 
             migrationBuilder.InsertData(
                 table: "Config",
-                columns: new[] { "Id", "ConfigType", "CreatedBy", "CreatedDate", "DeletedAt", "DeletedBy", "IsDeleted", "Key", "ModifiedBy", "ModifiedDate", "Value" },
+                columns: new[] { "Id", "ConfigType", "CreatedBy", "CreatedDate", "DeletedAt", "DeletedBy", "IsDeleted", "Key", "ModifiedBy", "ModifiedDate", "Unit", "Value" },
                 values: new object[,]
                 {
-                    { new Guid("738eda23-9323-4db9-b36b-73adb8e942ef"), 0, null, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, null, false, "VAT", null, null, "0.08" },
-                    { new Guid("984394dd-9af3-401f-9319-0c5a7a3686fd"), 3, null, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, null, false, "REGISTRATION_WEEK_LIMIT", null, null, "2" },
-                    { new Guid("b7c6da0c-f0de-44d7-9aa5-cb72eb569a9d"), 2, null, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, null, false, "REGISTRATION_CUTOFF_DAY", null, null, "2" },
-                    { new Guid("d2ee8501-1046-4895-bc33-cecbdb969f1b"), 4, null, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, null, false, "SWAP_WORKING_SLOT_CUTOFF_DAY", null, null, "2" },
-                    { new Guid("e0d7298b-5cd8-47e4-939c-e42e4e5a42e5"), 1, null, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, null, false, "MAXIMUM_REGISTER_SLOT", null, null, "3" }
+                    { new Guid("37c23088-09b3-4f3d-8d56-e1183a899cca"), 5, null, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, null, false, "MAXIMUM_REGISTER_PER_STAFF", null, null, "Ca làm việc", "3" },
+                    { new Guid("738eda23-9323-4db9-b36b-73adb8e942ef"), 0, null, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, null, false, "VAT", null, null, "%", "80" },
+                    { new Guid("984394dd-9af3-401f-9319-0c5a7a3686fd"), 3, null, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, null, false, "REGISTRATION_WEEK_LIMIT", null, null, "Tuần", "2" },
+                    { new Guid("b7c6da0c-f0de-44d7-9aa5-cb72eb569a9d"), 2, null, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, null, false, "REGISTRATION_CUTOFF_DAY", null, null, "Ngày", "2" },
+                    { new Guid("d2ee8501-1046-4895-bc33-cecbdb969f1b"), 4, null, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, null, false, "SWAP_WORKING_SLOT_CUTOFF_DAY", null, null, "Ngày", "2" },
+                    { new Guid("e0d7298b-5cd8-47e4-939c-e42e4e5a42e5"), 1, null, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, null, false, "MAXIMUM_REGISTER_SLOT", null, null, "Nhân viên", "3" }
                 });
 
             migrationBuilder.InsertData(
@@ -1455,6 +1484,13 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                 column: "AppUserCustomerId",
                 unique: true,
                 filter: "[AppUserCustomerId] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Customer_Phone",
+                table: "Customer",
+                column: "Phone",
+                unique: true,
+                filter: "[Phone] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_FeedBack_OrderId",
@@ -1665,11 +1701,6 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                 column: "WorkshopPizzaRegisterId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_WorkshopRegister_CustomerId",
-                table: "WorkshopRegister",
-                column: "CustomerId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_WorkshopRegister_OrderId",
                 table: "WorkshopRegister",
                 column: "OrderId");
@@ -1756,6 +1787,9 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                 name: "Payment");
 
             migrationBuilder.DropTable(
+                name: "ReasonConfig");
+
+            migrationBuilder.DropTable(
                 name: "Recipe");
 
             migrationBuilder.DropTable(
@@ -1807,6 +1841,9 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                 name: "ProductSize");
 
             migrationBuilder.DropTable(
+                name: "Customer");
+
+            migrationBuilder.DropTable(
                 name: "Staff");
 
             migrationBuilder.DropTable(
@@ -1820,6 +1857,9 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "VoucherBatch");
+
+            migrationBuilder.DropTable(
+                name: "AppUserCustomer");
 
             migrationBuilder.DropTable(
                 name: "AppUsers");
@@ -1840,16 +1880,10 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                 name: "Product");
 
             migrationBuilder.DropTable(
-                name: "Customer");
-
-            migrationBuilder.DropTable(
                 name: "Workshop");
 
             migrationBuilder.DropTable(
                 name: "Category");
-
-            migrationBuilder.DropTable(
-                name: "AppUserCustomer");
 
             migrationBuilder.DropTable(
                 name: "Order");
