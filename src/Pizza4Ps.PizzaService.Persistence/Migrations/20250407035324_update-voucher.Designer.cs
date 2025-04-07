@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Pizza4Ps.PizzaService.Persistence;
 
@@ -11,9 +12,11 @@ using Pizza4Ps.PizzaService.Persistence;
 namespace Pizza4Ps.PizzaService.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20250407035324_update-voucher")]
+    partial class updatevoucher
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -948,12 +951,6 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
 
                     b.Property<Guid>("TableId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal?>("TotalAdditionalFeePrice")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal?>("TotalOrderItemPrice")
-                        .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal?>("TotalPrice")
                         .HasColumnType("decimal(18, 2)");
@@ -2210,9 +2207,6 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("CloseRegisterJobId")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
@@ -2264,9 +2258,6 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("OpenRegisterJobId")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Organizer")

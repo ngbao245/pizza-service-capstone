@@ -89,19 +89,11 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.WorkshopRegisters.Comma
                 }
                 orderItem.SetTotalPrice();
             }
-            var additionalFee = new AdditionalFee(
-                id: Guid.NewGuid(),
-                name: "Workshop fee",
-                description: "Workshop fee",
-                value: workshopRegister.TotalFee,
-                orderId: order.Id
-                );
             workshopRegister.AssignTableOrder(table.Id, order.Id);
             table.SetOpening();
             table.SetCurrentOrderId(order.Id);
             _orderRepository.Add(order);
             _orderItemRepository.AddRange(orderItems);
-            _additionalFeeRepository.Add(additionalFee);
             _tableRepository.Update(table);
             _workshopRegisterRepository.Update(workshopRegister);
             await _unitOfWork.SaveChangeAsync();

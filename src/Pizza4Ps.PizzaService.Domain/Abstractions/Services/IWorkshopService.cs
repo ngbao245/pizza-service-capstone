@@ -6,5 +6,7 @@ namespace Pizza4Ps.PizzaService.Domain.Abstractions.Services
     public interface IWorkshopService : IDomainService
     {
         Task<Guid> CreateAsync(Workshop workshop, List<WorkshopFoodDetail> workshopFoodDetails);
+        Task StartRegisterWorkshop(Guid workshopId);
+        Task CloseRegisterWorkshop(Guid workshopId);
     }
 }

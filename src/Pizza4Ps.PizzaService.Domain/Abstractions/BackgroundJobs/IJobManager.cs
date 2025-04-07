@@ -1,4 +1,4 @@
-﻿namespace Pizza4Ps.PizzaService.Infrastructure.Abstractions.BackgroundJobs
+﻿namespace Pizza4Ps.PizzaService.Domain.Abstractions.BackgroundJobs
 {
     public interface IJobManager
     {

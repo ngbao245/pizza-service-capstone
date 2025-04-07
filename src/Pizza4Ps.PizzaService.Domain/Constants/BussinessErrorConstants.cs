@@ -4,7 +4,7 @@
     {
         public class AdditionalFeeErrorConstant
         {
-            public const string VALUE_INVALID = "Số tiền không thể là số âm";
+            public const string VALUE_INVALID = "Số tiền khấu trừ không thể vượt qua số tiền tổng";
             public const string ADDITIONAL_FEE_NOT_FOUND = "Không tìm thấy phụ phí";
         }
         public class ReasonConfigErrorConstant
@@ -100,6 +100,9 @@
             public const string BOOKING_SLOT_FULL = "Không còn bàn trống vào thời gian này";
             public const string INVALID_BOOKING_STATUS = "Trạng thái đặt chỗ không hợp lệ";
             public const string INVALID_BOOKING_CAPACITY = "Số lượng khách vượt quá sức chứa của bàn";
+            public const string ASSIGNED_TABLE = "Bàn đã được chỉ định";
+            public const string INVALID_BOOKING_TIME = "Không thể thay đổi thông tin đặt bàn trước nửa tiếng";
+
             public const string NOT_ASSIGNED_TABLE = "Bàn chưa được chỉ định";
         }
 
@@ -178,6 +181,10 @@
             public const string ORDER_CANNOT_CANCEL_CHECK_OUT = "Đơn hàng chưa được xuất hóa đơn hoặc thanh toán";
             public const string ORDER_CANNOT_PAY = "Đơn hàng chưa được kiểm tra hoặc đã thanh toán";
             public const string ORDER_STATUS_INVALID_TO_ORDER = "Đơn hàng đã được xuất hóa đơn hoặc đã thanh toán";
+            public const string ORDER_INVALID_STATUS = "Trạng thái đơn hàng không hợp lệ";
+            public const string ORDER_NO_ITEMS = "Đơn hàng rỗng, không có món ăn";
+
+
         }
 
         public class StaffErrorConstant
@@ -211,6 +218,13 @@
         public class VoucherErrorConstant
         {
             public const string VOUCHER_NOT_FOUND = "Không tìm thấy voucher";
+            public const string VOUCHER_OCCUPIED = "voucher đã được sử dụng";
+            public const string VOUCHER_EXPIRED = "Đơn hàng đã được xuất hóa đơn hoặc đã thanh toán";
+            public const string INVALID_DISCOUNT_TYPE = "Không thể tính ra tiền sau khi sử dụng mã giảm giá";
+            public const string DUPLICATE_VOUCHER_FROM_BATCH = "Không thể sử dụng voucher cùng loại";
+            public const string DUPLICATE_VOUCHER_NONBATCH = "Không thể sử dụng một voucher nhiều lần";
+            public const string VOUCHER_NOT_ACTIVATED = "Không thể sử dụng voucher chưa được kích hoạt";
+            public const string DISCOUNT_EXCEEDS_SUBTOTAL = "Mức giảm giá vượt quá khả năng cho phép";
         }
 
         public class VoucherBatchErrorConstant

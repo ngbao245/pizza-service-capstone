@@ -202,5 +202,20 @@ namespace Pizza4Ps.PizzaService.API.Controllers
                 StatusCode = 200
             });
         }
+
+        [HttpPut("cancel/{id}")]
+        public async Task<IActionResult> CancelAsync([FromRoute] Guid id)
+        {
+            await _sender.Send(new CancelReservationCommand { ReservationId = id });
+
+            return Ok(new ApiResponse
+            {
+                Success = true,
+                Message = Message.UPDATED_SUCCESS,
+                StatusCode = StatusCodes.Status200OK
+            });
+        }
+
+
     }
 }

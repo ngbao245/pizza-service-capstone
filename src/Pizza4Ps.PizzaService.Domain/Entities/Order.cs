@@ -10,6 +10,8 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         public DateTime StartTime { get; set; }
         public DateTime? EndTime { get; set; }
         public decimal? TotalPrice { get; set; }
+        public decimal? TotalOrderItemPrice { get; set; }
+        public decimal? TotalAdditionalFeePrice { get; set; }
         public OrderStatusEnum Status { get; set; }
         public OrderTypeEnum Type { get; set; }
         public string? Phone { get; set; }
@@ -45,6 +47,14 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         public void SetTotalPrice(decimal totalPrice)
         {
             TotalPrice = totalPrice;
+        }
+        public void SetTotalOrderItemPrice(decimal totalOrderItemPrice)
+        {
+            TotalOrderItemPrice = totalOrderItemPrice;
+        }
+        public void SetTotalAdditionalFeePrice(decimal totalAdditionalFeePrice)
+        {
+            TotalAdditionalFeePrice = totalAdditionalFeePrice;
         }
 
         public void SetCancelCheckOut()

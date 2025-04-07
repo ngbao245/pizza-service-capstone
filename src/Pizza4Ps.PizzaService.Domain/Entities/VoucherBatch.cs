@@ -13,8 +13,9 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         public DateTime EndDate { get; set; }         // Hết hạn của voucher
         public DateTime IssuedAt { get; set; }        // Thời gian tạo đợt voucher
         public int TotalQuantity { get; set; }        // Tổng số voucher phát hành
-        public int RemainingQuantity { get; set; }
-        public decimal DiscountValue { get; set; }   // Số voucher chưa được claim
+        public int RemainingQuantity { get; set; }    // Số voucher chưa được claim
+        public decimal ChangePoint { get; set; }     // Điểm đổi voucher
+        public decimal DiscountValue { get; set; }   
         public DiscountTypeEnum DiscountType { get; set; }
 
         // Quan hệ 1-n: Một đợt voucher có nhiều voucher
@@ -27,7 +28,7 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         public VoucherBatch(string batchCode, string? description,
             DateTime startDate, DateTime endDate,
             DateTime issuedAt, int totalQuantity,
-            decimal discountValue, DiscountTypeEnum discountType)
+            decimal discountValue, DiscountTypeEnum discountType, decimal changePoint)
         {
             Id = Guid.NewGuid();
             BatchCode = batchCode;
@@ -39,6 +40,7 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
             RemainingQuantity = totalQuantity;
             DiscountValue = discountValue;
             DiscountType = discountType;
+            ChangePoint = changePoint;
         }
         //public VoucherBatch(Guid id, string name, string description, int totalQuantity)
         //{

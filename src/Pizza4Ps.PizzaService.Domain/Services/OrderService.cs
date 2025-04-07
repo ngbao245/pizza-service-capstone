@@ -13,9 +13,13 @@ namespace Pizza4Ps.PizzaService.Domain.Services
 {
     public class OrderService : DomainService, IOrderService
     {
+        private readonly IAdditionalFeeRepository _additionalFeeRepository;
+        private readonly IConfigRepository _configRepository;
+        private readonly IWorkshopRegisterRepository _workshopRegisterRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IOrderItemDetailRepository _orderItemDetailRepository;
         private readonly IOrderRepository _orderRepository;
+        private readonly IOrderVoucherRepository _orderVoucherRepository;
         private readonly ITableRepository _tableRepository;
         private readonly IProductRepository _productRepository;
         private readonly IOptionItemRepository _optionItemRepository;
@@ -27,8 +31,16 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             ITableRepository tableRepository,
             IProductRepository productRepository,
             IOptionItemRepository optionItemRepository,
-            IOrderItemRepository orderItemRepository)
+            IOrderItemRepository orderItemRepository,
+            IOrderVoucherRepository orderVoucherRepository,
+            IWorkshopRegisterRepository workshopRegisterRepository,
+            IConfigRepository configRepository,
+            IAdditionalFeeRepository additionalFeeRepository
+            )
         {
+            _additionalFeeRepository = additionalFeeRepository;
+            _configRepository = configRepository;
+            _workshopRegisterRepository = workshopRegisterRepository;
             _unitOfWork = unitOfWork;
             _orderItemDetailRepository = orderItemDetailRepository;
             _orderRepository = orderRepository;
@@ -36,6 +48,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             _productRepository = productRepository;
             _optionItemRepository = optionItemRepository;
             _orderItemRepository = orderItemRepository;
+            _orderVoucherRepository = orderVoucherRepository;
         }
 
         public async Task<Guid> CreateAsync(Guid tableId, OrderTypeEnum type)
@@ -151,29 +164,102 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             if (order.Status != OrderStatusEnum.Unpaid)
                 throw new BusinessException(BussinessErrorConstants.OrderErrorConstant.ORDER_CANNOT_CHECK_OUT);
             //Validate các món phải done hết mới được checkout
+            decimal totalOrderItemPrice = 0;
             foreach (var orderItem in order.OrderItems)
             {
-                totalPrice += orderItem.TotalPrice;
+                if (orderItem.OrderItemStatus != OrderItemStatus.Done && orderItem.OrderItemStatus != OrderItemStatus.Cancelled)
+                {
+                    throw new BusinessException("Đơn hàng có món ăn chưa được hoàn thành hoặc huỷ");
+                }
+                if (orderItem.OrderItemStatus == OrderItemStatus.Done)
+                {
+                    totalOrderItemPrice += orderItem.TotalPrice;
+                }
             }
-            foreach (var additionalFee in order.AdditionalFees)
+            // Tính các chi phí thêm của workshop
+            decimal totalAdditionalFees = 0;
+            var additionalFees = new List<AdditionalFee>();
+            if (order.Type == OrderTypeEnum.Workshop)
             {
-                totalPrice += additionalFee.Value;
+                var workshopRegister = await _workshopRegisterRepository.GetSingleAsync(x => x.OrderId == order.Id);
+                if (workshopRegister == null)
+                {
+                    throw new BusinessException("Không tìm thấy thông tin đăng ký workshop");
+                }
+                var additionalFee = new AdditionalFee(
+                    id: Guid.NewGuid(),
+                    name: "Workshop fee",
+                    description: "Workshop fee",
+                    value: workshopRegister.TotalFee,
+                    orderId: order.Id
+                    );
+                additionalFees.Add(additionalFee);
+                totalAdditionalFees += workshopRegister.TotalFee;
             }
+            // Tính thuế
+            var vatFee = await _configRepository.GetSingleAsync(x => x.ConfigType == ConfigType.VAT);
+            if (vatFee != null && decimal.Parse(vatFee.Value) != 0)
+            {
+                var totalVatFee = ((totalOrderItemPrice + additionalFees.Sum(x => x.Value)) * decimal.Parse(vatFee.Value)) / 100;
+                var additionalFee = new AdditionalFee(
+                    id: Guid.NewGuid(),
+                    name: $"VAT ({vatFee.Value}%)",
+                    description: "Thuế",
+                    value: totalVatFee,
+                    orderId: order.Id
+                    );
+                additionalFees.Add(additionalFee);
+                totalAdditionalFees += totalVatFee;
+            }
+            totalPrice = totalOrderItemPrice + totalAdditionalFees;
             order.SetCheckOut();
             order.SetTotalPrice(totalPrice);
+            order.SetTotalAdditionalFeePrice(totalAdditionalFees);
+            order.SetTotalOrderItemPrice(totalOrderItemPrice);
+
+            _additionalFeeRepository.AddRange(additionalFees);
+            _orderRepository.Update(order);
+
+            //var orderVouchers = await _orderVoucherRepository
+            //.GetListAsTracking(ov => ov.OrderId == orderId)
+            //.ToListAsync();
+
+            //foreach (var ov in orderVouchers)
+            //{
+            //    ov.SetUsed();
+            //    _orderVoucherRepository.Update(ov);
+            //}
+
             await _unitOfWork.SaveChangeAsync();
         }
 
         public async Task CancelCheckOut(Guid orderId)
         {
-            decimal totalPrice = 0;
-            var order = await _orderRepository.GetSingleByIdAsync(orderId);
+            decimal total = 0;
+            var order = await _orderRepository.GetSingleByIdAsync(orderId, "AdditionalFees");
             if (order == null)
                 throw new BusinessException(BussinessErrorConstants.OrderErrorConstant.ORDER_NOT_FOUND);
             if (order.Status != OrderStatusEnum.CheckedOut)
                 throw new BusinessException(BussinessErrorConstants.OrderErrorConstant.ORDER_CANNOT_CHECK_OUT);
-            order.SetTotalPrice(totalPrice);
+            order.SetTotalPrice(total);
+            order.SetTotalAdditionalFeePrice(total);
+            order.SetTotalOrderItemPrice(total);
             order.SetCancelCheckOut();
+
+            foreach(var additionalFee in order.AdditionalFees)
+            {
+                _additionalFeeRepository.HardDelete(additionalFee);
+            }
+            //var orderVouchers = await _orderVoucherRepository
+            //.GetListAsTracking(ov => ov.OrderId == orderId)
+            //.ToListAsync();
+
+            //foreach (var ov in orderVouchers)
+            //{
+            //    ov.Cancel();
+            //    _orderVoucherRepository.Update(ov);
+            //}
+
             await _unitOfWork.SaveChangeAsync();
         }
 

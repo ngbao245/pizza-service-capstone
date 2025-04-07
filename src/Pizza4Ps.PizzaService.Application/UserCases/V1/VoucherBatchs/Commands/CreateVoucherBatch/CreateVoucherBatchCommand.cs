@@ -12,5 +12,6 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.VoucherBatchs.Commands.
         public int TotalQuantity { get; set; }        // Tổng số voucher phát hành
         public decimal DiscountValue { get; set; }   // Số voucher chưa được claim
         public string DiscountType { get; set; }
+        public decimal ChangePoint { get; set; }     // Điểm đổi voucher
     }
 }

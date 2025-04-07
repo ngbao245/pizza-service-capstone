@@ -26,6 +26,8 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Workshops.Commands.Crea
 
         public decimal TotalFee { get; set; }
 
+        public int MaxRegister { get; set; }
+
         public int MaxPizzaPerRegister { get; set; }
 
         public int MaxParticipantPerRegister { get; set; }

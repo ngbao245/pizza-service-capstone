@@ -6,6 +6,7 @@ using Pizza4Ps.PizzaService.Application.UserCases.V1.Vouchers.Commands.CreateVou
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Vouchers.Commands.DeleteVoucher;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Vouchers.Commands.RestoreVoucher;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Vouchers.Commands.UpdateVoucher;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Vouchers.Commands.UserVoucher;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Vouchers.Queries.GetListVoucher;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Vouchers.Queries.GetListVoucherIgnoreQueryFilter;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Vouchers.Queries.GetVoucherById;
@@ -105,6 +106,27 @@ namespace Pizza4Ps.PizzaService.API.Controllers
             {
                 Message = Message.DELETED_SUCCESS,
                 StatusCode = StatusCodes.Status200OK
+            });
+        }
+
+        [HttpPost("use")]
+        public async Task<IActionResult> ApplyVoucher([FromBody] UserVoucherCommand command)
+        {
+            var result = await _sender.Send(command);
+            if (result)
+            {
+                return Ok(new ApiResponse
+                {
+                    Result = result,
+                    Message = Message.UPDATED_SUCCESS,
+                    StatusCode = StatusCodes.Status200OK
+                });
+            }
+            return BadRequest(new ApiResponse
+            {
+                Success = false,
+                Message = Message.UPDATE_FAILED,
+                StatusCode = StatusCodes.Status400BadRequest
             });
         }
     }

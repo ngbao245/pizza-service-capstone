@@ -32,7 +32,8 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.VoucherBatchs.Commands.
                 DateTime.Now,
                 totalQuantity: request.TotalQuantity,
                 discountType: discountType,
-                discountValue: request.DiscountValue);
+                discountValue: request.DiscountValue,
+                changePoint: request.ChangePoint);
             return new ResultDto<Guid>
             {
                 Id = result
