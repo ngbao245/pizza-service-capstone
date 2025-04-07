@@ -31,35 +31,35 @@ namespace Pizza4Ps.PizzaService.Infrastructure.Services
             // Context.User chứa các claim từ token.
             var userId = HttpContextHelper.GetStaffId(_httpContextAccessor.HttpContext);
 
-            if (userId == null)
-                return;
-
-            var staff = await _staffRepository.GetSingleByIdAsync(userId.Value);
-
-            var zones = await _staffZoneRepository.GetListAsTracking(x => x.StaffId == userId)
-                .Include(x => x.Zone).Select(x => x.Zone.Name).ToListAsync();
-
-            // Giả sử thông tin zone được lưu trong claim "zone"
-
-
-            if (staff.StaffType == Domain.Enums.StaffTypeEnum.Staff && zones.Any())
+            if (userId != null)
             {
-                foreach(var zone in zones)
+                var staff = await _staffRepository.GetSingleByIdAsync(userId.Value);
+
+                var zones = await _staffZoneRepository.GetListAsTracking(x => x.StaffId == userId)
+                    .Include(x => x.Zone).Select(x => x.Zone.Name).ToListAsync();
+
+                // Giả sử thông tin zone được lưu trong claim "zone"
+
+
+                if (staff.StaffType == Domain.Enums.StaffTypeEnum.Staff && zones.Any())
                 {
-                    // Nhân viên sẽ được join vào group theo zone (ví dụ: "Zone_A" nếu zone là A)
-                    await Groups.AddToGroupAsync(Context.ConnectionId, $"Zone_{zone}");
-                    Console.WriteLine($"Connection {Context.ConnectionId} added to group Zone_{zone}");
+                    foreach (var zone in zones)
+                    {
+                        // Nhân viên sẽ được join vào group theo zone (ví dụ: "Zone_A" nếu zone là A)
+                        await Groups.AddToGroupAsync(Context.ConnectionId, $"Zone_{zone}");
+                        Console.WriteLine($"Connection {Context.ConnectionId} added to group Zone_{zone}");
+                    }
                 }
-            }
-            else if (staff.StaffType == Domain.Enums.StaffTypeEnum.Manager)
-            {
-                await Groups.AddToGroupAsync(Context.ConnectionId, "ManagersGroup");
-                Console.WriteLine($"Connection {Context.ConnectionId} added to group ManagersGroup");
-            }
-            else
-            {
-                await Groups.AddToGroupAsync(Context.ConnectionId, "DefaultGroup");
-                Console.WriteLine($"Connection {Context.ConnectionId} added to group DefaultGroup");
+                else if (staff.StaffType == Domain.Enums.StaffTypeEnum.Manager)
+                {
+                    await Groups.AddToGroupAsync(Context.ConnectionId, "ManagersGroup");
+                    Console.WriteLine($"Connection {Context.ConnectionId} added to group ManagersGroup");
+                }
+                else
+                {
+                    await Groups.AddToGroupAsync(Context.ConnectionId, "DefaultGroup");
+                    Console.WriteLine($"Connection {Context.ConnectionId} added to group DefaultGroup");
+                }
             }
             await base.OnConnectedAsync();
         }

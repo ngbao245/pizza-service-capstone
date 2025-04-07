@@ -45,5 +45,10 @@ namespace Pizza4Ps.PizzaService.Infrastructure.Services
                     });
             }
         }
+        public async Task UpdateOrderItemStatusAsync()
+        {
+            // Gửi đến tất cả client đang kết nối
+            await _hubContext.Clients.All.SendAsync("OrderItemUpdatedStatus");
+        }
     }
 }

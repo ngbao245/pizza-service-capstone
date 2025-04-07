@@ -24,6 +24,7 @@ namespace Pizza4Ps.PizzaService.API.Setup
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapHub<NotificationHub>("/notificationHub");
+                //endpoints.MapHub<NotificationHub>("/notificationHub");
                 endpoints.MapControllers();
             });
 

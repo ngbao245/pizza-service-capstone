@@ -11,11 +11,14 @@ namespace Pizza4Ps.PizzaService.Domain.Services
 {
     public class OrderItemService : DomainService, IOrderItemService
     {
+        private readonly IRealTimeNotifier _realTimeNotifier;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IOrderItemRepository _orderitemRepository;
 
-        public OrderItemService(IUnitOfWork unitOfWork, IOrderItemRepository orderitemRepository)
+        public OrderItemService(IUnitOfWork unitOfWork, IOrderItemRepository orderitemRepository,
+            IRealTimeNotifier realTimeNotifier)
         {
+            _realTimeNotifier = realTimeNotifier;
             _unitOfWork = unitOfWork;
             _orderitemRepository = orderitemRepository;
         }
@@ -73,6 +76,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             if (entity == null) throw new ServerException(BussinessErrorConstants.OrderItemErrorConstant.ORDER_ITEM_NOT_FOUND);
             entity.setServing();
             await _unitOfWork.SaveChangeAsync();
+            await _realTimeNotifier.UpdateOrderItemStatusAsync();
         }
         public async Task ApproveCookingAsync(Guid id)
         {
@@ -80,6 +84,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             if (entity == null) throw new ServerException(BussinessErrorConstants.OrderItemErrorConstant.ORDER_ITEM_NOT_FOUND);
             entity.SetCooking();
             await _unitOfWork.SaveChangeAsync();
+            await _realTimeNotifier.UpdateOrderItemStatusAsync();
         }
 
         public async Task DoneServingAsync(Guid id)
@@ -88,6 +93,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             if (entity == null) throw new ServerException(BussinessErrorConstants.OrderItemErrorConstant.ORDER_ITEM_NOT_FOUND);
             entity.setDone();
             await _unitOfWork.SaveChangeAsync();
+            await _realTimeNotifier.UpdateOrderItemStatusAsync();
         }
 
         public async Task UpdateStatusToCancelledAsync(Guid id, string? reason)
@@ -96,6 +102,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             if (entity == null) throw new ServerException(BussinessErrorConstants.OrderItemErrorConstant.ORDER_ITEM_NOT_FOUND);
             entity.setCancelled(reason);
             await _unitOfWork.SaveChangeAsync();
+            await _realTimeNotifier.UpdateOrderItemStatusAsync();
         }
     }
 }

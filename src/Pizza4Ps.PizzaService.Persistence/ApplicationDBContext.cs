@@ -14,7 +14,7 @@ namespace Pizza4Ps.PizzaService.Persistence
 
         public ApplicationDBContext(DbContextOptions<ApplicationDBContext> options, AuditSaveChangesInterceptor auditInterceptor)
             : base(options)
-        {
+            {
             _auditInterceptor = auditInterceptor;
         }
 
