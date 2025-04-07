@@ -13,6 +13,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
 {
     public class OrderService : DomainService, IOrderService
     {
+        private readonly IRealTimeNotifier _realTimeNotifier;
         private readonly IAdditionalFeeRepository _additionalFeeRepository;
         private readonly IConfigRepository _configRepository;
         private readonly IWorkshopRegisterRepository _workshopRegisterRepository;
@@ -25,7 +26,9 @@ namespace Pizza4Ps.PizzaService.Domain.Services
         private readonly IOptionItemRepository _optionItemRepository;
         private readonly IOrderItemRepository _orderItemRepository;
 
-        public OrderService(IUnitOfWork unitOfWork,
+        public OrderService(
+            IRealTimeNotifier realTimeNotifier,
+            IUnitOfWork unitOfWork,
             IOrderItemDetailRepository orderItemDetailRepository,
             IOrderRepository orderRepository,
             ITableRepository tableRepository,
@@ -38,6 +41,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             IAdditionalFeeRepository additionalFeeRepository
             )
         {
+            _realTimeNotifier = realTimeNotifier;
             _additionalFeeRepository = additionalFeeRepository;
             _configRepository = configRepository;
             _workshopRegisterRepository = workshopRegisterRepository;
@@ -139,6 +143,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
                 orderItem.SetTotalPrice();
             }
             await _unitOfWork.SaveChangeAsync();
+            await _realTimeNotifier.UpdateOrderItemStatusAsync();
         }
 
 
