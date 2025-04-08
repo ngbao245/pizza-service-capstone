@@ -31,22 +31,23 @@ namespace Pizza4Ps.PizzaService.Domain.Services
 
         public async Task<Guid> CreateAsync(string customerName, string phoneNumber, string phoneOtp, DateTime bookingTime, int numberOfPeople)
         {
-            //var slot = await _bookingSlotRepository.GetListAsNoTracking(x
-            //    => x.StartTime <= bookingTime.TimeOfDay && x.EndTime > bookingTime.TimeOfDay).FirstOrDefaultAsync();
-            //if (slot == null) throw new BusinessException(BussinessErrorConstants.BookingSlotErrorConstant.BOOKING_SLOT_NOT_FOUND);
-            //// Lấy các booking đã được đặt cho slot đó trong ngày
-            //var existingBookings = await _bookingRepository.GetListAsNoTracking(x
-            //    => x.BookingTime.Date == bookingTime.Date &&
-            //        x.BookingTime.TimeOfDay >= slot.StartTime &&
-            //        x.BookingTime.TimeOfDay < slot.EndTime &&
-            //        x.BookingStatus == ReservationStatusEnum.Created).ToListAsync();
+            var slot = await _bookingSlotRepository.GetListAsNoTracking(x
+                => x.StartTime <= bookingTime.TimeOfDay && x.EndTime > bookingTime.TimeOfDay).FirstOrDefaultAsync();
+            if (slot == null) throw new BusinessException(BussinessErrorConstants.BookingSlotErrorConstant.BOOKING_SLOT_NOT_FOUND);
+            // Lấy các booking đã được đặt cho slot đó trong ngày
+            var existingBookings = await _bookingRepository.GetListAsNoTracking(x
+                => x.BookingTime.Date == bookingTime.Date &&
+                    x.BookingTime.TimeOfDay >= slot.StartTime &&
+                    x.BookingTime.TimeOfDay < slot.EndTime &&
+                    x.BookingStatus != ReservationStatusEnum.Cancelled).ToListAsync();
 
-            //// Chỉ lấy các booking có BookingTime thuộc slot của cùng ngày
-            //int total = existingBookings.Sum(b => b.NumberOfPeople);
-            //if (total + numberOfPeople > slot.Capacity) throw new BusinessException(BussinessErrorConstants.BookingErrorConstant.BOOKING_SLOT_FULL);
-            //// Nếu hợp lệ, tạo booking
-
-
+            int total = existingBookings.Count();
+            ReservationPriorityStatus priorityStatus = ReservationPriorityStatus.Priority;
+            if (total + 1 > slot.Capacity)
+            {
+                priorityStatus = ReservationPriorityStatus.NonPriority;
+            }
+            // Nếu hợp lệ, tạo booking
 
             var customer = await _customerRepository.GetSingleAsync(x => x.Phone == phoneNumber);
 
@@ -66,7 +67,8 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             customerId: customer.Id,
             customerName: customerName,
             phoneNumber: phoneNumber,
-            tableId: null
+            tableId: null,
+            reservationPriorityStatus: priorityStatus
             );
 
             _bookingRepository.Add(booking);

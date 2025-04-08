@@ -10,6 +10,7 @@ public class Reservation : EntityAuditBase<Guid>
     public string PhoneNumber { get; set; }
     public DateTime BookingTime { get; set; }
     public int NumberOfPeople { get; set; }
+    public ReservationPriorityStatus ReservationPriorityStatus { get; set; }
     public ReservationStatusEnum BookingStatus { get; private set; }
 
     public Guid? TableId { get; set; }
@@ -17,7 +18,8 @@ public class Reservation : EntityAuditBase<Guid>
 
     private Reservation() { }
 
-    public Reservation(Guid? customerId, string customerName, string phoneNumber, DateTime bookingTime, int numberOfPeople, Guid? tableId)
+    public Reservation(Guid? customerId, string customerName, string phoneNumber,
+        DateTime bookingTime, int numberOfPeople, Guid? tableId, ReservationPriorityStatus reservationPriorityStatus)
     {
         Id = Guid.NewGuid();
         CustomerId = customerId;
@@ -27,6 +29,7 @@ public class Reservation : EntityAuditBase<Guid>
         NumberOfPeople = numberOfPeople;
         BookingStatus = ReservationStatusEnum.Created;
         TableId = tableId;
+        ReservationPriorityStatus = reservationPriorityStatus;
     }
 
     public void Cancel()
