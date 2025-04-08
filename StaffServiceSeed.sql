@@ -216,11 +216,11 @@ BEGIN TRY
 	INSERT INTO [dbo].[Staff] (Id, FullName, Phone, Email, StaffType, Status, CreatedDate, ModifiedDate, CreatedBy, ModifiedBy, IsDeleted, DeletedAt, DeletedBy, AppUserId) 
 	VALUES
 	--Manager
-	(NEWID(), N'Vũ Nhật Hào', '', '', 1, 1, GETDATE(), NULL, 'Admin', NULL, 0, NULL, NULL, '3674B44D-225E-4ADF-26F0-08DD759A0482'),
-	(NEWID(), N'Nguyễn Hoàng Bảo', '', '', 1, 1, GETDATE(), NULL, 'Admin', NULL, 0, NULL, NULL, 'E8EEA46D-4BA6-4C07-26F1-08DD759A0482'),
-	(NEWID(), N'Nguyễn Hưng Hảo', '', '', 1, 1, GETDATE(), NULL, 'Admin', NULL, 0, NULL, NULL, '9AF63A0D-559A-4270-26F2-08DD759A0482'),
-	(NEWID(), N'Tống Trường Thanh', '', '', 1, 1, GETDATE(), NULL, 'Admin', NULL, 0, NULL, NULL, 'EBD4F98C-0FF5-4127-26F3-08DD759A0482'),
-	(NEWID(), N'Trương Sỹ Quảng', '', '', 1, 1, GETDATE(), NULL, 'Admin', NULL, 0, NULL, NULL, 'EB1A0E6D-3475-4A30-26F4-08DD759A0482'),
+	(NEWID(), N'Vũ Nhật Hào', '0379231040', 'haovnse161380@fpt.edu.vn', 1, 1, GETDATE(), NULL, 'Admin', NULL, 0, NULL, NULL, '3674B44D-225E-4ADF-26F0-08DD759A0482'),
+	(NEWID(), N'Nguyễn Hoàng Bảo', '0934140524', 'baonhse172266@fpt.edu.vn', 1, 1, GETDATE(), NULL, 'Admin', NULL, 0, NULL, NULL, 'E8EEA46D-4BA6-4C07-26F1-08DD759A0482'),
+	(NEWID(), N'Nguyễn Hưng Hảo', '0946000406', 'haonhse172788@fpt.edu.vn', 1, 1, GETDATE(), NULL, 'Admin', NULL, 0, NULL, NULL, '9AF63A0D-559A-4270-26F2-08DD759A0482'),
+	(NEWID(), N'Tống Trường Thanh', '0967992202', 'thanhttse160320@fpt.edu.vn', 1, 1, GETDATE(), NULL, 'Admin', NULL, 0, NULL, NULL, 'EBD4F98C-0FF5-4127-26F3-08DD759A0482'),
+	(NEWID(), N'Trương Sỹ Quảng', '0888509299', 'quangtsse160326@fpt.edu.vn', 1, 1, GETDATE(), NULL, 'Admin', NULL, 0, NULL, NULL, 'EB1A0E6D-3475-4A30-26F4-08DD759A0482'),
 
 	--Staff FullTime
 	(NEWID(), N'StaffFT_1', '', '', 0, 1, GETDATE(), NULL, 'Admin', NULL, 0, NULL, NULL, '58162CDE-E9ED-498D-26F5-08DD759A0482'),
