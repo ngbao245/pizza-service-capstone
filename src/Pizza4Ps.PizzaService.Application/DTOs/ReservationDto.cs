@@ -1,4 +1,6 @@
-﻿namespace Pizza4Ps.PizzaService.Application.DTOs
+﻿using Pizza4Ps.PizzaService.Domain.Enums;
+
+namespace Pizza4Ps.PizzaService.Application.DTOs
 {
     public class ReservationDto
     {
@@ -7,6 +9,7 @@
         public int NumberOfPeople { get; set; }
         public string PhoneNumber { get; set; }
         public string CustomerName { get; set; }
+        public string ReservationPriorityStatus { get; set; }
         public string Status { get; set; }
         public Guid? CustomerId { get; set; }
         public Guid? TableId { get; set; }
