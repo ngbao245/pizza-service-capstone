@@ -14,12 +14,18 @@ namespace Pizza4Ps.PizzaService.Domain.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IStaffZoneRepository _staffZoneRepository;
         private readonly IStaffZoneScheduleRepository _staffZoneScheduleRepository;
+        private readonly IWorkingSlotRepository _workingSlotRepository;
 
-        public StaffZoneService(IUnitOfWork unitOfWork, IStaffZoneRepository staffZoneRepository, IStaffZoneScheduleRepository staffZoneScheduleRepository)
+        public StaffZoneService(
+            IUnitOfWork unitOfWork,
+            IStaffZoneRepository staffZoneRepository,
+            IStaffZoneScheduleRepository staffZoneScheduleRepository,
+            IWorkingSlotRepository workingSlotRepository)
         {
             _unitOfWork = unitOfWork;
             _staffZoneRepository = staffZoneRepository;
             _staffZoneScheduleRepository = staffZoneScheduleRepository;
+            _workingSlotRepository = workingSlotRepository;
         }
 
         public async Task<Guid> CreateAsync(string note, Guid staffId, Guid zoneId)
@@ -40,30 +46,39 @@ namespace Pizza4Ps.PizzaService.Domain.Services
 
         public async Task SyncStaffZonesAsync(DateOnly workingDate, Guid workingSlotId)
         {
+            var now = TimeOnly.FromDateTime(TimeZoneInfo.ConvertTimeFromUtc(
+                DateTime.UtcNow,
+                TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time")
+            ));
+            var nowSpan = now.ToTimeSpan();
+
+            // Lấy ca đang xử lý
+            var workingSlot = await _workingSlotRepository.GetSingleByIdAsync(workingSlotId);
+            if (workingSlot == null) throw new BusinessException(BussinessErrorConstants.WorkingSlotErrorConstant.WORKING_SLOT_NOT_FOUND);
+
+            // Lấy tất cả schedules trong ngày
             var schedules = await _staffZoneScheduleRepository.GetListAsTracking(
-                x => x.WorkingDate == workingDate
-                && x.WorkingSlotId == workingSlotId)
-                .ToListAsync();
+                x => x.WorkingDate == workingDate).ToListAsync();
 
-            var newStaffZones = new List<StaffZone>();
+            var relevantSchedules = schedules.Where(x =>
+                (x.WorkingSlotId == workingSlotId)
+                ||
+                (x.WorkingSlotId == null && workingSlot.ShiftStart <= nowSpan && nowSpan <= workingSlot.ShiftEnd)
+            ).ToList();
 
-            foreach (var schedule in schedules)
+            // Xóa hết staff-zone cũ
+            var existingStaffZones = await _staffZoneRepository.GetListAsTracking().ToListAsync();
+            foreach (var existingStaffZone in existingStaffZones)
             {
-                var existingStaffZone = await _staffZoneRepository.GetSingleAsync(
-                    x => x.StaffId == schedule.StaffId
-                    && x.ZoneId == schedule.ZoneId);
-
-                if (existingStaffZone == null)
-                {
-                    newStaffZones.Add(new StaffZone(Guid.NewGuid(), null, schedule.StaffId, schedule.ZoneId));
-                }
+                _staffZoneRepository.SoftDelete(existingStaffZone);
             }
 
-            if (newStaffZones.Any())
-            {
-                _staffZoneRepository.AddRange(newStaffZones);
-            }
+            // Gán lại staff-zone mới
+            var newStaffZones = relevantSchedules
+               .Select(s => new StaffZone(Guid.NewGuid(), null, s.StaffId, s.ZoneId))
+               .ToList();
 
+            _staffZoneRepository.AddRange(newStaffZones);
             await _unitOfWork.SaveChangeAsync();
         }
 

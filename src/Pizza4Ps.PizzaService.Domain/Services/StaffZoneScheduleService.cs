@@ -18,6 +18,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
         private readonly IZoneRepository _zoneRepository;
         private readonly IWorkingSlotRepository _workingSlotRepository;
         private readonly IStaffRepository _staffRepository;
+        private readonly IConfigRepository _configRepository;
 
         public StaffZoneScheduleService(
             IUnitOfWork unitOfWork,
@@ -25,7 +26,8 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             IWorkingSlotRegisterRepository workingSlotRegisterRepository,
             IZoneRepository zoneRepository,
             IWorkingSlotRepository workingSlotRepository,
-            IStaffRepository staffRepository)
+            IStaffRepository staffRepository,
+            IConfigRepository configRepository)
         {
             _unitOfWork = unitOfWork;
             _staffZoneScheduleRepository = staffZoneScheduleRepository;
@@ -33,6 +35,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             _zoneRepository = zoneRepository;
             _workingSlotRepository = workingSlotRepository;
             _staffRepository = staffRepository;
+            _configRepository = configRepository;
         }
 
         public async Task<Guid> CreateAsync(DateOnly workingDate, Guid staffId, Guid zoneId, Guid workingSlotId)
@@ -68,6 +71,80 @@ namespace Pizza4Ps.PizzaService.Domain.Services
         public async Task AutoAssignZoneForWeekAsync(DateOnly startDate)
         {
             if (startDate.DayOfWeek != DayOfWeek.Monday) throw new BusinessException(BussinessErrorConstants.DayErrorConstant.INVALID_START_DATE);
+
+            var staffZoneSchedules = new List<StaffZoneSchedule>();
+            var assignedZones = new Dictionary<Guid, Guid>();
+            var zoneCapacity = new Dictionary<Guid, int>();
+
+            //check duplicate
+            var endDate = startDate.AddDays(7);
+            var oldSchedules = await _staffZoneScheduleRepository
+                .GetListAsTracking(x => x.WorkingDate >= startDate && x.WorkingDate < endDate)
+                .ToListAsync();
+
+            if (oldSchedules.Any())
+            {
+                foreach (var oldSchedule in oldSchedules)
+                {
+                    _staffZoneScheduleRepository.SoftDelete(oldSchedule);
+                }
+            }
+
+            //
+
+            for (int i = 0; i < 7; i++)
+            {
+                var workingDate = startDate.AddDays(i);
+                var workingSlots = await _workingSlotRepository.GetListAsTracking().OrderBy(x => x.ShiftStart).ToListAsync();
+                if (!workingSlots.Any()) continue;
+
+                var zones = await _zoneRepository.GetListAsTracking().ToListAsync();
+                if (!zones.Any()) throw new BusinessException(BussinessErrorConstants.ZoneErrorConstant.ZONE_NOT_FOUND);
+
+                var diningAreas = zones.Where(x => x.Type == ZoneTypeEnum.DininingArea).ToList();
+                var kitchenAreas = zones.Where(x => x.Type == ZoneTypeEnum.KitchenArea).ToList();
+
+                var fullTimeStaffs = await _staffRepository.GetListAsTracking(x => x.Status == StaffStatusEnum.FullTime).ToListAsync();
+                var partTimeRegistrations = await _workingSlotRegisterRepository.GetListAsTracking(
+                    x => x.WorkingDate == workingDate && x.Status == WorkingSlotRegisterStatusEnum.Approved)
+                    .Include(x => x.Staff)
+                    .Include(x => x.WorkingSlot)
+                    .ToListAsync();
+
+                AssignFullTimeZones(fullTimeStaffs, diningAreas, kitchenAreas, assignedZones, zoneCapacity, staffZoneSchedules, workingDate);
+
+                foreach (var slot in workingSlots)
+                {
+                    AssignZones(partTimeRegistrations.Where(x => x.WorkingSlotId == slot.Id).Select(x => x.Staff).ToList(),
+                        diningAreas, kitchenAreas, staffZoneSchedules, assignedZones, zoneCapacity, workingDate, slot.Id);
+                }
+            }
+            _staffZoneScheduleRepository.AddRange(staffZoneSchedules);
+
+            foreach (var schedule in staffZoneSchedules)
+            {
+                var workingSlotRegister = await _workingSlotRegisterRepository.GetSingleAsync(
+                    x => x.StaffId == schedule.StaffId
+                      && x.WorkingDate == schedule.WorkingDate
+                      && x.WorkingSlotId == schedule.WorkingSlotId);
+
+                if (workingSlotRegister != null)
+                {
+                    workingSlotRegister.ZoneId = schedule.ZoneId;
+                }
+            }
+
+            await _unitOfWork.SaveChangeAsync();
+        }
+
+        public async Task AutoAssignZoneForWeekJobAsync()
+        {
+            var config = await _configRepository.GetSingleAsync(x => x.ConfigType == ConfigType.REGISTRATION_CUTOFF_DAY);
+            int cutoffDays = int.Parse(config.Value);
+
+            var vietnamTime = TimeZoneInfo.ConvertTimeBySystemTimeZoneId(DateTime.UtcNow, "SE Asia Standard Time");
+            var nextMonday = vietnamTime.Date.AddDays(7 - (int)vietnamTime.DayOfWeek + (int)DayOfWeek.Monday);
+            var startDate = DateOnly.FromDateTime(nextMonday);
 
             var staffZoneSchedules = new List<StaffZoneSchedule>();
             var assignedZones = new Dictionary<Guid, Guid>();
