@@ -49,11 +49,22 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.OrderItems.Queries.GetL
                 }
                 orderType = parsedStatus;
             }
+
+            ProductTypeEnum? productType = null;
+            if (!string.IsNullOrEmpty(request.ProductType))
+            {
+                if (!Enum.TryParse(request.ProductType, true, out ProductTypeEnum parsedStatus))
+                {
+                    throw new BusinessException(BussinessErrorConstants.ProductErrorConstant.INVALID_PRODUCT_TYPE);
+                }
+                productType = parsedStatus;
+            }
             var query = _orderitemRepository.GetListAsNoTracking(x =>
                 (request.OrderId == null || x.OrderId == request.OrderId)
                 && (request.ProductId == null || x.ProductId == request.ProductId)
                 && (orderItemStatuses == null || orderItemStatuses.Count == 0 || orderItemStatuses.Contains(x.OrderItemStatus))
                 && (orderType == null || x.Type == orderType)
+                && (productType == null || x.ProductType == productType)
                 , includeProperties: request.IncludeProperties);
             var entities = await query
                 .OrderBy(request.SortBy)

@@ -7,6 +7,7 @@ using Pizza4Ps.PizzaService.Domain.Abstractions.Repositories;
 using Pizza4Ps.PizzaService.Domain.Constants;
 using Pizza4Ps.PizzaService.Domain.Enums;
 using Pizza4Ps.PizzaService.Domain.Exceptions;
+using System.ComponentModel.DataAnnotations;
 using System.Linq.Dynamic.Core;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Orders.Queries.GetListOrder
@@ -46,7 +47,8 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Orders.Queries.GetListO
 				x => (request.StartTime == null || x.StartTime == request.StartTime)
 				&& (request.EndTime == null || x.EndTime == request.EndTime)
 				&& (orderStatusEnum == null || x.Status == orderStatusEnum)
-				&& (orderTypeEnum == null || x.Type == orderTypeEnum)
+                && (request.Phone == null || x.Phone == request.Phone)
+                && (orderTypeEnum == null || x.Type == orderTypeEnum)
                 && (request.TableId == null || x.TableId == request.TableId),
 				includeProperties: request.IncludeProperties);
 			var entities = await query
