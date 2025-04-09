@@ -4,8 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using Pizza4Ps.PizzaService.Application.Abstractions;
 using Pizza4Ps.PizzaService.Application.DTOs;
 using Pizza4Ps.PizzaService.Domain.Abstractions.Repositories;
-using Pizza4Ps.PizzaService.Domain.Constants;
-using Pizza4Ps.PizzaService.Domain.Exceptions;
 using System.Linq.Dynamic.Core;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.ProductSizes.Queries.GetListProductSize

@@ -1,4 +1,6 @@
-﻿namespace Pizza4Ps.PizzaService.Application.DTOs
+﻿using Pizza4Ps.PizzaService.Domain.Enums;
+
+namespace Pizza4Ps.PizzaService.Application.DTOs
 {
     public class OrderItemDto
     {
@@ -16,6 +18,7 @@
         public string Type { get; set; }
         //public virtual OrderDto Order { get; set; }
         public virtual ProductDto Product { get; set; }
+        public string? ProductType { get; set; }
         public virtual ICollection<OrderItemDetailDto> OrderItemDetails { get; set; } = new List<OrderItemDetailDto>();
         public DateTime? StartTimeCooking { get; set; }
         public DateTime? StartTimeServing { get; set; }
