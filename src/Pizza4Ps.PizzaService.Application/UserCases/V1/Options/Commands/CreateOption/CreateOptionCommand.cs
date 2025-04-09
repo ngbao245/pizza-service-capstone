@@ -8,5 +8,6 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Options.Commands.Create
         public Guid ProductId { get; set; }
         public string Name { get; set; }
         public string? Description { get; set; }
+        public bool SelectMany { get; set; }
     }
 }

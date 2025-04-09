@@ -18,6 +18,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Commands.Creat
     {
         public string Name { get; set; }
         public string? Description { get; set; }
+        public bool SelectMany { get; set; }
         public List<CreateProductOptionItemModel> ProductOptionItemModels { get; set; } = new List<CreateProductOptionItemModel>();
     }
     public class CreateProductOptionItemModel

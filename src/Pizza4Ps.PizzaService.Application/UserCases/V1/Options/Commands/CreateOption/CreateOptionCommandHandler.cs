@@ -21,7 +21,8 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Options.Commands.Create
 			var result = await _optionService.CreateAsync(
 				request.ProductId,
                 request.Name,
-				request.Description);
+				request.Description,
+				request.SelectMany);
 			return new ResultDto<Guid>
             {
 				Id = result

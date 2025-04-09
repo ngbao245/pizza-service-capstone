@@ -7,6 +7,7 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         public string Name { get; set; }
         public string? Description { get; set; }
         public Guid ProductId { get; set; }
+        public bool SelectMany { get; set; }
         public virtual Product Product { get; set; }
         public virtual ICollection<OptionItem> OptionItems { get; set; } = new List<OptionItem>();
 
@@ -14,12 +15,13 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         {
         }
 
-        public Option(Guid id, Guid productId, string name, string? description)
+        public Option(Guid id, Guid productId, string name, string? description, bool selectMany)
         {
             Id = id;
             Name = name;
             ProductId = productId;
             Description = description;
+            SelectMany = selectMany;
         }
 
         public void UpdateOption(string name, string description)

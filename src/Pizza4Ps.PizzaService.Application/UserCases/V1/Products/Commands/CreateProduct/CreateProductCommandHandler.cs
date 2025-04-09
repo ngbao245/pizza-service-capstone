@@ -94,7 +94,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Commands.Creat
                     var optionItems = new List<OptionItem>();
                     foreach (var optionModel in productOptions)
                     {
-                        var option = new Option(Guid.NewGuid(), product.Id, optionModel.Name, optionModel.Description);
+                        var option = new Option(Guid.NewGuid(), product.Id, optionModel.Name, optionModel.Description, optionModel.SelectMany);
                         options.Add(option);
                         foreach (var optionItem in optionModel.ProductOptionItemModels)
                         {

@@ -4,7 +4,7 @@ namespace Pizza4Ps.PizzaService.Domain.Abstractions.Services
 {
 	public interface IOptionService : IDomainService
     {
-		Task<Guid> CreateAsync(Guid productId, string name, string? description);
+		Task<Guid> CreateAsync(Guid productId, string name, string? description, bool selectMany);
 
         Task<Guid> UpdateAsync(Guid id, string name, string description);
 		Task DeleteAsync(List<Guid> ids, bool IsHardDeleted = false);
