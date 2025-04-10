@@ -23,6 +23,11 @@ namespace Pizza4Ps.PizzaService.Domain.Services
 
         public async Task<Guid> CreateAsync(string code, int capacity, Guid zoneId)
         {
+            var existedTable = await _tableRepository.GetSingleAsync(x => x.Code == code);  
+            if (existedTable != null)
+            {
+                throw new BusinessException("Mã code bàn đã tồn tại");
+            }
             var entity = new Table(Guid.NewGuid(), code, capacity, zoneId);
             _tableRepository.Add(entity);
             await _unitOfWork.SaveChangeAsync();

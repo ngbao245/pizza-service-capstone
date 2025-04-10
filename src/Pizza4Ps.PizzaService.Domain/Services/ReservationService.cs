@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Pizza4Ps.PizzaService.Domain.Abstractions;
+using Pizza4Ps.PizzaService.Domain.Abstractions.BackgroundJobs;
 using Pizza4Ps.PizzaService.Domain.Abstractions.Repositories;
 using Pizza4Ps.PizzaService.Domain.Abstractions.Services;
 using Pizza4Ps.PizzaService.Domain.Constants;
@@ -12,6 +13,8 @@ namespace Pizza4Ps.PizzaService.Domain.Services
 {
     public class ReservationService : DomainService, IReservationService
     {
+        private readonly IBackgroundJobService _backgroundJobService;
+        private readonly IRealTimeNotifier _realTimeNotifier;
         private readonly ICustomerRepository _customerRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IReservationSlotRepository _bookingSlotRepository;
@@ -20,8 +23,12 @@ namespace Pizza4Ps.PizzaService.Domain.Services
 
         public ReservationService(IUnitOfWork unitOfWork, IReservationRepository bookingRepository
             , IReservationSlotRepository bookingSlotRepository, ITableRepository tableRepository,
-            ICustomerRepository customerRepository)
+            ICustomerRepository customerRepository,
+            IRealTimeNotifier realTimeNotifier,
+            IBackgroundJobService backgroundJobService)
         {
+            _backgroundJobService = backgroundJobService;
+            _realTimeNotifier = realTimeNotifier;
             _customerRepository = customerRepository;
             _unitOfWork = unitOfWork;
             _bookingSlotRepository = bookingSlotRepository;
@@ -73,6 +80,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
 
             _bookingRepository.Add(booking);
             await _unitOfWork.SaveChangeAsync();
+            await _realTimeNotifier.CreatedReservationAsync(booking);
             return booking.Id;
         }
 
@@ -116,7 +124,10 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             {
                 throw new BusinessException(BussinessErrorConstants.BookingErrorConstant.INVALID_BOOKING_STATUS);
             }
-
+            if (DateTime.Now < existingReservation.BookingTime.AddMinutes(-30))
+            {
+                throw new BusinessException("Bạn không thể sắp xếp bàn cho việc đặt bàn trước quá 30 phút");
+            }
             existingReservation.TableId = existingTable.Id;
             _bookingRepository.Update(existingReservation);
             existingTable.SetBooked();
@@ -167,6 +178,18 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             }
             existingReservation.Confirm();
             _bookingRepository.Update(existingReservation);
+            await _unitOfWork.SaveChangeAsync();
+            TimeSpan bookingDelay = existingReservation.BookingTime.AddMinutes(-30) - DateTime.Now;
+            if (bookingDelay < TimeSpan.Zero)
+            {
+                bookingDelay = TimeSpan.Zero;
+            }
+
+            // Lập lịch job thoong baso
+            string openRegisterJobId = _backgroundJobService.ScheduleJob<IRealTimeNotifier>(
+                service => service.AssignReservationAsync(existingReservation),
+                bookingDelay);
+            existingReservation.SetAssignTableIobId(openRegisterJobId);
             await _unitOfWork.SaveChangeAsync();
         }
         public async Task CancelAsync(Guid reservationId)

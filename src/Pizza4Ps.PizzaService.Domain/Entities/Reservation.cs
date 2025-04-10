@@ -10,6 +10,7 @@ public class Reservation : EntityAuditBase<Guid>
     public string PhoneNumber { get; set; }
     public DateTime BookingTime { get; set; }
     public int NumberOfPeople { get; set; }
+    public string? AssignTableJobId { get; set; }
     public ReservationPriorityStatus ReservationPriorityStatus { get; set; }
     public ReservationStatusEnum BookingStatus { get; private set; }
 
@@ -44,5 +45,9 @@ public class Reservation : EntityAuditBase<Guid>
     public void Confirm()
     {
         BookingStatus = ReservationStatusEnum.Confirmed;
+    }
+    public void SetAssignTableIobId(string assignTableJobId)
+    {
+        AssignTableJobId = assignTableJobId;
     }
 }

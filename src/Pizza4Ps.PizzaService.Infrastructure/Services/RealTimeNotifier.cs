@@ -14,6 +14,16 @@ namespace Pizza4Ps.PizzaService.Infrastructure.Services
             _hubContext = hubContext;
         }
 
+        public async Task AssignReservationAsync(Reservation reservation)
+        {
+            await _hubContext.Clients.All.SendAsync("AssignTableForReservation", reservation);
+        }
+
+        public async Task CreatedReservationAsync(Reservation reservation)
+        {
+            await _hubContext.Clients.All.SendAsync("ReservationCreated", reservation);
+        }
+
         public async Task NotifyAsync(Notification notification)
         {
             // Ví dụ: với CallStaff, gửi đến group của khu vực và đồng thời gửi đến ManagersGroup
