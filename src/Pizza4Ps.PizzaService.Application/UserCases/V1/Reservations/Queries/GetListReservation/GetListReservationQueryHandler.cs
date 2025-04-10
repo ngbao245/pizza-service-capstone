@@ -37,7 +37,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Bookings.Queries.GetLis
             var query = _BookingRepository.GetListAsNoTracking(
                 x => (request.CustomerCode == null || x.CustomerId.Equals(request.CustomerCode))
                 && (request.PhoneNumber == null || x.PhoneNumber.Equals(request.PhoneNumber))
-                && (request.BookingTime == null || x.BookingTime.Day.Equals(request.BookingTime.Value.Day))
+                && (request.BookingTime == null || x.BookingTime.Date == request.BookingTime.Value.Date)
                 && (bookingStatus == null || x.BookingStatus == bookingStatus),
                 includeProperties: request.IncludeProperties);
             var entities = await query

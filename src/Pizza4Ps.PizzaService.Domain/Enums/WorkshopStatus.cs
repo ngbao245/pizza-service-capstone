@@ -2,10 +2,12 @@
 {
     public enum WorkshopStatus
     {
-        Scheduled,
-        Opening,
-        Closed,
-        Approved,
-        Cancelled
+        Scheduled, // Lên kế hoạch
+        OpeningToRegister, //Mở đăng ký
+        ClosedRegister, // đóng đăng ký
+        Opening, //Đang mở
+        Closed, //Đã đóng
+        Cancelled, // Huỷ
+        
     }
 }
