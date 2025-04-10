@@ -22,7 +22,7 @@ namespace Pizza4Ps.PizzaService.API.Controllers
             }
 
             string registrationCode = RegistrationCodeGenerator.GenerateCode(8);
-            await _emailService.SendWorkshopEmail(request.CustomerEmail, request.CustomerName, request.WorkshopName, registrationCode);
+            await _emailService.SendWorkshopRegisterEmail(request.CustomerEmail, request.CustomerName, request.WorkshopName, registrationCode);
 
             return Ok(new { message = "Email đã gửi thành công!", registrationCode });
         }

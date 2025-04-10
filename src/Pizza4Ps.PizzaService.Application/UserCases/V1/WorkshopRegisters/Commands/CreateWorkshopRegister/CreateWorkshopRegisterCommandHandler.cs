@@ -69,6 +69,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.WorkshopRegisters.Comma
             var workshopRegister = new WorkshopRegister(
                 customerName: request.CustomerName,
                 customerPhone: request.PhoneNumber,
+                customerEmail: request.Email,
                 workshopId: request.WorkshopId,
                 registeredAt: DateTime.Now,
                 totalFee: workshop.TotalFee,
@@ -107,7 +108,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.WorkshopRegisters.Comma
             }
             await _workshopRegisterService.RegisterAsync(workshopRegister, workshopPizzaRegisters, workshopPizzaRegisterDetails);
 
-            await _emailService.SendWorkshopEmail(request.Email, customer.FullName ?? "Quý khách", workshop.Name, workshopRegister.Code);
+            await _emailService.SendWorkshopRegisterEmail(request.Email, customer.FullName ?? "Quý khách", workshop.Name, workshopRegister.Code);
 
             return new ResultDto<Guid>()
             {

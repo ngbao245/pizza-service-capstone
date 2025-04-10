@@ -119,5 +119,9 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         {
             WorkshopStatus = WorkshopStatus.Closed;
         }
+        public void SetCancel()
+        {
+            WorkshopStatus = WorkshopStatus.Cancelled;
+        }
     }
 }

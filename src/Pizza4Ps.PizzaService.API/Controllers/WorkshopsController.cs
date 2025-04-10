@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Pizza4Ps.PizzaService.API.Constants;
 using Pizza4Ps.PizzaService.API.Models;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Workshops.Commands.CancelWorkshop;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Workshops.Commands.CreateWorkshop;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Workshops.Queries.GetWorkshopById;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Workshops.Queries.GetWorkshopList;
@@ -25,6 +26,16 @@ namespace Pizza4Ps.PizzaService.API.Controllers
             return Ok(new ApiResponse
             {
                 Result = result,
+                Message = Message.CREATED_SUCCESS,
+                StatusCode = StatusCodes.Status201Created
+            });
+        }
+        [HttpPut("cancel-workshop")]
+        public async Task<IActionResult> CancelWorkshopAsync([FromBody] CancelWorkshopCommand request)
+        {
+            await _sender.Send(request);
+            return Ok(new ApiResponse
+            {
                 Message = Message.CREATED_SUCCESS,
                 StatusCode = StatusCodes.Status201Created
             });

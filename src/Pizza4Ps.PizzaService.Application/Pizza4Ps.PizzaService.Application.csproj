@@ -14,6 +14,9 @@
 		<None Update="Templates\CustomerRegisterEmail.html">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
+		<None Update="Templates\CancelWorkshopEmail.html">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
 	  <EmbeddedResource Remove="Models\**" />
 	  <None Remove="Models\**" />
 	</ItemGroup>
