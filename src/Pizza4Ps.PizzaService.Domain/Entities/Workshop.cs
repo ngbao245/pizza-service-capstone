@@ -18,6 +18,7 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         public string HotLineContact { get; set; }
 
         public DateTime WorkshopDate { get; set; }
+        public string? OpeningWorkshopJobId { get; set; }
 
         public DateTime StartRegisterDate { get; set; }
 
@@ -89,12 +90,12 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
 
         public void StartRegister()
         {
-            WorkshopStatus = WorkshopStatus.Opening;
+            WorkshopStatus = WorkshopStatus.OpeningToRegister;
         }
 
         public void StopRegister()
         {
-            WorkshopStatus = WorkshopStatus.Closed;
+            WorkshopStatus = WorkshopStatus.ClosedRegister;
         }
 
         public void SetOpenRegisterJobId(string? openRegisterJobId)
@@ -106,6 +107,17 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         {
             CloseRegisterJobId = closeRegisterJobId;
         }
-
+        public void OpenWorkshop()
+        {
+            WorkshopStatus = WorkshopStatus.Opening;
+        }
+        public void SetOpeningWorkshopJobId(string? openWorkshopJobId)
+        {
+            OpeningWorkshopJobId = openWorkshopJobId;
+        }
+        public void CloseWorkshop()
+        {
+            WorkshopStatus = WorkshopStatus.Closed;
+        }
     }
 }

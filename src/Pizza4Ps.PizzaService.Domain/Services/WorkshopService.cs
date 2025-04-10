@@ -30,30 +30,42 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             _workshopFoodDetailRepository.AddRange(workshopFoodDetails);
             await _unitOfWork.SaveChangeAsync();
             // Tính delay từ thời điểm hiện tại đến thời gian đăng ký
-            TimeSpan openDelay = workshop.StartRegisterDate - DateTime.Now;
+            TimeSpan openRegisterDelay = workshop.StartRegisterDate - DateTime.Now;
+            if (openRegisterDelay < TimeSpan.Zero)
+            {
+                openRegisterDelay = TimeSpan.Zero;
+            }
+            TimeSpan closeRegisterDelay = workshop.EndRegisterDate - DateTime.Now;
+            if (closeRegisterDelay < TimeSpan.Zero)
+            {
+                closeRegisterDelay = TimeSpan.Zero;
+            }
+            TimeSpan openDelay = workshop.WorkshopDate - DateTime.Now;
             if (openDelay < TimeSpan.Zero)
             {
                 openDelay = TimeSpan.Zero;
             }
-            TimeSpan closeDelay = workshop.EndRegisterDate - DateTime.Now;
-            if (closeDelay < TimeSpan.Zero)
-            {
-                closeDelay = TimeSpan.Zero;
-            }
 
             // Lập lịch job mở đăng ký
-            string openJobId = _backgroundJobService.ScheduleJob<WorkshopService>(
+            string openRegisterJobId = _backgroundJobService.ScheduleJob<WorkshopService>(
                 service => service.StartRegisterWorkshopSync(workshop.Id),
-                openDelay);
+                openRegisterDelay);
 
             // Lập lịch job đóng đăng ký
-            string closeJobId = _backgroundJobService.ScheduleJob<WorkshopService>(
+            string closeRegisterJobId = _backgroundJobService.ScheduleJob<WorkshopService>(
                 service => service.StopRegisterWorkshopSync(workshop.Id),
-                closeDelay);
+                closeRegisterDelay);
+
+            // Lập lịch job mở workshop
+            string OpenWorkshopJobId = _backgroundJobService.ScheduleJob<WorkshopService>(
+                service => service.OpenWorkshopSync(workshop.Id),
+                openDelay);
 
             // Cập nhật JobId vào Workshop
-            workshop.SetOpenRegisterJobId(openJobId);
-            workshop.SetCloseRegisterJobId(closeJobId);
+            workshop.SetOpenRegisterJobId(openRegisterJobId);
+            workshop.SetCloseRegisterJobId(closeRegisterJobId);
+            workshop.SetOpeningWorkshopJobId(OpenWorkshopJobId);
+
             await _unitOfWork.SaveChangeAsync();
             return workshop.Id;
         }
@@ -79,6 +91,17 @@ namespace Pizza4Ps.PizzaService.Domain.Services
                 await _unitOfWork.SaveChangeAsync();
             }
         }
+
+        public async Task OpenWorkshop(Guid workshopId)
+        {
+            var workshop = await _workshopRepository.GetSingleAsync(x => x.Id == workshopId);
+            if (workshop != null)
+            {
+                workshop.OpenWorkshop();
+                _workshopRepository.Update(workshop);
+                await _unitOfWork.SaveChangeAsync();
+            }
+        }
         // Các wrapper đồng bộ để sử dụng với Hangfire
         public void StartRegisterWorkshopSync(Guid workshopId)
         {
@@ -88,6 +111,11 @@ namespace Pizza4Ps.PizzaService.Domain.Services
         public void StopRegisterWorkshopSync(Guid workshopId)
         {
             CloseRegisterWorkshop(workshopId).GetAwaiter().GetResult();
+        }
+
+        public void OpenWorkshopSync(Guid workshopId)
+        {
+            OpenWorkshop(workshopId).GetAwaiter().GetResult();
         }
     }
 }
