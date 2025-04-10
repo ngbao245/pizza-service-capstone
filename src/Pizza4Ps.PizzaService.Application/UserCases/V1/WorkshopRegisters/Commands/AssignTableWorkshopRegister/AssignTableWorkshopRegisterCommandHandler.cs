@@ -50,6 +50,10 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.WorkshopRegisters.Comma
             {
                 throw new BusinessException("Table is invalid to assign");
             }
+            if (workshopRegister.WorkshopRegisterStatus != Domain.Enums.WorkshopRegisterStatus.Attended)
+            {
+                throw new BusinessException("Đăng ký này chưa được check in nên không thể sắp xếp bàn");
+            }
             if (table.CurrentOrderId != null)
             {
                 throw new BusinessException("Table is taken");
