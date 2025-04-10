@@ -7,7 +7,7 @@ namespace Pizza4Ps.PizzaService.Infrastructure.DependencyInjection.Extentions
 {
     public static class BackgroundJobAppBuilderExtentions
     {
-        public static IApplicationBuilder UseScheduledBackgroundJobs(this IApplicationBuilder app)
+        public static async Task<IApplicationBuilder> UseScheduledBackgroundJobs(this IApplicationBuilder app)
         {
             // Sử dụng Hangfire Dashboard
             //app.UseHangfireDashboard();
@@ -19,8 +19,11 @@ namespace Pizza4Ps.PizzaService.Infrastructure.DependencyInjection.Extentions
             });
 
             // Kích hoạt JobScheduler để lập lịch các job định kỳ khi ứng dụng khởi động
-            var jobScheduler = app.ApplicationServices.GetRequiredService<IJobManager>();
-            jobScheduler.ScheduleJobs();
+            using (var scope = app.ApplicationServices.CreateAsyncScope())
+            {
+                var jobScheduler = scope.ServiceProvider.GetRequiredService<IJobManager>();
+                await jobScheduler.ScheduleJobs();
+            }
 
             return app;
         }

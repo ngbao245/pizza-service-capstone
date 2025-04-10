@@ -6,6 +6,7 @@ using Pizza4Ps.PizzaService.Domain.Abstractions;
 using Pizza4Ps.PizzaService.Domain.Abstractions.BackgroundJobs;
 using Pizza4Ps.PizzaService.Infrastructure.Services;
 using Pizza4Ps.PizzaService.Infrastructure.Services.BackgroundJobs;
+using static System.Formats.Asn1.AsnWriter;
 
 namespace Pizza4Ps.PizzaService.Infrastructure.DependencyInjection.Extentions
 {
@@ -25,7 +26,7 @@ namespace Pizza4Ps.PizzaService.Infrastructure.DependencyInjection.Extentions
         public static IServiceCollection AddBackgroundJobServices(this IServiceCollection services)
         {
             services.AddSingleton<IBackgroundJobService, BackgroundJobService>();
-            services.AddSingleton<IJobManager, JobManager>();
+            services.AddScoped<IJobManager, JobManager>();
             // Đăng ký và khởi tạo các job định kỳ
             // jobManager.ScheduleJobs();
             return services;
