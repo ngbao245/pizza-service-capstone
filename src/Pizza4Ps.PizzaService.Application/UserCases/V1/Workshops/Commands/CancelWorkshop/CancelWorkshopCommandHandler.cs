@@ -35,7 +35,10 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Workshops.Commands.Canc
             List<(string name, string email)> customerInfos = workshopRegister
                 .Select(c => (c.CustomerName, c.CustomerEmail))  // ánh xạ thành tuple
                 .ToList();
-            await _emailService.SendCancelWorkshopEmail(customerInfos, workshop.Name, workshop.WorkshopDate);
+            if (customerInfos.Any())
+            {
+                await _emailService.SendCancelWorkshopEmail(customerInfos, workshop.Name, workshop.WorkshopDate);
+            }
             workshop.SetCancel();
             await _unitOfWork.SaveChangeAsync();
         }
