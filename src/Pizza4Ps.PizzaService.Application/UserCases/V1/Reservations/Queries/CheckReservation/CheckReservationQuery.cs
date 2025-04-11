@@ -7,6 +7,6 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Reservations.Queries.Ch
     public class CheckReservationQuery : PaginatedQuery<PaginatedResultDto<ReservationDto>>
     {
         public string PhoneNumber { get; set; }
-        public DateTimeOffset? BookingDate {  get; set; }
+        public DateTime? BookingDate {  get; set; }
     }
 }
