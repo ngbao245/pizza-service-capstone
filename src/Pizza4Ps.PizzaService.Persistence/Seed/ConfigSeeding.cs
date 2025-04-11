@@ -15,7 +15,7 @@ namespace Pizza4Ps.PizzaService.Persistence.Seed
                     Id = Guid.Parse("738eda23-9323-4db9-b36b-73adb8e942ef"),
                     ConfigType = ConfigType.VAT,
                     Key = "VAT",
-                    Value = "80",
+                    Value = "8",
                     Unit = "%"
                 },
                 new Config
