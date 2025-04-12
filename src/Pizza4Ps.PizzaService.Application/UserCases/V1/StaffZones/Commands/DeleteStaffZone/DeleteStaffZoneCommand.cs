@@ -4,8 +4,8 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.StaffZones.Commands.Del
 {
     public class DeleteStaffZoneCommand : IRequest
     {
-        public List<Guid> Ids { get; set; }
-        public bool isHardDelete { get; set; }
+		public List<Guid> Ids { get; set; }
+		public bool isHardDelete { get; set; }
     }
 }
 
