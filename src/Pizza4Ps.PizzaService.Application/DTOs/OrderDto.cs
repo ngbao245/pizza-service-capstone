@@ -21,6 +21,8 @@ namespace Pizza4Ps.PizzaService.Application.DTOs
         public virtual TableDto Table { get; set; }
         public virtual ICollection<AdditionalFeeDto> AdditionalFees { get; set; } 
         public virtual ICollection<OrderItemDto> OrderItems { get; set; }
+
+        public virtual ICollection<OrderVoucherDto> OrderVouchers { get; set; }
     }
 }
 

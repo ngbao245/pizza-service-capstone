@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Pizza4Ps.PizzaService.Persistence;
 
@@ -11,9 +12,11 @@ using Pizza4Ps.PizzaService.Persistence;
 namespace Pizza4Ps.PizzaService.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20250414174428_update-voucher-field")]
+    partial class updatevoucherfield
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1971,6 +1974,15 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<decimal>("ChangePoint")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime?>("ClaimedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("ClaimedByCustomerId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Code")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -1992,6 +2004,9 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
 
                     b.Property<decimal>("DiscountValue")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<bool>("IsClaimed")
+                        .HasColumnType("bit");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -2781,7 +2796,7 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
             modelBuilder.Entity("Pizza4Ps.PizzaService.Domain.Entities.OrderVoucher", b =>
                 {
                     b.HasOne("Pizza4Ps.PizzaService.Domain.Entities.Order", "Order")
-                        .WithMany("OrderVouchers")
+                        .WithMany()
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -3141,8 +3156,6 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                     b.Navigation("AdditionalFees");
 
                     b.Navigation("OrderItems");
-
-                    b.Navigation("OrderVouchers");
                 });
 
             modelBuilder.Entity("Pizza4Ps.PizzaService.Domain.Entities.OrderItem", b =>

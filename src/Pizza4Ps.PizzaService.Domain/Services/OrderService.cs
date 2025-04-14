@@ -182,9 +182,8 @@ namespace Pizza4Ps.PizzaService.Domain.Services
                     totalOrderItemPrice += orderItem.TotalPrice;
                 }
             }
-            // Tính các chi phí thêm của workshop
-            decimal totalAdditionalFees = 0;
             var additionalFees = new List<AdditionalFee>();
+            var workshopAdditionalFees = new List<AdditionalFee>();
             if (order.Type == OrderTypeEnum.Workshop)
             {
                 var workshopRegister = await _workshopRegisterRepository.GetSingleAsync(x => x.OrderId == order.Id);
@@ -199,14 +198,51 @@ namespace Pizza4Ps.PizzaService.Domain.Services
                     value: workshopRegister.TotalFee,
                     orderId: order.Id
                     );
-                additionalFees.Add(additionalFee);
-                totalAdditionalFees += workshopRegister.TotalFee;
+                workshopAdditionalFees.Add(additionalFee);
+            }
+            // Tính voucher
+            var voucherAdditionalFees = new List<AdditionalFee>();
+            var orderVouchers = await _orderVoucherRepository.GetListAsNoTracking(x => x.OrderId == order.Id)
+                .Include(x => x.Voucher)
+                .ToListAsync();
+            if (orderVouchers != null && orderVouchers.Any())
+            {
+                foreach (var orderVoucher in orderVouchers)
+                {
+                    if (orderVoucher.Voucher.DiscountType == DiscountTypeEnum.Direct)
+                    {
+                        var additionalVoucher = new AdditionalFee(
+                            id: Guid.NewGuid(),
+                            name: $"Voucher discount",
+                            description: "Voucher discount",
+                            value: -orderVoucher.Voucher.DiscountValue,
+                            orderId: order.Id);
+                        voucherAdditionalFees.Add(additionalVoucher);
+                    }
+                    else if (orderVoucher.Voucher.DiscountType == DiscountTypeEnum.Percentage)
+                    {
+                        var totalDiscount = ((totalOrderItemPrice + workshopAdditionalFees.Sum(x => x.Value)) * orderVoucher.Voucher.DiscountValue) / 100;
+                        var additionalVoucher = new AdditionalFee(
+                            id: Guid.NewGuid(),
+                            name: $"Voucher {orderVoucher.Voucher.DiscountValue}%",
+                            description: "Voucher discount",
+                            value: -totalDiscount,
+                            orderId: order.Id);
+                        voucherAdditionalFees.Add(additionalVoucher);
+                    }
+                }
             }
             // Tính thuế
+            var vatAdditionalFees = new List<AdditionalFee>();
             var vatFee = await _configRepository.GetSingleAsync(x => x.ConfigType == ConfigType.VAT);
             if (vatFee != null && decimal.Parse(vatFee.Value) != 0)
             {
-                var totalVatFee = ((totalOrderItemPrice + additionalFees.Sum(x => x.Value)) * decimal.Parse(vatFee.Value)) / 100;
+                decimal totalPriceCalVat = totalOrderItemPrice + workshopAdditionalFees.Sum(x => x.Value);
+                decimal totalVatFee = 0;
+                if (totalPriceCalVat > 0)
+                {
+                    totalVatFee = (totalPriceCalVat * decimal.Parse(vatFee.Value)) / 100;
+                }
                 var additionalFee = new AdditionalFee(
                     id: Guid.NewGuid(),
                     name: $"VAT ({vatFee.Value}%)",
@@ -214,10 +250,18 @@ namespace Pizza4Ps.PizzaService.Domain.Services
                     value: totalVatFee,
                     orderId: order.Id
                     );
-                additionalFees.Add(additionalFee);
-                totalAdditionalFees += totalVatFee;
+                vatAdditionalFees.Add(additionalFee);
             }
+            additionalFees.AddRange(workshopAdditionalFees);
+            additionalFees.AddRange(vatAdditionalFees);
+            additionalFees.AddRange(voucherAdditionalFees);
+
+            var totalAdditionalFees = additionalFees.Sum(x => x.Value);
             totalPrice = totalOrderItemPrice + totalAdditionalFees;
+            if (totalPrice < 0)
+            {
+                totalPrice = 0;
+            }
             order.SetCheckOut();
             order.SetTotalPrice(totalPrice);
             order.SetTotalAdditionalFeePrice(totalAdditionalFees);

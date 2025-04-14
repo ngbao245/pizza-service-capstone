@@ -21,6 +21,7 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         public virtual Table Table { get; set; }
         public virtual ICollection<AdditionalFee> AdditionalFees { get; set; } = new List<AdditionalFee>();
         public virtual ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
+        public virtual ICollection<OrderVoucher> OrderVouchers { get; set; } = new List<OrderVoucher>();
 
         private Order()
         {

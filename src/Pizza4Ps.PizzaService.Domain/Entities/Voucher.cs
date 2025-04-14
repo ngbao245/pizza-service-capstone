@@ -10,10 +10,10 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         public DiscountTypeEnum DiscountType { get; set; }
         public decimal DiscountValue { get; set; }
         // Trạng thái claim voucher
-        public bool IsClaimed { get; set; }           // false: chưa được claim; true: đã claim
-        public DateTime? ClaimedAt { get; set; }        // Thời gian khách hàng claim voucher
-        public Guid? ClaimedByCustomerId { get; set; }  // ID khách hàng claim voucher
-        public decimal ChangePoint { get; set; }     // Điểm đổi voucher
+        //public bool IsClaimed { get; set; }           // false: chưa được claim; true: đã claim
+        //public DateTime? ClaimedAt { get; set; }        // Thời gian khách hàng claim voucher
+        //public Guid? ClaimedByCustomerId { get; set; }  // ID khách hàng claim voucher
+        //public decimal ChangePoint { get; set; }     // Điểm đổi voucher
         public bool IsUsed { get; set; }           // false: chưa sử dụng; true: đã sử dụng
 
         // Liên kết đến đợt phát hành
@@ -31,38 +31,40 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
             DiscountType = discountType;
             DiscountValue = discountValue;
             VoucherBatchId = voucherBatchId;
-            IsClaimed = false;
             IsUsed = false;
         }
 
-
-
-
-        /// <summary>
-        /// Phương thức claim voucher
-        /// </summary>
-        /// <param name="claimedById">ID của người claim voucher</param>
-        public void Claim(Guid claimedById)
+        public void SetUsed()
         {
-            // Kiểm tra xem voucher đã được claim chưa
-            if (IsClaimed)
-            {
-                throw new BusinessException("Voucher đã được claim.");
-            }
-
-            // Kiểm tra xem voucher có còn trong thời gian hiệu lực không (nếu cần)
-            if (VoucherBatch != null)
-            {
-                if (DateTime.UtcNow < VoucherBatch.StartDate || DateTime.UtcNow > VoucherBatch.EndDate)
-                {
-                    throw new BusinessException("Voucher không nằm trong thời gian hiệu lực.");
-                }
-            }
-
-            // Đánh dấu voucher đã được claim
-            IsClaimed = true;
-            ClaimedAt = DateTime.UtcNow;
-            ClaimedByCustomerId = claimedById;
+            IsUsed = true;
         }
+
+
+        ///// <summary>
+        ///// Phương thức claim voucher
+        ///// </summary>
+        ///// <param name="claimedById">ID của người claim voucher</param>
+        //public void Claim(Guid claimedById)
+        //{
+        //    // Kiểm tra xem voucher đã được claim chưa
+        //    if (IsClaimed)
+        //    {
+        //        throw new BusinessException("Voucher đã được claim.");
+        //    }
+
+        //    // Kiểm tra xem voucher có còn trong thời gian hiệu lực không (nếu cần)
+        //    if (VoucherBatch != null)
+        //    {
+        //        if (DateTime.UtcNow < VoucherBatch.StartDate || DateTime.UtcNow > VoucherBatch.EndDate)
+        //        {
+        //            throw new BusinessException("Voucher không nằm trong thời gian hiệu lực.");
+        //        }
+        //    }
+
+        //    // Đánh dấu voucher đã được claim
+        //    IsClaimed = true;
+        //    ClaimedAt = DateTime.UtcNow;
+        //    ClaimedByCustomerId = claimedById;
+        //}
     }
 }

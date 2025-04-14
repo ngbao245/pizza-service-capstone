@@ -76,103 +76,103 @@ namespace Pizza4Ps.PizzaService.Domain.Services
 
         public async Task<bool> UserVoucherAsync(Guid orderId, string code)
         {
-            var existingOrder = await _orderRepository.GetSingleByIdAsync(orderId, "OrderItems,AdditionalFees");
-            if (existingOrder == null)
-            {
-                throw new BusinessException(BussinessErrorConstants.OrderErrorConstant.ORDER_NOT_FOUND);
-            }
-            if (existingOrder.Status != OrderStatusEnum.Unpaid)
-            {
-                throw new BusinessException(BussinessErrorConstants.OrderErrorConstant.ORDER_INVALID_STATUS);
-            }
-
-
-            var existingVoucher = await _voucherRepository.GetSingleAsync(x => x.Code == code, "VoucherBatch");
-            if (existingVoucher == null)
-            {
-                throw new BusinessException(BussinessErrorConstants.VoucherErrorConstant.VOUCHER_NOT_FOUND);
-            }
-
-            if (!existingVoucher.IsClaimed)
-            {
-                throw new BusinessException(BussinessErrorConstants.VoucherErrorConstant.VOUCHER_NOT_ACTIVATED);
-            }
-
-            if (existingVoucher.VoucherBatch != null)
-            {
-                var now = DateTime.UtcNow;
-                if (now < existingVoucher.VoucherBatch.StartDate || now > existingVoucher.VoucherBatch.EndDate)
-                {
-                    throw new BusinessException(BussinessErrorConstants.VoucherErrorConstant.VOUCHER_EXPIRED);
-                }
-
-                var duplicateVoucherExists = await _orderVoucherRepository
-                    .GetListAsTracking(ov => ov.OrderId == orderId, "Voucher")
-                    .AnyAsync(ov => ov.Voucher.VoucherBatchId == existingVoucher.VoucherBatchId
-                                      && ov.Status != OrderVoucherStatusEnum.Cancelled);
-                if (duplicateVoucherExists)
-                {
-                    throw new BusinessException(BussinessErrorConstants.VoucherErrorConstant.DUPLICATE_VOUCHER_FROM_BATCH);
-                }
-
-            }
-            var duplicateNonBatchExists = await _orderVoucherRepository
-                .GetListAsTracking(ov => ov.OrderId == orderId, "Voucher")
-                .AnyAsync(ov => ov.Voucher.Id == existingVoucher.Id
-                                  && ov.Status != OrderVoucherStatusEnum.Cancelled);
-            if (duplicateNonBatchExists)
-            {
-                throw new BusinessException(BussinessErrorConstants.VoucherErrorConstant.DUPLICATE_VOUCHER_NONBATCH);
-            }
-
-            //if (existingOrder.OrderItems == null || !existingOrder.OrderItems.Any())
+            //var existingOrder = await _orderRepository.GetSingleByIdAsync(orderId, "OrderItems,AdditionalFees");
+            //if (existingOrder == null)
             //{
-            //    throw new BusinessException(BussinessErrorConstants.OrderErrorConstant.ORDER_NO_ITEMS);
+            //    throw new BusinessException(BussinessErrorConstants.OrderErrorConstant.ORDER_NOT_FOUND);
+            //}
+            //if (existingOrder.Status != OrderStatusEnum.Unpaid)
+            //{
+            //    throw new BusinessException(BussinessErrorConstants.OrderErrorConstant.ORDER_INVALID_STATUS);
             //}
 
-            decimal orderSubtotal = existingOrder.OrderItems.Sum(item => item.TotalPrice);
 
-            decimal discountValue = 0;
-            if (existingVoucher.DiscountType == DiscountTypeEnum.Direct)
-            {
-                discountValue = existingVoucher.DiscountValue;
-            }
-            else if (existingVoucher.DiscountType == DiscountTypeEnum.Percentage)
-            {
-                discountValue = Math.Round(orderSubtotal * existingVoucher.DiscountValue / 100, 2);
-            }
-            else
-            {
-                throw new BusinessException(BussinessErrorConstants.VoucherErrorConstant.INVALID_DISCOUNT_TYPE);
-            }
+            //var existingVoucher = await _voucherRepository.GetSingleAsync(x => x.Code == code, "VoucherBatch");
+            //if (existingVoucher == null)
+            //{
+            //    throw new BusinessException(BussinessErrorConstants.VoucherErrorConstant.VOUCHER_NOT_FOUND);
+            //}
 
-            if (discountValue > orderSubtotal)
-            {
-                throw new BusinessException(BussinessErrorConstants.VoucherErrorConstant.DISCOUNT_EXCEEDS_SUBTOTAL);
-            }
-            var discountFee = new AdditionalFee(
-                Guid.NewGuid(),
-                $"Voucher: {existingVoucher.Code}",
-                $"Applied voucher {existingVoucher.Code}",
-                -discountValue,
-                existingOrder.Id
-            );
+            //if (!existingVoucher.IsClaimed)
+            //{
+            //    throw new BusinessException(BussinessErrorConstants.VoucherErrorConstant.VOUCHER_NOT_ACTIVATED);
+            //}
 
-            if (discountFee.Value < -orderSubtotal)
-            {
-                throw new BusinessException(BussinessErrorConstants.AdditionalFeeErrorConstant.VALUE_INVALID);
-            }
-            _additionalFeeRepository.Add(discountFee);
+            //if (existingVoucher.VoucherBatch != null)
+            //{
+            //    var now = DateTime.UtcNow;
+            //    if (now < existingVoucher.VoucherBatch.StartDate || now > existingVoucher.VoucherBatch.EndDate)
+            //    {
+            //        throw new BusinessException(BussinessErrorConstants.VoucherErrorConstant.VOUCHER_EXPIRED);
+            //    }
 
-            existingOrder.AdditionalFees.Add(discountFee);
+            //    var duplicateVoucherExists = await _orderVoucherRepository
+            //        .GetListAsTracking(ov => ov.OrderId == orderId, "Voucher")
+            //        .AnyAsync(ov => ov.Voucher.VoucherBatchId == existingVoucher.VoucherBatchId
+            //                          && ov.Status != OrderVoucherStatusEnum.Cancelled);
+            //    if (duplicateVoucherExists)
+            //    {
+            //        throw new BusinessException(BussinessErrorConstants.VoucherErrorConstant.DUPLICATE_VOUCHER_FROM_BATCH);
+            //    }
 
-            var orderVoucher = new OrderVoucher(Guid.NewGuid(), existingOrder.Id, existingVoucher.Id);
-            _orderVoucherRepository.Add(orderVoucher);
+            //}
+            //var duplicateNonBatchExists = await _orderVoucherRepository
+            //    .GetListAsTracking(ov => ov.OrderId == orderId, "Voucher")
+            //    .AnyAsync(ov => ov.Voucher.Id == existingVoucher.Id
+            //                      && ov.Status != OrderVoucherStatusEnum.Cancelled);
+            //if (duplicateNonBatchExists)
+            //{
+            //    throw new BusinessException(BussinessErrorConstants.VoucherErrorConstant.DUPLICATE_VOUCHER_NONBATCH);
+            //}
 
-            //decimal newTotal = orderSubtotal + existingOrder.AdditionalFees.Sum(fee => fee.Value);
-            //existingOrder.SetTotalPrice(newTotal);
-            _orderRepository.Update(existingOrder);
-            await _unitOfWork.SaveChangeAsync();
+            ////if (existingOrder.OrderItems == null || !existingOrder.OrderItems.Any())
+            ////{
+            ////    throw new BusinessException(BussinessErrorConstants.OrderErrorConstant.ORDER_NO_ITEMS);
+            ////}
+
+            //decimal orderSubtotal = existingOrder.OrderItems.Sum(item => item.TotalPrice);
+
+            //decimal discountValue = 0;
+            //if (existingVoucher.DiscountType == DiscountTypeEnum.Direct)
+            //{
+            //    discountValue = existingVoucher.DiscountValue;
+            //}
+            //else if (existingVoucher.DiscountType == DiscountTypeEnum.Percentage)
+            //{
+            //    discountValue = Math.Round(orderSubtotal * existingVoucher.DiscountValue / 100, 2);
+            //}
+            //else
+            //{
+            //    throw new BusinessException(BussinessErrorConstants.VoucherErrorConstant.INVALID_DISCOUNT_TYPE);
+            //}
+
+            //if (discountValue > orderSubtotal)
+            //{
+            //    throw new BusinessException(BussinessErrorConstants.VoucherErrorConstant.DISCOUNT_EXCEEDS_SUBTOTAL);
+            //}
+            //var discountFee = new AdditionalFee(
+            //    Guid.NewGuid(),
+            //    $"Voucher: {existingVoucher.Code}",
+            //    $"Applied voucher {existingVoucher.Code}",
+            //    -discountValue,
+            //    existingOrder.Id
+            //);
+
+            //if (discountFee.Value < -orderSubtotal)
+            //{
+            //    throw new BusinessException(BussinessErrorConstants.AdditionalFeeErrorConstant.VALUE_INVALID);
+            //}
+            //_additionalFeeRepository.Add(discountFee);
+
+            //existingOrder.AdditionalFees.Add(discountFee);
+
+            //var orderVoucher = new OrderVoucher(Guid.NewGuid(), existingOrder.Id, existingVoucher.Id);
+            //_orderVoucherRepository.Add(orderVoucher);
+
+            ////decimal newTotal = orderSubtotal + existingOrder.AdditionalFees.Sum(fee => fee.Value);
+            ////existingOrder.SetTotalPrice(newTotal);
+            //_orderRepository.Update(existingOrder);
+            //await _unitOfWork.SaveChangeAsync();
             return true;
         }
 

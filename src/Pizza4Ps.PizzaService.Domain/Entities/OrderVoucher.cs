@@ -7,7 +7,6 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
 	{
 		public Guid OrderId { get; set; }
 		public Guid VoucherId { get; set; }
-        public OrderVoucherStatusEnum Status { get; set; }
 
 
         public virtual Order Order { get; set; }
@@ -22,7 +21,6 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
 			Id = id;
 			OrderId = orderId;
 			VoucherId = voucherId;
-			SetApplied();
 		}
 
 		public void UpdateOrderVoucher(Guid orderId, Guid voucherId)
@@ -30,18 +28,5 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
 			OrderId = orderId;
 			VoucherId = voucherId;
 		}
-
-		public void SetApplied() 
-		{
-			Status = OrderVoucherStatusEnum.Applied;
-		}
-        public void SetUsed()
-        {
-            Status = OrderVoucherStatusEnum.Used;
-        }
-        public void Cancel()
-        {
-            Status = OrderVoucherStatusEnum.Cancelled;
-        }
     }
 }

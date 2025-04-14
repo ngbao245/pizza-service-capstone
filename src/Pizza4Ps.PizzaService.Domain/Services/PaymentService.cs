@@ -13,6 +13,8 @@ namespace Pizza4Ps.PizzaService.Domain.Services
 {
     public class PaymentService : DomainService, IPaymentService
     {
+        private readonly IVoucherRepository _voucherRepository;
+        private readonly IOrderVoucherRepository _orderVoucherRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IPayOsService _payOsService;
         private readonly IOrderRepository _orderRepository;
@@ -24,8 +26,12 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             IPayOsService payOsService,
             IOrderRepository orderRepository,
             IPaymentRepository paymentRepository,
-            ITableRepository tableRepository)
+            ITableRepository tableRepository,
+            IOrderVoucherRepository orderVoucherRepository,
+            IVoucherRepository voucherRepository)
         {
+            _voucherRepository = voucherRepository;
+            _orderVoucherRepository = orderVoucherRepository;
             _unitOfWork = unitOfWork;
             _payOsService = payOsService;
             _orderRepository = orderRepository;
@@ -59,13 +65,25 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             order.SetOrderCode(orderCode.ToString());
             order.SetPaid();
 
-            var table = await _tableRepository.GetListAsTracking(x => x.CurrentOrderId == orderId).FirstAsync();
+            var table = await _tableRepository.GetListAsTracking(x => x.CurrentOrderId == orderId).FirstOrDefaultAsync();
             if (table != null)
             {
                 table.SetNullCurrentOrderId();
                 _tableRepository.Update(table);
             }
+            var voucherUses = await _orderVoucherRepository.GetListAsTracking(x => x.OrderId == order.Id)
+                .Include(x => x.Voucher)
+                .ToListAsync();
 
+            if (voucherUses != null)
+            {
+                foreach (var voucherUse in voucherUses)
+                {
+                    var voucher = voucherUse.Voucher;
+                    voucher.SetUsed();
+                    _voucherRepository.Update(voucher);
+                }
+            }
             _paymentRepository.Add(entity);
             _orderRepository.Update(order);
             await _unitOfWork.SaveChangeAsync();
@@ -95,6 +113,21 @@ namespace Pizza4Ps.PizzaService.Domain.Services
                         _tableRepository.Update(table);
                         Console.WriteLine($"Order {order.Id} is paid, {order}");
                     }
+
+                    var voucherUses = await _orderVoucherRepository.GetListAsTracking(x => x.OrderId == order.Id)
+                        .Include(x => x.Voucher)
+                        .ToListAsync();
+
+                    if (voucherUses != null)
+                    {
+                        foreach(var voucherUse in voucherUses)
+                        {
+                            var voucher = voucherUse.Voucher;
+                            voucher.SetUsed();
+                            _voucherRepository.Update(voucher);
+                        }
+                    }
+
                     await _unitOfWork.SaveChangeAsync();
                     return true;
                 }
