@@ -22,8 +22,8 @@ namespace Pizza4Ps.PizzaService.Domain.Services
 
         public async Task<Guid> CreateAsync(Guid orderId, Guid voucherId)
         {
-            var orderVoucher = _orderVoucherRepository.GetListAsNoTracking(x => x.VoucherId == voucherId);
-            if (orderVoucher == null)
+            var orderVoucher = await _orderVoucherRepository.GetListAsNoTracking(x => x.VoucherId == voucherId).ToListAsync();
+            if (orderVoucher != null && orderVoucher.Any())
             {
                 throw new BusinessException("Voucher đã được sử dụng");
             }

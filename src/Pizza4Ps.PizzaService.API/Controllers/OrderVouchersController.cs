@@ -9,6 +9,7 @@ using Pizza4Ps.PizzaService.Application.UserCases.V1.OrderVouchers.Commands.Upda
 using Pizza4Ps.PizzaService.Application.UserCases.V1.OrderVouchers.Queries.GetListOrderVoucher;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.OrderVouchers.Queries.GetListOrderVoucherIgnoreQueryFilter;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.OrderVouchers.Queries.GetOrderVoucherById;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Commands.DeleteProduct;
 
 namespace Pizza4Ps.PizzaService.API.Controllers
 {
@@ -97,10 +98,14 @@ namespace Pizza4Ps.PizzaService.API.Controllers
             });
         }
 
-        [HttpDelete()]
-        public async Task<IActionResult> DeleteManyAsync(List<Guid> ids, bool isHardDeleted = false)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteManyAsync([FromRoute] Guid id, bool isHardDeleted = false)
         {
-            await _sender.Send(new DeleteOrderVoucherCommand { Ids = ids, isHardDelete = isHardDeleted });
+            await _sender.Send(new DeleteOrderVoucherCommand
+            {
+                Ids = new List<Guid> { id },
+                isHardDelete = isHardDeleted
+            });
             return Ok(new ApiResponse
             {
                 Message = Message.DELETED_SUCCESS,
