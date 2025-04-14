@@ -66,29 +66,19 @@ namespace Pizza4Ps.PizzaService.Domain.Services
                 throw new BusinessException(BussinessErrorConstants.SwapWorkingSlotErrorConstant.SWAP_WORKING_SLOT_INVALID_STAFF_STATUS);
             }
 
-            // Nếu một nhân viên có WorkingSlotRegister và nhân viên kia có StaffZoneSchedule thì không thể đổi ca
-            var hasWorkingSlotRegisterFrom = await _workingSlotRegisterRepository.GetSingleAsync(
-                x => x.StaffId == employeeFromId
-                && x.WorkingDate == workingDateFrom
-                && x.WorkingSlotId == workingSlotFromId);
             var hasStaffZoneScheduleFrom = await _staffZoneScheduleRepository.GetSingleAsync(
                 x => x.StaffId == employeeFromId
                 && x.WorkingDate == workingDateFrom
                 && x.WorkingSlotId == workingSlotFromId);
 
-            var hasWorkingSlotRegisterTo = await _workingSlotRegisterRepository.GetSingleAsync(
-                x => x.StaffId == employeeToId
-                && x.WorkingDate == workingDateTo
-                && x.WorkingSlotId == workingSlotToId);
             var hasStaffZoneScheduleTo = await _staffZoneScheduleRepository.GetSingleAsync(
                 x => x.StaffId == employeeToId
                 && x.WorkingDate == workingDateTo
                 && x.WorkingSlotId == workingSlotToId);
 
-            if ((hasWorkingSlotRegisterFrom != null && hasStaffZoneScheduleTo != null) ||
-                (hasWorkingSlotRegisterTo != null && hasStaffZoneScheduleFrom != null))
+            if (hasStaffZoneScheduleFrom == null || hasStaffZoneScheduleTo == null)
             {
-                throw new BusinessException("Không thể đổi ca giữa nhân viên có WorkingSlotRegister và nhân viên có StaffZoneSchedule.");
+                throw new BusinessException(BussinessErrorConstants.SwapWorkingSlotErrorConstant.SWAP_WORKING_SLOT_INVALID_REQUEST);
             }
 
             // Kiểm tra đơn đổi ca đã duyệt
@@ -161,38 +151,6 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             var entity = await _swapWorkingSlotRepository.GetSingleByIdAsync(id);
             if (entity == null) throw new BusinessException(BussinessErrorConstants.SwapWorkingSlotErrorConstant.SWAP_WORKING_SLOT_NOT_FOUND);
 
-            var workingSlotRegisterFrom = await _workingSlotRegisterRepository.GetSingleAsync(
-                x => x.StaffId == entity.EmployeeFromId
-                     && x.WorkingSlotId == entity.WorkingSlotFromId
-                     && x.WorkingDate == entity.WorkingDateFrom);
-            var workingSlotRegisterTo = await _workingSlotRegisterRepository.GetSingleAsync(
-                x => x.StaffId == entity.EmployeeToId
-                     && x.WorkingSlotId == entity.WorkingSlotToId
-                     && x.WorkingDate == entity.WorkingDateTo);
-
-            if (workingSlotRegisterFrom == null || workingSlotRegisterTo == null)
-            {
-                throw new BusinessException(BussinessErrorConstants.WorkingSlotRegisterErrorConstant.WORKING_SLOT_REGISTER_NOT_FOUND);
-            }
-
-            // Swap shift, working date and StaffId
-            var tempWorkingSlotId = workingSlotRegisterFrom.WorkingSlotId;
-            var tempWorkingDate = workingSlotRegisterFrom.WorkingDate;
-            var tempStaffId = workingSlotRegisterFrom.StaffId;
-
-            // Perform the swap
-            workingSlotRegisterFrom.WorkingSlotId = workingSlotRegisterTo.WorkingSlotId;
-            workingSlotRegisterFrom.WorkingDate = workingSlotRegisterTo.WorkingDate;
-            workingSlotRegisterFrom.StaffId = entity.EmployeeToId;
-
-            workingSlotRegisterTo.WorkingSlotId = tempWorkingSlotId;
-            workingSlotRegisterTo.WorkingDate = tempWorkingDate;
-            workingSlotRegisterTo.StaffId = entity.EmployeeFromId;
-
-            _workingSlotRegisterRepository.Update(workingSlotRegisterFrom);
-            _workingSlotRegisterRepository.Update(workingSlotRegisterTo);
-
-            //swap zone
             var staffZoneScheduleFrom = await _staffZoneScheduleRepository.GetSingleAsync(
                 x => x.StaffId == entity.EmployeeFromId
                      && x.WorkingSlotId == entity.WorkingSlotFromId
@@ -208,11 +166,19 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             }
 
             var tempZoneId = staffZoneScheduleFrom.ZoneId;
-            staffZoneScheduleFrom.ZoneId = staffZoneScheduleTo.ZoneId;
-            staffZoneScheduleTo.ZoneId = tempZoneId;
+            var tempSlotId = staffZoneScheduleFrom.WorkingSlotId;
+            var tempDate = staffZoneScheduleFrom.WorkingDate;
+            var tempStaffId = staffZoneScheduleFrom.StaffId;
 
-            staffZoneScheduleFrom.WorkingDate = workingSlotRegisterFrom.WorkingDate;
-            staffZoneScheduleTo.WorkingDate = workingSlotRegisterTo.WorkingDate;
+            staffZoneScheduleFrom.ZoneId = staffZoneScheduleTo.ZoneId;
+            staffZoneScheduleFrom.WorkingSlotId = staffZoneScheduleTo.WorkingSlotId;
+            staffZoneScheduleFrom.WorkingDate = staffZoneScheduleTo.WorkingDate;
+            staffZoneScheduleFrom.StaffId = staffZoneScheduleTo.StaffId;
+
+            staffZoneScheduleTo.ZoneId = tempZoneId;
+            staffZoneScheduleTo.WorkingSlotId = tempSlotId;
+            staffZoneScheduleTo.WorkingDate = tempDate;
+            staffZoneScheduleTo.StaffId = tempStaffId;
 
             _staffZoneScheduleRepository.Update(staffZoneScheduleFrom);
             _staffZoneScheduleRepository.Update(staffZoneScheduleTo);

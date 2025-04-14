@@ -128,6 +128,11 @@ namespace Pizza4Ps.PizzaService.Domain.Services
         {
             var entity = await _workingSlotRegisterRepository.GetSingleByIdAsync(id);
             if (entity == null) throw new BusinessException(BussinessErrorConstants.WorkingSlotRegisterErrorConstant.WORKING_SLOT_REGISTER_NOT_FOUND);
+
+
+            if (entity.Status != WorkingSlotRegisterStatusEnum.Onhold)
+                throw new BusinessException(BussinessErrorConstants.WorkingSlotRegisterErrorConstant.WORKING_SLOT_REGISTER_INVALID_APPROVE);
+
             entity.setApproved();
             await _unitOfWork.SaveChangeAsync();
         }

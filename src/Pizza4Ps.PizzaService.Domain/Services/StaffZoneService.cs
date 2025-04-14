@@ -35,7 +35,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
 
             if (existingStaffZone != null)
             {
-                throw new BusinessException(BussinessErrorConstants.StaffZoneErrorConstant.STAFF_NOT_FOUND);
+                throw new BusinessException(BussinessErrorConstants.StaffZoneErrorConstant.STAFF_ZONE_EXISTED);
             }
 
             var staffZone = new StaffZone(Guid.NewGuid(), note, staffId, zoneId);
@@ -113,6 +113,14 @@ namespace Pizza4Ps.PizzaService.Domain.Services
 
         public async Task<Guid> UpdateAsync(Guid id, string note, Guid staffId, Guid zoneId)
         {
+            var existingStaffZone = await _staffZoneRepository.GetSingleAsync(
+                x => x.StaffId == staffId && x.ZoneId == zoneId);
+
+            if (existingStaffZone != null)
+            {
+                throw new BusinessException(BussinessErrorConstants.StaffZoneErrorConstant.STAFF_ZONE_EXISTED);
+            }
+
             var entity = await _staffZoneRepository.GetSingleByIdAsync(id);
             entity.UpdateStaffZone(note, staffId, zoneId);
             await _unitOfWork.SaveChangeAsync();

@@ -20,6 +20,7 @@
             public const string WORKING_SLOT_REGISTER_NOT_FOUND = "Không tìm thấy đơn đăng ký ca làm việc";
             public const string WORKING_SLOT_REGISTER_ALREADY_APPROVED = "Đăng ký ca làm việc đã được chấp thuận";
             public const string WORKING_SLOT_REGISTER_ALREADY_REJECTED = "Đăng ký ca làm việc đã bị từ chối";
+            public const string WORKING_SLOT_REGISTER_INVALID_APPROVE = "Chỉ những đơn đăng ký đang chờ duyệt(onhold) mới có thể được duyệt.";
         }
 
         public class SwapWorkingSlotErrorConstant
@@ -31,6 +32,7 @@
             public const string SWAP_WORKING_SLOT_INVALID_WORKING_DATE = "Hai nhân viên có cùng ngày làm việc và cùng ca làm việc";
             public const string SWAP_WORKING_SLOT_INVALID_STATE = "Không thể từ chối yêu cầu không ở trạng thái chờ duyệt";
             public const string SWAP_WORKING_SLOT_INVALID_STAFF_STATUS = "Chỉ nhân viên part-time mới có thể đổi ca";
+            public const string SWAP_WORKING_SLOT_INVALID_REQUEST = "Chỉ hỗ trợ đổi ca giữa các nhân viên có StaffZoneSchedule";
         }
 
         public class ConfigErrorConstant
@@ -203,6 +205,7 @@
         {
             public const string STAFFZONE_NOT_FOUND = "Không tìm thấy nhân viên trong khu vực theo thời gian thực";
             public const string STAFF_NOT_FOUND = "Không tìm thấy nhân viên theo thời gian thực";
+            public const string STAFF_ZONE_EXISTED = "Nhân viên đang làm việc trong khu vực và ca này rồi";
         }
 
         public class TableErrorConstant

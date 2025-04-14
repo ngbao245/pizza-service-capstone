@@ -64,13 +64,19 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             var staffZoneSchedule = new StaffZoneSchedule(Guid.NewGuid(), staff.FullName, zone.Name, workingDate, staffId, zoneId, workingSlotId);
             _staffZoneScheduleRepository.Add(staffZoneSchedule);
             workingSlotRegister.ZoneId = zoneId;
+            workingSlotRegister.setApproved();
             await _unitOfWork.SaveChangeAsync();
             return staffZoneSchedule.Id;
         }
 
-        public async Task AutoAssignZoneForWeekAsync(DateOnly startDate)
+        public async Task AutoAssignZoneForWeekJobAsync()
         {
-            if (startDate.DayOfWeek != DayOfWeek.Monday) throw new BusinessException(BussinessErrorConstants.DayErrorConstant.INVALID_START_DATE);
+            var config = await _configRepository.GetSingleAsync(x => x.ConfigType == ConfigType.REGISTRATION_CUTOFF_DAY);
+            int cutoffDays = int.Parse(config.Value);
+
+            var vietnamTime = TimeZoneInfo.ConvertTimeBySystemTimeZoneId(DateTime.UtcNow, "SE Asia Standard Time");
+            var nextMonday = vietnamTime.Date.AddDays(7 - (int)vietnamTime.DayOfWeek + (int)DayOfWeek.Monday);
+            var startDate = DateOnly.FromDateTime(nextMonday);
 
             var staffZoneSchedules = new List<StaffZoneSchedule>();
             var assignedZones = new Dictionary<Guid, Guid>();
@@ -78,17 +84,9 @@ namespace Pizza4Ps.PizzaService.Domain.Services
 
             //check duplicate
             var endDate = startDate.AddDays(7);
-            var oldSchedules = await _staffZoneScheduleRepository
+            var existingSchedules = await _staffZoneScheduleRepository
                 .GetListAsTracking(x => x.WorkingDate >= startDate && x.WorkingDate < endDate)
                 .ToListAsync();
-
-            if (oldSchedules.Any())
-            {
-                foreach (var oldSchedule in oldSchedules)
-                {
-                    _staffZoneScheduleRepository.SoftDelete(oldSchedule);
-                }
-            }
 
             //
 
@@ -111,12 +109,12 @@ namespace Pizza4Ps.PizzaService.Domain.Services
                     .Include(x => x.WorkingSlot)
                     .ToListAsync();
 
-                AssignFullTimeZones(fullTimeStaffs, diningAreas, kitchenAreas, assignedZones, zoneCapacity, staffZoneSchedules, workingDate);
+                AssignFullTimeZones(fullTimeStaffs, diningAreas, kitchenAreas, assignedZones, zoneCapacity, staffZoneSchedules, existingSchedules, workingDate);
 
                 foreach (var slot in workingSlots)
                 {
                     AssignZones(partTimeRegistrations.Where(x => x.WorkingSlotId == slot.Id).Select(x => x.Staff).ToList(),
-                        diningAreas, kitchenAreas, staffZoneSchedules, assignedZones, zoneCapacity, workingDate, slot.Id);
+                        diningAreas, kitchenAreas, staffZoneSchedules, assignedZones, zoneCapacity, existingSchedules, workingDate, slot.Id);
                 }
             }
             _staffZoneScheduleRepository.AddRange(staffZoneSchedules);
@@ -137,14 +135,9 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             await _unitOfWork.SaveChangeAsync();
         }
 
-        public async Task AutoAssignZoneForWeekJobAsync()
+        public async Task AutoAssignZoneForWeekAsync(DateOnly startDate)
         {
-            var config = await _configRepository.GetSingleAsync(x => x.ConfigType == ConfigType.REGISTRATION_CUTOFF_DAY);
-            int cutoffDays = int.Parse(config.Value);
-
-            var vietnamTime = TimeZoneInfo.ConvertTimeBySystemTimeZoneId(DateTime.UtcNow, "SE Asia Standard Time");
-            var nextMonday = vietnamTime.Date.AddDays(7 - (int)vietnamTime.DayOfWeek + (int)DayOfWeek.Monday);
-            var startDate = DateOnly.FromDateTime(nextMonday);
+            if (startDate.DayOfWeek != DayOfWeek.Monday) throw new BusinessException(BussinessErrorConstants.DayErrorConstant.INVALID_START_DATE);
 
             var staffZoneSchedules = new List<StaffZoneSchedule>();
             var assignedZones = new Dictionary<Guid, Guid>();
@@ -152,17 +145,9 @@ namespace Pizza4Ps.PizzaService.Domain.Services
 
             //check duplicate
             var endDate = startDate.AddDays(7);
-            var oldSchedules = await _staffZoneScheduleRepository
+            var existingSchedules = await _staffZoneScheduleRepository
                 .GetListAsTracking(x => x.WorkingDate >= startDate && x.WorkingDate < endDate)
                 .ToListAsync();
-
-            if (oldSchedules.Any())
-            {
-                foreach (var oldSchedule in oldSchedules)
-                {
-                    _staffZoneScheduleRepository.SoftDelete(oldSchedule);
-                }
-            }
 
             //
 
@@ -185,12 +170,12 @@ namespace Pizza4Ps.PizzaService.Domain.Services
                     .Include(x => x.WorkingSlot)
                     .ToListAsync();
 
-                AssignFullTimeZones(fullTimeStaffs, diningAreas, kitchenAreas, assignedZones, zoneCapacity, staffZoneSchedules, workingDate);
+                AssignFullTimeZones(fullTimeStaffs, diningAreas, kitchenAreas, assignedZones, zoneCapacity, staffZoneSchedules, existingSchedules, workingDate);
 
                 foreach (var slot in workingSlots)
                 {
-                    AssignZones(partTimeRegistrations.Where(x => x.WorkingSlotId == slot.Id).Select(x => x.Staff).ToList(),
-                        diningAreas, kitchenAreas, staffZoneSchedules, assignedZones, zoneCapacity, workingDate, slot.Id);
+                    var partTimeRegist = partTimeRegistrations.Where(x => x.WorkingSlotId == slot.Id).Select(x => x.Staff).ToList();
+                    AssignZones(partTimeRegist, diningAreas, kitchenAreas, staffZoneSchedules, assignedZones, zoneCapacity, existingSchedules, workingDate, slot.Id);
                 }
             }
             _staffZoneScheduleRepository.AddRange(staffZoneSchedules);
@@ -218,6 +203,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             Dictionary<Guid, Guid> assignedZones,
             Dictionary<Guid, int> zoneCapacity,
             List<StaffZoneSchedule> staffZoneSchedules,
+            List<StaffZoneSchedule> existingSchedules,
             DateOnly workingDate)
         {
             int diningIndex = 0, kitchenIndex = 0;
@@ -225,6 +211,9 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             foreach (var staff in fullTimeStaffs)
             {
                 if (staff.StaffType == StaffTypeEnum.Manager) continue;
+
+                if (existingSchedules.Any(x => x.StaffId == staff.Id && x.WorkingDate == workingDate))
+                    continue;
 
                 if (!assignedZones.ContainsKey(staff.Id))
                 {
@@ -265,12 +254,18 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             List<StaffZoneSchedule> staffZoneSchedules,
             Dictionary<Guid, Guid> assignedZones,
             Dictionary<Guid, int> zoneCapacity,
+            List<StaffZoneSchedule> existingSchedules,
             DateOnly workingDate,
             Guid workingSlotId)
         {
             foreach (var staff in staffList)
             {
                 if (staff.StaffType == StaffTypeEnum.Manager) continue;
+
+                if (existingSchedules.Any(
+                    x => x.StaffId == staff.Id &&
+                    x.WorkingDate == workingDate &&
+                    x.WorkingSlotId == workingSlotId)) continue;
 
                 if (!assignedZones.ContainsKey(staff.Id))
                 {
