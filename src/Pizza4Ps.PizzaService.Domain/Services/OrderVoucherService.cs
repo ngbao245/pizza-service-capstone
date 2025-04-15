@@ -11,21 +11,25 @@ namespace Pizza4Ps.PizzaService.Domain.Services
 {
     public class OrderVoucherService : DomainService, IOrderVoucherService
     {
+        private readonly IVoucherRepository _voucherRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IOrderVoucherRepository _orderVoucherRepository;
 
-        public OrderVoucherService(IUnitOfWork unitOfWork, IOrderVoucherRepository orderVoucherRepository)
+        public OrderVoucherService(IUnitOfWork unitOfWork, IOrderVoucherRepository orderVoucherRepository,
+            IVoucherRepository voucherRepository)
         {
+            _voucherRepository = voucherRepository;
             _unitOfWork = unitOfWork;
             _orderVoucherRepository = orderVoucherRepository;
         }
 
         public async Task<Guid> CreateAsync(Guid orderId, Guid voucherId)
         {
-            var orderVoucher = await _orderVoucherRepository.GetListAsNoTracking(x => x.VoucherId == voucherId).ToListAsync();
-            if (orderVoucher != null && orderVoucher.Any())
+            var voucher = await _voucherRepository.GetSingleAsync(x => x.Id == voucherId);
+            if (voucher == null) throw new ServerException(ServerErrorConstants.NOT_FOUND);
+            if (voucher.VoucherStatus != Enums.VoucherStatus.Available)
             {
-                throw new BusinessException("Voucher đã được sử dụng");
+                throw new BusinessException("Voucher đã được sử dụng hoặc không hợp lệ");
             }
             var entity = new OrderVoucher(Guid.NewGuid(), orderId, voucherId);
             _orderVoucherRepository.Add(entity);

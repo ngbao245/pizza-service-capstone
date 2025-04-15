@@ -14,7 +14,7 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         //public DateTime? ClaimedAt { get; set; }        // Thời gian khách hàng claim voucher
         //public Guid? ClaimedByCustomerId { get; set; }  // ID khách hàng claim voucher
         //public decimal ChangePoint { get; set; }     // Điểm đổi voucher
-        public bool IsUsed { get; set; }           // false: chưa sử dụng; true: đã sử dụng
+        public VoucherStatus VoucherStatus { get; set; }       
 
         // Liên kết đến đợt phát hành
         public Guid? VoucherBatchId { get; set; }
@@ -31,14 +31,23 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
             DiscountType = discountType;
             DiscountValue = discountValue;
             VoucherBatchId = voucherBatchId;
-            IsUsed = false;
+            VoucherStatus = VoucherStatus.Available;
         }
 
         public void SetUsed()
         {
-            IsUsed = true;
+            VoucherStatus = VoucherStatus.Used;
         }
 
+        public void SetPendingPayment()
+        {
+            VoucherStatus = VoucherStatus.PendingPayment;
+        }
+
+        public void SetAvailable()
+        {
+            VoucherStatus = VoucherStatus.Available;
+        }
 
         ///// <summary>
         ///// Phương thức claim voucher

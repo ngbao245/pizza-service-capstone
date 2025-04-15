@@ -10,7 +10,8 @@ namespace Pizza4Ps.PizzaService.Application.Mappers
         public VoucherProfile()
         {
             CreateMap<VoucherDto, Voucher>().ReverseMap()
-                .ForMember(dest => dest.DiscountType, opt => opt.MapFrom(src => Enum.GetName(typeof(DiscountTypeEnum), src.DiscountType)));
+                .ForMember(dest => dest.DiscountType, opt => opt.MapFrom(src => Enum.GetName(typeof(DiscountTypeEnum), src.DiscountType)))
+                .ForMember(dest => dest.VoucherStatus, opt => opt.MapFrom(src => Enum.GetName(typeof(VoucherStatus), src.VoucherStatus)));
         }
     }
 }

@@ -41,6 +41,23 @@ namespace Pizza4Ps.PizzaService.Domain.Services
 
         public async Task<string> CreatePaymentQRCode(Guid orderId)
         {
+            var voucherUses = await _orderVoucherRepository.GetListAsTracking(x => x.OrderId == orderId)
+                .Include(x => x.Voucher)
+                .ToListAsync();
+
+            if (voucherUses != null)
+            {
+                foreach (var voucherUse in voucherUses)
+                {
+                    var voucher = voucherUse.Voucher;
+                    if (voucher.VoucherStatus != VoucherStatus.Available)
+                    {
+                        throw new BusinessException($"Voucher {voucher.Code} đã được sử dụng hoặc không hợp lệ");
+                    }
+                    voucher.SetPendingPayment();
+                    _voucherRepository.Update(voucher);
+                }
+            }
             var order = await _orderRepository.GetSingleByIdAsync(orderId);
             if (order == null)
                 throw new BusinessException(BussinessErrorConstants.OrderErrorConstant.ORDER_NOT_FOUND);
@@ -50,11 +67,57 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             var result = await _payOsService.CreatePaymentLink(orderCode, (int)order.TotalPrice!, "Thanh toán đơn hàng");
             order.SetOrderCode(orderCode.ToString());
             _orderRepository.Update(order);
+
             await _unitOfWork.SaveChangeAsync();
             return result.qrCode;
         }
+        public async Task CancelPaymentQRCode(Guid orderId)
+        {
+            var voucherUses = await _orderVoucherRepository.GetListAsTracking(x => x.OrderId == orderId)
+                .Include(x => x.Voucher)
+                .ToListAsync();
+
+            if (voucherUses != null)
+            {
+                foreach (var voucherUse in voucherUses)
+                {
+                    var voucher = voucherUse.Voucher;
+                    if (voucher.VoucherStatus != VoucherStatus.PendingPayment)
+                    {
+                        throw new BusinessException($"Voucher {voucher.Code} đã được sử dụng hoặc không hợp lệ");
+                    }
+                    voucher.SetAvailable();
+                    _voucherRepository.Update(voucher);
+                }
+            }
+            var order = await _orderRepository.GetSingleByIdAsync(orderId);
+            if (order == null)
+                throw new BusinessException(BussinessErrorConstants.OrderErrorConstant.ORDER_NOT_FOUND);
+
+            order.SetOrderCode(null);
+            _orderRepository.Update(order);
+            await _unitOfWork.SaveChangeAsync();
+        }
+
         public async Task<Guid> CreatePaymentCash(Guid orderId)
         {
+            var voucherUses = await _orderVoucherRepository.GetListAsTracking(x => x.OrderId == orderId)
+                .Include(x => x.Voucher)
+                .ToListAsync();
+
+            if (voucherUses != null)
+            {
+                foreach (var voucherUse in voucherUses)
+                {
+                    var voucher = voucherUse.Voucher;
+                    if (voucher.VoucherStatus != VoucherStatus.Available)
+                    {
+                        throw new BusinessException($"Voucher {voucher.Code} đã được sử dụng hoặc không hợp lệ");
+                    }
+                    voucher.SetUsed();
+                    _voucherRepository.Update(voucher);
+                }
+            }
             var order = await _orderRepository.GetSingleByIdAsync(orderId);
             if (order == null)
                 throw new BusinessException(BussinessErrorConstants.OrderErrorConstant.ORDER_NOT_FOUND);
@@ -70,19 +133,6 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             {
                 table.SetNullCurrentOrderId();
                 _tableRepository.Update(table);
-            }
-            var voucherUses = await _orderVoucherRepository.GetListAsTracking(x => x.OrderId == order.Id)
-                .Include(x => x.Voucher)
-                .ToListAsync();
-
-            if (voucherUses != null)
-            {
-                foreach (var voucherUse in voucherUses)
-                {
-                    var voucher = voucherUse.Voucher;
-                    voucher.SetUsed();
-                    _voucherRepository.Update(voucher);
-                }
             }
             _paymentRepository.Add(entity);
             _orderRepository.Update(order);
@@ -120,9 +170,13 @@ namespace Pizza4Ps.PizzaService.Domain.Services
 
                     if (voucherUses != null)
                     {
-                        foreach(var voucherUse in voucherUses)
+                        foreach (var voucherUse in voucherUses)
                         {
                             var voucher = voucherUse.Voucher;
+                            if (voucher.VoucherStatus != VoucherStatus.PendingPayment)
+                            {
+                                throw new BusinessException("Voucher không hợp lệ");
+                            }
                             voucher.SetUsed();
                             _voucherRepository.Update(voucher);
                         }

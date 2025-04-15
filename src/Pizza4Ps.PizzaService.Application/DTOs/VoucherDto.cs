@@ -10,7 +10,7 @@ namespace Pizza4Ps.PizzaService.Application.DTOs
         public string DiscountType { get; set; }
         public decimal DiscountValue { get; set; }
 
-
+        public string VoucherStatus { get; set; }
         // Liên kết đến đợt phát hành
         public Guid? VoucherBatchId { get; set; }
         public VoucherBatchDto VoucherBatch { get; set; }

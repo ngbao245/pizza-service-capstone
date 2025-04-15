@@ -4,6 +4,7 @@ using Net.payOS.Types;
 using Pizza4Ps.PizzaService.API.Constants;
 using Pizza4Ps.PizzaService.API.Models;
 using Pizza4Ps.PizzaService.Application.DTOs.WebhookPayOsDto;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Payments.Commands.CancelPaymentQRCode;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Payments.Commands.CreatePaymentQRCode;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Payments.Commands.DeletePayment;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Payments.Commands.PayOrderCash;
@@ -52,6 +53,19 @@ namespace Pizza4Ps.PizzaService.API.Controllers
             return Ok(new ApiResponse
             {
                 Result = result,
+                Message = Message.CREATED_SUCCESS,
+                StatusCode = StatusCodes.Status201Created
+            });
+        }
+        [HttpPost("cancel-payment-qrcode/{orderId}")]
+        public async Task<IActionResult> CancelPaymentLinkAsync([FromRoute] Guid orderId)
+        {
+            await _sender.Send(new CancelPaymentQRCodeCommand
+            {
+                OrderId = orderId
+            });
+            return Ok(new ApiResponse
+            {
                 Message = Message.CREATED_SUCCESS,
                 StatusCode = StatusCodes.Status201Created
             });
