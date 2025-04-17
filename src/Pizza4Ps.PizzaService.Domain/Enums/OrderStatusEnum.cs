@@ -5,5 +5,6 @@
         Unpaid, // Chưa thanh toán
         CheckedOut, // Đã check out
         Paid, // Đã thanh toán
+        Cancelled, // Đã hủy
     }
 }

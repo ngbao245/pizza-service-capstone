@@ -65,8 +65,11 @@ namespace Pizza4Ps.PizzaService.Domain.Services
         public async Task<Guid> CloseTable(Guid tableId)
         {
             var entity = await _tableRepository.GetSingleByIdAsync(tableId);
+            if (entity.CurrentOrderId != null)
+            {
+                throw new BusinessException("Vui lòng xử lý đơn hàng ngay tại bàn này trước khi đóng bàn");
+            }
             entity.SetClosing();
-            entity.SetNullCurrentOrderId();
             await _unitOfWork.SaveChangeAsync();
             return entity.Id;
         }
@@ -82,6 +85,18 @@ namespace Pizza4Ps.PizzaService.Domain.Services
         {
             var entity = await _tableRepository.GetSingleByIdAsync(tableId);
             entity.SetOpening();
+            await _unitOfWork.SaveChangeAsync();
+            return entity.Id;
+        }
+
+        public async Task<Guid> LockTable(Guid tableId, string? note)
+        {
+            var entity = await _tableRepository.GetSingleByIdAsync(tableId);
+            if (entity.CurrentOrderId != null)
+            {
+                throw new BusinessException("Vui lòng xử lý đơn hàng ngay tại bàn này trước khi khoá bàn");
+            }
+            entity.SetLocked(note);
             await _unitOfWork.SaveChangeAsync();
             return entity.Id;
         }

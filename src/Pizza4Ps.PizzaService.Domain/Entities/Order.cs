@@ -13,6 +13,7 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         public decimal? TotalOrderItemPrice { get; set; }
         public decimal? TotalAdditionalFeePrice { get; set; }
         public OrderStatusEnum Status { get; set; }
+        public string? Note { get; set; }
         public OrderTypeEnum Type { get; set; }
         public string? Phone { get; set; }
 

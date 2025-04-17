@@ -14,6 +14,8 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         public Guid? CurrentOrderId { get; set; }
         public Guid ZoneId { get; set; }
 
+        public string? Note { get; set; }
+
         public virtual Order CurrentOrder { get; set; }
         public virtual Zone Zone { get; set; }
 
@@ -55,9 +57,10 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         {
             Status = TableStatusEnum.Closing;
         }
-        public void SetLocked()
+        public void SetLocked(string? note)
         {
             Status = TableStatusEnum.Locked;
+            Note = note;
         }
         public void SetBooked()
         {
