@@ -13,7 +13,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Tables.Commands.LockTab
         }
         public async Task Handle(LockTableCommand request, CancellationToken cancellationToken)
         {
-            await _tableService.OpenTable(request.Id);
+            await _tableService.LockTable(request.Id, request.Note);
         }
     }
 }

@@ -317,5 +317,23 @@ namespace Pizza4Ps.PizzaService.Domain.Services
         {
             throw new NotImplementedException();
         }
+
+        public async Task CancelOrder(Guid orderId, string? note)
+        {
+            var order = await _orderRepository.GetSingleByIdAsync(orderId);
+            if (order == null)
+                throw new BusinessException(BussinessErrorConstants.OrderErrorConstant.ORDER_NOT_FOUND);
+            order.SetCancelOrder(note);
+
+            var table = await _tableRepository.GetSingleAsync(x => x.CurrentOrderId == order.Id);
+            if (table != null)
+            {
+                table.SetNullCurrentOrderId();
+                _tableRepository.Update(table);
+                Console.WriteLine($"Order {order.Id} is paid, {order}");
+            }
+            _orderRepository.Update(order);
+            await _unitOfWork.SaveChangeAsync();
+        }
     }
 }

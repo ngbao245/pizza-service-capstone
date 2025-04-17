@@ -4,6 +4,7 @@ using Pizza4Ps.PizzaService.API.Constants;
 using Pizza4Ps.PizzaService.API.Models;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Orders.Commands.AddFoodToOrder;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Orders.Commands.CancelCheckOut;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Orders.Commands.CancelOrder;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Orders.Commands.CheckOutOrder;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Orders.Commands.CreateOrder;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Orders.Commands.DeleteOrder;
@@ -177,6 +178,18 @@ namespace Pizza4Ps.PizzaService.API.Controllers
             {
                 OrderId = orderId
             });
+            return Ok(new ApiResponse
+            {
+                Success = true,
+                Message = Message.CREATED_SUCCESS,
+                StatusCode = StatusCodes.Status200OK
+            });
+        }
+        [HttpPut("cancel-order/{orderId}")]
+        public async Task<IActionResult> CancelOrderAsync([FromRoute] Guid orderId, [FromBody] CancelOrderCommand command)
+        {
+            command.Id = orderId;
+            await _sender.Send(command);
             return Ok(new ApiResponse
             {
                 Success = true,

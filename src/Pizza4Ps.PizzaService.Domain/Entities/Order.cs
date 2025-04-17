@@ -69,6 +69,13 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
             Status = OrderStatusEnum.CheckedOut;
         }
 
+        public void SetCancelOrder(string? note)
+        {
+            Status = OrderStatusEnum.Cancelled;
+            EndTime = DateTime.Now;
+            Note = note;
+        }
+
         public void SetPaid()
         {
             Status = OrderStatusEnum.Paid;
