@@ -8,6 +8,7 @@ namespace Pizza4Ps.PizzaService.Application.DTOs
         public string Code { get; set; }
         public int Capacity { get; set; }
         public string Status { get; set; }
+        public string? Note { get; set; }
         public Guid ZoneId { get; set; }
         public Guid? CurrentOrderId { get; set; }
 
