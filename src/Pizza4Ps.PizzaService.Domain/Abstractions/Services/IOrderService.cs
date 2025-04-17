@@ -15,5 +15,6 @@ namespace Pizza4Ps.PizzaService.Domain.Abstractions.Services
         Task CheckOutOrder(Guid orderId);
         Task CancelCheckOut(Guid orderId);
 		Task CancelOrder(Guid orderId, string? note);
+		Task SwapTableOrder(Guid orderId, Guid tableId);
     }
 }

@@ -335,5 +335,29 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             _orderRepository.Update(order);
             await _unitOfWork.SaveChangeAsync();
         }
+
+        public async Task SwapTableOrder(Guid orderId, Guid tableId)
+        {
+            var order = await _orderRepository.GetSingleByIdAsync(orderId);
+            if (order == null)
+                throw new BusinessException(BussinessErrorConstants.OrderErrorConstant.ORDER_NOT_FOUND);
+            var table = await _tableRepository.GetSingleAsync(x => x.CurrentOrderId == order.Id);
+            if (table != null)
+            {
+                table.SetNullCurrentOrderId();
+                _tableRepository.Update(table);
+            }
+            var newTable = await _tableRepository.GetSingleByIdAsync(tableId);
+            if (newTable == null)
+                throw new BusinessException(BussinessErrorConstants.TableErrorConstant.TABLE_NOT_FOUND);
+            if (newTable.Status != TableStatusEnum.Closing)
+            {
+                throw new BusinessException("Bàn hiện tại đang được sử dụng");
+            }
+            newTable.SetOpening();
+            newTable.SetCurrentOrderId(order.Id);
+            _tableRepository.Update(newTable);
+            await _unitOfWork.SaveChangeAsync();
+        }
     }
 }
