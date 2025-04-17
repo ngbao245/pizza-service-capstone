@@ -35,8 +35,6 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
 
         public void setApproved()
         {
-            if (Status == WorkingSlotRegisterStatusEnum.Approved)
-                throw new BusinessException(BussinessErrorConstants.WorkingSlotRegisterErrorConstant.WORKING_SLOT_REGISTER_ALREADY_APPROVED);
             Status = WorkingSlotRegisterStatusEnum.Approved;
         }
 
