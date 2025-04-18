@@ -49,6 +49,7 @@
         public class WorkingSlotErrorConstant
         {
             public const string WORKING_SLOT_NOT_FOUND = "Không tìm thấy ca làm việc";
+            public const string WORKING_SLOT_INVALID = "Không trong ca làm việc";
             public const string INVALID_WORKING_SLOT_SHIFT_TIME = "Thời gian bắt đầu ca phải sớm hơn thời gian kết thúc";
             public const string ALREADY_REGISTERED = "Nhân viên đã đăng ký ca làm việc này";
         }

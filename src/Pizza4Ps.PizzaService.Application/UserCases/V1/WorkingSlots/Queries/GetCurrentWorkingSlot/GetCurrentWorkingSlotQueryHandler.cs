@@ -30,8 +30,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.WorkingSlots.Queries.Ge
             var query = _workingSlotRepository.GetListAsNoTracking(
                 x => x.Day.Name == dayName
                 && x.ShiftStart <= nowTime.ToTimeSpan()
-                && nowTime.ToTimeSpan() < x.ShiftEnd,
-                includeProperties: "Shift,Day");
+                && nowTime.ToTimeSpan() < x.ShiftEnd);
             var result = await query.FirstOrDefaultAsync(cancellationToken);
             return _mapper.Map<WorkingSlotDto>(result);
         }

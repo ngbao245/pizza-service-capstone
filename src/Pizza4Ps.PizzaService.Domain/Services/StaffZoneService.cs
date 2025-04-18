@@ -44,39 +44,82 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             return staffZone.Id;
         }
 
-        public async Task SyncStaffZonesAsync(DateOnly workingDate, Guid workingSlotId)
+        //public async Task SyncStaffZonesAsync(DateOnly workingDate, Guid workingSlotId)
+        //{
+        //    var now = TimeOnly.FromDateTime(TimeZoneInfo.ConvertTimeFromUtc(
+        //        DateTime.UtcNow,
+        //        TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time")
+        //    ));
+        //    var nowSpan = now.ToTimeSpan();
+
+        //    // Lấy ca đang xử lý
+        //    var workingSlot = await _workingSlotRepository.GetSingleByIdAsync(workingSlotId);
+        //    if (workingSlot == null) throw new BusinessException(BussinessErrorConstants.WorkingSlotErrorConstant.WORKING_SLOT_NOT_FOUND);
+
+        //    // Lấy tất cả schedules trong ngày
+        //    var schedules = await _staffZoneScheduleRepository.GetListAsTracking(
+        //        x => x.WorkingDate == workingDate).ToListAsync();
+
+        //    var relevantSchedules = schedules.Where(x =>
+        //        (x.WorkingSlotId == workingSlotId)
+        //        ||
+        //        (x.WorkingSlotId == null && workingSlot.ShiftStart <= nowSpan && nowSpan <= workingSlot.ShiftEnd)
+        //    ).ToList();
+
+        //    // Xóa hết staff-zone cũ
+        //    var existingStaffZones = await _staffZoneRepository.GetListAsTracking().ToListAsync();
+        //    foreach (var existingStaffZone in existingStaffZones)
+        //    {
+        //        _staffZoneRepository.SoftDelete(existingStaffZone);
+        //    }
+
+        //    // Gán lại staff-zone mới
+        //    var newStaffZones = relevantSchedules
+        //       .Select(s => new StaffZone(Guid.NewGuid(), null, s.StaffId, s.ZoneId))
+        //       .ToList();
+
+        //    _staffZoneRepository.AddRange(newStaffZones);
+        //    await _unitOfWork.SaveChangeAsync();
+        //}
+
+        public async Task SyncStaffZonesAsync(Guid workingSlotId)
         {
-            var now = TimeOnly.FromDateTime(TimeZoneInfo.ConvertTimeFromUtc(
-                DateTime.UtcNow,
-                TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time")
-            ));
-            var nowSpan = now.ToTimeSpan();
+            var vnNow = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time"));
+            var today = DateOnly.FromDateTime(vnNow);
+            var nowSpan = TimeOnly.FromDateTime(vnNow).ToTimeSpan();
 
-            // Lấy ca đang xử lý
+            // Lấy ca làm
             var workingSlot = await _workingSlotRepository.GetSingleByIdAsync(workingSlotId);
-            if (workingSlot == null) throw new BusinessException(BussinessErrorConstants.WorkingSlotErrorConstant.WORKING_SLOT_NOT_FOUND);
+            if (workingSlot == null)
+                throw new BusinessException(BussinessErrorConstants.WorkingSlotErrorConstant.WORKING_SLOT_NOT_FOUND);
 
-            // Lấy tất cả schedules trong ngày
+            // Kiểm tra thời gian hiện tại có nằm trong ca không
+            if (nowSpan < workingSlot.ShiftStart || nowSpan >= workingSlot.ShiftEnd)
+                throw new BusinessException(BussinessErrorConstants.WorkingSlotErrorConstant.WORKING_SLOT_INVALID);
+
+            // Lấy toàn bộ schedule hôm nay, lọc ở bước sau
             var schedules = await _staffZoneScheduleRepository.GetListAsTracking(
-                x => x.WorkingDate == workingDate).ToListAsync();
+                x => x.WorkingDate == today &&
+                    (x.WorkingSlotId == workingSlotId || x.WorkingSlotId == null)
+            ).ToListAsync();
 
-            var relevantSchedules = schedules.Where(x =>
-                (x.WorkingSlotId == workingSlotId)
-                ||
-                (x.WorkingSlotId == null && workingSlot.ShiftStart <= nowSpan && nowSpan <= workingSlot.ShiftEnd)
-            ).ToList();
+            // Lọc những cái null-slot theo thời gian thực tế
+            var relevantSchedules = schedules
+                .Where(x => x.WorkingSlotId == workingSlotId ||
+                            (x.WorkingSlotId == null && workingSlot.ShiftStart <= nowSpan && nowSpan < workingSlot.ShiftEnd))
+                .ToList();
 
-            // Xóa hết staff-zone cũ
+            // Xóa toàn bộ staff-zone hiện tại
             var existingStaffZones = await _staffZoneRepository.GetListAsTracking().ToListAsync();
-            foreach (var existingStaffZone in existingStaffZones)
+            foreach (var zone in existingStaffZones)
             {
-                _staffZoneRepository.SoftDelete(existingStaffZone);
+                _staffZoneRepository.SoftDelete(zone);
             }
 
             // Gán lại staff-zone mới
             var newStaffZones = relevantSchedules
-               .Select(s => new StaffZone(Guid.NewGuid(), null, s.StaffId, s.ZoneId))
-               .ToList();
+                .Select(s => new StaffZone(Guid.NewGuid(), null, s.StaffId, s.ZoneId))
+                .ToList();
 
             _staffZoneRepository.AddRange(newStaffZones);
             await _unitOfWork.SaveChangeAsync();
