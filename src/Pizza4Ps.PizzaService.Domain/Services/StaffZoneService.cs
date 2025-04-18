@@ -118,15 +118,10 @@ namespace Pizza4Ps.PizzaService.Domain.Services
                             (x.WorkingSlotId == null && workingSlot.ShiftStart <= nowSpan && nowSpan < workingSlot.ShiftEnd))
                 .ToList();
 
-            // Xóa toàn bộ staff-zone hiện tại
             var existingStaffZones = await _staffZoneRepository.GetListAsTracking().ToListAsync();
-            foreach (var zone in existingStaffZones)
-            {
-                _staffZoneRepository.SoftDelete(zone);
-            }
 
-            // Gán lại staff-zone mới
             var newStaffZones = relevantSchedules
+                .Where(s => !existingStaffZones.Any(z => z.StaffId == s.StaffId && z.ZoneId == s.ZoneId))
                 .Select(s => new StaffZone(Guid.NewGuid(), null, s.StaffId, s.ZoneId))
                 .ToList();
 
