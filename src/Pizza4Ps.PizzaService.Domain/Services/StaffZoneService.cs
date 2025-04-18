@@ -6,6 +6,7 @@ using Pizza4Ps.PizzaService.Domain.Entities;
 using Pizza4Ps.PizzaService.Domain.Exceptions;
 using Pizza4Ps.PizzaService.Domain.Services.ServiceBase;
 using Microsoft.EntityFrameworkCore;
+using Pizza4Ps.PizzaService.Domain.Enums;
 
 namespace Pizza4Ps.PizzaService.Domain.Services
 {
@@ -15,21 +16,29 @@ namespace Pizza4Ps.PizzaService.Domain.Services
         private readonly IStaffZoneRepository _staffZoneRepository;
         private readonly IStaffZoneScheduleRepository _staffZoneScheduleRepository;
         private readonly IWorkingSlotRepository _workingSlotRepository;
+        private readonly IStaffRepository _staffRepository;
+        private readonly IZoneRepository _zoneRepository;
 
         public StaffZoneService(
             IUnitOfWork unitOfWork,
             IStaffZoneRepository staffZoneRepository,
             IStaffZoneScheduleRepository staffZoneScheduleRepository,
-            IWorkingSlotRepository workingSlotRepository)
+            IWorkingSlotRepository workingSlotRepository,
+            IStaffRepository staffRepository,
+            IZoneRepository zoneRepository)
         {
             _unitOfWork = unitOfWork;
             _staffZoneRepository = staffZoneRepository;
             _staffZoneScheduleRepository = staffZoneScheduleRepository;
             _workingSlotRepository = workingSlotRepository;
+            _staffRepository = staffRepository;
+            _zoneRepository = zoneRepository;
         }
 
         public async Task<Guid> CreateAsync(string note, Guid staffId, Guid zoneId)
         {
+            await ValidateStaffZoneAssignment(staffId, zoneId);
+
             var existingStaffZone = await _staffZoneRepository.GetSingleAsync(
                 x => x.StaffId == staffId && x.ZoneId == zoneId);
 
@@ -156,8 +165,10 @@ namespace Pizza4Ps.PizzaService.Domain.Services
 
         public async Task<Guid> UpdateAsync(Guid id, string note, Guid staffId, Guid zoneId)
         {
+            await ValidateStaffZoneAssignment(staffId, zoneId);
+
             var existingStaffZone = await _staffZoneRepository.GetSingleAsync(
-                x => x.StaffId == staffId && x.ZoneId == zoneId);
+                x => x.StaffId == staffId && x.ZoneId == zoneId && x.Id != id);
 
             if (existingStaffZone != null)
             {
@@ -168,6 +179,30 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             entity.UpdateStaffZone(note, staffId, zoneId);
             await _unitOfWork.SaveChangeAsync();
             return entity.Id;
+        }
+
+        private async Task ValidateStaffZoneAssignment(Guid staffId, Guid zoneId)
+        {
+            var staff = await _staffRepository.GetSingleByIdAsync(staffId)
+                ?? throw new BusinessException(BussinessErrorConstants.StaffErrorConstant.STAFF_NOT_FOUND);
+
+            var zone = await _zoneRepository.GetSingleByIdAsync(zoneId)
+                ?? throw new BusinessException(BussinessErrorConstants.ZoneErrorConstant.ZONE_NOT_FOUND);
+
+            switch (zone.Type)
+            {
+                case ZoneTypeEnum.KitchenArea:
+                    if (staff.StaffType != StaffTypeEnum.Cheff)
+                        throw new BusinessException(BussinessErrorConstants.StaffZoneErrorConstant.STAFF_ZONE_INVALID_CHEF);
+                    break;
+
+                case ZoneTypeEnum.DininingArea:
+                    if (staff.StaffType == StaffTypeEnum.Cheff)
+                        throw new BusinessException(BussinessErrorConstants.StaffZoneErrorConstant.STAFF_ZONE_INVALID_STAFF);
+                    break;
+                case ZoneTypeEnum.WorkshopArea:
+                    break;
+            }
         }
     }
 }
