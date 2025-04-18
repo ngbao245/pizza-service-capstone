@@ -111,9 +111,9 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             {
                 return false;
             }
-            if (existingTable.Status == TableStatusEnum.Locked)
+            if (existingTable.Status != TableStatusEnum.Closing)
             {
-                throw new BusinessException(BussinessErrorConstants.TableErrorConstant.INVALID_TABLE_STATUS);
+                throw new BusinessException(BussinessErrorConstants.TableErrorConstant.UNAVAILABLE_TABLE_STATUS);
             }
             var existingReservation = await _bookingRepository.GetSingleByIdAsync(reservationId);
             if (existingReservation == null)
@@ -122,7 +122,11 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             }
             if (existingReservation.BookingStatus == ReservationStatusEnum.Cancelled)
             {
-                throw new BusinessException(BussinessErrorConstants.BookingErrorConstant.INVALID_BOOKING_STATUS);
+                throw new BusinessException("Yêu cầu đặt bàn đã bị huỷ");
+            }
+            if (existingReservation.BookingStatus == ReservationStatusEnum.Checkedin)
+            {
+                throw new BusinessException("Yêu cầu đặt bàn đã hoàn tất");
             }
             if (DateTime.Now < existingReservation.BookingTime.AddMinutes(-30))
             {

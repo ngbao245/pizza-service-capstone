@@ -16,6 +16,7 @@ public class Reservation : EntityAuditBase<Guid>
 
     public Guid? TableId { get; set; }
     public virtual Table? Table { get; set; }
+    public virtual ICollection<TableAssignReservation> TableAssignReservations { get; set; }
 
     private Reservation() { }
 
