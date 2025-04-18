@@ -13,6 +13,7 @@ using Pizza4Ps.PizzaService.Application.UserCases.V1.Reservations.Commands.Assig
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Reservations.Commands.CancelReservation;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Reservations.Commands.CheckInReservation;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Reservations.Commands.ConfirmReservation;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Reservations.Commands.UnAssignTableReservation;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Reservations.Queries.CheckReservation;
 
 namespace Pizza4Ps.PizzaService.API.Controllers
@@ -174,6 +175,18 @@ namespace Pizza4Ps.PizzaService.API.Controllers
             });
         }
 
+        [HttpPost("unassign-table-reservation")]
+        public async Task<IActionResult> UnAssignTableAsync([FromBody] UnAssignTableReservationCommand command)
+        {
+            await _sender.Send(command);
+
+            return Ok(new ApiResponse
+            {
+                Success = true,
+                Message = Message.UPDATED_SUCCESS,
+                StatusCode = 200
+            });
+        }
         /// <summary>
         /// Note: Trạng thái bàn: Created -> confirm -> Checkin -> 
         /// Note: Trạng thái bàn: Cancel

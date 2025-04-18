@@ -13,6 +13,8 @@ namespace Pizza4Ps.PizzaService.Domain.Services
 {
     public class ReservationService : DomainService, IReservationService
     {
+        private readonly ITableAssignReservationRepository _tableAssignReservationRepository;
+        private readonly IConfigRepository _configRepository;
         private readonly IBackgroundJobService _backgroundJobService;
         private readonly IRealTimeNotifier _realTimeNotifier;
         private readonly ICustomerRepository _customerRepository;
@@ -25,8 +27,12 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             , IReservationSlotRepository bookingSlotRepository, ITableRepository tableRepository,
             ICustomerRepository customerRepository,
             IRealTimeNotifier realTimeNotifier,
-            IBackgroundJobService backgroundJobService)
+            IBackgroundJobService backgroundJobService,
+            IConfigRepository configRepository,
+            ITableAssignReservationRepository tableAssignReservationRepository)
         {
+            _tableAssignReservationRepository = tableAssignReservationRepository;
+            _configRepository = configRepository;
             _backgroundJobService = backgroundJobService;
             _realTimeNotifier = realTimeNotifier;
             _customerRepository = customerRepository;
@@ -104,16 +110,19 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             throw new NotImplementedException();
         }
 
-        public async Task<bool> AssignTableAsync(Guid reservationId, Guid tableId)
+        public async Task<bool> AssignTableAsync(Guid reservationId, List<Guid> tableIds)
         {
-            var existingTable = await _tableRepository.GetSingleByIdAsync(tableId);
-            if (existingTable == null)
+            var existingTables = await _tableRepository.GetListAsTracking(x => tableIds.Contains(x.Id)).ToListAsync();
+            if (existingTables == null)
             {
                 return false;
             }
-            if (existingTable.Status != TableStatusEnum.Closing)
+            foreach (var table in existingTables)
             {
-                throw new BusinessException(BussinessErrorConstants.TableErrorConstant.UNAVAILABLE_TABLE_STATUS);
+                if (table.Status != TableStatusEnum.Closing)
+                {
+                    throw new BusinessException(BussinessErrorConstants.TableErrorConstant.UNAVAILABLE_TABLE_STATUS);
+                }
             }
             var existingReservation = await _bookingRepository.GetSingleByIdAsync(reservationId);
             if (existingReservation == null)
@@ -128,21 +137,78 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             {
                 throw new BusinessException("Yêu cầu đặt bàn đã hoàn tất");
             }
-            if (DateTime.Now < existingReservation.BookingTime.AddMinutes(-30))
+            var configTimePreviousBooking = await _configRepository.GetSingleAsync(x => x.ConfigType == ConfigType.BOOKING_DATE_PREVIOUS_NOTIFY);
+            double configTimePreviousBookingDouble = 30;
+            if (configTimePreviousBooking != null)
             {
-                throw new BusinessException("Bạn không thể sắp xếp bàn cho việc đặt bàn trước quá 30 phút");
+                configTimePreviousBookingDouble = double.Parse(configTimePreviousBooking.Value);
             }
-            existingReservation.TableId = existingTable.Id;
-            _bookingRepository.Update(existingReservation);
-            existingTable.SetBooked();
-            _tableRepository.Update(existingTable);
+            if (DateTime.Now < existingReservation.BookingTime.AddMinutes(-configTimePreviousBookingDouble))
+            {
+                throw new BusinessException($"Bạn không thể sắp xếp bàn cho việc đặt bàn trước quá {configTimePreviousBookingDouble.ToString()} phút");
+            }
+            foreach (var table in existingTables)
+            {
+                var tableAssignReservation = new TableAssignReservation
+                {
+                    ReservationId = reservationId,
+                    Id = Guid.NewGuid(),
+                    TableId = table.Id,
+                };
+                table.SetBooked();
+                _tableRepository.Update(table);
+                _tableAssignReservationRepository.Add(tableAssignReservation);
+            }
             await _unitOfWork.SaveChangeAsync();
             return true;
         }
-
+        public async Task<bool> UnAssignTableAsync(Guid reservationId, List<Guid> tableIds)
+        {
+            var existingTables = await _tableRepository.GetListAsTracking(x => tableIds.Contains(x.Id)).ToListAsync();
+            if (existingTables == null)
+            {
+                return false;
+            }
+            var existingReservation = await _bookingRepository.GetSingleByIdAsync(reservationId);
+            if (existingReservation == null)
+            {
+                throw new BusinessException(BussinessErrorConstants.TableErrorConstant.TABLE_NOT_FOUND);
+            }
+            if (existingReservation.BookingStatus == ReservationStatusEnum.Cancelled)
+            {
+                throw new BusinessException("Yêu cầu đặt bàn đã bị huỷ");
+            }
+            if (existingReservation.BookingStatus == ReservationStatusEnum.Checkedin)
+            {
+                throw new BusinessException("Yêu cầu đặt bàn đã hoàn tất");
+            }
+            var configTimePreviousBooking = await _configRepository.GetSingleAsync(x => x.ConfigType == ConfigType.BOOKING_DATE_PREVIOUS_NOTIFY);
+            double configTimePreviousBookingDouble = 30;
+            if (configTimePreviousBooking != null)
+            {
+                configTimePreviousBookingDouble = double.Parse(configTimePreviousBooking.Value);
+            }
+            if (DateTime.Now < existingReservation.BookingTime.AddMinutes(-configTimePreviousBookingDouble))
+            {
+                throw new BusinessException($"Bạn không thể sắp xếp bàn cho việc đặt bàn trước quá {configTimePreviousBookingDouble.ToString()} phút");
+            }
+            foreach (var table in existingTables)
+            {
+                var tableAssignReservation = await _tableAssignReservationRepository.GetSingleAsync(x => x.ReservationId == reservationId
+                    && x.TableId == table.Id);
+                if (tableAssignReservation != null)
+                {
+                    table.SetClosing();
+                    _tableRepository.Update(table);
+                    _tableAssignReservationRepository.HardDelete(tableAssignReservation);
+                }
+            }
+            await _unitOfWork.SaveChangeAsync();
+            return true;
+        }
         public async Task<bool> CheckInAsync(Guid reservationId)
         {
-            var existingReservation = await _bookingRepository.GetSingleByIdAsync(reservationId);
+            var existingReservation = await _bookingRepository.GetSingleByIdAsync(reservationId, "TableAssignReservations");
             if (existingReservation == null)
             {
                 throw new BusinessException(BussinessErrorConstants.TableErrorConstant.TABLE_NOT_FOUND);
@@ -151,24 +217,19 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             {
                 throw new BusinessException(BussinessErrorConstants.BookingErrorConstant.INVALID_BOOKING_STATUS);
             }
-            if (existingReservation.TableId == null)
-            {
-                throw new BusinessException(BussinessErrorConstants.BookingErrorConstant.NOT_ASSIGNED_TABLE);
-            }
-            var existingTable = await _tableRepository.GetSingleByIdAsync(existingReservation.TableId.Value);
-            if (existingTable == null)
+            var listTableIds = existingReservation.TableAssignReservations.Select(x => x.TableId).ToList();
+            var existingTables = await _tableRepository.GetListAsTracking(x => listTableIds.Contains(x.Id)).ToListAsync();
+            if (existingTables == null || !existingTables.Any())
             {
                 return false;
             }
-            if (existingTable.Status != TableStatusEnum.Reserved)
+            foreach (var table in existingTables)
             {
-                throw new BusinessException(BussinessErrorConstants.TableErrorConstant.INVALID_TABLE_STATUS);
+                table.SetOpening();
+                _tableRepository.Update(table);
             }
             existingReservation.Checkedin();
-            existingTable.SetOpening();
-
             _bookingRepository.Update(existingReservation);
-            _tableRepository.Update(existingTable);
             await _unitOfWork.SaveChangeAsync();
             return true;
         }
@@ -207,5 +268,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             _bookingRepository.Update(existingReservation);
             await _unitOfWork.SaveChangeAsync();
         }
+
+
     }
 }

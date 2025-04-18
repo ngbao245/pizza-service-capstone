@@ -8,7 +8,8 @@ namespace Pizza4Ps.PizzaService.Domain.Abstractions.Services
         Task<Guid> UpdateAsync(Guid id, DateTime bookingDate, int guestCount, string status, Guid customerId);
         Task DeleteAsync(List<Guid> ids, bool IsHardDeleted = false);
         Task RestoreAsync(List<Guid> ids);
-        Task<bool> AssignTableAsync(Guid reservationId, Guid tableId);
+        Task<bool> AssignTableAsync(Guid reservationId, List<Guid> tableIds);
+        Task<bool> UnAssignTableAsync(Guid reservationId, List<Guid> tableIds);
         Task<bool> CheckInAsync(Guid reservationId);
         Task ConfirmAsync(Guid reservationId);
         Task CancelAsync(Guid reservationId);
