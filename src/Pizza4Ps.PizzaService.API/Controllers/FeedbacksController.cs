@@ -62,10 +62,10 @@ namespace Pizza4Ps.PizzaService.API.Controllers
 		}
 
 		[HttpGet("{id}")]
-		public async Task<IActionResult> GetSingleByIdAsync([FromRoute] Guid id)
+		public async Task<IActionResult> GetSingleByIdAsync([FromRoute] Guid id, string includeProperties = "")
 		{
-			var result = await _sender.Send(new GetFeedbackByIdQuery { Id = id });
-			return Ok(new ApiResponse
+			var result = await _sender.Send(new GetFeedbackByIdQuery { Id = id, includeProperties = includeProperties });
+            return Ok(new ApiResponse
 			{	
 				Result = result,
 				Message = Message.GET_SUCCESS,
