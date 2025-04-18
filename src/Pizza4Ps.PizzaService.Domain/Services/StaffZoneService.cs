@@ -119,18 +119,10 @@ namespace Pizza4Ps.PizzaService.Domain.Services
 
             var existingStaffZones = await _staffZoneRepository.GetListAsTracking().ToListAsync();
 
-            var newStaffZones = relevantSchedules
-                .Where(s => !existingStaffZones.Any(z => z.StaffId == s.StaffId))
-                .Select(s => new StaffZone(Guid.NewGuid(), null, s.StaffId, s.ZoneId))
-                .ToList();
-
             foreach (var schedule in relevantSchedules)
             {
-                var hasDifferentZone = existingStaffZones
-                    .Any(z => z.StaffId == schedule.StaffId && z.ZoneId != schedule.ZoneId);
-
-                var hasSameZone = existingStaffZones
-                    .Any(z => z.StaffId == schedule.StaffId && z.ZoneId == schedule.ZoneId);
+                var hasSameZone = existingStaffZones.Any(z => z.StaffId == schedule.StaffId && z.ZoneId == schedule.ZoneId);
+                var hasDifferentZone = existingStaffZones.Any(z => z.StaffId == schedule.StaffId && z.ZoneId != schedule.ZoneId);
 
                 if (!hasSameZone && !hasDifferentZone)
                 {
@@ -138,8 +130,6 @@ namespace Pizza4Ps.PizzaService.Domain.Services
                     _staffZoneRepository.Add(staffZone);
                 }
             }
-
-            _staffZoneRepository.AddRange(newStaffZones);
             await _unitOfWork.SaveChangeAsync();
         }
 
