@@ -16,6 +16,12 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
 
         public string? Note { get; set; }
 
+        public Guid? TableMergeId { get; set; }
+
+        public string? TableMergeName { get; set; }
+
+        public TableMerge TableMerge { get; set; }
+
         public virtual Order CurrentOrder { get; set; }
         public virtual Zone Zone { get; set; }
 

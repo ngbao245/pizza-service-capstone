@@ -220,6 +220,7 @@
             public const string TABLE_NOT_HAVE_ORDER = "Bàn không có đơn hàng nào";
             public const string TABLE_ORDER_NOT_HAVE_ORDER_ITEM = "Đơn hàng không có món nào";
             public const string INVALID_TABLE_STATUS = "Trạng thái bàn không hợp lệ";
+            public const string UNAVAILABLE_TABLE_STATUS = "Bàn không có sẵn, vui lòng chọn bàn khác";
             public const string TABLE_ORDER_NOT_HAVE_TOTAL_PRICE = "Tổng tiền đơn hàng chưa được tính";
             public const string CAPACITY_INVALID = "Sức chứa bàn phải lớn hơn 0";
         }

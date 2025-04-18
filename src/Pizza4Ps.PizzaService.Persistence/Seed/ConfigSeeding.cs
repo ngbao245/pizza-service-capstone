@@ -20,6 +20,14 @@ namespace Pizza4Ps.PizzaService.Persistence.Seed
                 },
                 new Config
                 {
+                    Id = Guid.Parse("738eda23-9323-4db9-b36b-75adb8e942ef"),
+                    ConfigType = ConfigType.BOOKING_DATE_PREVIOUS_NOTIFY,
+                    Key = "Giới hạn thời gian tối đa được phép sắp xếp bàn trước so với thời điểm hiện tại",
+                    Value = "45",
+                    Unit = "Phút"
+                },
+                new Config
+                {
                     Id = Guid.Parse("e0d7298b-5cd8-47e4-939c-e42e4e5a42e5"),
                     ConfigType = ConfigType.MAXIMUM_REGISTER_SLOT,
                     Key = "MAXIMUM_REGISTER_SLOT",
