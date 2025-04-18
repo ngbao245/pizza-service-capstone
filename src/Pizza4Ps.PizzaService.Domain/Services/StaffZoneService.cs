@@ -97,7 +97,6 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             var today = DateOnly.FromDateTime(vnNow);
             var nowSpan = TimeOnly.FromDateTime(vnNow).ToTimeSpan();
 
-            // Lấy ca làm
             var workingSlot = await _workingSlotRepository.GetSingleByIdAsync(workingSlotId);
             if (workingSlot == null)
                 throw new BusinessException(BussinessErrorConstants.WorkingSlotErrorConstant.WORKING_SLOT_NOT_FOUND);
@@ -121,9 +120,24 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             var existingStaffZones = await _staffZoneRepository.GetListAsTracking().ToListAsync();
 
             var newStaffZones = relevantSchedules
-                .Where(s => !existingStaffZones.Any(z => z.StaffId == s.StaffId && z.ZoneId == s.ZoneId))
+                .Where(s => !existingStaffZones.Any(z => z.StaffId == s.StaffId))
                 .Select(s => new StaffZone(Guid.NewGuid(), null, s.StaffId, s.ZoneId))
                 .ToList();
+
+            foreach (var schedule in relevantSchedules)
+            {
+                var hasDifferentZone = existingStaffZones
+                    .Any(z => z.StaffId == schedule.StaffId && z.ZoneId != schedule.ZoneId);
+
+                var hasSameZone = existingStaffZones
+                    .Any(z => z.StaffId == schedule.StaffId && z.ZoneId == schedule.ZoneId);
+
+                if (!hasSameZone && !hasDifferentZone)
+                {
+                    var staffZone = new StaffZone(Guid.NewGuid(), null, schedule.StaffId, schedule.ZoneId);
+                    _staffZoneRepository.Add(staffZone);
+                }
+            }
 
             _staffZoneRepository.AddRange(newStaffZones);
             await _unitOfWork.SaveChangeAsync();

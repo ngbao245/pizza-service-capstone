@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Pizza4Ps.PizzaService.Application.DTOs;
 using Pizza4Ps.PizzaService.Domain.Abstractions.Repositories;
@@ -32,6 +33,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.WorkingSlots.Queries.Ge
                 && x.ShiftStart <= nowTime.ToTimeSpan()
                 && nowTime.ToTimeSpan() < x.ShiftEnd);
             var result = await query.FirstOrDefaultAsync(cancellationToken);
+            if (result == null) throw new BusinessException(BussinessErrorConstants.WorkingSlotErrorConstant.WORKING_SLOT_INVALID);
             return _mapper.Map<WorkingSlotDto>(result);
         }
 
