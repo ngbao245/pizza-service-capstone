@@ -16,6 +16,7 @@ namespace Pizza4Ps.PizzaService.Persistence.Configurations
                    .WithMany(x => x.TableAssignReservations)
                    .HasForeignKey(s => s.ReservationId)
                    .OnDelete(DeleteBehavior.SetNull);
+
             builder.HasOne(s => s.Table)
                    .WithMany()
                    .HasForeignKey(s => s.TableId)

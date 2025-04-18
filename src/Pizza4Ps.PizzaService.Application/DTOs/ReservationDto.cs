@@ -1,4 +1,5 @@
-﻿using Pizza4Ps.PizzaService.Domain.Enums;
+﻿using Pizza4Ps.PizzaService.Domain.Entities;
+using Pizza4Ps.PizzaService.Domain.Enums;
 
 namespace Pizza4Ps.PizzaService.Application.DTOs
 {
@@ -14,7 +15,7 @@ namespace Pizza4Ps.PizzaService.Application.DTOs
         public Guid? CustomerId { get; set; }
         public Guid? TableId { get; set; }
 
-
+        public virtual ICollection<TableAssignReservationDto> TableAssignReservations { get; set; }
         // Relations
         public virtual CustomerDto Customer { get; set; }
         public virtual TableDto? Table { get; set; }
