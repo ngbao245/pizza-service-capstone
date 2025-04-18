@@ -3,8 +3,10 @@ using Microsoft.AspNetCore.Mvc;
 using Pizza4Ps.PizzaService.API.Constants;
 using Pizza4Ps.PizzaService.API.Models;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.WorkingSlots.Commands.CreateWorkingSlot;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.WorkingSlots.Queries.GetCurrentWorkingSlot;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.WorkingSlots.Queries.GetListWorkingSlot;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.WorkingSlots.Queries.GetWorkingSlotById;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Pizza4Ps.PizzaService.API.Controllers
 {
@@ -52,6 +54,18 @@ namespace Pizza4Ps.PizzaService.API.Controllers
         public async Task<IActionResult> GetSingleByIdAsync([FromRoute] Guid id)
         {
             var result = await _sender.Send(new GetWorkingSlotByIdQuery { Id = id });
+            return Ok(new ApiResponse
+            {
+                Result = result,
+                Message = Message.GET_SUCCESS,
+                StatusCode = StatusCodes.Status200OK
+            });
+        }
+
+        [HttpGet("current")]
+        public async Task<IActionResult> GetCurrentAsync()
+        {
+            var result = await _sender.Send(new GetCurrentWorkingSlotQuery());
             return Ok(new ApiResponse
             {
                 Result = result,

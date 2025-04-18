@@ -5,6 +5,7 @@ using Pizza4Ps.PizzaService.API.Models;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Tables.Commands.CloseTable;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Tables.Commands.CreateTable;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Tables.Commands.DeleteTable;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Tables.Commands.LockTable;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Tables.Commands.OpenTable;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Tables.Commands.RestoreTable;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Tables.Commands.UpdateTable;
@@ -154,6 +155,18 @@ namespace Pizza4Ps.PizzaService.API.Controllers
             {
                 Id = tableId
             });
+            return Ok(new ApiResponse
+            {
+                Success = true,
+                Message = Message.UPDATED_SUCCESS,
+                StatusCode = StatusCodes.Status200OK
+            });
+        }
+        [HttpPut("lock-table/{tableId}")]
+        public async Task<IActionResult> LockTableAsync([FromRoute] Guid tableId, [FromBody] LockTableCommand lockTable)
+        {
+            lockTable.Id = tableId;
+            await _sender.Send(lockTable);
             return Ok(new ApiResponse
             {
                 Success = true,

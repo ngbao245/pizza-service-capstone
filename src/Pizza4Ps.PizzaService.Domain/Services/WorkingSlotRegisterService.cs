@@ -6,6 +6,7 @@ using Pizza4Ps.PizzaService.Domain.Entities;
 using Pizza4Ps.PizzaService.Domain.Enums;
 using Pizza4Ps.PizzaService.Domain.Exceptions;
 using Pizza4Ps.PizzaService.Domain.Constants;
+using Microsoft.EntityFrameworkCore;
 
 namespace Pizza4Ps.PizzaService.Domain.Services
 {
@@ -137,6 +138,24 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             var entity = await _workingSlotRegisterRepository.GetSingleByIdAsync(id);
             if (entity == null) throw new BusinessException(BussinessErrorConstants.WorkingSlotRegisterErrorConstant.WORKING_SLOT_REGISTER_NOT_FOUND);
             entity.setRejected();
+            await _unitOfWork.SaveChangeAsync();
+        }
+
+        public async Task DeleteAsync(List<Guid> ids, bool IsHardDeleted = false)
+        {
+            var entities = await _workingSlotRegisterRepository.GetListAsTracking(x => ids.Contains(x.Id)).IgnoreQueryFilters().ToListAsync();
+            if (entities == null) throw new BusinessException(BussinessErrorConstants.WorkingSlotRegisterErrorConstant.WORKING_SLOT_REGISTER_NOT_FOUND);
+            foreach (var entity in entities)
+            {
+                if (IsHardDeleted)
+                {
+                    _workingSlotRegisterRepository.HardDelete(entity);
+                }
+                else
+                {
+                    _workingSlotRegisterRepository.SoftDelete(entity);
+                }
+            }
             await _unitOfWork.SaveChangeAsync();
         }
     }

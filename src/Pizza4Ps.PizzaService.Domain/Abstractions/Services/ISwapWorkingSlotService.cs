@@ -7,5 +7,6 @@
         Task UpdateStatusToPendingApproveAsync(Guid id);
         Task UpdateStatusToApprovedAsync(Guid id);
         Task UpdateStatusToRejectedAsync(Guid id);
+        Task DeleteAsync(List<Guid> ids, bool IsHardDeleted = false);
     }
 }

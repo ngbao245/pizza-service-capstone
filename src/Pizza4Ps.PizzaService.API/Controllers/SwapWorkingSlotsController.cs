@@ -1,17 +1,15 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Pizza4Ps.PizzaService.API.Constants;
 using Pizza4Ps.PizzaService.API.Models;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.Options.Commands.CreateOption;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.StaffZones.Commands.DeleteStaffZone;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.SwapWorkingSlots.Commands.CreateSwapWorkingSlot;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.SwapWorkingSlots.Commands.DeleteSwapWorkingSlot;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.SwapWorkingSlots.Commands.UpdateStatusToApproved;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.SwapWorkingSlots.Commands.UpdateStatusToPendingApprove;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.SwapWorkingSlots.Commands.UpdateStatusToRejected;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.SwapWorkingSlots.Queries.GetListSwapWorkingSlot;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.SwapWorkingSlots.Queries.GetSwapWorkingSlotById;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.WorkingSlotRegisters.Queries.GetListWorkingSlotRegister;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.WorkingSlotRegisters.Queries.GetWorkingSlotRegisterById;
 
 namespace Pizza4Ps.PizzaService.API.Controllers
 {
@@ -111,5 +109,21 @@ namespace Pizza4Ps.PizzaService.API.Controllers
                 StatusCode = StatusCodes.Status200OK
             });
         }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteManyAsync([FromRoute] Guid id, bool isHardDeleted = false)
+        {
+            await _sender.Send(new DeleteSwapWorkingSlotCommand
+            {
+                Ids = new List<Guid> { id },
+                isHardDelete = isHardDeleted
+            });
+            return Ok(new ApiResponse
+            {
+                Message = Message.DELETED_SUCCESS,
+                StatusCode = StatusCodes.Status200OK
+            });
+        }
+
     }
 }

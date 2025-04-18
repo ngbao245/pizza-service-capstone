@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Pizza4Ps.PizzaService.API.Constants;
 using Pizza4Ps.PizzaService.API.Models;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.StaffZones.Commands.DeleteStaffZone;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.WorkingSlotRegisters.Commands.DeleteRegister;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.WorkingSlotRegisters.Commands.RegisterWorkingSlot;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.WorkingSlotRegisters.Commands.UpdateStatusToApproved;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.WorkingSlotRegisters.Commands.UpdateStatusToRejected;
@@ -93,6 +95,21 @@ namespace Pizza4Ps.PizzaService.API.Controllers
             {
                 Result = result,
                 Message = Message.GET_SUCCESS,
+                StatusCode = StatusCodes.Status200OK
+            });
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteManyAsync([FromRoute] Guid id, bool isHardDeleted = false)
+        {
+            await _sender.Send(new DeleteRegisterCommand
+            {
+                Ids = new List<Guid> { id },
+                isHardDelete = isHardDeleted
+            });
+            return Ok(new ApiResponse
+            {
+                Message = Message.DELETED_SUCCESS,
                 StatusCode = StatusCodes.Status200OK
             });
         }

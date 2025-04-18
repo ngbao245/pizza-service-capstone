@@ -49,6 +49,7 @@
         public class WorkingSlotErrorConstant
         {
             public const string WORKING_SLOT_NOT_FOUND = "Không tìm thấy ca làm việc";
+            public const string WORKING_SLOT_INVALID = "Không trong ca làm việc";
             public const string INVALID_WORKING_SLOT_SHIFT_TIME = "Thời gian bắt đầu ca phải sớm hơn thời gian kết thúc";
             public const string ALREADY_REGISTERED = "Nhân viên đã đăng ký ca làm việc này";
         }
@@ -206,6 +207,11 @@
             public const string STAFFZONE_NOT_FOUND = "Không tìm thấy nhân viên trong khu vực theo thời gian thực";
             public const string STAFF_NOT_FOUND = "Không tìm thấy nhân viên theo thời gian thực";
             public const string STAFF_ZONE_EXISTED = "Nhân viên đang làm việc trong khu vực và ca này rồi";
+
+            public const string STAFF_ZONE_INVALID_CHEF = "Chỉ đầu bếp mới được phân công vào khu vực bếp";
+            public const string STAFF_ZONE_INVALID_STAFF= "Đầu bếp không được phân công ra khu vực phục vụ";
+
+            
         }
 
         public class TableErrorConstant

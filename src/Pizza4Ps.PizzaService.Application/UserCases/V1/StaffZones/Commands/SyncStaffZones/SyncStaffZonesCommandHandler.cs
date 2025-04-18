@@ -17,7 +17,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.StaffZones.Commands.Syn
 
         public async Task Handle(SyncStaffZonesCommand request, CancellationToken cancellationToken)
         {
-            await _StaffZoneService.SyncStaffZonesAsync(request.workingDate, request.workingSlotId);
+            await _StaffZoneService.SyncStaffZonesAsync(request.workingSlotId);
         }
     }
 }

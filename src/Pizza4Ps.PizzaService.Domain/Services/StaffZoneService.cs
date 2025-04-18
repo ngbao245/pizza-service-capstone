@@ -6,6 +6,7 @@ using Pizza4Ps.PizzaService.Domain.Entities;
 using Pizza4Ps.PizzaService.Domain.Exceptions;
 using Pizza4Ps.PizzaService.Domain.Services.ServiceBase;
 using Microsoft.EntityFrameworkCore;
+using Pizza4Ps.PizzaService.Domain.Enums;
 
 namespace Pizza4Ps.PizzaService.Domain.Services
 {
@@ -15,21 +16,29 @@ namespace Pizza4Ps.PizzaService.Domain.Services
         private readonly IStaffZoneRepository _staffZoneRepository;
         private readonly IStaffZoneScheduleRepository _staffZoneScheduleRepository;
         private readonly IWorkingSlotRepository _workingSlotRepository;
+        private readonly IStaffRepository _staffRepository;
+        private readonly IZoneRepository _zoneRepository;
 
         public StaffZoneService(
             IUnitOfWork unitOfWork,
             IStaffZoneRepository staffZoneRepository,
             IStaffZoneScheduleRepository staffZoneScheduleRepository,
-            IWorkingSlotRepository workingSlotRepository)
+            IWorkingSlotRepository workingSlotRepository,
+            IStaffRepository staffRepository,
+            IZoneRepository zoneRepository)
         {
             _unitOfWork = unitOfWork;
             _staffZoneRepository = staffZoneRepository;
             _staffZoneScheduleRepository = staffZoneScheduleRepository;
             _workingSlotRepository = workingSlotRepository;
+            _staffRepository = staffRepository;
+            _zoneRepository = zoneRepository;
         }
 
         public async Task<Guid> CreateAsync(string note, Guid staffId, Guid zoneId)
         {
+            await ValidateStaffZoneAssignment(staffId, zoneId);
+
             var existingStaffZone = await _staffZoneRepository.GetSingleAsync(
                 x => x.StaffId == staffId && x.ZoneId == zoneId);
 
@@ -44,39 +53,77 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             return staffZone.Id;
         }
 
-        public async Task SyncStaffZonesAsync(DateOnly workingDate, Guid workingSlotId)
+        //public async Task SyncStaffZonesAsync(DateOnly workingDate, Guid workingSlotId)
+        //{
+        //    var now = TimeOnly.FromDateTime(TimeZoneInfo.ConvertTimeFromUtc(
+        //        DateTime.UtcNow,
+        //        TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time")
+        //    ));
+        //    var nowSpan = now.ToTimeSpan();
+
+        //    // Lấy ca đang xử lý
+        //    var workingSlot = await _workingSlotRepository.GetSingleByIdAsync(workingSlotId);
+        //    if (workingSlot == null) throw new BusinessException(BussinessErrorConstants.WorkingSlotErrorConstant.WORKING_SLOT_NOT_FOUND);
+
+        //    // Lấy tất cả schedules trong ngày
+        //    var schedules = await _staffZoneScheduleRepository.GetListAsTracking(
+        //        x => x.WorkingDate == workingDate).ToListAsync();
+
+        //    var relevantSchedules = schedules.Where(x =>
+        //        (x.WorkingSlotId == workingSlotId)
+        //        ||
+        //        (x.WorkingSlotId == null && workingSlot.ShiftStart <= nowSpan && nowSpan <= workingSlot.ShiftEnd)
+        //    ).ToList();
+
+        //    // Xóa hết staff-zone cũ
+        //    var existingStaffZones = await _staffZoneRepository.GetListAsTracking().ToListAsync();
+        //    foreach (var existingStaffZone in existingStaffZones)
+        //    {
+        //        _staffZoneRepository.SoftDelete(existingStaffZone);
+        //    }
+
+        //    // Gán lại staff-zone mới
+        //    var newStaffZones = relevantSchedules
+        //       .Select(s => new StaffZone(Guid.NewGuid(), null, s.StaffId, s.ZoneId))
+        //       .ToList();
+
+        //    _staffZoneRepository.AddRange(newStaffZones);
+        //    await _unitOfWork.SaveChangeAsync();
+        //}
+
+        public async Task SyncStaffZonesAsync(Guid workingSlotId)
         {
-            var now = TimeOnly.FromDateTime(TimeZoneInfo.ConvertTimeFromUtc(
-                DateTime.UtcNow,
-                TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time")
-            ));
-            var nowSpan = now.ToTimeSpan();
+            var vnNow = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time"));
+            var today = DateOnly.FromDateTime(vnNow);
+            var nowSpan = TimeOnly.FromDateTime(vnNow).ToTimeSpan();
 
-            // Lấy ca đang xử lý
+            // Lấy ca làm
             var workingSlot = await _workingSlotRepository.GetSingleByIdAsync(workingSlotId);
-            if (workingSlot == null) throw new BusinessException(BussinessErrorConstants.WorkingSlotErrorConstant.WORKING_SLOT_NOT_FOUND);
+            if (workingSlot == null)
+                throw new BusinessException(BussinessErrorConstants.WorkingSlotErrorConstant.WORKING_SLOT_NOT_FOUND);
 
-            // Lấy tất cả schedules trong ngày
+            // Kiểm tra thời gian hiện tại có nằm trong ca không
+            if (nowSpan < workingSlot.ShiftStart || nowSpan >= workingSlot.ShiftEnd)
+                throw new BusinessException(BussinessErrorConstants.WorkingSlotErrorConstant.WORKING_SLOT_INVALID);
+
+            // Lấy toàn bộ schedule hôm nay, lọc ở bước sau
             var schedules = await _staffZoneScheduleRepository.GetListAsTracking(
-                x => x.WorkingDate == workingDate).ToListAsync();
+                x => x.WorkingDate == today &&
+                    (x.WorkingSlotId == workingSlotId || x.WorkingSlotId == null)
+            ).ToListAsync();
 
-            var relevantSchedules = schedules.Where(x =>
-                (x.WorkingSlotId == workingSlotId)
-                ||
-                (x.WorkingSlotId == null && workingSlot.ShiftStart <= nowSpan && nowSpan <= workingSlot.ShiftEnd)
-            ).ToList();
+            // Lọc những cái null-slot theo thời gian thực tế
+            var relevantSchedules = schedules
+                .Where(x => x.WorkingSlotId == workingSlotId ||
+                            (x.WorkingSlotId == null && workingSlot.ShiftStart <= nowSpan && nowSpan < workingSlot.ShiftEnd))
+                .ToList();
 
-            // Xóa hết staff-zone cũ
             var existingStaffZones = await _staffZoneRepository.GetListAsTracking().ToListAsync();
-            foreach (var existingStaffZone in existingStaffZones)
-            {
-                _staffZoneRepository.SoftDelete(existingStaffZone);
-            }
 
-            // Gán lại staff-zone mới
             var newStaffZones = relevantSchedules
-               .Select(s => new StaffZone(Guid.NewGuid(), null, s.StaffId, s.ZoneId))
-               .ToList();
+                .Where(s => !existingStaffZones.Any(z => z.StaffId == s.StaffId && z.ZoneId == s.ZoneId))
+                .Select(s => new StaffZone(Guid.NewGuid(), null, s.StaffId, s.ZoneId))
+                .ToList();
 
             _staffZoneRepository.AddRange(newStaffZones);
             await _unitOfWork.SaveChangeAsync();
@@ -113,8 +160,10 @@ namespace Pizza4Ps.PizzaService.Domain.Services
 
         public async Task<Guid> UpdateAsync(Guid id, string note, Guid staffId, Guid zoneId)
         {
+            await ValidateStaffZoneAssignment(staffId, zoneId);
+
             var existingStaffZone = await _staffZoneRepository.GetSingleAsync(
-                x => x.StaffId == staffId && x.ZoneId == zoneId);
+                x => x.StaffId == staffId && x.ZoneId == zoneId && x.Id != id);
 
             if (existingStaffZone != null)
             {
@@ -125,6 +174,30 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             entity.UpdateStaffZone(note, staffId, zoneId);
             await _unitOfWork.SaveChangeAsync();
             return entity.Id;
+        }
+
+        private async Task ValidateStaffZoneAssignment(Guid staffId, Guid zoneId)
+        {
+            var staff = await _staffRepository.GetSingleByIdAsync(staffId)
+                ?? throw new BusinessException(BussinessErrorConstants.StaffErrorConstant.STAFF_NOT_FOUND);
+
+            var zone = await _zoneRepository.GetSingleByIdAsync(zoneId)
+                ?? throw new BusinessException(BussinessErrorConstants.ZoneErrorConstant.ZONE_NOT_FOUND);
+
+            switch (zone.Type)
+            {
+                case ZoneTypeEnum.KitchenArea:
+                    if (staff.StaffType != StaffTypeEnum.Cheff)
+                        throw new BusinessException(BussinessErrorConstants.StaffZoneErrorConstant.STAFF_ZONE_INVALID_CHEF);
+                    break;
+
+                case ZoneTypeEnum.DininingArea:
+                    if (staff.StaffType == StaffTypeEnum.Cheff)
+                        throw new BusinessException(BussinessErrorConstants.StaffZoneErrorConstant.STAFF_ZONE_INVALID_STAFF);
+                    break;
+                case ZoneTypeEnum.WorkshopArea:
+                    break;
+            }
         }
     }
 }

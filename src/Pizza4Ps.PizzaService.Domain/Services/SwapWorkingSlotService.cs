@@ -202,5 +202,23 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             entity.setRejected();
             await _unitOfWork.SaveChangeAsync();
         }
+
+        public async Task DeleteAsync(List<Guid> ids, bool IsHardDeleted = false)
+        {
+            var entities = await _swapWorkingSlotRepository.GetListAsTracking(x => ids.Contains(x.Id)).IgnoreQueryFilters().ToListAsync();
+            if (entities == null) throw new BusinessException(BussinessErrorConstants.SwapWorkingSlotErrorConstant.SWAP_WORKING_SLOT_NOT_FOUND);
+            foreach (var entity in entities)
+            {
+                if (IsHardDeleted)
+                {
+                    _swapWorkingSlotRepository.HardDelete(entity);
+                }
+                else
+                {
+                    _swapWorkingSlotRepository.SoftDelete(entity);
+                }
+            }
+            await _unitOfWork.SaveChangeAsync();
+        }
     }
 }
