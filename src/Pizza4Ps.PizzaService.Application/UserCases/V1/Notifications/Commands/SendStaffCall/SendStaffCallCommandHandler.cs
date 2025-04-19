@@ -24,7 +24,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Notifications.Commands.
             {
                 throw new BusinessException(BussinessErrorConstants.TableErrorConstant.TABLE_NOT_FOUND);
             }
-            await _notificationService.SendStaffCallNotificationAsync(table.Code, table.Zone.Name);
+            await _notificationService.SendStaffCallNotificationAsync(table.Code, table.Zone.Name, request.Note);
         }
     }
 }

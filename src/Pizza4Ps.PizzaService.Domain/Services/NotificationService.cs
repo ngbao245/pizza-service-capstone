@@ -27,13 +27,13 @@ namespace Pizza4Ps.PizzaService.Domain.Services
         /// Gửi notification gọi nhân viên tới khu vực cụ thể và lưu vào bảng notification để hiển thị nút chuông.
         /// </summary>
         /// <param name="zone">Tên khu vực (ví dụ: "Zone_A")</param>
-        public async Task SendStaffCallNotificationAsync(string table, string zone)
+        public async Task SendStaffCallNotificationAsync(string table, string zone, string? note)
         {
             var notification = new Notification
             {
                 Type = NotificationType.CallStaff,
                 Title = "Gọi nhân viên",
-                Message = $"Có yêu cầu gọi nhân viên tại bàn {table} - khu vực {zone}",
+                Message = note == null ? $"Có yêu cầu gọi nhân viên tại bàn {table} - khu vực {zone}" : note,
                 Payload = zone, // Payload chứa tên zone
                 RequiresPersistence = true, // Lưu thông báo để hiển thị trên nút chuông
                 IsHandled = false,

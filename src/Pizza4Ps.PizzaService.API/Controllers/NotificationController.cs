@@ -17,9 +17,10 @@ namespace Pizza4Ps.PizzaService.API.Controllers
         }
 
         [HttpPost("callstaff/{tableId}")]
-        public async Task<IActionResult> CallStaff([FromRoute] Guid tableId)
+        public async Task<IActionResult> CallStaff([FromRoute] Guid tableId, SendStaffCallCommand command)
         {
-            await _sender.Send(new SendStaffCallCommand { TableId = tableId });
+            command.TableId = tableId;
+            await _sender.Send(command);
             return Ok(new ApiResponse
             {
                 Success = true,
