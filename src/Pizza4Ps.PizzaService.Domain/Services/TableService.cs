@@ -73,13 +73,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             await _unitOfWork.SaveChangeAsync();
             return entity.Id;
         }
-        public async Task<Guid> UpdateAsync(Guid id, string code, int capacity, TableStatusEnum status, Guid zoneId)
-        {
-            var entity = await _tableRepository.GetSingleByIdAsync(id);
-            entity.UpdateTable(code, capacity, status, zoneId);
-            await _unitOfWork.SaveChangeAsync();
-            return entity.Id;
-        }
+
 
         public async Task<Guid> OpenTable(Guid tableId)
         {
@@ -100,5 +94,20 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             await _unitOfWork.SaveChangeAsync();
             return entity.Id;
         }
+
+        public async Task<Guid> UpdateAsync(Guid id, string code, int capacity, TableStatusEnum status, Guid zoneId)
+        {
+            var entity = await _tableRepository.GetSingleByIdAsync(id);
+
+            if (entity == null)
+                throw new BusinessException(BussinessErrorConstants.TableErrorConstant.TABLE_NOT_FOUND);
+
+            entity.UpdateTable(code, capacity, status, zoneId);
+
+            await _unitOfWork.SaveChangeAsync();
+
+            return entity.Id;
+        }
+
     }
 }
