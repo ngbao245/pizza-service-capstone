@@ -23,15 +23,17 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Tables.Commands.CancelM
         public async Task Handle(CancelMergeTableCommand request, CancellationToken cancellationToken)
         {
             var tables = await _tableRepository.GetListAsTracking(x => x.TableMergeId == request.TableMergeId).ToListAsync();
-            if (!tables.Any())
-            {
-                throw new BusinessException(BussinessErrorConstants.TableErrorConstant.TABLE_NOT_FOUND);
-            }
-            //if (tables.Any(t => t.Status != Domain.Enums.TableStatusEnum.Closing))
-            //    throw new BusinessException("Các bàn được ghép có thể đang được sử dụng, hãy kiểm tra và đóng các bàn lại");
+            //if (!tables.Any())
+            //{
+            //    throw new BusinessException(BussinessErrorConstants.TableErrorConstant.TABLE_NOT_FOUND);
+            //}
+
+            if (tables.Any(t => t.CurrentOrderId != null))
+                throw new BusinessException("Bàn đã được sử dụng cho một đơn hàng, vui lòng kiểm tra lại");
             foreach (var table in tables)
             {
                 table.CancelMerge();
+                table.SetOpening();
                 _tableRepository.Update(table);
             }
             var tableMerge = await _tableMergeRepository.GetSingleByIdAsync(request.TableMergeId);

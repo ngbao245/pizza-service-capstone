@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Pizza4Ps.PizzaService.Application.Abstractions;
+using Pizza4Ps.PizzaService.Application.DTOs;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Tables.Queries.GetTableMerge
 {
-    internal class GetTableMergeQuery
+    public class GetTableMergeQuery : PaginatedQuery<PaginatedResultDto<TableMergeDto>>
     {
     }
 }

@@ -32,7 +32,8 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Tables.Commands.MergeTa
                 throw new BusinessException("Một hoặc nhiều bàn đang được ghép nhóm khác!");
             if (tables.Any(t => t.CurrentOrderId != null))
                 throw new BusinessException("Bàn đã được sử dụng cho một đơn hàng khác, vui lòng kiểm tra lại");
-
+            if (tables.Any(t => t.Status != Domain.Enums.TableStatusEnum.Closing))
+                throw new BusinessException("Các bàn được ghép có thể đang được sử dụng, hãy kiểm tra và đóng các bàn lại");
 
             var mergedGroup = new TableMerge
             {

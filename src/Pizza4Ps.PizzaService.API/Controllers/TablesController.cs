@@ -14,6 +14,7 @@ using Pizza4Ps.PizzaService.Application.UserCases.V1.Tables.Commands.UpdateTable
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Tables.Queries.GetListTable;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Tables.Queries.GetListTableIgnoreQueryFilter;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Tables.Queries.GetTableById;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Tables.Queries.GetTableMerge;
 
 namespace Pizza4Ps.PizzaService.API.Controllers
 {
@@ -171,6 +172,18 @@ namespace Pizza4Ps.PizzaService.API.Controllers
             await _sender.Send(lockTable);
             return Ok(new ApiResponse
             {
+                Success = true,
+                Message = Message.UPDATED_SUCCESS,
+                StatusCode = StatusCodes.Status200OK
+            });
+        }
+        [HttpGet("table-merge")]
+        public async Task<IActionResult> GetTableMergeAsync([FromQuery] GetTableMergeQuery query)
+        {
+            var result = await _sender.Send(query);
+            return Ok(new ApiResponse
+            {
+                Result = result,
                 Success = true,
                 Message = Message.UPDATED_SUCCESS,
                 StatusCode = StatusCodes.Status200OK
