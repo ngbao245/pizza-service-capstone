@@ -19,13 +19,13 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
 
         public string? PhoneOtp { get; set; } 
 
-        public bool? Gender { get;set; }
+            public bool? Gender { get;set; }
 
-        public decimal? TotalPoint { get; set; }
+            public decimal? TotalPoint { get; set; }
 
-        public DateTime? DateOfBirth { get; set; }
+            public DateTime? DateOfBirth { get; set; }
 
-        public string? Email { get; set; }
+            public string? Email { get; set; }
 
         public Guid? AppUserCustomerId { get; set; }
         

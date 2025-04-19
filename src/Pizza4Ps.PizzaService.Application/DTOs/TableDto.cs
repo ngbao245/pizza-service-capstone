@@ -11,8 +11,10 @@ namespace Pizza4Ps.PizzaService.Application.DTOs
         public string? Note { get; set; }
         public Guid ZoneId { get; set; }
         public Guid? CurrentOrderId { get; set; }
+        public Guid? CurrentReservationId { get; set; }
+        public virtual OrderDto CurrentOrder { get; set; }
 
-        public virtual Order CurrentOrder { get; set; }
+        public virtual ReservationDto CurrentReservation { get; set; }
         public virtual ZoneDto Zone { get; set; }
     }
 }
