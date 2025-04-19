@@ -364,6 +364,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             if (table != null)
             {
                 table.SetNullCurrentOrderId();
+                table.SetClosing();
                 _tableRepository.Update(table);
             }
             var newTable = await _tableRepository.GetSingleByIdAsync(tableId);
@@ -371,6 +372,8 @@ namespace Pizza4Ps.PizzaService.Domain.Services
                 throw new BusinessException(BussinessErrorConstants.TableErrorConstant.TABLE_NOT_FOUND);
             if (newTable.TableMergeId != null)
                 throw new BusinessException("Bàn đang được ghép, không thể đổi bàn");
+            if (newTable.CurrentOrderId != null)
+                throw new BusinessException("Bàn muốn đổi đang có đơn hàng, không thể đổi bàn");
             if (newTable.Status != TableStatusEnum.Closing)
             {
                 throw new BusinessException("Bàn hiện tại đang được sử dụng");
