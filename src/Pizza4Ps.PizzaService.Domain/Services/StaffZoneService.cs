@@ -12,6 +12,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
 {
     public class StaffZoneService : DomainService, IStaffZoneService
     {
+        private readonly IRealTimeNotifier _realTimeNotifier;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IStaffZoneRepository _staffZoneRepository;
         private readonly IStaffZoneScheduleRepository _staffZoneScheduleRepository;
@@ -25,8 +26,9 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             IStaffZoneScheduleRepository staffZoneScheduleRepository,
             IWorkingSlotRepository workingSlotRepository,
             IStaffRepository staffRepository,
-            IZoneRepository zoneRepository)
+            IZoneRepository zoneRepository, IRealTimeNotifier realTimeNotifier)
         {
+            _realTimeNotifier = realTimeNotifier;
             _unitOfWork = unitOfWork;
             _staffZoneRepository = staffZoneRepository;
             _staffZoneScheduleRepository = staffZoneScheduleRepository;
@@ -177,6 +179,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             var entity = await _staffZoneRepository.GetSingleByIdAsync(id);
             entity.UpdateStaffZone(note, staffId, zoneId);
             await _unitOfWork.SaveChangeAsync();
+            await _realTimeNotifier.UpdatedStaffZoneAsync();
             return entity.Id;
         }
 
