@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MediatR;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Tables.Commands.MergeTable
 {
-    internal class MergeTableCommand
+    public class MergeTableCommand : IRequest
     {
+        public List<Guid> TableIds { get; set; }
+
+        public string GroupName { get; set; }
     }
 }

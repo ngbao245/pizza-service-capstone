@@ -69,6 +69,14 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             {
                 throw new BusinessException("Vui lòng xử lý đơn hàng ngay tại bàn này trước khi đóng bàn");
             }
+            if (entity.CurrentReservationId != null)
+            {
+                throw new BusinessException("Vui lòng xử lý yêu cầu đặt bàn trước khi đóng bàn");
+            }
+            if (entity.TableMergeId != null)
+            {
+                throw new BusinessException("Bàn này đang được ghép, vui lòng xử lý trước khi đóng bàn");
+            }
             entity.SetClosing();
             await _unitOfWork.SaveChangeAsync();
             return entity.Id;
@@ -89,6 +97,14 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             if (entity.CurrentOrderId != null)
             {
                 throw new BusinessException("Vui lòng xử lý đơn hàng ngay tại bàn này trước khi khoá bàn");
+            }
+            if (entity.CurrentReservationId != null)
+            {
+                throw new BusinessException("Vui lòng xử lý yêu cầu đặt bàn trước khi khoá bàn");
+            }
+            if (entity.TableMergeId != null)
+            {
+                throw new BusinessException("Bàn này đang được ghép, vui lòng xử lý trước khi khoá bàn");
             }
             entity.SetLocked(note);
             await _unitOfWork.SaveChangeAsync();

@@ -60,9 +60,24 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             var table = await _tableRepository.GetSingleByIdAsync(tableId);
             if (table.CurrentOrderId != null) throw new BusinessException(CurrentOrderIdExisted.CURRENT_ORDER_ID_EXISTED);
             var entity = new Order(Guid.NewGuid(), tableId, table.Code, type);
+            if (table.TableMergeId != null)
+            {
+                var tablesMerge = await _tableRepository.GetListAsTracking(x => x.TableMergeId == table.TableMergeId).ToListAsync();
+                foreach (var tableMerge in tablesMerge)
+                {
+                    tableMerge.SetCurrentOrderId(entity.Id);
+                    _tableRepository.Update(tableMerge);
+                }
+            }
+            else
+            {
+                table.SetCurrentOrderId(entity.Id);
+
+                _tableRepository.Update(table);
+            }
+
             _orderRepository.Add(entity);
-            table.SetCurrentOrderId(entity.Id);
-            _tableRepository.Update(table);
+
             await _unitOfWork.SaveChangeAsync();
             return entity.Id;
         }
@@ -296,7 +311,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             order.SetTotalOrderItemPrice(total);
             order.SetCancelCheckOut();
 
-            foreach(var additionalFee in order.AdditionalFees)
+            foreach (var additionalFee in order.AdditionalFees)
             {
                 _additionalFeeRepository.HardDelete(additionalFee);
             }
@@ -325,12 +340,14 @@ namespace Pizza4Ps.PizzaService.Domain.Services
                 throw new BusinessException(BussinessErrorConstants.OrderErrorConstant.ORDER_NOT_FOUND);
             order.SetCancelOrder(note);
 
-            var table = await _tableRepository.GetSingleAsync(x => x.CurrentOrderId == order.Id);
-            if (table != null)
+            var tables = await _tableRepository.GetListAsTracking(x => x.CurrentOrderId == order.Id).ToListAsync();
+            foreach (var table in tables)
             {
-                table.SetNullCurrentOrderId();
-                _tableRepository.Update(table);
-                Console.WriteLine($"Order {order.Id} is paid, {order}");
+                if (table != null)
+                {
+                    table.SetNullCurrentOrderId();
+                    _tableRepository.Update(table);
+                }
             }
             _orderRepository.Update(order);
             await _unitOfWork.SaveChangeAsync();
@@ -342,6 +359,8 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             if (order == null)
                 throw new BusinessException(BussinessErrorConstants.OrderErrorConstant.ORDER_NOT_FOUND);
             var table = await _tableRepository.GetSingleAsync(x => x.CurrentOrderId == order.Id);
+            if (table.TableMergeId != null)
+                throw new BusinessException("Bàn đang được ghép, không thể đổi bàn");
             if (table != null)
             {
                 table.SetNullCurrentOrderId();
@@ -350,6 +369,8 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             var newTable = await _tableRepository.GetSingleByIdAsync(tableId);
             if (newTable == null)
                 throw new BusinessException(BussinessErrorConstants.TableErrorConstant.TABLE_NOT_FOUND);
+            if (newTable.TableMergeId != null)
+                throw new BusinessException("Bàn đang được ghép, không thể đổi bàn");
             if (newTable.Status != TableStatusEnum.Closing)
             {
                 throw new BusinessException("Bàn hiện tại đang được sử dụng");

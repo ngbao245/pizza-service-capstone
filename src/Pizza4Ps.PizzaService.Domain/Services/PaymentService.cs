@@ -128,12 +128,18 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             order.SetOrderCode(orderCode.ToString());
             order.SetPaid();
 
-            var table = await _tableRepository.GetListAsTracking(x => x.CurrentOrderId == orderId).FirstOrDefaultAsync();
-            if (table != null)
+            var tables = await _tableRepository.GetListAsTracking(x => x.CurrentOrderId == orderId).ToListAsync();
+            foreach (var table in tables)
             {
-                table.SetNullCurrentOrderId();
-                _tableRepository.Update(table);
+                if (table != null)
+                {
+                    table.SetNullCurrentOrderId();
+                    table.SetClosing();
+                    table.CancelMerge();
+                    _tableRepository.Update(table);
+                }
             }
+
             _paymentRepository.Add(entity);
             _orderRepository.Update(order);
             await _unitOfWork.SaveChangeAsync();

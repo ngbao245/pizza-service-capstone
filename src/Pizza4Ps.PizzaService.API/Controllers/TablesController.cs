@@ -2,10 +2,12 @@
 using Microsoft.AspNetCore.Mvc;
 using Pizza4Ps.PizzaService.API.Constants;
 using Pizza4Ps.PizzaService.API.Models;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Tables.Commands.CancelMergeTable;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Tables.Commands.CloseTable;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Tables.Commands.CreateTable;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Tables.Commands.DeleteTable;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Tables.Commands.LockTable;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Tables.Commands.MergeTable;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Tables.Commands.OpenTable;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Tables.Commands.RestoreTable;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Tables.Commands.UpdateTable;
@@ -167,6 +169,31 @@ namespace Pizza4Ps.PizzaService.API.Controllers
         {
             lockTable.Id = tableId;
             await _sender.Send(lockTable);
+            return Ok(new ApiResponse
+            {
+                Success = true,
+                Message = Message.UPDATED_SUCCESS,
+                StatusCode = StatusCodes.Status200OK
+            });
+        }
+        [HttpPut("merge-table")]
+        public async Task<IActionResult> MergeTableAsync([FromBody] MergeTableCommand mergeTableCommand)
+        {
+            await _sender.Send(mergeTableCommand);
+            return Ok(new ApiResponse
+            {
+                Success = true,
+                Message = Message.UPDATED_SUCCESS,
+                StatusCode = StatusCodes.Status200OK
+            });
+        }
+        [HttpPut("cancel-merge-table/{tableMergeId}")]
+        public async Task<IActionResult> MergeTableAsync([FromRoute] Guid tableMergeId)
+        {
+            await _sender.Send(new CancelMergeTableCommand
+            {
+                TableMergeId = tableMergeId
+            });
             return Ok(new ApiResponse
             {
                 Success = true,

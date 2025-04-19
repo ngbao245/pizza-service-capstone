@@ -48,7 +48,16 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
             }
             return capacity;
         }
-
+        public void SetMergeTable(Guid tableMergeId, string tableMergeName)
+        {
+            TableMergeId = tableMergeId;
+            TableMergeName = tableMergeName;
+        }
+        public void CancelMerge()
+        {
+            TableMergeId = null;
+            TableMergeName = null;
+        }
         public void SetCurrentOrderId(Guid currentOrderId)
         {
             CurrentOrderId = currentOrderId;
