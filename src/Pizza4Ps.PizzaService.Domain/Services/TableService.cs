@@ -95,14 +95,14 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             return entity.Id;
         }
 
-        public async Task<Guid> UpdateAsync(Guid id, string code, int capacity, TableStatusEnum status, Guid zoneId)
+        public async Task<Guid> UpdateAsync(Guid id, string code, int capacity, Guid zoneId)
         {
             var entity = await _tableRepository.GetSingleByIdAsync(id);
 
             if (entity == null)
                 throw new BusinessException(BussinessErrorConstants.TableErrorConstant.TABLE_NOT_FOUND);
 
-            entity.UpdateTable(code, capacity, status, zoneId);
+            entity.UpdateTable(code, capacity, zoneId);
 
             await _unitOfWork.SaveChangeAsync();
 

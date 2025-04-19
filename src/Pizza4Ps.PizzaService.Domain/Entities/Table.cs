@@ -80,11 +80,10 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
             CurrentReservationId = null;
         }
 
-        internal void UpdateTable(string code, int capacity, TableStatusEnum status, Guid zoneId)
+        internal void UpdateTable(string code, int capacity, Guid zoneId)
         {
             Code = code;
             Capacity = capacity;
-            Status = status;
             ZoneId = zoneId;
         }
     }

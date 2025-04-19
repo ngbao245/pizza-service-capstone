@@ -19,18 +19,10 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Tables.Commands.UpdateT
         public async Task Handle(UpdateTableCommand request, CancellationToken cancellationToken)
         {
 
-            // Parse string status into enum
-            TableStatusEnum tableStatus = string.IsNullOrWhiteSpace(request.Status)
-                ? throw new BusinessException(BussinessErrorConstants.TableErrorConstant.INVALID_TABLE_STATUS)
-                : Enum.TryParse<TableStatusEnum>(request.Status, true, out var parsedStatus)
-                    ? parsedStatus
-                    : throw new BusinessException(BussinessErrorConstants.TableErrorConstant.INVALID_TABLE_STATUS);
-
             await _tableService.UpdateAsync(
                 request.Id.Value,
                 request.Code,
                 request.Capacity,
-                tableStatus,
                 request.ZoneId);
         }
     }
