@@ -69,9 +69,9 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             if (workingSlot == null)
                 throw new BusinessException(BussinessErrorConstants.WorkingSlotErrorConstant.WORKING_SLOT_NOT_FOUND);
 
-            // Kiểm tra thời gian hiện tại có nằm trong ca không
-            if (nowSpan < workingSlot.ShiftStart || nowSpan >= workingSlot.ShiftEnd)
-                throw new BusinessException(BussinessErrorConstants.WorkingSlotErrorConstant.WORKING_SLOT_INVALID);
+            //// Kiểm tra thời gian hiện tại có nằm trong ca không
+            //if (nowSpan < workingSlot.ShiftStart || nowSpan >= workingSlot.ShiftEnd)
+            //    throw new BusinessException(BussinessErrorConstants.WorkingSlotErrorConstant.WORKING_SLOT_INVALID);
 
             // Lấy toàn bộ schedule hôm nay, lọc ở bước sau
             var schedules = await _staffZoneScheduleRepository.GetListAsTracking(
@@ -93,7 +93,8 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             var existingStaffZones = await _staffZoneRepository.GetListAsTracking().ToListAsync();
 
             // Xóa các StaffZone nếu nhân viên đã được đánh dấu vắng mặt trong ca
-            var staffZonesToRemove = existingStaffZones.Where(z => absentStaffIds.Contains(z.StaffId)).ToList();
+            var staffZonesToRemove = existingStaffZones.Where(
+                z => absentStaffIds.Contains(z.StaffId)).ToList();
 
             foreach (var staffZone in staffZonesToRemove)
             {
@@ -102,8 +103,8 @@ namespace Pizza4Ps.PizzaService.Domain.Services
 
             foreach (var schedule in relevantSchedules)
             {
-                var hasSameZone = existingStaffZones.Any(z => z.StaffId == schedule.StaffId && z.ZoneId == schedule.ZoneId);
-                var hasDifferentZone = existingStaffZones.Any(z => z.StaffId == schedule.StaffId && z.ZoneId != schedule.ZoneId);
+                var hasSameZone = existingStaffZones.Any(z => z.StaffId == schedule.StaffId && z.ZoneId == schedule.ZoneId && !z.IsDeleted);
+                var hasDifferentZone = existingStaffZones.Any(z => z.StaffId == schedule.StaffId && z.ZoneId != schedule.ZoneId && !z.IsDeleted);
 
                 if (!hasSameZone && !hasDifferentZone)
                 {
