@@ -20,6 +20,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Dockerfile = Dockerfile
 	EndProjectSection
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pizza4Ps.PizzaService.Application.Contract", "src\Pizza4Ps.PizzaService.Application.Contract\Pizza4Ps.PizzaService.Application.Contract.csproj", "{5CD4BE73-A33E-460C-8CAF-31F7477E28E1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -46,6 +48,10 @@ Global
 		{4EB0F6AD-6DD9-4869-A278-9D6B6F479345}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4EB0F6AD-6DD9-4869-A278-9D6B6F479345}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4EB0F6AD-6DD9-4869-A278-9D6B6F479345}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5CD4BE73-A33E-460C-8CAF-31F7477E28E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5CD4BE73-A33E-460C-8CAF-31F7477E28E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5CD4BE73-A33E-460C-8CAF-31F7477E28E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5CD4BE73-A33E-460C-8CAF-31F7477E28E1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -56,6 +62,7 @@ Global
 		{EE1444F0-678A-461B-B8CD-EEFF886C6D19} = {14702133-4E75-49E6-923F-EE3C15350881}
 		{5A9F556C-6483-447E-A915-103B6C72E503} = {14702133-4E75-49E6-923F-EE3C15350881}
 		{4EB0F6AD-6DD9-4869-A278-9D6B6F479345} = {14702133-4E75-49E6-923F-EE3C15350881}
+		{5CD4BE73-A33E-460C-8CAF-31F7477E28E1} = {14702133-4E75-49E6-923F-EE3C15350881}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {303245B1-6E26-43FA-9692-42F0E11A78D2}

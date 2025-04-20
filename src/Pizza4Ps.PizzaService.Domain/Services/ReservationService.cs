@@ -155,7 +155,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
                     Id = Guid.NewGuid(),
                     TableId = table.Id,
                 };
-                table.SetBooked();
+                table.SetBooked(reservationId);
                 _tableRepository.Update(table);
                 _tableAssignReservationRepository.Add(tableAssignReservation);
             }
@@ -199,6 +199,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
                 if (tableAssignReservation != null)
                 {
                     table.SetClosing();
+                    table.SetNullCurrentReservationId();
                     _tableRepository.Update(table);
                     _tableAssignReservationRepository.HardDelete(tableAssignReservation);
                 }
@@ -226,6 +227,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             foreach (var table in existingTables)
             {
                 table.SetOpening();
+                table.SetNullCurrentReservationId();
                 _tableRepository.Update(table);
             }
             existingReservation.Checkedin();

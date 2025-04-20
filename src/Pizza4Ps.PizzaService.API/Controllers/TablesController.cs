@@ -2,16 +2,19 @@
 using Microsoft.AspNetCore.Mvc;
 using Pizza4Ps.PizzaService.API.Constants;
 using Pizza4Ps.PizzaService.API.Models;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Tables.Commands.CancelMergeTable;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Tables.Commands.CloseTable;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Tables.Commands.CreateTable;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Tables.Commands.DeleteTable;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Tables.Commands.LockTable;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Tables.Commands.MergeTable;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Tables.Commands.OpenTable;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Tables.Commands.RestoreTable;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Tables.Commands.UpdateTable;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Tables.Queries.GetListTable;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Tables.Queries.GetListTableIgnoreQueryFilter;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Tables.Queries.GetTableById;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Tables.Queries.GetTableMerge;
 
 namespace Pizza4Ps.PizzaService.API.Controllers
 {
@@ -87,9 +90,9 @@ namespace Pizza4Ps.PizzaService.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetSingleByIdAsync([FromRoute] Guid id)
+        public async Task<IActionResult> GetSingleByIdAsync([FromRoute] Guid id, string includeProperties = "")
         {
-            var result = await _sender.Send(new GetTableByIdQuery { Id = id });
+            var result = await _sender.Send(new GetTableByIdQuery { Id = id, includeProperties = includeProperties });
             return Ok(new ApiResponse
             {
                 Result = result,
@@ -174,5 +177,43 @@ namespace Pizza4Ps.PizzaService.API.Controllers
                 StatusCode = StatusCodes.Status200OK
             });
         }
+        [HttpGet("table-merge")]
+        public async Task<IActionResult> GetTableMergeAsync([FromQuery] GetTableMergeQuery query)
+        {
+            var result = await _sender.Send(query);
+            return Ok(new ApiResponse
+            {
+                Result = result,
+                Success = true,
+                Message = Message.UPDATED_SUCCESS,
+                StatusCode = StatusCodes.Status200OK
+            });
+        }
+        [HttpPut("merge-table")]
+        public async Task<IActionResult> MergeTableAsync([FromBody] MergeTableCommand mergeTableCommand)
+        {
+            await _sender.Send(mergeTableCommand);
+            return Ok(new ApiResponse
+            {
+                Success = true,
+                Message = Message.UPDATED_SUCCESS,
+                StatusCode = StatusCodes.Status200OK
+            });
+        }
+        [HttpPut("cancel-merge-table/{tableMergeId}")]
+        public async Task<IActionResult> MergeTableAsync([FromRoute] Guid tableMergeId)
+        {
+            await _sender.Send(new CancelMergeTableCommand
+            {
+                TableMergeId = tableMergeId
+            });
+            return Ok(new ApiResponse
+            {
+                Success = true,
+                Message = Message.UPDATED_SUCCESS,
+                StatusCode = StatusCodes.Status200OK
+            });
+        }
+
     }
 }

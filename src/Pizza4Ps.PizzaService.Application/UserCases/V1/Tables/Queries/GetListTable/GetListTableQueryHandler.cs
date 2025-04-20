@@ -34,6 +34,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Tables.Queries.GetListT
                 && (request.Capacity == null || x.Capacity == request.Capacity)
                 && (request.Status == null || x.Status == tableStatus)
                 && (request.ZoneId == null || x.ZoneId == request.ZoneId)
+                && (request.TableMergeId == null || x.TableMergeId == request.TableMergeId)
                 && (request.CurrentOrderId == null || x.CurrentOrderId == request.CurrentOrderId)
                 , includeProperties: request.IncludeProperties);
             var entities = await query

@@ -13,6 +13,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
 {
     public class PaymentService : DomainService, IPaymentService
     {
+        private readonly ITableMergeRepository _tableMergeRepository;
         private readonly IVoucherRepository _voucherRepository;
         private readonly IOrderVoucherRepository _orderVoucherRepository;
         private readonly IUnitOfWork _unitOfWork;
@@ -28,8 +29,9 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             IPaymentRepository paymentRepository,
             ITableRepository tableRepository,
             IOrderVoucherRepository orderVoucherRepository,
-            IVoucherRepository voucherRepository)
+            IVoucherRepository voucherRepository, ITableMergeRepository tableMergeRepository)
         {
+            _tableMergeRepository = tableMergeRepository;
             _voucherRepository = voucherRepository;
             _orderVoucherRepository = orderVoucherRepository;
             _unitOfWork = unitOfWork;
@@ -128,12 +130,23 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             order.SetOrderCode(orderCode.ToString());
             order.SetPaid();
 
-            var table = await _tableRepository.GetListAsTracking(x => x.CurrentOrderId == orderId).FirstOrDefaultAsync();
-            if (table != null)
+            var tables = await _tableRepository.GetListAsTracking(x => x.CurrentOrderId == orderId).ToListAsync();
+            foreach (var table in tables)
             {
-                table.SetNullCurrentOrderId();
-                _tableRepository.Update(table);
+                if (table != null)
+                {
+                    table.SetNullCurrentOrderId();
+                    table.SetClosing();
+                    if (table.TableMergeId != null)
+                    {
+                        var tableMerge = await _tableMergeRepository.GetSingleByIdAsync(table.TableMergeId.Value);
+                        table.CancelMerge();
+                        _tableMergeRepository.HardDelete(tableMerge);
+                    }
+                    _tableRepository.Update(table);
+                }
             }
+
             _paymentRepository.Add(entity);
             _orderRepository.Update(order);
             await _unitOfWork.SaveChangeAsync();
@@ -156,12 +169,22 @@ namespace Pizza4Ps.PizzaService.Domain.Services
                     _paymentRepository.Add(entity);
                     Console.WriteLine($"Order {order.Id} is paid, {order}");
 
-                    var table = await _tableRepository.GetSingleAsync(x => x.CurrentOrderId == order.Id);
-                    if (table != null)
+
+                    var tables = await _tableRepository.GetListAsTracking(x => x.CurrentOrderId == order.Id).ToListAsync();
+                    foreach (var table in tables)
                     {
-                        table.SetNullCurrentOrderId();
-                        _tableRepository.Update(table);
-                        Console.WriteLine($"Order {order.Id} is paid, {order}");
+                        if (table != null)
+                        {
+                            table.SetNullCurrentOrderId();
+                            table.SetClosing();
+                            if (table.TableMergeId != null)
+                            {
+                                var tableMerge = await _tableMergeRepository.GetSingleByIdAsync(table.TableMergeId.Value);
+                                table.CancelMerge();
+                                _tableMergeRepository.HardDelete(tableMerge);
+                            }
+                            _tableRepository.Update(table);
+                        }
                     }
 
                     var voucherUses = await _orderVoucherRepository.GetListAsTracking(x => x.OrderId == order.Id)

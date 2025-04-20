@@ -69,17 +69,19 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             {
                 throw new BusinessException("Vui lòng xử lý đơn hàng ngay tại bàn này trước khi đóng bàn");
             }
+            if (entity.CurrentReservationId != null)
+            {
+                throw new BusinessException("Vui lòng xử lý yêu cầu đặt bàn trước khi đóng bàn");
+            }
+            if (entity.TableMergeId != null)
+            {
+                throw new BusinessException("Bàn này đang được ghép, vui lòng xử lý trước khi đóng bàn");
+            }
             entity.SetClosing();
             await _unitOfWork.SaveChangeAsync();
             return entity.Id;
         }
-        public async Task<Guid> UpdateAsync(Guid id, string code, int capacity, TableStatusEnum status, Guid zoneId)
-        {
-            var entity = await _tableRepository.GetSingleByIdAsync(id);
-            entity.UpdateTable(code, capacity, status, zoneId);
-            await _unitOfWork.SaveChangeAsync();
-            return entity.Id;
-        }
+
 
         public async Task<Guid> OpenTable(Guid tableId)
         {
@@ -96,9 +98,32 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             {
                 throw new BusinessException("Vui lòng xử lý đơn hàng ngay tại bàn này trước khi khoá bàn");
             }
+            if (entity.CurrentReservationId != null)
+            {
+                throw new BusinessException("Vui lòng xử lý yêu cầu đặt bàn trước khi khoá bàn");
+            }
+            if (entity.TableMergeId != null)
+            {
+                throw new BusinessException("Bàn này đang được ghép, vui lòng xử lý trước khi khoá bàn");
+            }
             entity.SetLocked(note);
             await _unitOfWork.SaveChangeAsync();
             return entity.Id;
         }
+
+        public async Task<Guid> UpdateAsync(Guid id, string code, int capacity, Guid zoneId)
+        {
+            var entity = await _tableRepository.GetSingleByIdAsync(id);
+
+            if (entity == null)
+                throw new BusinessException(BussinessErrorConstants.TableErrorConstant.TABLE_NOT_FOUND);
+
+            entity.UpdateTable(code, capacity, zoneId);
+
+            await _unitOfWork.SaveChangeAsync();
+
+            return entity.Id;
+        }
+
     }
 }

@@ -22,10 +22,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Folder Include="UserCases\V1\Tables\Queries\" />
-		<Folder Include="UserCases\V1\Tables\Queries\" />
-		<Folder Include="UserCases\V1\Tables\Queries\" />
-		<Folder Include="UserCases\V1\Tables\Queries\" />
 		<Folder Include="UserCases\V1\WorkingSlots\Queries\NewFolder\" />
 		<Folder Include="Validators\" />
 	</ItemGroup>

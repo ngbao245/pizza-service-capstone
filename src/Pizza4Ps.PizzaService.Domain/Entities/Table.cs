@@ -12,6 +12,7 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         public TableStatusEnum Status { get; set; }
 
         public Guid? CurrentOrderId { get; set; }
+        public Guid? CurrentReservationId { get; set; }
         public Guid ZoneId { get; set; }
 
         public string? Note { get; set; }
@@ -22,6 +23,7 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
 
         public TableMerge TableMerge { get; set; }
 
+        public virtual Reservation CurrentReservation { get; set; }
         public virtual Order CurrentOrder { get; set; }
         public virtual Zone Zone { get; set; }
 
@@ -46,7 +48,16 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
             }
             return capacity;
         }
-
+        public void SetMergeTable(Guid tableMergeId, string tableMergeName)
+        {
+            TableMergeId = tableMergeId;
+            TableMergeName = tableMergeName;
+        }
+        public void CancelMerge()
+        {
+            TableMergeId = null;
+            TableMergeName = null;
+        }
         public void SetCurrentOrderId(Guid currentOrderId)
         {
             CurrentOrderId = currentOrderId;
@@ -68,16 +79,20 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
             Status = TableStatusEnum.Locked;
             Note = note;
         }
-        public void SetBooked()
+        public void SetBooked(Guid reservationId)
         {
             Status = TableStatusEnum.Reserved;
+            CurrentReservationId = reservationId;
+        }
+        public void SetNullCurrentReservationId()
+        {
+            CurrentReservationId = null;
         }
 
-        internal void UpdateTable(string code, int capacity, TableStatusEnum status, Guid zoneId)
+        internal void UpdateTable(string code, int capacity, Guid zoneId)
         {
             Code = code;
             Capacity = capacity;
-            Status = status;
             ZoneId = zoneId;
         }
     }
