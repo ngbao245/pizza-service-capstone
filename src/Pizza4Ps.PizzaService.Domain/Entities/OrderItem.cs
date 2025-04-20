@@ -10,6 +10,8 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         public string TableCode { get; set; }
         public int Quantity { get; set; }
         public decimal Price { get; set; }
+        public bool IsProductCombo { get; set; }
+        public Guid? ParentId { get; set; }
         //Bao gồm order item và order items detail
         public decimal TotalPrice { get; set; }
         public DateTime StartTime { get; set; }
@@ -33,7 +35,7 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
 
         public OrderItem(Guid id, string name, int quantity, decimal price,
             Guid orderId, Guid? productId, string tableCode, string? note, DateTime startTime, OrderTypeEnum type,
-            ProductTypeEnum? productType)
+            ProductTypeEnum? productType, bool isProductCombo, Guid? parentId)
         {
             Id = id;
             Name = name;
@@ -47,6 +49,8 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
             Note = note;
             Type = type;
             ProductType = productType;
+            IsProductCombo = isProductCombo;
+            ParentId = parentId;
         }
 
         public void SetTotalPrice()

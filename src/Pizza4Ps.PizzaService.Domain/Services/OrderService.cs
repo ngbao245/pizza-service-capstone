@@ -127,37 +127,84 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             if (order.Status != OrderStatusEnum.Unpaid) throw new BusinessException(BussinessErrorConstants.OrderErrorConstant.ORDER_STATUS_INVALID_TO_ORDER);
             foreach (var item in items)
             {
-                var product = await _productRepository.GetSingleByIdAsync(item.productId);
+                var product = await _productRepository.GetSingleByIdAsync(item.productId, "ComboItems");
                 if (product == null) throw new BusinessException(BussinessErrorConstants.ProductErrorConstant.PRODUCT_NOT_FOUND);
-                var orderItem = new OrderItem(
-                    id: Guid.NewGuid(),
-                    name: product.Name,
-                    quantity: item.quantity,
-                    price: product.Price,
-                    orderId: order.Id,
-                    productId: product.Id,
-                    tableCode: order.TableCode,
-                    note: item.note,
-                    type: OrderTypeEnum.Order,
-                    startTime: createTime,
-                    productType: product.ProductType);
-                _orderItemRepository.Add(orderItem);
-                var optionItems = await _optionItemRepository.GetListAsTracking(x => item.optionItemIds.Contains(x.Id)).ToListAsync();
-                foreach (var optionItemId in item.optionItemIds)
+                if (product.ProductRole == ProductRoleEnum.Combo)
                 {
-                    var optionItem = optionItems.FirstOrDefault(x => x.Id == optionItemId);
-                    if (optionItem == null) throw new BusinessException(BussinessErrorConstants.OptionItemErrorConstant.OPTION_ITEM_NOT_FOUND);
-                    var orderDetail = new OrderItemDetail(
+                    if (product.ComboItems == null || !product.ComboItems.Any())
+                    {
+                        throw new BusinessException("Combo không có món ăn nào");
+                    }
+                    var orderItemCombo = new OrderItem(
                         id: Guid.NewGuid(),
-                        name: optionItem.Name,
-                        additionalPrice: optionItem.AdditionalPrice,
-                        orderItemId: orderItem.Id
-                        );
-                    //_optionItemOrderItemRepository.Add(orderDetail);
-                    orderItem.OrderItemDetails.Add(orderDetail);
+                        name: product.Name,
+                        quantity: item.quantity,
+                        price: 0,
+                        orderId: order.Id,
+                        productId: product.Id,
+                        tableCode: order.TableCode,
+                        note: item.note,
+                        type: OrderTypeEnum.Order,
+                        startTime: createTime,
+                        productType: product.ProductType,
+                        isProductCombo: true,
+                        parentId: null);
+                    orderItemCombo.setDone();
+                    _orderItemRepository.Add(orderItemCombo);
+                    foreach (var comboItem in product.ComboItems)
+                    {
+                        var orderItem = new OrderItem(
+                            id: Guid.NewGuid(),
+                            name: product.Name,
+                            quantity: item.quantity,
+                            price: 0,
+                            orderId: order.Id,
+                            productId: product.Id,
+                            tableCode: order.TableCode,
+                            note: item.note,
+                            type: OrderTypeEnum.Order,
+                            startTime: createTime,
+                            productType: product.ProductType,
+                            isProductCombo: false,
+                            parentId: orderItemCombo.Id);
+                        _orderItemRepository.Add(orderItem);
+                    }
                 }
-                orderItem.SetTotalPrice();
+                else
+                {
+                    var orderItem = new OrderItem(
+                        id: Guid.NewGuid(),
+                        name: product.Name,
+                        quantity: item.quantity,
+                        price: product.Price,
+                        orderId: order.Id,
+                        productId: product.Id,
+                        tableCode: order.TableCode,
+                        note: item.note,
+                        type: OrderTypeEnum.Order,
+                        startTime: createTime,
+                        productType: product.ProductType,
+                        isProductCombo: false,
+                        parentId: null);
+                    _orderItemRepository.Add(orderItem);
+                    var optionItems = await _optionItemRepository.GetListAsTracking(x => item.optionItemIds.Contains(x.Id)).ToListAsync();
+                    foreach (var optionItemId in item.optionItemIds)
+                    {
+                        var optionItem = optionItems.FirstOrDefault(x => x.Id == optionItemId);
+                        if (optionItem == null) throw new BusinessException(BussinessErrorConstants.OptionItemErrorConstant.OPTION_ITEM_NOT_FOUND);
+                        var orderDetail = new OrderItemDetail(
+                            id: Guid.NewGuid(),
+                            name: optionItem.Name,
+                            additionalPrice: optionItem.AdditionalPrice,
+                            orderItemId: orderItem.Id
+                            );
+                        //_optionItemOrderItemRepository.Add(orderDetail);
+                        orderItem.OrderItemDetails.Add(orderDetail);
+                    }
+                    orderItem.SetTotalPrice();
+                }
             }
+
             await _unitOfWork.SaveChangeAsync();
             await _realTimeNotifier.UpdateOrderItemStatusAsync();
         }

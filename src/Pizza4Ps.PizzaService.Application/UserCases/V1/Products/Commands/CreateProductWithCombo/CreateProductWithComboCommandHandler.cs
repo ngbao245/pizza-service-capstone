@@ -1,21 +1,25 @@
-﻿using AutoMapper;
+﻿using CloudinaryDotNet.Actions;
 using CloudinaryDotNet;
-using CloudinaryDotNet.Actions;
 using MediatR;
 using Newtonsoft.Json;
 using Pizza4Ps.PizzaService.Application.Abstractions;
-using Pizza4Ps.PizzaService.Domain.Abstractions;
-using Pizza4Ps.PizzaService.Domain.Abstractions.Repositories;
-using Pizza4Ps.PizzaService.Domain.Abstractions.Services;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Commands.CreateProduct;
 using Pizza4Ps.PizzaService.Domain.Constants;
 using Pizza4Ps.PizzaService.Domain.Entities;
 using Pizza4Ps.PizzaService.Domain.Enums;
 using Pizza4Ps.PizzaService.Domain.Exceptions;
+using AutoMapper;
+using Pizza4Ps.PizzaService.Domain.Abstractions.Repositories;
+using Pizza4Ps.PizzaService.Domain.Abstractions.Services;
+using Pizza4Ps.PizzaService.Domain.Abstractions;
+using Org.BouncyCastle.Ocsp;
+using Pizza4Ps.PizzaService.Persistence.Repositories;
 
-namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Commands.CreateProduct
+namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Commands.CreateProductWithCombo
 {
-    public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand, ResultDto<Guid>>
+    public class CreateProductWithComboCommandHandler : IRequestHandler<CreateProductWithComboCommand, ResultDto<Guid>>
     {
+        private readonly IProductComboItemRepository _productComboItemRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IProductRepository _productRepository;
         private readonly IOptionItemRepository _optionItemRepository;
@@ -24,14 +28,16 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Commands.Creat
         private readonly IMapper _mapper;
         private readonly IProductService _productService;
 
-        public CreateProductCommandHandler(IMapper mapper,
+        public CreateProductWithComboCommandHandler(IMapper mapper,
             IProductService productService,
             IOptionRepository optionRepository,
             IOptionItemRepository optionItemRepository,
             IProductRepository productRepository,
             IUnitOfWork unitOfWork,
-            Cloudinary cloudinary)
+            Cloudinary cloudinary,
+            IProductComboItemRepository productComboItemRepository)
         {
+            _productComboItemRepository = productComboItemRepository;
             _unitOfWork = unitOfWork;
             _productRepository = productRepository;
             _optionItemRepository = optionItemRepository;
@@ -41,7 +47,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Commands.Creat
             _productService = productService;
         }
 
-        public async Task<ResultDto<Guid>> Handle(CreateProductCommand request, CancellationToken cancellationToken)
+        public async Task<ResultDto<Guid>> Handle(CreateProductWithComboCommand request, CancellationToken cancellationToken)
         {
             string? imageUrl = null;
             string? imagePublicId = null;
@@ -65,11 +71,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Commands.Creat
                     imageUrl = uploadResult.SecureUrl.ToString();
                     imagePublicId = uploadResult.PublicId;
                 }
-                // Validate product type
-                if (!Enum.TryParse(request.ProductType, true, out ProductTypeEnum productTypeEnum))
-                {
-                    throw new BusinessException(BussinessErrorConstants.ProductErrorConstant.INVALID_PRODUCT_TYPE);
-                }
+
                 // Tạo product entity
                 var product = new Product(
                     Guid.NewGuid(),
@@ -78,58 +80,29 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Commands.Creat
                     null,
                     description: request.Description,
                     categoryId: request.CategoryId,
-                    productType: productTypeEnum,
+                    productType: null,
                     imageUrl: imageUrl,
                     imagePublicId: imagePublicId,
-                    productRole: ProductRoleEnum.Master,
+                    productRole: ProductRoleEnum.Combo,
                     parentProductId: null
                 );
-                // Deserialize JSON chứa danh sách Option
-                if (!string.IsNullOrEmpty(request.ProductOptionModels))
+                var comboItems = new List<ComboItemModel>();
+                if (!string.IsNullOrWhiteSpace(request.ComboItems))
                 {
-                    var productOptions = JsonConvert.DeserializeObject<List<CreateProductOptionModel>>(request.ProductOptionModels);
-                    if (productOptions == null || productOptions.Count == 0)
-                    {
-                        throw new BusinessException(BussinessErrorConstants.ProductErrorConstant.INVALID_PRODUCT_OPTION);
-                    }
-                    var options = new List<Option>();
-                    var optionItems = new List<OptionItem>();
-                    foreach (var optionModel in productOptions)
-                    {
-                        var option = new Option(Guid.NewGuid(), product.Id, optionModel.Name, optionModel.Description, optionModel.SelectMany);
-                        options.Add(option);
-                        foreach (var optionItem in optionModel.ProductOptionItemModels)
-                        {
-                            optionItems.Add(new OptionItem(Guid.NewGuid(), optionItem.Name, optionItem.AdditionalPrice, option.Id));
-                        }
-                    }
-                    _optionRepository.AddRange(options);
-                    _optionItemRepository.AddRange(optionItems);
+                    comboItems = JsonConvert
+                        .DeserializeObject<List<ComboItemModel>>(request.ComboItems)
+                        ?? new List<ComboItemModel>();
                 }
-                var sizes = new List<CreateProductSizeModel>();
-                if (!string.IsNullOrWhiteSpace(request.Sizes))
+
+                // 2. Use comboItems as before
+                foreach (var ci in comboItems)
                 {
-                    sizes = JsonConvert
-                        .DeserializeObject<List<CreateProductSizeModel>>(request.Sizes)
-                        ?? new List<CreateProductSizeModel>(); // phòng null :contentReference[oaicite:0]{index=0}
-                }
-                // 4. Tạo các size (child products)
-                foreach (var s in sizes)
-                {
-                    var child = new Product(
-                    Guid.NewGuid(),
-                    name: $"{request.Name} - {s.Name}",
-                    price: s.Price,
-                    null,
-                    description: null,
-                    categoryId: request.CategoryId,
-                    productType: productTypeEnum,
-                    imageUrl: null,
-                    imagePublicId: null,
-                    productRole: ProductRoleEnum.Child,
-                    parentProductId: product.Id
-                    );
-                    _productRepository.Add(child);
+                    _productComboItemRepository.Add(new ProductComboItem(
+                        Guid.NewGuid(),
+                        product.Id,
+                        ci.ProductId,
+                        ci.Quantity
+                    ));
                 }
                 // Thêm product, option và option item vào repository
                 _productRepository.Add(product);

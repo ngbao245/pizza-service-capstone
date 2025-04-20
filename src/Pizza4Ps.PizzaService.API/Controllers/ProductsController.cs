@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Pizza4Ps.PizzaService.API.Constants;
 using Pizza4Ps.PizzaService.API.Models;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.Options.Queries.GetListOptionByProduct;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Commands.CreateProduct;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Commands.CreateProductWithCombo;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Commands.DeleteProduct;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Commands.RestoreProduct;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Commands.UpdateImageProduct;
@@ -53,7 +53,11 @@ namespace Pizza4Ps.PizzaService.API.Controllers
         ///       ]
         ///     }
         ///   ]
-        /// 
+        ///  Sizes: Chuoi json chứa danh sách size theo product theo mẫu:
+        ///   [
+        ///     {"name":"Small","price":80000},
+        ///     {"name":"Large","price":120000}
+        ///   ]
         /// - Lưu ý: Trường "ProductOptionModels" là một chuỗi JSON, FE cần chuyển đổi danh sách option sang JSON string trước khi gửi.
         /// </remarks>
         /// <returns></returns>
@@ -67,7 +71,53 @@ namespace Pizza4Ps.PizzaService.API.Controllers
 				Message = Message.CREATED_SUCCESS,
 				StatusCode = StatusCodes.Status201Created
 			});
-		}
+        }
+        /// <summary>
+        /// Tạo món ăn
+        /// </summary>
+        /// <remarks>
+        /// - Dữ liệu gửi theo định dạng multipart/form-data.
+        /// - ProductOptionModels: Chuỗi JSON chứa danh sách option, theo mẫu sau:
+        ///   [
+        ///     {
+        ///       "name": "Size",
+        ///       "description": "Choose your size",
+        ///       "productOptionItemModels": [
+        ///         { "name": "Small", "additionalPrice": 0 },
+        ///         { "name": "Medium", "additionalPrice": 2 },
+        ///         { "name": "Large", "additionalPrice": 4 }
+        ///       ]
+        ///     },
+        ///     {
+        ///       "name": "Dough",
+        ///       "description": "Choose your dough type",
+        ///       "productOptionItemModels": [
+        ///         { "name": "Thin", "additionalPrice": 0 },
+        ///         { "name": "Thick", "additionalPrice": 3 }
+        ///       ]
+        ///     }
+        ///   ]
+        ///  ComboItems: Chuoi json chứa danh sách product theo mẫu:
+        ///  [
+        ///      { "productId": "11111111-1111-1111-1111-111111111111", "quantity": 1 },
+        ///      { "productId": "22222222-2222-2222-2222-222222222222", "quantity": 2 }
+        ///  ]
+        /// 
+        /// 
+        /// - Lưu ý: Trường "ProductOptionModels" là một chuỗi JSON, FE cần chuyển đổi danh sách option sang JSON string trước khi gửi.
+        /// </remarks>
+        /// <returns></returns>
+        [HttpPost("create-product-with-combo")]
+        public async Task<IActionResult> CreateProductWithSizeAsync([FromForm] CreateProductWithComboCommand request)
+        {
+            var result = await _sender.Send(request);
+            return Ok(new ApiResponse
+            {
+                Result = result,
+                Message = Message.CREATED_SUCCESS,
+                StatusCode = StatusCodes.Status201Created
+            });
+        }
         [HttpPut("upload-image")]
         public async Task<IActionResult> UpdateImageProduct([FromForm] UpdateImageProductCommand request)
         {

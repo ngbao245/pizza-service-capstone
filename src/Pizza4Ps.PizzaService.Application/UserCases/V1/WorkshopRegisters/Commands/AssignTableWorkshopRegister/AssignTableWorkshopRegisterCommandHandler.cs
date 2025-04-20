@@ -79,7 +79,9 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.WorkshopRegisters.Comma
                     note: null,
                     DateTime.Now,
                     type: Domain.Enums.OrderTypeEnum.Workshop,
-                    productType: null);
+                    productType: null,
+                    isProductCombo: false,
+                    parentId: null);
                 orderItems.Add(orderItem);
                 foreach (var workshopPizzaRegisterDetail in workshopPizzaRegister.WorkshopPizzaRegisterDetails)
                 {
