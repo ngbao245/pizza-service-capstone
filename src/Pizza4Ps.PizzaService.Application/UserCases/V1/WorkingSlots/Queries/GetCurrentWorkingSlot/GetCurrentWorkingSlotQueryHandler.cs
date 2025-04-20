@@ -33,7 +33,6 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.WorkingSlots.Queries.Ge
                 && x.ShiftStart <= nowTime.ToTimeSpan()
                 && nowTime.ToTimeSpan() < x.ShiftEnd);
             var result = await query.FirstOrDefaultAsync(cancellationToken);
-            if (result == null) return new WorkingSlotDto();
             return _mapper.Map<WorkingSlotDto>(result);
         }
 
