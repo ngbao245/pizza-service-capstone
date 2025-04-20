@@ -6,7 +6,7 @@ namespace Pizza4Ps.PizzaService.Application.Mappers
 {
     public class StaffAbsenceProfile : Profile
     {
-        protected StaffAbsenceProfile()
+        public StaffAbsenceProfile()
         {
             CreateMap<StaffAbsenceDto, StaffAbsence>().ReverseMap();
         }
