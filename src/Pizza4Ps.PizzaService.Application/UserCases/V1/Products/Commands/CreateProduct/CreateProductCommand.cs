@@ -13,6 +13,16 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Commands.Creat
         public Guid CategoryId { get; set; }
         public string ProductType { get; set; }
         public string? ProductOptionModels { get; set; }
+        /// <summary>
+        /// Danh sách size (child products)
+        /// </summary>
+        public string? Sizes { get; set; }
+
+    }
+    public class CreateProductSizeModel
+    {
+        public string Name { get; set; }
+        public decimal Price { get; set; }
     }
     public class CreateProductOptionModel
     {

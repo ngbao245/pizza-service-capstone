@@ -22,7 +22,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Folder Include="UserCases\V1\Products\Commands\CreateProductWithSize\" />
 		<Folder Include="UserCases\V1\WorkingSlots\Queries\NewFolder\" />
 		<Folder Include="Validators\" />
 	</ItemGroup>

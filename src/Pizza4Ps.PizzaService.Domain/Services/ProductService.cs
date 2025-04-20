@@ -24,10 +24,11 @@ namespace Pizza4Ps.PizzaService.Domain.Services
 		public async Task<Guid> CreateAsync(string name, decimal price,
 			byte[]? image, string? description, Guid categoryId, ProductTypeEnum productType, string? imageUrl, string? imagePublicId)
 		{
-			var entity = new Product(Guid.NewGuid(), name, price, image, description, categoryId, productType, imageUrl, imagePublicId);
-			_productRepository.Add(entity);
-			await _unitOfWork.SaveChangeAsync();
-			return entity.Id;
+			throw new Exception();
+			//var entity = new Product(Guid.NewGuid(), name, price, image, description, categoryId, productType, imageUrl, imagePublicId);
+			//_productRepository.Add(entity);
+			//await _unitOfWork.SaveChangeAsync();
+			//return entity.Id;
 		}
 
 		public async Task DeleteAsync(List<Guid> ids, bool IsHardDeleted = false)

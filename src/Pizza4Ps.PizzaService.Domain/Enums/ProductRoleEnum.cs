@@ -2,9 +2,8 @@
 {
     public enum ProductRoleEnum
     {
-        Single = 0, // Sản phẩm đơn lẻ
-        Combo = 1,  // Sản phẩm combo
-        Child = 2,  // Sản phẩm con thuộc combo
-        Master = 3  // Sản phẩm cha (nếu cần thiết)
+        Master = 0, // Sản phẩm cha
+        Child = 1,  // Sản phẩm con thuộc combo
+        Combo = 2,  // Sản phẩm combo
     }
 }

@@ -21,7 +21,7 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         public virtual Product? ParentProduct { get; set; }
         public virtual ICollection<Product> ChildProducts { get; set; } = new List<Product>();
 
-        public ProductTypeEnum ProductType { get; set; }
+        public ProductTypeEnum? ProductType { get; set; }
 
         public virtual Category Category { get; set; }
         public virtual ICollection<Option> Options { get; set; }
@@ -34,8 +34,8 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
 
         public Product(Guid id, string name, decimal price,
             byte[]? image, string? description,
-            Guid categoryId, ProductTypeEnum productType,
-            string? imageUrl, string? imagePublicId)
+            Guid categoryId, ProductTypeEnum? productType,
+            string? imageUrl, string? imagePublicId, ProductRoleEnum productRole, Guid? parentProductId)
         {
             Id = id;
             Name = SetName(name);
@@ -46,6 +46,8 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
             Image = image;
             ImageUrl = imageUrl;
             ImagePublicId = imagePublicId;
+            ProductRole = productRole;
+            ParentProductId = parentProductId;
         }
 
         public void UpdateProduct(string name, decimal price, byte[]? image, string description, Guid categoryId, ProductTypeEnum productType, string? imageUrl, string? imagePublicId)

@@ -11,5 +11,17 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         public virtual Product Product { get; set; } = null!; // Món thành phần trong combo
 
         public int Quantity { get; set; }
+        public ProductComboItem()
+        {
+            
+        }
+
+        public ProductComboItem(Guid id, Guid comboId, Guid productId, int quantity)
+        {
+            Id = id;
+            ComboId = comboId;
+            ProductId = productId;
+            Quantity = quantity;
+        }
     }
 }
