@@ -7,6 +7,10 @@ using Pizza4Ps.PizzaService.Application.UserCases.V1.Options.Commands.RestoreOpt
 using Pizza4Ps.PizzaService.Application.UserCases.V1.StaffAbsences.Commands.CreateStaffAbsence;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.StaffAbsences.Commands.DeleteStaffAbsence;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.StaffAbsences.Commands.RestoreStaffAbsence;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.StaffAbsences.Queries.GetListStaffAbsence;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.StaffAbsences.Queries.GetStaffAbsenceById;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Staffs.Queries.GetListStaff;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Staffs.Queries.GetStaffById;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.StaffZones.Commands.DeleteStaffZone;
 
 namespace Pizza4Ps.PizzaService.API.Controllers
@@ -33,6 +37,30 @@ namespace Pizza4Ps.PizzaService.API.Controllers
                 Result = result,
                 Message = Message.CREATED_SUCCESS,
                 StatusCode = StatusCodes.Status201Created
+            });
+        }
+
+        [HttpGet()]
+        public async Task<IActionResult> GetListAsync([FromQuery] GetListStaffAbsenceQuery query)
+        {
+            var result = await _sender.Send(query);
+            return Ok(new ApiResponse
+            {
+                Result = result,
+                Message = Message.GET_SUCCESS,
+                StatusCode = StatusCodes.Status200OK
+            });
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetSingleByIdAsync([FromRoute] Guid id)
+        {
+            var result = await _sender.Send(new GetStaffAbsenceByIdQuery { Id = id });
+            return Ok(new ApiResponse
+            {
+                Result = result,
+                Message = Message.GET_SUCCESS,
+                StatusCode = StatusCodes.Status200OK
             });
         }
 
