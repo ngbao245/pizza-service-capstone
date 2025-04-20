@@ -12,11 +12,20 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         public string? ImageUrl { get; set; } // URL ảnh trên Cloudinary
         public string? ImagePublicId { get; set; } // Public ID của ảnh trên Cloudinary
         public Guid CategoryId { get; set; }
+
+        // Field mới: phân loại sản phẩm (master, single, child, combo)
+        public ProductRoleEnum ProductRole { get; set; }
+
+        // Quan hệ giữa sản phẩm master và sản phẩm child (ví dụ: các size khác nhau)
+        public Guid? ParentProductId { get; set; }
+        public virtual Product? ParentProduct { get; set; }
+        public virtual ICollection<Product> ChildProducts { get; set; } = new List<Product>();
+
         public ProductTypeEnum ProductType { get; set; }
 
         public virtual Category Category { get; set; }
         public virtual ICollection<Option> Options { get; set; }
-
+        public virtual ICollection<ProductComboItem> ComboItems { get; set; } = new List<ProductComboItem>();
         public virtual ICollection<ProductSize> ProductSizes { get; set; }
 
         public Product()

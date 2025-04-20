@@ -53,6 +53,7 @@
         internal const string Ingredient = nameof(Ingredient);
         internal const string Recipe = nameof(Recipe);
         internal const string ProductSize = nameof(ProductSize);
+        internal const string ProductComboItem = nameof(ProductComboItem);
         internal const string Workshop = nameof(Workshop);
         internal const string WorkshopFoodDetail = nameof(WorkshopFoodDetail);
         internal const string WorkshopPizzaRegister = nameof(WorkshopPizzaRegister);
