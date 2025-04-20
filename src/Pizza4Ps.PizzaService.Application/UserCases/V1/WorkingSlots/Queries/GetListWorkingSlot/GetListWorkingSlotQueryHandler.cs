@@ -24,8 +24,8 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.WorkingSlots.Queries.Ge
         public async Task<PaginatedResultDto<WorkingSlotDto>> Handle(GetListWorkingSlotQuery request, CancellationToken cancellationToken)
         {
             var query = _WorkingSlotRepository.GetListAsNoTracking(
-                x => (request.ShiftName == null || x.ShiftName.Contains(request.ShiftName))
-                && (request.DayName == null || x.DayName.Contains(request.DayName))
+                x => (request.ShiftName == null || x.ShiftName.Equals(request.ShiftName))
+                && (request.DayName == null || x.DayName.Equals(request.DayName))
                 && (request.ShiftStart != null && request.ShiftEnd == null) ? x.ShiftStart >= request.ShiftStart :
                 (request.ShiftEnd != null && request.ShiftStart == null) ? x.ShiftEnd <= request.ShiftEnd :
                 (request.ShiftStart != null && request.ShiftEnd != null) ? (x.ShiftStart >= request.ShiftStart && x.ShiftEnd <= request.ShiftEnd) : true
