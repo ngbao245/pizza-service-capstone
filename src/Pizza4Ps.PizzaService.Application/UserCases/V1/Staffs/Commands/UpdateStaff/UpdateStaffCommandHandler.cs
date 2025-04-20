@@ -20,7 +20,8 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Staffs.Commands.UpdateS
 				request.Phone,
 				request.Email,
 				request.StaffType,
-				request.Status);
+				request.Status,
+                request.Password);
 		}
 	}
 }
