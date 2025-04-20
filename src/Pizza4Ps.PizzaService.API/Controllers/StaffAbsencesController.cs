@@ -2,16 +2,11 @@
 using Microsoft.AspNetCore.Mvc;
 using Pizza4Ps.PizzaService.API.Constants;
 using Pizza4Ps.PizzaService.API.Models;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.Options.Commands.DeleteOption;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.Options.Commands.RestoreOption;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.StaffAbsences.Commands.CreateStaffAbsence;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.StaffAbsences.Commands.DeleteStaffAbsence;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.StaffAbsences.Commands.RestoreStaffAbsence;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.StaffAbsences.Queries.GetListStaffAbsence;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.StaffAbsences.Queries.GetStaffAbsenceById;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.Staffs.Queries.GetListStaff;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.Staffs.Queries.GetStaffById;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.StaffZones.Commands.DeleteStaffZone;
 
 namespace Pizza4Ps.PizzaService.API.Controllers
 {
