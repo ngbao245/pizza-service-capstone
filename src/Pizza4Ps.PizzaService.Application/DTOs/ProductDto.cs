@@ -1,7 +1,4 @@
-﻿using Pizza4Ps.PizzaService.Domain.Entities;
-using Pizza4Ps.PizzaService.Domain.Enums;
-
-namespace Pizza4Ps.PizzaService.Application.DTOs
+﻿namespace Pizza4Ps.PizzaService.Application.DTOs
 {
     public class ProductDto
     {
@@ -16,7 +13,7 @@ namespace Pizza4Ps.PizzaService.Application.DTOs
         public string ProductType { get; set; }
         public virtual CategoryDto Category { get; set; }
         public virtual ICollection<ProductSizeDto> ProductSizes { get; set; }
-        public virtual ICollection<OptionDto> Options { get; set; }
+        public virtual ICollection<ProductOptionDto> ProductOptions { get; set; }
 
         // Field mới: phân loại sản phẩm (master, single, child, combo)
         public string ProductRole { get; set; }

@@ -11,11 +11,13 @@ using Pizza4Ps.PizzaService.Domain.Constants;
 using Pizza4Ps.PizzaService.Domain.Entities;
 using Pizza4Ps.PizzaService.Domain.Enums;
 using Pizza4Ps.PizzaService.Domain.Exceptions;
+using Pizza4Ps.PizzaService.Persistence.Repositories;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Commands.CreateProduct
 {
     public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand, ResultDto<Guid>>
     {
+        private readonly IProductOptionRepository _productOptionRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IProductRepository _productRepository;
         private readonly IOptionItemRepository _optionItemRepository;
@@ -30,8 +32,10 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Commands.Creat
             IOptionItemRepository optionItemRepository,
             IProductRepository productRepository,
             IUnitOfWork unitOfWork,
-            Cloudinary cloudinary)
+            Cloudinary cloudinary,
+            IProductOptionRepository productOptionRepository)
         {
+            _productOptionRepository = productOptionRepository;
             _unitOfWork = unitOfWork;
             _productRepository = productRepository;
             _optionItemRepository = optionItemRepository;
@@ -84,28 +88,16 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Commands.Creat
                     productRole: ProductRoleEnum.Master,
                     parentProductId: null
                 );
-                // Deserialize JSON chứa danh sách Option
-                if (!string.IsNullOrEmpty(request.ProductOptionModels))
+                if (request.OptionIds != null)
                 {
-                    var productOptions = JsonConvert.DeserializeObject<List<CreateProductOptionModel>>(request.ProductOptionModels);
-                    if (productOptions == null || productOptions.Count == 0)
+                    foreach (var optionId in request.OptionIds)
                     {
-                        throw new BusinessException(BussinessErrorConstants.ProductErrorConstant.INVALID_PRODUCT_OPTION);
+                        var productOption = new ProductOption(productId: product.Id,
+                            optionId: optionId);
+                        _productOptionRepository.Add(productOption);
                     }
-                    var options = new List<Option>();
-                    var optionItems = new List<OptionItem>();
-                    foreach (var optionModel in productOptions)
-                    {
-                        var option = new Option(Guid.NewGuid(), product.Id, optionModel.Name, optionModel.Description, optionModel.SelectMany);
-                        options.Add(option);
-                        foreach (var optionItem in optionModel.ProductOptionItemModels)
-                        {
-                            optionItems.Add(new OptionItem(Guid.NewGuid(), optionItem.Name, optionItem.AdditionalPrice, option.Id));
-                        }
-                    }
-                    _optionRepository.AddRange(options);
-                    _optionItemRepository.AddRange(optionItems);
                 }
+
                 var sizes = new List<CreateProductSizeModel>();
                 if (!string.IsNullOrWhiteSpace(request.Sizes))
                 {
