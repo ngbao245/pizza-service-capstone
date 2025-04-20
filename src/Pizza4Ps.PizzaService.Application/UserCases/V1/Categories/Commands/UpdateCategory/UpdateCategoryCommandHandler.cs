@@ -15,7 +15,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Categories.Commands.Upd
         public async Task Handle(UpdateCategoryCommand request, CancellationToken cancellationToken)
         {
             var result = await _categoryService.UpdateAsync(
-                request.Id,
+                request.Id!.Value,
                 request.Name,
                 request.Description);
         }

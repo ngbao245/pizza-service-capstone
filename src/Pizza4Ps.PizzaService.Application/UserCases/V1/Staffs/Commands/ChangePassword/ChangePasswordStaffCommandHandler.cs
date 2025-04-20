@@ -20,7 +20,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Staffs.Commands.ChangeP
 
         public async Task Handle(ChangePasswordStaffCommand request, CancellationToken cancellationToken)
         {
-            var staff = await _staffRepository.GetSingleByIdAsync(request.StaffId);
+            var staff = await _staffRepository.GetSingleByIdAsync(request.StaffId!.Value);
             if (staff == null)
             {
                 throw new BusinessException(BussinessErrorConstants.StaffErrorConstant.STAFF_NOT_FOUND);

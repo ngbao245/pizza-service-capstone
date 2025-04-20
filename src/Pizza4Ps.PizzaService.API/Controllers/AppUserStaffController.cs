@@ -29,9 +29,10 @@ namespace Pizza4Ps.PizzaService.API.Controllers
             });
         }
 
-        [HttpPut("change-password")]
-        public async Task<IActionResult> ChangePasswordAsync([FromBody] ChangePasswordStaffCommand request)
+        [HttpPut("change-password/{id}")]
+        public async Task<IActionResult> ChangePasswordAsync([FromRoute] Guid id, [FromBody] ChangePasswordStaffCommand request)
         {
+            request.StaffId = id;
             await _sender.Send(request);
             return Ok(new ApiResponse
             {
