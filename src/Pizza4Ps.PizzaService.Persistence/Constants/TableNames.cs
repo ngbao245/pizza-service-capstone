@@ -65,5 +65,6 @@
         internal const string WorkingSlotRegister = nameof(WorkingSlotRegister);
         internal const string SwapWorkingSlot = nameof(SwapWorkingSlot);
         internal const string ReasonConfig = nameof(ReasonConfig);
+        internal const string StaffAbsence = nameof(StaffAbsence);
     }
 }
