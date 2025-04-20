@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Pizza4Ps.PizzaService.API.Models;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.AuthStaff.Commands.LoginStaff;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Staffs.Commands.ChangePassword;
 
 namespace Pizza4Ps.PizzaService.API.Controllers
 {
@@ -15,6 +16,7 @@ namespace Pizza4Ps.PizzaService.API.Controllers
         {
             _sender = sender;
         }
+
         [HttpPost("login")]
         public async Task<IActionResult> LoginCustomerAsync([FromBody] LoginStaffCommand request)
         {
@@ -24,6 +26,18 @@ namespace Pizza4Ps.PizzaService.API.Controllers
                 Result = result,
                 Message = "Login successfully",
                 StatusCode = StatusCodes.Status201Created
+            });
+        }
+
+        [HttpPut("change-password")]
+        public async Task<IActionResult> ChangePasswordAsync([FromBody] ChangePasswordStaffCommand request)
+        {
+            await _sender.Send(request);
+            return Ok(new ApiResponse
+            {
+                Success = true,
+                Message = "Password changed successfully.",
+                StatusCode = StatusCodes.Status200OK
             });
         }
     }
