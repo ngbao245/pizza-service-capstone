@@ -67,7 +67,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
 
             var workingSlot = await _workingSlotRepository.GetSingleByIdAsync(workingSlotId);
             if (workingSlot == null)
-                throw new BusinessException(BussinessErrorConstants.WorkingSlotErrorConstant.WORKING_SLOT_NOT_FOUND);
+                return;
 
             //// Kiểm tra thời gian hiện tại có nằm trong ca không
             //if (nowSpan < workingSlot.ShiftStart || nowSpan >= workingSlot.ShiftEnd)
