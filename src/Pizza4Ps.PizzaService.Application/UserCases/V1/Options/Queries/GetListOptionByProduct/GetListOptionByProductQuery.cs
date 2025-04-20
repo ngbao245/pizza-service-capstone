@@ -6,7 +6,5 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Options.Queries.GetList
     public class GetListOptionByProductQuery : PaginatedQuery<PaginatedResultDto<OptionMenuDto>>
     {
         public Guid ProductId { get; set; }
-        public string? Name { get; set; }
-        public decimal? AdditionalPrice { get; set; }
     }
 }

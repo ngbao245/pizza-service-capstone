@@ -5,7 +5,7 @@ using Pizza4Ps.PizzaService.Persistence.Constants;
 
 namespace Pizza4Ps.PizzaService.Persistence.Configurations
 {
-	internal class ProductConfigration : IEntityTypeConfiguration<Product>
+	public class ProductConfigration : IEntityTypeConfiguration<Product>
 	{
 		public void Configure(EntityTypeBuilder<Product> builder)
 		{

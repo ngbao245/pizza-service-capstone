@@ -7,6 +7,6 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.OptionItems.Commands.Cr
 	{
         public string Name { get; set; }
         public decimal AdditionalPrice { get; set; }
-        public Guid OptionId { get; set; }
+        public Guid? OptionId { get; set; }
     }
 }
