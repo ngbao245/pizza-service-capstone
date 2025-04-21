@@ -4,11 +4,12 @@ using Pizza4Ps.PizzaService.Domain.Entities;
 
 namespace Pizza4Ps.PizzaService.Application.Mappers
 {
-    public class ProductSizeProfile : Profile
+    public class ProductComboSlotProfile : Profile
     {
-        public ProductSizeProfile()
+        public ProductComboSlotProfile()
         {
-            CreateMap<ProductSize, ProductSizeDto>().ReverseMap();
+            CreateMap<ProductComboSlotDto, ProductComboSlot>().ReverseMap();
+
         }
     }
 }

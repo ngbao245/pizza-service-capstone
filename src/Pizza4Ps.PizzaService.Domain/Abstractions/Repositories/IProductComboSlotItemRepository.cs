@@ -3,8 +3,7 @@ using Pizza4Ps.PizzaService.Domain.Entities;
 
 namespace Pizza4Ps.PizzaService.Domain.Abstractions.Repositories
 {
-    public interface IProductSizeRepository: IRepositoryBase<ProductSize, Guid>
+    public interface IProductComboSlotItemRepository : IRepositoryBase<ProductComboSlotItem, Guid>
     {
-        
     }
 }

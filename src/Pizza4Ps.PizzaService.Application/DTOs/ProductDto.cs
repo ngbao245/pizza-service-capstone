@@ -1,4 +1,6 @@
-﻿namespace Pizza4Ps.PizzaService.Application.DTOs
+﻿using Pizza4Ps.PizzaService.Domain.Entities;
+
+namespace Pizza4Ps.PizzaService.Application.DTOs
 {
     public class ProductDto
     {
@@ -12,15 +14,15 @@
         public Guid CategoryId { get; set; }
         public string ProductType { get; set; }
         public virtual CategoryDto Category { get; set; }
-        public virtual ICollection<ProductSizeDto> ProductSizes { get; set; }
         public virtual ICollection<ProductOptionDto> ProductOptions { get; set; }
 
         // Field mới: phân loại sản phẩm (master, single, child, combo)
         public string ProductRole { get; set; }
+        public string ProductStatus { get; set; }
 
         public virtual ICollection<ProductDto> ChildProducts { get; set; } = new List<ProductDto>();
 
-        public virtual ICollection<ProductComboItemDto> ComboItems { get; set; } = new List<ProductComboItemDto>();
-
+        public virtual ICollection<ProductComboSlotDto> ProductComboSlots { get; set; } = new List<ProductComboSlotDto>();
+        public virtual ICollection<RecipeDto> Recipes { get; set; } = new List<RecipeDto>();
     }
 }

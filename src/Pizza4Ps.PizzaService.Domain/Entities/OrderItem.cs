@@ -52,7 +52,10 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
             IsProductCombo = isProductCombo;
             ParentId = parentId;
         }
-
+        public void SetTotalPriceCombo(decimal totalPrice)
+        {
+            TotalPrice = totalPrice;
+        }
         public void SetTotalPrice()
         {
             var totalOrderItemDetails = OrderItemDetails.Select(x => x.AdditionalPrice).Sum();

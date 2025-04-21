@@ -5,25 +5,24 @@ using Pizza4Ps.PizzaService.Persistence.Constants;
 
 namespace Pizza4Ps.PizzaService.Persistence.Configurations
 {
-    public class ProductComboItemConfiguration : IEntityTypeConfiguration<ProductComboItem>
+    public class ProductComboSlotItemConfiguration : IEntityTypeConfiguration<ProductComboSlotItem>
     {
-        public void Configure(EntityTypeBuilder<ProductComboItem> builder)
+        public void Configure(EntityTypeBuilder<ProductComboSlotItem> builder)
         {
-            builder.ToTable(TableNames.ProductComboItem);
+            builder.ToTable(TableNames.ProductComboSlotItem);
             builder.HasKey(x => x.Id);
 
-            builder.Property(x => x.Quantity)
-                .IsRequired();
-
-            builder.HasOne(x => x.Combo)
-                .WithMany(p => p.ComboItems)
-                .HasForeignKey(x => x.ComboId)
+            builder.HasOne(x => x.ProductComboSlot)
+                .WithMany(p => p.ProductComboSlotItems)
+                .HasForeignKey(x => x.ProductComboSlotId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasOne(x => x.Product)
                 .WithMany()
                 .HasForeignKey(x => x.ProductId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.SetNull);
+
+
         }
     }
 }

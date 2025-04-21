@@ -6,7 +6,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Recipe.Queries.GetListR
 {
     public class GetListRecipeQuery: PaginatedQuery<PaginatedResultDto<RecipeDto>>
     {
-        public Guid? ProductSizeId { get; set; }
+        public Guid? ProductId { get; set; }
         public Guid? IngredientId { get; set; }
         public string? IngredientName { get; set; }
         public string? Unit { get; set; }

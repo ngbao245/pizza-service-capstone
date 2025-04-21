@@ -1,10 +1,7 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Pizza4Ps.PizzaService.API.Constants;
 using Pizza4Ps.PizzaService.API.Models;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.ProductSizes.Commands.CreateProductSize;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.ProductSizes.Queries.GetListProductSize;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.ReasonConfigs.Commands.CreateReasonConfig;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.ReasonConfigs.Queries.GetReasonConfigList;
 

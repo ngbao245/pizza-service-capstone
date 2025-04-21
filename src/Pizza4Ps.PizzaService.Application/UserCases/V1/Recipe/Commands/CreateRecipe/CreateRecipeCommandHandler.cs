@@ -30,7 +30,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Recipe.Commands.CreateR
             unitOfMeasurementType = parsedStatus;
 
             var result = await _recipeService.CreateAsync(
-                request.ProductSizeId,
+                request.ProductId,
                 request.IngredientId,
                 request.IngredientName,
                 unitOfMeasurementType.Value,

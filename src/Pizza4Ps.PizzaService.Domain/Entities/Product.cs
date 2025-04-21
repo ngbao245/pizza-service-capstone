@@ -23,10 +23,12 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
 
         public ProductTypeEnum? ProductType { get; set; }
 
+        public ProductStatus ProductStatus { get; set; }
+
         public virtual Category Category { get; set; }
-        public virtual ICollection<ProductOption> ProductOptions { get; set; }
-        public virtual ICollection<ProductComboItem> ComboItems { get; set; } = new List<ProductComboItem>();
-        public virtual ICollection<ProductSize> ProductSizes { get; set; }
+        public virtual ICollection<ProductOption> ProductOptions { get; set; } = new List<ProductOption>();
+        public virtual ICollection<ProductComboSlot> ProductComboSlots { get; set; } = new List<ProductComboSlot>();
+        public virtual ICollection<Recipe> Recipes { get; set; } = new List<Recipe>();
 
         public Product()
         {
@@ -48,6 +50,7 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
             ImagePublicId = imagePublicId;
             ProductRole = productRole;
             ParentProductId = parentProductId;
+            ProductStatus = ProductStatus.Locked;
         }
 
         public void UpdateProduct(string name, decimal price, byte[]? image, string description, Guid categoryId, ProductTypeEnum productType, string? imageUrl, string? imagePublicId)
@@ -60,6 +63,10 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
             Image = image;
             if (imageUrl != null) ImageUrl = imageUrl;
             if (imagePublicId != null) ImagePublicId = imagePublicId;
+        }
+        public void UpdateProductStatus(ProductStatus productStatus)
+        {
+            ProductStatus = productStatus;
         }
         private string SetName(string name)
         {

@@ -11,11 +11,17 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Commands.Creat
         public IFormFile? file { get; set; }
         public string? Description { get; set; }
         public Guid CategoryId { get; set; }
-        public string ComboItems { get; set; }
+        public string ComboSlots { get; set; }
     }
-    public class ComboItemModel
+    public class ComboSlotModel
+    {
+        public string SlotName { get; set; }
+        public List<ComboSlotItemModel> ComboSlotItems { get; set; }
+    }
+
+    public class ComboSlotItemModel
     {
         public Guid ProductId { get; set; }
-        public int Quantity { get; set; }
+        public decimal ExtraPrice { get; set; }
     }
 }

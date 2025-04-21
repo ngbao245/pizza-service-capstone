@@ -8,6 +8,7 @@ using Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Commands.DeletePro
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Commands.RestoreProduct;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Commands.UpdateImageProduct;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Commands.UpdateProduct;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Commands.UpdateProductStatus;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Queries.GetListProduct;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Queries.GetListProductIgnoreQueryFilter;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Queries.GetMenu;
@@ -125,6 +126,18 @@ namespace Pizza4Ps.PizzaService.API.Controllers
             return Ok(new ApiResponse
             {
                 Message = Message.CREATED_SUCCESS,
+                StatusCode = StatusCodes.Status201Created
+            });
+        }
+        [HttpPut("update-status/{productId}")]
+        public async Task<IActionResult> UpdateStatusProduct([FromRoute] Guid productId, UpdateProductStatusCommand request)
+        {
+            request.Id = productId;
+            await _sender.Send(request);
+            return Ok(new ApiResponse
+            {
+                Success = true,
+                Message = Message.UPDATED_SUCCESS,
                 StatusCode = StatusCodes.Status201Created
             });
         }

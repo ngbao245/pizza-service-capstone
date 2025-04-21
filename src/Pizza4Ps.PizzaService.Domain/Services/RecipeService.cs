@@ -14,26 +14,18 @@ namespace Pizza4Ps.PizzaService.Domain.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IRecipeRepository _recipeRepository;
-        private readonly IProductSizeRepository _productSizeRepository;
         private readonly IIngredientRepository _ingredientRepository;
 
-        public RecipeService(IUnitOfWork unitOfWork, IRecipeRepository recipeRepository, IProductSizeRepository productSizeRepository, IIngredientRepository ingredientRepository)
+        public RecipeService(IUnitOfWork unitOfWork, IRecipeRepository recipeRepository,  IIngredientRepository ingredientRepository)
         {
             _unitOfWork = unitOfWork;
             _recipeRepository = recipeRepository;
-            _productSizeRepository = productSizeRepository;
             _ingredientRepository = ingredientRepository;
         }
 
-        public async Task<Guid> CreateAsync(Guid productSizeId, Guid? ingredientId, string ingredientName, UnitOfMeasurementType unit, decimal quantity)
+        public async Task<Guid> CreateAsync(Guid productId, Guid? ingredientId, string ingredientName, UnitOfMeasurementType unit, decimal quantity)
         {
-            var existingProductSize = await _productSizeRepository.CountAsync(p => p.Id == productSizeId);
-            if (existingProductSize == 0)
-            {
-                throw new BusinessException(BussinessErrorConstants.ProductSizeErrorConstant.PRODUCTSIZE_NOT_FOUND);
-            }
-
-            var entity = new Recipe(Guid.NewGuid(), productSizeId, ingredientId, ingredientName, unit, quantity);
+            var entity = new Recipe(Guid.NewGuid(), ingredientId, ingredientName, unit, quantity, productId);
             _recipeRepository.Add(entity);
             await _unitOfWork.SaveChangeAsync();
             return entity.Id;

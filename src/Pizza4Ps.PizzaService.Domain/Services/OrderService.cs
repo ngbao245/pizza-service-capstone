@@ -127,47 +127,71 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             if (order.Status != OrderStatusEnum.Unpaid) throw new BusinessException(BussinessErrorConstants.OrderErrorConstant.ORDER_STATUS_INVALID_TO_ORDER);
             foreach (var item in items)
             {
-                var product = await _productRepository.GetSingleByIdAsync(item.productId, "ComboItems");
+                var product = await _productRepository.GetSingleByIdAsync(item.productId, "ProductComboSlots.ProductComboSlotItems.Product");
                 if (product == null) throw new BusinessException(BussinessErrorConstants.ProductErrorConstant.PRODUCT_NOT_FOUND);
+
                 if (product.ProductRole == ProductRoleEnum.Combo)
                 {
-                    if (product.ComboItems == null || !product.ComboItems.Any())
-                    {
-                        throw new BusinessException("Combo không có món ăn nào");
-                    }
-                    var orderItemCombo = new OrderItem(
+                    // 1. Lấy base price của combo
+                    decimal baseComboPrice = product.Price;
+
+                    // 2. Lấy các slot‑item khách đã chọn
+                    var selectedSlotItems = product.ProductComboSlots
+                        .SelectMany(slot => slot.ProductComboSlotItems)
+                        .Where(i => item.optionItemIds.Contains(i.Id))
+                        .ToList();
+
+                    // 3. Tính tổng extraPrice
+                    decimal totalExtra = selectedSlotItems.Sum(i => i.ExtraPrice);
+
+                    // 4. Tính giá combo cho 1 đơn vị
+                    decimal pricePerCombo = baseComboPrice + totalExtra;
+
+                    // 5. Tính tổng cho toàn bộ quantity
+                    decimal finalComboPrice = pricePerCombo * item.quantity;
+                    // 1. Tạo order item cha
+                    var parent = new OrderItem(
                         id: Guid.NewGuid(),
                         name: product.Name,
                         quantity: item.quantity,
-                        price: 0,
+                        price: product.Price,
                         orderId: order.Id,
                         productId: product.Id,
                         tableCode: order.TableCode,
                         note: item.note,
                         type: OrderTypeEnum.Order,
                         startTime: createTime,
-                        productType: product.ProductType,
+                        productType: null,
                         isProductCombo: true,
-                        parentId: null);
-                    orderItemCombo.setDone();
-                    _orderItemRepository.Add(orderItemCombo);
-                    foreach (var comboItem in product.ComboItems)
+                        parentId: null
+                    );
+                    parent.setDone();
+                    parent.SetTotalPriceCombo(finalComboPrice);
+                    _orderItemRepository.Add(parent);
+                    foreach (var slot in product.ProductComboSlots)
                     {
-                        var orderItem = new OrderItem(
+                        // Khách chọn item nào (ví dụ: đã map vào dto nếu cần)
+                        var selectedItem = slot.ProductComboSlotItems
+                            .FirstOrDefault(i => item.optionItemIds.Contains(i.Id));
+                        if (selectedItem == null)
+                            throw new BusinessException("Lựa chọn món trong combo không hợp lệ");
+
+                        var child = new OrderItem(
                             id: Guid.NewGuid(),
-                            name: product.Name,
+                            name: selectedItem.Product.Name,
                             quantity: item.quantity,
-                            price: 0,
+                            price: selectedItem.ExtraPrice,
                             orderId: order.Id,
-                            productId: product.Id,
+                            productId: selectedItem.ProductId,
                             tableCode: order.TableCode,
                             note: item.note,
                             type: OrderTypeEnum.Order,
                             startTime: createTime,
-                            productType: product.ProductType,
+                            productType: selectedItem.Product.ProductType,
                             isProductCombo: false,
-                            parentId: orderItemCombo.Id);
-                        _orderItemRepository.Add(orderItem);
+                            parentId: parent.Id
+                        );
+                        _orderItemRepository.Add(child);
                     }
                 }
                 else
@@ -229,17 +253,17 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             var order = await _orderRepository.GetSingleByIdAsync(orderId, "OrderItems,AdditionalFees");
             if (order == null)
                 throw new BusinessException(BussinessErrorConstants.OrderErrorConstant.ORDER_NOT_FOUND);
-            if (order.Status != OrderStatusEnum.Unpaid)
-                throw new BusinessException(BussinessErrorConstants.OrderErrorConstant.ORDER_CANNOT_CHECK_OUT);
+            //if (order.Status != OrderStatusEnum.Unpaid)
+            //    throw new BusinessException(BussinessErrorConstants.OrderErrorConstant.ORDER_CANNOT_CHECK_OUT);
             //Validate các món phải done hết mới được checkout
             decimal totalOrderItemPrice = 0;
             foreach (var orderItem in order.OrderItems)
             {
-                if (orderItem.OrderItemStatus != OrderItemStatus.Done && orderItem.OrderItemStatus != OrderItemStatus.Cancelled)
-                {
-                    throw new BusinessException("Đơn hàng có món ăn chưa được hoàn thành hoặc huỷ");
-                }
-                if (orderItem.OrderItemStatus == OrderItemStatus.Done)
+                //if (orderItem.OrderItemStatus != OrderItemStatus.Done && orderItem.OrderItemStatus != OrderItemStatus.Cancelled)
+                //{
+                //    throw new BusinessException("Đơn hàng có món ăn chưa được hoàn thành hoặc huỷ");
+                //}
+                if (orderItem.OrderItemStatus != OrderItemStatus.Cancelled)
                 {
                     totalOrderItemPrice += orderItem.TotalPrice;
                 }

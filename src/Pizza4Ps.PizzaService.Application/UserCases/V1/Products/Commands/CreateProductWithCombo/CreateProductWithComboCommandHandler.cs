@@ -1,25 +1,23 @@
-﻿using CloudinaryDotNet.Actions;
+﻿using AutoMapper;
 using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
 using MediatR;
 using Newtonsoft.Json;
 using Pizza4Ps.PizzaService.Application.Abstractions;
-using Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Commands.CreateProduct;
-using Pizza4Ps.PizzaService.Domain.Constants;
+using Pizza4Ps.PizzaService.Domain.Abstractions;
+using Pizza4Ps.PizzaService.Domain.Abstractions.Repositories;
+using Pizza4Ps.PizzaService.Domain.Abstractions.Services;
 using Pizza4Ps.PizzaService.Domain.Entities;
 using Pizza4Ps.PizzaService.Domain.Enums;
 using Pizza4Ps.PizzaService.Domain.Exceptions;
-using AutoMapper;
-using Pizza4Ps.PizzaService.Domain.Abstractions.Repositories;
-using Pizza4Ps.PizzaService.Domain.Abstractions.Services;
-using Pizza4Ps.PizzaService.Domain.Abstractions;
-using Org.BouncyCastle.Ocsp;
 using Pizza4Ps.PizzaService.Persistence.Repositories;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Commands.CreateProductWithCombo
 {
     public class CreateProductWithComboCommandHandler : IRequestHandler<CreateProductWithComboCommand, ResultDto<Guid>>
     {
-        private readonly IProductComboItemRepository _productComboItemRepository;
+        private readonly IProductComboSlotRepository _productComboSlotRepository;
+        private readonly IProductComboSlotItemRepository _productComboSlotItemRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IProductRepository _productRepository;
         private readonly IOptionItemRepository _optionItemRepository;
@@ -35,9 +33,10 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Commands.Creat
             IProductRepository productRepository,
             IUnitOfWork unitOfWork,
             Cloudinary cloudinary,
-            IProductComboItemRepository productComboItemRepository)
+            IProductComboSlotItemRepository productComboItemRepository, IProductComboSlotRepository productComboSlotRepository)
         {
-            _productComboItemRepository = productComboItemRepository;
+            _productComboSlotRepository = productComboSlotRepository;
+            _productComboSlotItemRepository = productComboItemRepository;
             _unitOfWork = unitOfWork;
             _productRepository = productRepository;
             _optionItemRepository = optionItemRepository;
@@ -86,23 +85,26 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Commands.Creat
                     productRole: ProductRoleEnum.Combo,
                     parentProductId: null
                 );
-                var comboItems = new List<ComboItemModel>();
-                if (!string.IsNullOrWhiteSpace(request.ComboItems))
-                {
-                    comboItems = JsonConvert
-                        .DeserializeObject<List<ComboItemModel>>(request.ComboItems)
-                        ?? new List<ComboItemModel>();
-                }
+                var comboSlots = new List<ComboSlotModel>();
+                comboSlots = JsonConvert.DeserializeObject<List<ComboSlotModel>>(request.ComboSlots);
 
                 // 2. Use comboItems as before
-                foreach (var ci in comboItems)
+                foreach (var item in comboSlots!)
                 {
-                    _productComboItemRepository.Add(new ProductComboItem(
-                        Guid.NewGuid(),
-                        product.Id,
-                        ci.ProductId,
-                        ci.Quantity
-                    ));
+                    var comboSlot = new ProductComboSlot(
+                        id: Guid.NewGuid(),
+                        comboId: product.Id,
+                        slotname: item.SlotName);
+                    _productComboSlotRepository.Add(comboSlot);
+                    foreach (var option in item.ComboSlotItems)
+                    {
+                        var comboSlotItem = new ProductComboSlotItem(
+                            id: Guid.NewGuid(),
+                            productComboSlotId: comboSlot.Id,
+                            productId: option.ProductId,
+                            extraPrice: option.ExtraPrice);
+                        _productComboSlotItemRepository.Add(comboSlotItem);
+                    }
                 }
                 // Thêm product, option và option item vào repository
                 _productRepository.Add(product);

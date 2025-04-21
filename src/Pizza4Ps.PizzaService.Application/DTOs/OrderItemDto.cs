@@ -1,6 +1,4 @@
-﻿using Pizza4Ps.PizzaService.Domain.Enums;
-
-namespace Pizza4Ps.PizzaService.Application.DTOs
+﻿namespace Pizza4Ps.PizzaService.Application.DTOs
 {
     public class OrderItemDto
     {
@@ -24,5 +22,7 @@ namespace Pizza4Ps.PizzaService.Application.DTOs
         public DateTime? StartTimeServing { get; set; }
         public DateTime? EndTime { get; set; }
         public string? ReasonCancel { get; set; }
+        public bool IsProductCombo { get; set; }
+        public Guid? ParentId { get; set; }
     }
 }
