@@ -121,8 +121,11 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             var nowSpan = TimeOnly.FromDateTime(vnNow).ToTimeSpan();
 
             var workingSlot = await _workingSlotRepository.GetSingleByIdAsync(workingSlotId);
-            if (workingSlot == null)
-                throw new BusinessException(BussinessErrorConstants.WorkingSlotErrorConstant.WORKING_SLOT_NOT_FOUND);
+            var shiftStart = workingSlot?.ShiftStart;
+            var shiftEnd = workingSlot?.ShiftEnd;
+
+            //if (workingSlot == null)
+            //    throw new BusinessException(BussinessErrorConstants.WorkingSlotErrorConstant.WORKING_SLOT_NOT_FOUND);
 
             // Không chặn nếu không trong ca - chỉ sync những người hợp lệ
 
@@ -141,8 +144,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
                 .Where(x => !absentStaffIds.Contains(x.StaffId))
                 .Where(x =>
                     x.WorkingSlotId == workingSlotId || // part-time đúng ca
-                    (x.WorkingSlotId == null && // full-time và đang trong giờ ca
-                     workingSlot.ShiftStart <= nowSpan && nowSpan < workingSlot.ShiftEnd))
+                    (x.WorkingSlotId == null && shiftStart != null && shiftStart <= nowSpan && nowSpan < shiftEnd))
                 .ToList();
 
             var relevantStaffIds = relevantSchedules.Select(x => x.StaffId).ToHashSet();
