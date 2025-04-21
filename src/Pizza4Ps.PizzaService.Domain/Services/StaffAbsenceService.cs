@@ -22,6 +22,12 @@ namespace Pizza4Ps.PizzaService.Domain.Services
 
         public async Task<Guid> CreateAsync(Guid staffId, Guid workingSlotId, DateOnly absentDate)
         {
+            var existed = await _staffAbsenceRepository
+                .GetSingleAsync(x => x.StaffId == staffId
+                && x.WorkingSlotId == workingSlotId
+                && x.AbsentDate == absentDate);
+            if (existed != null) throw new BusinessException(BussinessErrorConstants.StaffAbsenceErrorConstant.STAFF_ABSENCE_EXISTED);
+
             var entity = new StaffAbsence(Guid.NewGuid(), staffId, workingSlotId, absentDate);
             _staffAbsenceRepository.Add(entity);
             await _unitOfWork.SaveChangeAsync();

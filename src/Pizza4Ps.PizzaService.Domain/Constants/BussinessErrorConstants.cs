@@ -252,5 +252,11 @@
             public const string KITCHEN_ZONE_NOT_FOUND = "Không có khu vực bếp nào để gán đầu bếp";
             public const string DINING_ZONE_NOT_FOUND = "Không có khu vực ăn nào để gán nhân viên phục vụ";
         }
+
+        public class StaffAbsenceErrorConstant
+        {
+            public const string STAFF_ABSENCE_EXISTED = "Nhân viên này đã được đánh dấu vắng mặt trong ca làm này";
+
+        }
     }
 }
