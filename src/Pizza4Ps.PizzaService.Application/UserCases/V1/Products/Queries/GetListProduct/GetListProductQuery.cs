@@ -10,5 +10,6 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Queries.GetLis
         public string? Description { get; set; }
         public Guid? CategoryId { get; set; }
         public string? ProductType { get; set; }
+        public List<string>? ProductStatuses { get; set; }
     }
 }

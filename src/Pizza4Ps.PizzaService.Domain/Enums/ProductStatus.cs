@@ -2,7 +2,7 @@
 {
     public enum ProductStatus
     {
-        Availale,
+        Available,
         OutOfIngredient,
         Locked
     }
