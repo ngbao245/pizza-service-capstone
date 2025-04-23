@@ -253,8 +253,8 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             var order = await _orderRepository.GetSingleByIdAsync(orderId, "OrderItems,AdditionalFees");
             if (order == null)
                 throw new BusinessException(BussinessErrorConstants.OrderErrorConstant.ORDER_NOT_FOUND);
-            //if (order.Status != OrderStatusEnum.Unpaid)
-            //    throw new BusinessException(BussinessErrorConstants.OrderErrorConstant.ORDER_CANNOT_CHECK_OUT);
+            if (order.Status != OrderStatusEnum.Unpaid)
+                throw new BusinessException(BussinessErrorConstants.OrderErrorConstant.ORDER_CANNOT_CHECK_OUT);
             //Validate các món phải done hết mới được checkout
             decimal totalOrderItemPrice = 0;
             foreach (var orderItem in order.OrderItems)
