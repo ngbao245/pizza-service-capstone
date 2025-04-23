@@ -145,7 +145,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
                     decimal totalExtra = selectedSlotItems.Sum(i => i.ExtraPrice);
 
                     // 4. Tính giá combo cho 1 đơn vị
-                    decimal pricePerCombo = baseComboPrice + totalExtra;
+                    decimal pricePerCombo = baseComboPrice;
 
                     // 5. Tính tổng cho toàn bộ quantity
                     decimal finalComboPrice = pricePerCombo * item.quantity;
@@ -191,6 +191,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
                             isProductCombo: false,
                             parentId: parent.Id
                         );
+                        child.SetTotalPriceCombo(selectedItem.ExtraPrice * item.quantity);
                         _orderItemRepository.Add(child);
                     }
                 }
@@ -265,6 +266,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
                 //}
                 if (orderItem.OrderItemStatus != OrderItemStatus.Cancelled)
                 {
+
                     totalOrderItemPrice += orderItem.TotalPrice;
                 }
             }
