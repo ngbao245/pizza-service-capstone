@@ -1,5 +1,6 @@
 ﻿using Pizza4Ps.PizzaService.Application.Abstractions;
 using Pizza4Ps.PizzaService.Application.DTOs;
+using Pizza4Ps.PizzaService.Domain.Enums;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.StaffZoneSchedules.Queries.GetListStaffZoneSchedule
 {
@@ -9,6 +10,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.StaffZoneSchedules.Quer
         //public TimeOnly? ShiftStart { get; set; }
         //public TimeOnly? ShiftEnd { get; set; }
         //public string? Note { get; set; }
+        public string? StaffStatus { get; set; }
         public string? StaffName { get; set; }
         public string? ZoneName { get; set; }
         public DateOnly? WorkingDate { get; set; }

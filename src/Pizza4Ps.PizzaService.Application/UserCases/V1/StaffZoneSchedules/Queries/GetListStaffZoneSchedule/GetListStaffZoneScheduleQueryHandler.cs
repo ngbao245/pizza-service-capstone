@@ -5,6 +5,7 @@ using Pizza4Ps.PizzaService.Application.Abstractions;
 using Pizza4Ps.PizzaService.Application.DTOs;
 using Pizza4Ps.PizzaService.Domain.Abstractions.Repositories;
 using Pizza4Ps.PizzaService.Domain.Constants;
+using Pizza4Ps.PizzaService.Domain.Enums;
 using Pizza4Ps.PizzaService.Domain.Exceptions;
 using System.Linq.Dynamic.Core;
 
@@ -23,13 +24,24 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.StaffZoneSchedules.Quer
 
         public async Task<PaginatedResultDto<StaffZoneScheduleDto>> Handle(GetListStaffZoneScheduleQuery request, CancellationToken cancellationToken)
         {
+            StaffStatusEnum? staffStatus = null;
+            if (!string.IsNullOrEmpty(request.StaffStatus))
+            {
+                if (!Enum.TryParse(request.StaffStatus, true, out StaffStatusEnum parsedStatus))
+                {
+                    throw new BusinessException(BussinessErrorConstants.StaffErrorConstant.INVALID_STAFF_STATUS);
+                }
+                staffStatus = parsedStatus;
+            }
+
             var query = _StaffZoneScheduleRepository.GetListAsNoTracking(
                 x => (request.StaffName == null || x.StaffName.Contains(request.StaffName))
                 && (request.ZoneName == null || x.ZoneName.Contains(request.ZoneName))
                 && (request.WorkingDate == null || x.WorkingDate == request.WorkingDate)
                 && (request.StaffId == null || x.StaffId == request.StaffId)
                 && (request.ZoneId == null || x.ZoneId == request.ZoneId)
-                && (request.WorkingSlotId == null || x.WorkingSlotId == request.WorkingSlotId),
+                && (request.WorkingSlotId == null || x.WorkingSlotId == request.WorkingSlotId)
+                && (staffStatus == null || x.Staff.Status == staffStatus),
                 includeProperties: request.IncludeProperties);
             var entities = await query
                 .OrderBy(request.SortBy)

@@ -63,6 +63,10 @@ namespace Pizza4Ps.PizzaService.API.Controllers
             });
         }
 
+        /// <remarks>
+        /// PartTime
+        /// FullTime
+        /// </remarks>
         [HttpGet()]
         public async Task<IActionResult> GetListAsync([FromQuery] GetListStaffZoneScheduleQuery query)
         {
