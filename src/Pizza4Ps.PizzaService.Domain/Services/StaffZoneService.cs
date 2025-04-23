@@ -149,9 +149,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
 
             var relevantStaffIds = relevantSchedules.Select(x => x.StaffId).ToHashSet();
 
-            var existingStaffZones = await _staffZoneRepository.GetListAsTracking()
-                .Where(z => !z.IsDeleted)
-                .ToListAsync();
+            var existingStaffZones = await _staffZoneRepository.GetListAsTracking().ToListAsync();
 
             // Xóa những StaffZone không hợp lệ nữa
             var staffZonesToRemove = existingStaffZones
@@ -161,7 +159,6 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             foreach (var staffZone in staffZonesToRemove)
             {
                 _staffZoneRepository.SoftDelete(staffZone);
-                existingStaffZones.Remove(staffZone);
             }
 
             // Thêm mới nếu chưa có
