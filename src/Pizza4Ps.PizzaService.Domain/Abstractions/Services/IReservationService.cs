@@ -10,7 +10,7 @@ namespace Pizza4Ps.PizzaService.Domain.Abstractions.Services
         Task RestoreAsync(List<Guid> ids);
         Task<bool> AssignTableAsync(Guid reservationId, List<Guid> tableIds);
         Task<bool> UnAssignTableAsync(Guid reservationId, List<Guid> tableIds);
-        Task<bool> CheckInAsync(Guid reservationId);
+        Task CheckInAsync(Guid reservationId);
         Task ConfirmAsync(Guid reservationId);
         Task CancelAsync(Guid reservationId);
     }

@@ -196,18 +196,7 @@ namespace Pizza4Ps.PizzaService.API.Controllers
         [HttpPut("check-in")]
         public async Task<IActionResult> CheckInAsync([FromBody] CheckInReservationCommand command)
         {
-            var result = await _sender.Send(command);
-
-            if (!result)
-            {
-                return BadRequest(new ApiResponse
-                {
-                    Success = false,
-                    Message = Message.UPDATE_FAILED,
-                    StatusCode = 400
-                });
-            }
-
+            await _sender.Send(command);
             return Ok(new ApiResponse
             {
                 Success = true,

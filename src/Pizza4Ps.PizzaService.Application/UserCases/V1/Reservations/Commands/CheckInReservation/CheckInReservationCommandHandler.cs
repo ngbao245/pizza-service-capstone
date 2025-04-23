@@ -3,7 +3,7 @@ using Pizza4Ps.PizzaService.Domain.Abstractions.Services;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Reservations.Commands.CheckInReservation
 {
-    public class CheckInReservationCommandHandler : IRequestHandler<CheckInReservationCommand, bool>
+    public class CheckInReservationCommandHandler : IRequestHandler<CheckInReservationCommand>
     {
         private readonly IReservationService _reservationService;
 
@@ -12,9 +12,9 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Reservations.Commands.C
             _reservationService = reservationService;
         }
 
-        public async Task<bool> Handle(CheckInReservationCommand request, CancellationToken cancellationToken)
+        public async Task Handle(CheckInReservationCommand request, CancellationToken cancellationToken)
         {
-            return await _reservationService.CheckInAsync(request.ReservationId);
+            await _reservationService.CheckInAsync(request.ReservationId);
         }
     }
 }

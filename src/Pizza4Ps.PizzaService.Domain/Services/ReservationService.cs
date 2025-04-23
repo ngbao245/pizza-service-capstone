@@ -207,7 +207,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             await _unitOfWork.SaveChangeAsync();
             return true;
         }
-        public async Task<bool> CheckInAsync(Guid reservationId)
+        public async Task CheckInAsync(Guid reservationId)
         {
             var existingReservation = await _bookingRepository.GetSingleByIdAsync(reservationId, "TableAssignReservations");
             if (existingReservation == null)
@@ -220,10 +220,10 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             }
             var listTableIds = existingReservation.TableAssignReservations.Select(x => x.TableId).ToList();
             var existingTables = await _tableRepository.GetListAsTracking(x => listTableIds.Contains(x.Id)).ToListAsync();
-            if (existingTables == null || !existingTables.Any())
-            {
-                return false;
-            }
+            //if (existingTables == null || !existingTables.Any())
+            //{
+            //    throw new BusinessException(BussinessErrorConstants.BookingErrorConstant.INVALID_BOOKING_STATUS);
+            //}
             foreach (var table in existingTables)
             {
                 table.SetOpening();
@@ -233,7 +233,6 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             existingReservation.Checkedin();
             _bookingRepository.Update(existingReservation);
             await _unitOfWork.SaveChangeAsync();
-            return true;
         }
 
         public async Task ConfirmAsync(Guid reservationId)
