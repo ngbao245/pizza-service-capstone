@@ -166,9 +166,9 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             foreach (var schedule in relevantSchedules)
             {
                 var hasSameZone = existingStaffZones.Any(z =>
-                    z.StaffId == schedule.StaffId && z.ZoneId == schedule.ZoneId && !z.IsDeleted);
+                    z.StaffId == schedule.StaffId && z.ZoneId == schedule.ZoneId);
                 var hasDifferentZone = existingStaffZones.Any(z =>
-                    z.StaffId == schedule.StaffId && z.ZoneId != schedule.ZoneId && !z.IsDeleted);
+                    z.StaffId == schedule.StaffId && z.ZoneId != schedule.ZoneId);
 
                 if (!hasSameZone && !hasDifferentZone)
                 {
