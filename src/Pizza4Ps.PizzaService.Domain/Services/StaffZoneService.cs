@@ -161,6 +161,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             foreach (var staffZone in staffZonesToRemove)
             {
                 _staffZoneRepository.SoftDelete(staffZone);
+                existingStaffZones.Remove(staffZone);
             }
 
             // Thêm mới nếu chưa có
