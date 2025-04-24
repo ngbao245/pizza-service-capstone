@@ -124,7 +124,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             if (existingReservation.TableAssignReservations == null || !existingReservation.TableAssignReservations.Any())
             {
 
-                _backgroundJobService.RemoveRecurringJob(existingReservation.AssignTableJobId!);
+                _backgroundJobService.DeleteJob(existingReservation.AssignTableJobId!);
 
                 var configTimePreviousBooking = await _configRepository.GetSingleAsync(x => x.ConfigType == ConfigType.BOOKING_DATE_PREVIOUS_NOTIFY);
                 double configTimePreviousBookingDouble = 30;
