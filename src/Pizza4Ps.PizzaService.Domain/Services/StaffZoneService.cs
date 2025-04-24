@@ -20,6 +20,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
         private readonly IStaffRepository _staffRepository;
         private readonly IZoneRepository _zoneRepository;
         private readonly IStaffAbsenceRepository _staffAbsenceRepository;
+        private static readonly SemaphoreSlim _syncLock = new SemaphoreSlim(1, 1);
 
         public StaffZoneService(
             IUnitOfWork unitOfWork,
@@ -116,70 +117,78 @@ namespace Pizza4Ps.PizzaService.Domain.Services
 
         public async Task SyncStaffZonesAsync(Guid workingSlotId)
         {
-            var vnNow = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time"));
-            var today = DateOnly.FromDateTime(vnNow);
-            var nowSpan = TimeOnly.FromDateTime(vnNow).ToTimeSpan();
-
-            var workingSlot = await _workingSlotRepository.GetSingleByIdAsync(workingSlotId);
-            var shiftStart = workingSlot?.ShiftStart;
-            var shiftEnd = workingSlot?.ShiftEnd;
-
-            //if (workingSlot == null)
-            //    throw new BusinessException(BussinessErrorConstants.WorkingSlotErrorConstant.WORKING_SLOT_NOT_FOUND);
-
-            // Không chặn nếu không trong ca - chỉ sync những người hợp lệ
-
-            var schedules = await _staffZoneScheduleRepository.GetListAsTracking(
-                x => x.WorkingDate == today &&
-                    (x.WorkingSlotId == workingSlotId || x.WorkingSlotId == null)
-            ).ToListAsync();
-
-            var absences = await _staffAbsenceRepository.GetListAsTracking(
-                x => x.AbsentDate == today && x.WorkingSlotId == workingSlotId
-            ).ToListAsync();
-            var absentStaffIds = absences.Select(x => x.StaffId).ToHashSet();
-
-            // Lọc ra lịch hợp lệ: không vắng mặt + đúng ca hoặc nằm trong thời gian ca
-            var relevantSchedules = schedules
-                .Where(x => !absentStaffIds.Contains(x.StaffId))
-                .Where(x =>
-                    x.WorkingSlotId == workingSlotId || // part-time đúng ca
-                    (x.WorkingSlotId == null && shiftStart != null && shiftStart <= nowSpan && nowSpan < shiftEnd))
-                .ToList();
-
-            var relevantStaffIds = relevantSchedules.Select(x => x.StaffId).ToHashSet();
-
-            var existingStaffZones = await _staffZoneRepository.GetListAsTracking(
-                z => !z.IsDeleted
-            ).ToListAsync();
-
-            // Xóa những StaffZone không hợp lệ nữa
-            var staffZonesToRemove = existingStaffZones
-                .Where(z => !relevantStaffIds.Contains(z.StaffId))
-                .ToList();
-
-            foreach (var staffZone in staffZonesToRemove)
+            await _syncLock.WaitAsync();
+            try
             {
-                _staffZoneRepository.SoftDelete(staffZone);
-                existingStaffZones.Remove(staffZone);
-            }
+                var vnNow = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time"));
+                var today = DateOnly.FromDateTime(vnNow);
+                var nowSpan = TimeOnly.FromDateTime(vnNow).ToTimeSpan();
 
-            // Thêm mới nếu chưa có
-            foreach (var schedule in relevantSchedules)
-            {
-                var hasSameZone = existingStaffZones.Any(z =>
-                    z.StaffId == schedule.StaffId && z.ZoneId == schedule.ZoneId);
-                var hasDifferentZone = existingStaffZones.Any(z =>
-                    z.StaffId == schedule.StaffId && z.ZoneId != schedule.ZoneId);
+                var workingSlot = await _workingSlotRepository.GetSingleByIdAsync(workingSlotId);
+                var shiftStart = workingSlot?.ShiftStart;
+                var shiftEnd = workingSlot?.ShiftEnd;
 
-                if (!hasSameZone && !hasDifferentZone)
+                //if (workingSlot == null)
+                //    throw new BusinessException(BussinessErrorConstants.WorkingSlotErrorConstant.WORKING_SLOT_NOT_FOUND);
+
+                // Không chặn nếu không trong ca - chỉ sync những người hợp lệ
+
+                var schedules = await _staffZoneScheduleRepository.GetListAsTracking(
+                    x => x.WorkingDate == today &&
+                        (x.WorkingSlotId == workingSlotId || x.WorkingSlotId == null)
+                ).ToListAsync();
+
+                var absences = await _staffAbsenceRepository.GetListAsTracking(
+                    x => x.AbsentDate == today && x.WorkingSlotId == workingSlotId
+                ).ToListAsync();
+                var absentStaffIds = absences.Select(x => x.StaffId).ToHashSet();
+
+                // Lọc ra lịch hợp lệ: không vắng mặt + đúng ca hoặc nằm trong thời gian ca
+                var relevantSchedules = schedules
+                    .Where(x => !absentStaffIds.Contains(x.StaffId))
+                    .Where(x =>
+                        x.WorkingSlotId == workingSlotId || // part-time đúng ca
+                        (x.WorkingSlotId == null && shiftStart != null && shiftStart <= nowSpan && nowSpan < shiftEnd))
+                    .ToList();
+
+                var relevantStaffIds = relevantSchedules.Select(x => x.StaffId).ToHashSet();
+
+                var existingStaffZones = await _staffZoneRepository.GetListAsTracking(
+                    z => !z.IsDeleted
+                ).ToListAsync();
+
+                // Xóa những StaffZone không hợp lệ nữa
+                var staffZonesToRemove = existingStaffZones
+                    .Where(z => !relevantStaffIds.Contains(z.StaffId))
+                    .ToList();
+
+                foreach (var staffZone in staffZonesToRemove)
                 {
-                    var staffZone = new StaffZone(Guid.NewGuid(), null, schedule.StaffId, schedule.ZoneId);
-                    _staffZoneRepository.Add(staffZone);
+                    _staffZoneRepository.SoftDelete(staffZone);
+                    existingStaffZones.Remove(staffZone);
                 }
-            }
 
-            await _unitOfWork.SaveChangeAsync();
+                // Thêm mới nếu chưa có
+                foreach (var schedule in relevantSchedules)
+                {
+                    var hasSameZone = existingStaffZones.Any(z =>
+                        z.StaffId == schedule.StaffId && z.ZoneId == schedule.ZoneId);
+                    var hasDifferentZone = existingStaffZones.Any(z =>
+                        z.StaffId == schedule.StaffId && z.ZoneId != schedule.ZoneId);
+
+                    if (!hasSameZone && !hasDifferentZone)
+                    {
+                        var staffZone = new StaffZone(Guid.NewGuid(), null, schedule.StaffId, schedule.ZoneId);
+                        _staffZoneRepository.Add(staffZone);
+                    }
+                }
+
+                await _unitOfWork.SaveChangeAsync();
+            }
+            finally
+            {
+                _syncLock.Release();
+            }
         }
 
         public async Task DeleteAsync(List<Guid> ids, bool IsHardDeleted = false)
