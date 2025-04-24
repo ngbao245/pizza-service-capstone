@@ -149,7 +149,9 @@ namespace Pizza4Ps.PizzaService.Domain.Services
 
             var relevantStaffIds = relevantSchedules.Select(x => x.StaffId).ToHashSet();
 
-            var existingStaffZones = await _staffZoneRepository.GetListAsTracking().ToListAsync();
+            var existingStaffZones = await _staffZoneRepository.GetListAsTracking(
+                z => !z.IsDeleted
+            ).ToListAsync();
 
             // Xóa những StaffZone không hợp lệ nữa
             var staffZonesToRemove = existingStaffZones
