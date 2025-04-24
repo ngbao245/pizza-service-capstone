@@ -105,9 +105,21 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             throw new NotImplementedException();
         }
 
-        public async Task<Guid> UpdateAsync(Guid id, DateTime bookingDate, int guestCount, string status, Guid customerId)
+        public async Task ChangeBookingTimeAsync(Guid id, DateTime bookingTime, int numberOfPeople)
         {
-            throw new NotImplementedException();
+            var existingReservation = await _bookingRepository.GetSingleByIdAsync(id);
+            if (existingReservation == null)
+            {
+                throw new BusinessException(BussinessErrorConstants.TableErrorConstant.TABLE_NOT_FOUND);
+            }
+            if (existingReservation.BookingStatus == ReservationStatusEnum.Cancelled)
+            {
+                throw new BusinessException("Yêu cầu đặt bàn đã bị huỷ");
+            }
+            if (existingReservation.BookingStatus == ReservationStatusEnum.Checkedin)
+            {
+                throw new BusinessException("Yêu cầu đặt bàn đã hoàn tất");
+            }
         }
 
         public async Task<bool> AssignTableAsync(Guid reservationId, List<Guid> tableIds)
@@ -268,6 +280,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             existingReservation.Cancel();
             _bookingRepository.Update(existingReservation);
             await _unitOfWork.SaveChangeAsync();
+            _backgroundJobService.RemoveRecurringJob(existingReservation.AssignTableJobId!);
         }
 
 
