@@ -13,6 +13,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
 {
     public class ReservationService : DomainService, IReservationService
     {
+        private readonly ITableMergeRepository _tableMergeRepository;
         private readonly ITableAssignReservationRepository _tableAssignReservationRepository;
         private readonly IConfigRepository _configRepository;
         private readonly IBackgroundJobService _backgroundJobService;
@@ -29,8 +30,10 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             IRealTimeNotifier realTimeNotifier,
             IBackgroundJobService backgroundJobService,
             IConfigRepository configRepository,
-            ITableAssignReservationRepository tableAssignReservationRepository)
+            ITableAssignReservationRepository tableAssignReservationRepository,
+            ITableMergeRepository tableMergeRepository)
         {
+            _tableMergeRepository = tableMergeRepository;
             _tableAssignReservationRepository = tableAssignReservationRepository;
             _configRepository = configRepository;
             _backgroundJobService = backgroundJobService;
@@ -249,12 +252,37 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             //{
             //    throw new BusinessException(BussinessErrorConstants.BookingErrorConstant.INVALID_BOOKING_STATUS);
             //}
-            foreach (var table in existingTables)
+            if (existingTables.Count > 1)
             {
-                table.SetOpening();
-                table.SetNullCurrentReservationId();
-                _tableRepository.Update(table);
+                if (existingTables.Any(t => t.TableMergeId != null))
+                    throw new BusinessException("Một hoặc nhiều bàn đang được ghép nhóm khác!");
+                if (existingTables.Any(t => t.CurrentOrderId != null))
+                    throw new BusinessException("Bàn đã được sử dụng cho một đơn hàng khác, vui lòng kiểm tra lại");
+
+                var mergedGroup = new TableMerge
+                {
+                    Id = Guid.NewGuid(),
+                    Name = existingReservation.PhoneNumber,
+                };
+                foreach (var table in existingTables)
+                {
+                    table.SetMergeTable(mergedGroup.Id,
+                        mergedGroup.Name);
+                    table.SetOpening();
+                    _tableRepository.Update(table);
+                }
+                _tableMergeRepository.Add(mergedGroup);
+                await _unitOfWork.SaveChangeAsync();
             }
+            else
+            {
+                foreach (var table in existingTables)
+                {
+                    table.SetOpening();
+                    _tableRepository.Update(table);
+                }
+            }
+
             existingReservation.Checkedin();
             _bookingRepository.Update(existingReservation);
             await _unitOfWork.SaveChangeAsync();
