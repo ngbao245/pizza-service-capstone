@@ -51,4 +51,9 @@ public class Reservation : EntityAuditBase<Guid>
     {
         AssignTableJobId = assignTableJobId;
     }
+
+    public void ChangeBookingTime(DateTime bookingTime)
+    {
+        BookingTime = bookingTime;
+    }
 }
