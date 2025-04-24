@@ -42,7 +42,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             _tableRepository = tableRepository;
         }
 
-        public async Task<Guid> CreateAsync(string customerName, string phoneNumber, string phoneOtp, DateTime bookingTime, int numberOfPeople)
+        public async Task<Guid> CreateAsync(string customerName, string phoneNumber, DateTime bookingTime, int numberOfPeople, ReservationStatusEnum reservationStatusEnum)
         {
             var slot = await _bookingSlotRepository.GetListAsNoTracking(x
                 => x.StartTime <= bookingTime.TimeOfDay && x.EndTime > bookingTime.TimeOfDay).FirstOrDefaultAsync();
@@ -60,28 +60,16 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             {
                 priorityStatus = ReservationPriorityStatus.NonPriority;
             }
-            // Nếu hợp lệ, tạo booking
 
-            var customer = await _customerRepository.GetSingleAsync(x => x.Phone == phoneNumber);
-
-            if (customer == null)
-            {
-                customer = new Customer(Guid.NewGuid(), customerName, phoneNumber);
-                _customerRepository.Add(customer);
-            }
-            if (customer.PhoneOtp != phoneOtp)
-            {
-                throw new BusinessException("Phone OTP is not valid");
-            }
 
             var booking = new Reservation(
             bookingTime: bookingTime,
             numberOfPeople: numberOfPeople,
-            customerId: customer.Id,
             customerName: customerName,
             phoneNumber: phoneNumber,
             tableId: null,
-            reservationPriorityStatus: priorityStatus
+            reservationPriorityStatus: priorityStatus,
+            reservationStatusEnum: reservationStatusEnum
             );
 
             _bookingRepository.Add(booking);

@@ -13,6 +13,7 @@ using Pizza4Ps.PizzaService.Application.UserCases.V1.Reservations.Commands.Assig
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Reservations.Commands.CancelReservation;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Reservations.Commands.CheckInReservation;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Reservations.Commands.ConfirmReservation;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Reservations.Commands.CreateReservationByAdmin;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Reservations.Commands.UnAssignTableReservation;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Reservations.Queries.CheckReservation;
 
@@ -42,7 +43,17 @@ namespace Pizza4Ps.PizzaService.API.Controllers
                 StatusCode = StatusCodes.Status201Created
             });
         }
-
+        [HttpPost("create-reservation-by-manager")]
+        public async Task<IActionResult> CreateAsync([FromBody] CreateReservationByAdminCommand request)
+        {
+            var result = await _sender.Send(request);
+            return Ok(new ApiResponse
+            {
+                Result = result,
+                Message = Message.CREATED_SUCCESS,
+                StatusCode = StatusCodes.Status201Created
+            });
+        }
         [HttpGet("ignore-filter")]
         [ApiExplorerSettings(IgnoreApi = true)]
         public async Task<IActionResult> GetListIgnoreQueryFilterAsync([FromQuery] GetListReservationIgnoreQueryFilterQuery query)
