@@ -202,10 +202,6 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             {
                 throw new BusinessException(BussinessErrorConstants.TableErrorConstant.TABLE_NOT_FOUND);
             }
-            if (existingReservation.BookingStatus == ReservationStatusEnum.Cancelled)
-            {
-                throw new BusinessException("Yêu cầu đặt bàn đã bị huỷ");
-            }
             if (existingReservation.BookingStatus == ReservationStatusEnum.Checkedin)
             {
                 throw new BusinessException("Yêu cầu đặt bàn đã hoàn tất");
@@ -327,7 +323,10 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             existingReservation.Cancel();
             _bookingRepository.Update(existingReservation);
             await _unitOfWork.SaveChangeAsync();
-            _backgroundJobService.RemoveRecurringJob(existingReservation.AssignTableJobId!);
+            if (existingReservation.AssignTableJobId != null)
+            {
+                _backgroundJobService.RemoveRecurringJob(existingReservation.AssignTableJobId);
+            }
         }
 
 
