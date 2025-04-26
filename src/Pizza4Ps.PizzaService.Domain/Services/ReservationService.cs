@@ -315,13 +315,25 @@ namespace Pizza4Ps.PizzaService.Domain.Services
         }
         public async Task CancelAsync(Guid reservationId)
         {
-            var existingReservation = await _bookingRepository.GetSingleByIdAsync(reservationId);
+            var existingReservation = await _bookingRepository.GetSingleByIdAsync(reservationId, "TableAssignReservations");
             if (existingReservation == null)
             {
                 throw new BusinessException(BussinessErrorConstants.TableErrorConstant.TABLE_NOT_FOUND);
             }
             existingReservation.Cancel();
             _bookingRepository.Update(existingReservation);
+            foreach (var tableAssignReservation in existingReservation.TableAssignReservations)
+            {
+                var table = await _tableRepository.GetSingleAsync(x => x.Id == tableAssignReservation.TableId);
+                    
+                if (table != null)
+                {
+                    table.SetClosing();
+                    table.SetNullCurrentReservationId();
+                    _tableRepository.Update(table);
+                    _tableAssignReservationRepository.HardDelete(tableAssignReservation);
+                }
+            }
             await _unitOfWork.SaveChangeAsync();
             if (existingReservation.AssignTableJobId != null)
             {
