@@ -134,8 +134,8 @@ namespace Pizza4Ps.PizzaService.Domain.Services
                     service => service.AssignReservationAsync(existingReservation),
                     bookingDelay);
                 existingReservation.SetAssignTableIobId(openRegisterJobId);
-                await _unitOfWork.SaveChangeAsync();
             }
+            await _unitOfWork.SaveChangeAsync();
         }
 
         public async Task<bool> AssignTableAsync(Guid reservationId, List<Guid> tableIds)
