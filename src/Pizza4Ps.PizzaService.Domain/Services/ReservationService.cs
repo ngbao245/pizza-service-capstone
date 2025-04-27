@@ -13,6 +13,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
 {
     public class ReservationService : DomainService, IReservationService
     {
+        private readonly ITableMergeRepository _tableMergeRepository;
         private readonly ITableAssignReservationRepository _tableAssignReservationRepository;
         private readonly IConfigRepository _configRepository;
         private readonly IBackgroundJobService _backgroundJobService;
@@ -29,8 +30,10 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             IRealTimeNotifier realTimeNotifier,
             IBackgroundJobService backgroundJobService,
             IConfigRepository configRepository,
-            ITableAssignReservationRepository tableAssignReservationRepository)
+            ITableAssignReservationRepository tableAssignReservationRepository,
+            ITableMergeRepository tableMergeRepository)
         {
+            _tableMergeRepository = tableMergeRepository;
             _tableAssignReservationRepository = tableAssignReservationRepository;
             _configRepository = configRepository;
             _backgroundJobService = backgroundJobService;
@@ -42,7 +45,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             _tableRepository = tableRepository;
         }
 
-        public async Task<Guid> CreateAsync(string customerName, string phoneNumber, string phoneOtp, DateTime bookingTime, int numberOfPeople)
+        public async Task<Guid> CreateAsync(string customerName, string phoneNumber, DateTime bookingTime, int numberOfPeople, ReservationStatusEnum reservationStatusEnum)
         {
             var slot = await _bookingSlotRepository.GetListAsNoTracking(x
                 => x.StartTime <= bookingTime.TimeOfDay && x.EndTime > bookingTime.TimeOfDay).FirstOrDefaultAsync();
@@ -60,28 +63,16 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             {
                 priorityStatus = ReservationPriorityStatus.NonPriority;
             }
-            // Nếu hợp lệ, tạo booking
 
-            var customer = await _customerRepository.GetSingleAsync(x => x.Phone == phoneNumber);
-
-            if (customer == null)
-            {
-                customer = new Customer(Guid.NewGuid(), customerName, phoneNumber);
-                _customerRepository.Add(customer);
-            }
-            if (customer.PhoneOtp != phoneOtp)
-            {
-                throw new BusinessException("Phone OTP is not valid");
-            }
 
             var booking = new Reservation(
             bookingTime: bookingTime,
             numberOfPeople: numberOfPeople,
-            customerId: customer.Id,
             customerName: customerName,
             phoneNumber: phoneNumber,
             tableId: null,
-            reservationPriorityStatus: priorityStatus
+            reservationPriorityStatus: priorityStatus,
+            reservationStatusEnum: reservationStatusEnum
             );
 
             _bookingRepository.Add(booking);
@@ -105,9 +96,46 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             throw new NotImplementedException();
         }
 
-        public async Task<Guid> UpdateAsync(Guid id, DateTime bookingDate, int guestCount, string status, Guid customerId)
+        public async Task ChangeBookingTimeAsync(Guid id, DateTime bookingTime, int numberOfPeople)
         {
-            throw new NotImplementedException();
+            var existingReservation = await _bookingRepository.GetSingleByIdAsync(id, "TableAssignReservations");
+            if (existingReservation == null)
+            {
+                throw new BusinessException(BussinessErrorConstants.BookingErrorConstant.BOOKING_NOT_FOUND);
+            }
+            if (existingReservation.BookingStatus == ReservationStatusEnum.Cancelled)
+            {
+                throw new BusinessException("Yêu cầu đặt bàn đã bị huỷ");
+            }
+            if (existingReservation.BookingStatus == ReservationStatusEnum.Checkedin)
+            {
+                throw new BusinessException("Yêu cầu đặt bàn đã hoàn tất");
+            }
+            existingReservation.ChangeBookingTime(bookingTime);
+            if (existingReservation.TableAssignReservations == null || !existingReservation.TableAssignReservations.Any())
+            {
+
+                _backgroundJobService.DeleteJob(existingReservation.AssignTableJobId!);
+
+                var configTimePreviousBooking = await _configRepository.GetSingleAsync(x => x.ConfigType == ConfigType.BOOKING_DATE_PREVIOUS_NOTIFY);
+                double configTimePreviousBookingDouble = 30;
+                if (configTimePreviousBooking != null)
+                {
+                    configTimePreviousBookingDouble = double.Parse(configTimePreviousBooking.Value);
+                }
+                TimeSpan bookingDelay = existingReservation.BookingTime.AddMinutes(-configTimePreviousBookingDouble) - DateTime.Now;
+                if (bookingDelay < TimeSpan.Zero)
+                {
+                    bookingDelay = TimeSpan.Zero;
+                }
+
+                // Lập lịch job thoong baso
+                string openRegisterJobId = _backgroundJobService.ScheduleJob<IRealTimeNotifier>(
+                    service => service.AssignReservationAsync(existingReservation),
+                    bookingDelay);
+                existingReservation.SetAssignTableIobId(openRegisterJobId);
+            }
+            await _unitOfWork.SaveChangeAsync();
         }
 
         public async Task<bool> AssignTableAsync(Guid reservationId, List<Guid> tableIds)
@@ -174,10 +202,6 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             {
                 throw new BusinessException(BussinessErrorConstants.TableErrorConstant.TABLE_NOT_FOUND);
             }
-            if (existingReservation.BookingStatus == ReservationStatusEnum.Cancelled)
-            {
-                throw new BusinessException("Yêu cầu đặt bàn đã bị huỷ");
-            }
             if (existingReservation.BookingStatus == ReservationStatusEnum.Checkedin)
             {
                 throw new BusinessException("Yêu cầu đặt bàn đã hoàn tất");
@@ -224,12 +248,37 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             //{
             //    throw new BusinessException(BussinessErrorConstants.BookingErrorConstant.INVALID_BOOKING_STATUS);
             //}
-            foreach (var table in existingTables)
+            if (existingTables.Count > 1)
             {
-                table.SetOpening();
-                table.SetNullCurrentReservationId();
-                _tableRepository.Update(table);
+                if (existingTables.Any(t => t.TableMergeId != null))
+                    throw new BusinessException("Một hoặc nhiều bàn đang được ghép nhóm khác!");
+                if (existingTables.Any(t => t.CurrentOrderId != null))
+                    throw new BusinessException("Bàn đã được sử dụng cho một đơn hàng khác, vui lòng kiểm tra lại");
+
+                var mergedGroup = new TableMerge
+                {
+                    Id = Guid.NewGuid(),
+                    Name = existingReservation.PhoneNumber,
+                };
+                foreach (var table in existingTables)
+                {
+                    table.SetMergeTable(mergedGroup.Id,
+                        mergedGroup.Name);
+                    table.SetOpening();
+                    _tableRepository.Update(table);
+                }
+                _tableMergeRepository.Add(mergedGroup);
+                await _unitOfWork.SaveChangeAsync();
             }
+            else
+            {
+                foreach (var table in existingTables)
+                {
+                    table.SetOpening();
+                    _tableRepository.Update(table);
+                }
+            }
+
             existingReservation.Checkedin();
             _bookingRepository.Update(existingReservation);
             await _unitOfWork.SaveChangeAsync();
@@ -245,7 +294,13 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             existingReservation.Confirm();
             _bookingRepository.Update(existingReservation);
             await _unitOfWork.SaveChangeAsync();
-            TimeSpan bookingDelay = existingReservation.BookingTime.AddMinutes(-30) - DateTime.Now;
+            var configTimePreviousBooking = await _configRepository.GetSingleAsync(x => x.ConfigType == ConfigType.BOOKING_DATE_PREVIOUS_NOTIFY);
+            double configTimePreviousBookingDouble = 30;
+            if (configTimePreviousBooking != null)
+            {
+                configTimePreviousBookingDouble = double.Parse(configTimePreviousBooking.Value);
+            }
+            TimeSpan bookingDelay = existingReservation.BookingTime.AddMinutes(-configTimePreviousBookingDouble) - DateTime.Now;
             if (bookingDelay < TimeSpan.Zero)
             {
                 bookingDelay = TimeSpan.Zero;
@@ -260,14 +315,30 @@ namespace Pizza4Ps.PizzaService.Domain.Services
         }
         public async Task CancelAsync(Guid reservationId)
         {
-            var existingReservation = await _bookingRepository.GetSingleByIdAsync(reservationId);
+            var existingReservation = await _bookingRepository.GetSingleByIdAsync(reservationId, "TableAssignReservations");
             if (existingReservation == null)
             {
                 throw new BusinessException(BussinessErrorConstants.TableErrorConstant.TABLE_NOT_FOUND);
             }
             existingReservation.Cancel();
             _bookingRepository.Update(existingReservation);
+            foreach (var tableAssignReservation in existingReservation.TableAssignReservations)
+            {
+                var table = await _tableRepository.GetSingleAsync(x => x.Id == tableAssignReservation.TableId);
+                    
+                if (table != null)
+                {
+                    table.SetClosing();
+                    table.SetNullCurrentReservationId();
+                    _tableRepository.Update(table);
+                    _tableAssignReservationRepository.HardDelete(tableAssignReservation);
+                }
+            }
             await _unitOfWork.SaveChangeAsync();
+            if (existingReservation.AssignTableJobId != null)
+            {
+                _backgroundJobService.RemoveRecurringJob(existingReservation.AssignTableJobId);
+            }
         }
 
 

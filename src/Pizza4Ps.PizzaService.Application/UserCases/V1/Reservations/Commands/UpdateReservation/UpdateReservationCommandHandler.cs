@@ -14,12 +14,10 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Bookings.Commands.Updat
 
 		public async Task Handle(UpdateReservationCommand request, CancellationToken cancellationToken)
 		{
-			var result = await _bookingService.UpdateAsync(
+			await _bookingService.ChangeBookingTimeAsync(
 				request.Id!.Value,
 				request.BookingDate,
-				request.GuestCount,
-				request.Status,
-				request.CustomerId);
+				request.GuestCount);
 		}
 	}
 }

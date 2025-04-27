@@ -20,16 +20,15 @@ public class Reservation : EntityAuditBase<Guid>
 
     private Reservation() { }
 
-    public Reservation(Guid? customerId, string customerName, string phoneNumber,
-        DateTime bookingTime, int numberOfPeople, Guid? tableId, ReservationPriorityStatus reservationPriorityStatus)
+    public Reservation(string customerName, string phoneNumber,
+        DateTime bookingTime, int numberOfPeople, Guid? tableId, ReservationPriorityStatus reservationPriorityStatus, ReservationStatusEnum reservationStatusEnum)
     {
         Id = Guid.NewGuid();
-        CustomerId = customerId;
         CustomerName = customerName;
         PhoneNumber = phoneNumber;
         BookingTime = bookingTime;
         NumberOfPeople = numberOfPeople;
-        BookingStatus = ReservationStatusEnum.Created;
+        BookingStatus = reservationStatusEnum;
         TableId = tableId;
         ReservationPriorityStatus = reservationPriorityStatus;
     }
@@ -50,5 +49,10 @@ public class Reservation : EntityAuditBase<Guid>
     public void SetAssignTableIobId(string assignTableJobId)
     {
         AssignTableJobId = assignTableJobId;
+    }
+
+    public void ChangeBookingTime(DateTime bookingTime)
+    {
+        BookingTime = bookingTime;
     }
 }

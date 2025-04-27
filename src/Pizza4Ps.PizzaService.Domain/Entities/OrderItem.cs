@@ -32,7 +32,10 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         public OrderItem()
         {
         }
-
+        public void ChangeTableCode(string tableCode)
+        {
+            TableCode = tableCode;
+        }
         public OrderItem(Guid id, string name, int quantity, decimal price,
             Guid orderId, Guid? productId, string tableCode, string? note, DateTime startTime, OrderTypeEnum type,
             ProductTypeEnum? productType, bool isProductCombo, Guid? parentId)
@@ -104,6 +107,7 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         {
             OrderItemStatus = OrderItemStatus.Cancelled;
             ReasonCancel = reason;
+            EndTime = DateTime.Now;
         }
     }
 
