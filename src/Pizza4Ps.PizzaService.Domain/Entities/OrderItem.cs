@@ -104,6 +104,7 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         {
             OrderItemStatus = OrderItemStatus.Cancelled;
             ReasonCancel = reason;
+            EndTime = DateTime.Now;
         }
     }
 
