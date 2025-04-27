@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Pizza4Ps.PizzaService.API.Constants;
 using Pizza4Ps.PizzaService.API.Models;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.StaffZones.Commands.DeleteStaffZone;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.StaffZoneSchedules.Commands.AutoAssignZone;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.StaffZoneSchedules.Commands.CreateStaffZoneSchedule;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.StaffZoneSchedules.Commands.DeleteStaffZoneSchedule;
@@ -133,10 +134,13 @@ namespace Pizza4Ps.PizzaService.API.Controllers
         }
 
         [HttpDelete()]
-        public async Task<IActionResult> DeleteManyAsync([FromBody] DeleteStaffZoneScheduleCommand command)
+        public async Task<IActionResult> DeleteManyAsync([FromRoute] Guid id, bool isHardDeleted = false)
         {
-            await _sender.Send(command);
-            return Ok(new ApiResponse
+            await _sender.Send(new DeleteStaffZoneScheduleCommand
+            {
+                Ids = new List<Guid> { id },
+                isHardDelete = isHardDeleted
+            }); return Ok(new ApiResponse
             {
                 Message = Message.DELETED_SUCCESS,
                 StatusCode = StatusCodes.Status200OK
