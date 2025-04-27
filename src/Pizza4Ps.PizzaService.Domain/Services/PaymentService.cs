@@ -13,6 +13,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
 {
     public class PaymentService : DomainService, IPaymentService
     {
+        private readonly IRealTimeNotifier _realTimeNotifier;
         private readonly ITableMergeRepository _tableMergeRepository;
         private readonly IVoucherRepository _voucherRepository;
         private readonly IOrderVoucherRepository _orderVoucherRepository;
@@ -29,8 +30,9 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             IPaymentRepository paymentRepository,
             ITableRepository tableRepository,
             IOrderVoucherRepository orderVoucherRepository,
-            IVoucherRepository voucherRepository, ITableMergeRepository tableMergeRepository)
+            IVoucherRepository voucherRepository, ITableMergeRepository tableMergeRepository, IRealTimeNotifier realTimeNotifier)
         {
+            _realTimeNotifier = realTimeNotifier;
             _tableMergeRepository = tableMergeRepository;
             _voucherRepository = voucherRepository;
             _orderVoucherRepository = orderVoucherRepository;
@@ -206,6 +208,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
                     }
 
                     await _unitOfWork.SaveChangeAsync();
+                    await _realTimeNotifier.PaymentSuccess(order);
                     return true;
                 }
                 return false;

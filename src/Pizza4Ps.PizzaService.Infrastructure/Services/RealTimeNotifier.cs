@@ -56,6 +56,11 @@ namespace Pizza4Ps.PizzaService.Infrastructure.Services
             }
         }
 
+        public async Task PaymentSuccess(Order order)
+        {
+            await _hubContext.Clients.All.SendAsync("PaymentSuccess", order);
+        }
+
         public async Task UpdatedStaffZoneAsync()
         {
             // Gửi đến tất cả client đang kết nối

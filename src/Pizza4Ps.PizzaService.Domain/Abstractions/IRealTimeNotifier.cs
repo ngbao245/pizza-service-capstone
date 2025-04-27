@@ -10,6 +10,7 @@ namespace Pizza4Ps.PizzaService.Domain.Abstractions
 
         Task CreatedReservationAsync(Reservation reservation);
         Task AssignReservationAsync (Reservation reservation);
+        Task PaymentSuccess(Order order);
         Task UpdatedStaffZoneAsync();
 
     }
