@@ -48,10 +48,10 @@ namespace Pizza4Ps.PizzaService.Domain.Services
 
             var workingSlotRegisters = await _workingSlotRegisterRepository.GetListAsTracking(
                 x => x.StaffId == staffId && x.WorkingDate == workingDate).ToListAsync();
-            if (workingSlotRegisters == null) throw new BusinessException(BussinessErrorConstants.WorkingSlotRegisterErrorConstant.WORKING_SLOT_REGISTER_NOT_FOUND);
+            //if (workingSlotRegisters == null) throw new BusinessException(BussinessErrorConstants.WorkingSlotRegisterErrorConstant.WORKING_SLOT_REGISTER_NOT_FOUND);
 
             var workingSlotRegister = workingSlotRegisters.FirstOrDefault(x => x.WorkingSlotId == workingSlotId);
-            if (workingSlotRegister == null) throw new BusinessException($"Nhân viên chưa đăng ký ca {workingSlot.ShiftName} vào ngày {workingDate:yyyy-MM-dd}");
+            //if (workingSlotRegister == null) throw new BusinessException($"Nhân viên chưa đăng ký ca {workingSlot.ShiftName} vào ngày {workingDate:yyyy-MM-dd}");
 
             var zone = await _zoneRepository.GetSingleByIdAsync(zoneId);
             if (zone == null) throw new BusinessException(BussinessErrorConstants.ZoneErrorConstant.ZONE_NOT_FOUND);
@@ -63,8 +63,13 @@ namespace Pizza4Ps.PizzaService.Domain.Services
 
             var staffZoneSchedule = new StaffZoneSchedule(Guid.NewGuid(), staff.FullName, zone.Name, workingDate, staffId, zoneId, workingSlotId);
             _staffZoneScheduleRepository.Add(staffZoneSchedule);
-            workingSlotRegister.ZoneId = zoneId;
-            workingSlotRegister.setApproved();
+
+            if (workingSlotRegister != null)
+            {
+                workingSlotRegister.ZoneId = zoneId;
+                workingSlotRegister.setApproved();
+            }
+
             await _unitOfWork.SaveChangeAsync();
             return staffZoneSchedule.Id;
         }
