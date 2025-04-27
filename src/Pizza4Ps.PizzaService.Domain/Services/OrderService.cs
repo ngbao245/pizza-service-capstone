@@ -428,7 +428,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
 
         public async Task SwapTableOrder(Guid orderId, Guid tableId)
         {
-            var order = await _orderRepository.GetSingleByIdAsync(orderId);
+            var order = await _orderRepository.GetSingleByIdAsync(orderId, "OrderItems");
             if (order == null)
                 throw new BusinessException(BussinessErrorConstants.OrderErrorConstant.ORDER_NOT_FOUND);
             var table = await _tableRepository.GetSingleAsync(x => x.CurrentOrderId == order.Id);
@@ -453,6 +453,13 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             }
             newTable.SetOpening();
             newTable.SetCurrentOrderId(order.Id);
+            order.ChangeTable(newTable.Id, newTable.Code);
+            _orderRepository.Update(order);
+            foreach (var item in order.OrderItems)
+            {
+                item.ChangeTableCode(newTable.Code);
+                _orderItemRepository.Update(item);
+            }
             _tableRepository.Update(newTable);
             await _unitOfWork.SaveChangeAsync();
         }

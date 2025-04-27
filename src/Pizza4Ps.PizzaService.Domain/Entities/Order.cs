@@ -45,7 +45,11 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         {
             OrderCode = orderCode;
         }
-
+        public void ChangeTable(Guid newTableId, string tableCode)
+        {
+            TableId = newTableId;
+            TableCode = tableCode;
+        }
         public void SetTotalPrice(decimal totalPrice)
         {
             TotalPrice = totalPrice;
