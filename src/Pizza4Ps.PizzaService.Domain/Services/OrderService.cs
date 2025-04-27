@@ -281,8 +281,8 @@ namespace Pizza4Ps.PizzaService.Domain.Services
                 }
                 var additionalFee = new AdditionalFee(
                     id: Guid.NewGuid(),
-                    name: "Workshop fee",
-                    description: "Workshop fee",
+                    name: "Phí tham gia workshop",
+                    description: "Phí tham gia workshop",
                     value: workshopRegister.TotalFee,
                     orderId: order.Id
                     );
