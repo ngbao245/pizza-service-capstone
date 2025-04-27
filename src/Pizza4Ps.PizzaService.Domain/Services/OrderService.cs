@@ -462,6 +462,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             }
             _tableRepository.Update(newTable);
             await _unitOfWork.SaveChangeAsync();
+            await _realTimeNotifier.UpdateOrderItemDoneCookingAsync();
         }
     }
 }
