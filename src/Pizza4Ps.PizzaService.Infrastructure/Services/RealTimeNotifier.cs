@@ -62,6 +62,12 @@ namespace Pizza4Ps.PizzaService.Infrastructure.Services
             await _hubContext.Clients.All.SendAsync("UpdatedStaffZoneAsync");
         }
 
+        public async Task UpdateOrderItemDoneCookingAsync()
+        {
+            // Gửi đến tất cả client đang kết nối
+            await _hubContext.Clients.All.SendAsync("OrderItemDoneCooking");
+        }
+
         public async Task UpdateOrderItemStatusAsync()
         {
             // Gửi đến tất cả client đang kết nối
