@@ -43,6 +43,5 @@ namespace Pizza4Ps.PizzaService.Application.DTOs
         public string ZoneName { get; set; }
 
         public List<WorkshopFoodDetailDto> WorkshopFoodDetails { get; set; }
-        public List<WorkshopRegisterDto> WorkshopRegisters { get; set; }
     }
 }
