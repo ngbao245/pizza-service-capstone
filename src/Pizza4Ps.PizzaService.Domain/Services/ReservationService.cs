@@ -134,8 +134,8 @@ namespace Pizza4Ps.PizzaService.Domain.Services
                     service => service.AssignReservationAsync(existingReservation),
                     bookingDelay);
                 existingReservation.SetAssignTableIobId(openRegisterJobId);
-                await _unitOfWork.SaveChangeAsync();
             }
+            await _unitOfWork.SaveChangeAsync();
         }
 
         public async Task<bool> AssignTableAsync(Guid reservationId, List<Guid> tableIds)
@@ -201,10 +201,6 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             if (existingReservation == null)
             {
                 throw new BusinessException(BussinessErrorConstants.TableErrorConstant.TABLE_NOT_FOUND);
-            }
-            if (existingReservation.BookingStatus == ReservationStatusEnum.Cancelled)
-            {
-                throw new BusinessException("Yêu cầu đặt bàn đã bị huỷ");
             }
             if (existingReservation.BookingStatus == ReservationStatusEnum.Checkedin)
             {
@@ -319,15 +315,30 @@ namespace Pizza4Ps.PizzaService.Domain.Services
         }
         public async Task CancelAsync(Guid reservationId)
         {
-            var existingReservation = await _bookingRepository.GetSingleByIdAsync(reservationId);
+            var existingReservation = await _bookingRepository.GetSingleByIdAsync(reservationId, "TableAssignReservations");
             if (existingReservation == null)
             {
                 throw new BusinessException(BussinessErrorConstants.TableErrorConstant.TABLE_NOT_FOUND);
             }
             existingReservation.Cancel();
             _bookingRepository.Update(existingReservation);
+            foreach (var tableAssignReservation in existingReservation.TableAssignReservations)
+            {
+                var table = await _tableRepository.GetSingleAsync(x => x.Id == tableAssignReservation.TableId);
+                    
+                if (table != null)
+                {
+                    table.SetClosing();
+                    table.SetNullCurrentReservationId();
+                    _tableRepository.Update(table);
+                    _tableAssignReservationRepository.HardDelete(tableAssignReservation);
+                }
+            }
             await _unitOfWork.SaveChangeAsync();
-            _backgroundJobService.RemoveRecurringJob(existingReservation.AssignTableJobId!);
+            if (existingReservation.AssignTableJobId != null)
+            {
+                _backgroundJobService.RemoveRecurringJob(existingReservation.AssignTableJobId);
+            }
         }
 
 
