@@ -2,6 +2,6 @@
 {
     public interface IJobManager
     {
-        void ScheduleJobs();
+        Task ScheduleJobs();
     }
 }

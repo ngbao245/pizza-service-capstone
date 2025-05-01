@@ -6,7 +6,7 @@ namespace Pizza4Ps.PizzaService.API.Setup
 {
     public static class MiddlewareRegistery
     {
-        public static IApplicationBuilder MiddlewareRegisteryMethod(this IApplicationBuilder app)
+        public static async Task<IApplicationBuilder> MiddlewareRegisteryMethod(this IApplicationBuilder app)
         {
             app.UseRouting();
 
