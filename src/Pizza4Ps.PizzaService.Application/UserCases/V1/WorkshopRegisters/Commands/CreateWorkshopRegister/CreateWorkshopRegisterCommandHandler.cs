@@ -52,7 +52,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.WorkshopRegisters.Comma
             {
                 throw new BusinessException("Phone OTP is not valid");
             }
-            var workshop = await _workshopRepository.GetSingleByIdAsync(request.WorkshopId);
+            var workshop = await _workshopRepository.GetSingleByIdAsync(request.WorkshopId, "WorkshopRegisters");
             if (workshop == null)
             {
                 throw new BusinessException("Workshop is not found");
@@ -64,6 +64,10 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.WorkshopRegisters.Comma
             if (request.TotalParticipant > workshop.MaxParticipantPerRegister)
             {
                 throw new BusinessException($"You cannot register over {workshop.MaxPizzaPerRegister} participants");
+            }
+            if (workshop.WorkshopRegisters.Any(x => x.CustomerPhone == request.PhoneNumber))
+            {
+                throw new BusinessException("You have already registered for this workshop");
             }
             var workshopCode = RegistrationCodeGenerator.GenerateCode();
             var workshopRegister = new WorkshopRegister(
