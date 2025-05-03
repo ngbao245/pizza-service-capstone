@@ -4,6 +4,6 @@
     {
         Registered,
         Attended,
-        Cancel
+        Cancelled
     }
 }

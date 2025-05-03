@@ -36,6 +36,8 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
 
         public Order Order { get; set; }
 
+        public string? ReasonCancel { get; set; }
+
         public ICollection<WorkshopPizzaRegister> WorkshopPizzaRegisters { get; set; }
 
         public WorkshopRegister()
@@ -55,6 +57,13 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
             TotalParticipant = totalParticipant;
             WorkshopRegisterStatus = WorkshopRegisterStatus.Registered;
             TotalFee = totalFee;
+        }
+
+
+        public void Cancel(string? reason)
+        {
+            WorkshopRegisterStatus = WorkshopRegisterStatus.Cancelled;
+            ReasonCancel = reason;
         }
 
         public void AssignTableOrder(Guid tableId, Guid orderId)

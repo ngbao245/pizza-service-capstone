@@ -31,7 +31,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.WorkshopRegisters.Comma
             {
                 throw new BusinessException("Đăng ký này đã được check in, vui lòng kiểm tra lại");
             }
-            if (workshopRegister.WorkshopRegisterStatus == Domain.Enums.WorkshopRegisterStatus.Cancel)
+            if (workshopRegister.WorkshopRegisterStatus == Domain.Enums.WorkshopRegisterStatus.Cancelled)
             {
                 throw new BusinessException("Đăng ký này đã được huỷ, vui lòng kiểm tra lại");
             }

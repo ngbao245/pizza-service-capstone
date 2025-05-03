@@ -5,6 +5,7 @@ using Pizza4Ps.PizzaService.API.Constants;
 using Pizza4Ps.PizzaService.API.Models;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Vouchers.Queries.GetVoucherById;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.WorkshopRegisters.Commands.AssignTableWorkshopRegister;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.WorkshopRegisters.Commands.CancelWorkshopRegister;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.WorkshopRegisters.Commands.CheckInWorkshop;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.WorkshopRegisters.Commands.CreateWorkshopRegister;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.WorkshopRegisters.Queries.GetWorkshopRegisterByCode;
@@ -88,6 +89,18 @@ namespace Pizza4Ps.PizzaService.API.Controllers
             {
                 Success = true,
                 Message = "Assign table successfully",
+                StatusCode = StatusCodes.Status201Created
+            });
+        }
+        [HttpPut("cancel/{workshopRegisterId}")]
+        public async Task<IActionResult> CancelWorkshopRegisterAsync([FromRoute] Guid workshopRegisterId, [FromBody] CancelWorkshopRegisterCommand request)
+        {
+            request.WorkshopRegisterId = workshopRegisterId;
+            await _sender.Send(request);
+            return Ok(new ApiResponse
+            {
+                Success = true,
+                Message = "check-in workshop successfully",
                 StatusCode = StatusCodes.Status201Created
             });
         }

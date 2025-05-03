@@ -65,9 +65,13 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.WorkshopRegisters.Comma
             {
                 throw new BusinessException($"You cannot register over {workshop.MaxPizzaPerRegister} participants");
             }
-            if (workshop.WorkshopRegisters.Any(x => x.CustomerPhone == request.PhoneNumber))
+            if (workshop.WorkshopRegisters.Any(x => x.CustomerPhone == request.PhoneNumber && x.WorkshopRegisterStatus != Domain.Enums.WorkshopRegisterStatus.Cancelled))
             {
                 throw new BusinessException("You have already registered for this workshop");
+            }
+            if (workshop.WorkshopRegisters.Count(x => x.WorkshopRegisterStatus != Domain.Enums.WorkshopRegisterStatus.Cancelled) >= workshop.MaxRegister)
+            {
+                throw new BusinessException("This workshop is full");
             }
             var workshopCode = RegistrationCodeGenerator.GenerateCode();
             var workshopRegister = new WorkshopRegister(
