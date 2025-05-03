@@ -39,17 +39,17 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.AuthStaff.Commands.Logi
             // Tìm user theo UserName
             var user = await _userManager.FindByNameAsync(request.Username);
             if (user == null)
-                throw new BusinessException("Invalid username, please try again");
+                throw new BusinessException("Tên đăng nhập không hợp lệ. Vui lòng thử lại");
 
             // Kiểm tra mật khẩu
             var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, false);
             if (!result.Succeeded)
-                throw new BusinessException("Invalid password, please try again");
+                throw new BusinessException("Mật khẩu không chính xác. Vui lòng thử lại");
 
             var staff = await _staffRepository.GetSingleAsync(x => x.AppUserId == user.Id);
 
             if (staff == null)
-                throw new BusinessException("Invalid staff information, please contact to host");
+                throw new BusinessException("Không tìm thấy thông tin nhân viên. Vui lòng liên hệ quản lý");
             // Tạo danh sách các claim
             var claims = new List<Claim>
             {
