@@ -59,19 +59,23 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.WorkshopRegisters.Comma
             }
             if (request.Products.Count() > workshop.MaxPizzaPerRegister)
             {
-                throw new BusinessException($"You cannot register over {workshop.MaxPizzaPerRegister} products");
+                throw new BusinessException($"Bạn không thể đăng ký quá {workshop.MaxPizzaPerRegister} pizza");
             }
             if (request.TotalParticipant > workshop.MaxParticipantPerRegister)
             {
-                throw new BusinessException($"You cannot register over {workshop.MaxPizzaPerRegister} participants");
+                throw new BusinessException($"Bạn không thể đăng ký số lượng quá {workshop.MaxPizzaPerRegister} người");
             }
             if (workshop.WorkshopRegisters.Any(x => x.CustomerPhone == request.PhoneNumber && x.WorkshopRegisterStatus != Domain.Enums.WorkshopRegisterStatus.Cancelled))
             {
-                throw new BusinessException("You have already registered for this workshop");
+                throw new BusinessException("Bạn đã đăng ký workshop này rồi, vui lòng liên hệ với nhà hàng để được hỗ trợ");
             }
             if (workshop.WorkshopRegisters.Count(x => x.WorkshopRegisterStatus != Domain.Enums.WorkshopRegisterStatus.Cancelled) >= workshop.MaxRegister)
             {
-                throw new BusinessException("This workshop is full");
+                throw new BusinessException("Workshop đã hết chỗ");
+            }
+            if (workshop.WorkshopStatus != Domain.Enums.WorkshopStatus.OpeningToRegister)
+            {
+                throw new BusinessException("Workshop chưa mở để đăng ký");
             }
             var workshopCode = RegistrationCodeGenerator.GenerateCode();
             var workshopRegister = new WorkshopRegister(
