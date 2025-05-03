@@ -64,6 +64,11 @@ namespace Pizza4Ps.PizzaService.Domain.Services
                 priorityStatus = ReservationPriorityStatus.NonPriority;
             }
 
+            var existingCustomerReserved = existingBookings.FirstOrDefault(x => x.PhoneNumber == phoneNumber);
+            if (existingCustomerReserved != null)
+            {
+                throw new BusinessException(BussinessErrorConstants.BookingErrorConstant.BOOKING_ALREADY_EXISTS);
+            }
 
             var booking = new Reservation(
             bookingTime: bookingTime,

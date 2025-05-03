@@ -99,6 +99,7 @@
 
         public class BookingErrorConstant
         {
+            public const string BOOKING_ALREADY_EXISTS = "Số điện thoại đã có yêu cầu đặt chỗ vào thời gian này";
             public const string BOOKING_NOT_FOUND = "Không tìm thấy yêu cầu đặt chỗ";
             public const string BOOKING_SLOT_FULL = "Không còn bàn trống vào thời gian này";
             public const string INVALID_BOOKING_STATUS = "Trạng thái đặt chỗ không hợp lệ";
