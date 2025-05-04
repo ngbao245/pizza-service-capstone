@@ -129,6 +129,16 @@ namespace Pizza4Ps.PizzaService.Domain.Services
                     throw new BusinessException("Workshop không ở trạng thái đã đóng đăng ký");
                 }
                 workshop.ReOpenToRegister(newEndRegisterDate);
+                // Lập lịch job đóng đăng ký
+                TimeSpan closeRegisterDelay = workshop.EndRegisterDate - DateTime.Now;
+                if (closeRegisterDelay < TimeSpan.Zero)
+                {
+                    closeRegisterDelay = TimeSpan.Zero;
+                }
+                string closeRegisterJobId = _backgroundJobService.ScheduleJob<WorkshopService>(
+                    service => service.StopRegisterWorkshopSync(workshop.Id),
+                    closeRegisterDelay);
+                workshop.SetCloseRegisterJobId(closeRegisterJobId);
                 _workshopRepository.Update(workshop);
                 await _unitOfWork.SaveChangeAsync();
             }
