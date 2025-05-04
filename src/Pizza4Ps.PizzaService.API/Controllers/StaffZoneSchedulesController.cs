@@ -9,6 +9,7 @@ using Pizza4Ps.PizzaService.Application.UserCases.V1.StaffZoneSchedules.Commands
 using Pizza4Ps.PizzaService.Application.UserCases.V1.StaffZoneSchedules.Commands.RestoreStaffZoneSchedule;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.StaffZoneSchedules.Commands.UpdateStaffZoneSchedule;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.StaffZoneSchedules.Commands.UpdateZone;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.StaffZoneSchedules.Queries.GetListMonthly;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.StaffZoneSchedules.Queries.GetListStaffZoneSchedule;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.StaffZoneSchedules.Queries.GetListStaffZoneScheduleIgnoreQueryFilter;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.StaffZoneSchedules.Queries.GetStaffZoneScheduleById;
@@ -92,6 +93,17 @@ namespace Pizza4Ps.PizzaService.API.Controllers
             });
         }
 
+        [HttpGet("monthly-schedule")]
+        public async Task<IActionResult> GetMonthlyScheduleAsync([FromQuery] GetMonthlyStaffZoneScheduleQuery query)
+        {
+            var result = await _sender.Send(query);
+            return Ok(new ApiResponse
+            {
+                Result = result,
+                Message = Message.GET_SUCCESS,
+                StatusCode = StatusCodes.Status200OK
+            });
+        }
 
         [HttpPut("update-zone{id}")]
         [ApiExplorerSettings(IgnoreApi = true)]
