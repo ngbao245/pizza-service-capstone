@@ -24,14 +24,19 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Staffs.Queries.GetListS
 
         public async Task<PaginatedResultDto<StaffDto>> Handle(GetListStaffQuery request, CancellationToken cancellationToken)
         {
-            StaffTypeEnum? staffType = null;
-            if (!string.IsNullOrEmpty(request.StaffType))
+            List<StaffTypeEnum>? staffTypes = null;
+            if (request.StaffType != null && request.StaffType.Any())
             {
-                if (!Enum.TryParse(request.StaffType, true, out StaffTypeEnum parsedStatus))
+                staffTypes = request.StaffType
+                    .Select(type => Enum.TryParse<StaffTypeEnum>(type, true, out var parsedType) ? parsedType : (StaffTypeEnum?)null)
+                    .Where(type => type.HasValue)
+                    .Select(type => type.Value)
+                    .ToList();
+
+                if (staffTypes.Count == 0)
                 {
                     throw new BusinessException(BussinessErrorConstants.StaffErrorConstant.INVALID_STAFF_TYPE);
                 }
-                staffType = parsedStatus;
             }
 
             StaffStatusEnum? staffStatus = null;
@@ -50,7 +55,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Staffs.Queries.GetListS
                 x => (request.FullName == null || x.FullName.Contains(request.FullName))
                 && (request.Phone == null || x.Phone.Contains(request.Phone))
                 && (request.Email == null || x.Email.Contains(request.Email))
-                && (staffType == null || x.StaffType == staffType)
+                && (staffTypes == null || staffTypes.Contains(x.StaffType))
                 && (staffStatus == null || x.Status == staffStatus),
                 includeProperties: includeProperties);
             var entities = await query
