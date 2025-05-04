@@ -8,5 +8,7 @@ namespace Pizza4Ps.PizzaService.Domain.Abstractions.Services
         Task<Guid> CreateAsync(Workshop workshop, List<WorkshopFoodDetail> workshopFoodDetails);
         Task StartRegisterWorkshop(Guid workshopId);
         Task CloseRegisterWorkshop(Guid workshopId);
+        Task ReOpenToRegisterWorkshop(Guid workshopId, DateTime newEndRegisterDate);
+        Task ForceOpenWorkshop(Guid workshopId);
     }
 }

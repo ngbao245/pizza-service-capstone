@@ -18,6 +18,7 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         public decimal DiscountValue { get; set; }   
         public DiscountTypeEnum DiscountType { get; set; }
 
+        public bool IsValid { get; set; } = true; // Trạng thái của đợt voucher (còn hiệu lực hay không)
         // Quan hệ 1-n: Một đợt voucher có nhiều voucher
         public ICollection<Voucher> Vouchers { get; set; } = new List<Voucher>();   
 
@@ -41,6 +42,7 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
             DiscountValue = discountValue;
             DiscountType = discountType;
             ChangePoint = changePoint;
+            IsValid = true;
         }
         //public VoucherBatch(Guid id, string name, string description, int totalQuantity)
         //{

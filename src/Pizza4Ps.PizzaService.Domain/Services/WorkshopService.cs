@@ -4,6 +4,7 @@ using Pizza4Ps.PizzaService.Domain.Abstractions.BackgroundJobs;
 using Pizza4Ps.PizzaService.Domain.Abstractions.Repositories;
 using Pizza4Ps.PizzaService.Domain.Abstractions.Services;
 using Pizza4Ps.PizzaService.Domain.Entities;
+using Pizza4Ps.PizzaService.Domain.Exceptions;
 using Pizza4Ps.PizzaService.Domain.Services.ServiceBase;
 
 namespace Pizza4Ps.PizzaService.Domain.Services
@@ -116,6 +117,38 @@ namespace Pizza4Ps.PizzaService.Domain.Services
         public void OpenWorkshopSync(Guid workshopId)
         {
             OpenWorkshop(workshopId).GetAwaiter().GetResult();
+        }
+
+        public async Task ReOpenToRegisterWorkshop(Guid workshopId, DateTime newEndRegisterDate)
+        {
+            var workshop = await _workshopRepository.GetSingleByIdAsync(workshopId);
+            if (workshop != null)
+            {
+                if (workshop.WorkshopStatus != Domain.Enums.WorkshopStatus.ClosedRegister)
+                {
+                    throw new BusinessException("Workshop không ở trạng thái đã đóng đăng ký");
+                }
+                workshop.ReOpenToRegister(newEndRegisterDate);
+                _workshopRepository.Update(workshop);
+                await _unitOfWork.SaveChangeAsync();
+            }
+            throw new BusinessException("Workshop không tồn tại");
+        }
+        public async Task ForceOpenWorkshop(Guid workshopId)
+        {
+            var workshop = await _workshopRepository.GetSingleByIdAsync(workshopId);
+            if (workshop != null)
+            {
+                if (workshop.OpeningWorkshopJobId != null)
+                {
+                    _backgroundJobService.RemoveRecurringJob(workshop.OpeningWorkshopJobId);
+                    workshop.SetOpeningWorkshopJobId(null);
+                }
+                workshop.OpenWorkshop();
+                _workshopRepository.Update(workshop);
+                await _unitOfWork.SaveChangeAsync();
+            }
+            throw new BusinessException("Workshop không tồn tại");
         }
     }
 }

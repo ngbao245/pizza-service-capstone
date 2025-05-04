@@ -123,5 +123,10 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         {
             WorkshopStatus = WorkshopStatus.Cancelled;
         }
+        public void ReOpenToRegister(DateTime newEndRegisterDate)
+        {
+            WorkshopStatus = WorkshopStatus.OpeningToRegister;
+            EndRegisterDate = newEndRegisterDate;
+        }
     }
 }
