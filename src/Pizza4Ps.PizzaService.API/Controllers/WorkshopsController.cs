@@ -93,7 +93,7 @@ namespace Pizza4Ps.PizzaService.API.Controllers
         [HttpPut("open/{workshopId}")]
         public async Task<IActionResult> OpenAsync([FromRoute] Guid workshopId)
         {
-            var command = new OpenWorkshopCommand { Id = workshopId };
+            var command = new OpenWorkshopCommand { WorkshopId = workshopId };
             await _sender.Send(command);
             return Ok(new ApiResponse
             {
@@ -114,4 +114,5 @@ namespace Pizza4Ps.PizzaService.API.Controllers
                 StatusCode = StatusCodes.Status200OK
             });
         }
+    }
 }

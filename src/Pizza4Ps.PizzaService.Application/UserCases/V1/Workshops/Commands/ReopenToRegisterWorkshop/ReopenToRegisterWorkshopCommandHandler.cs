@@ -17,17 +17,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Workshops.Commands.Reop
         }
         public async Task Handle(ReopenToRegisterWorkshopCommand request, CancellationToken cancellationToken)
         {
-            var workshop = await _workshopRepository.GetSingleByIdAsync(request.WorkshopId);
-            if (workshop == null)
-            {
-                throw new NotFoundException($"Workshop with id {request.WorkshopId} not found.");
-            }
-            if (workshop.WorkshopStatus != Domain.Enums.WorkshopStatus.ClosedRegister)
-            {
-                throw new BusinessException("Workshop is not in a closed state.");
-            }
-            workshop.ReOpenToRegister(request.NewEndRegisterDate);
-            await _unitOfWork.SaveChangeAsync(cancellationToken);
+            await _workshopService.ReOpenToRegisterWorkshop(request.WorkshopId!.Value, request.NewEndRegisterDate);
         }
     }
 }
