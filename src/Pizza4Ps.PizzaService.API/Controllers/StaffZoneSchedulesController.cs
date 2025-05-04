@@ -133,7 +133,7 @@ namespace Pizza4Ps.PizzaService.API.Controllers
             });
         }
 
-        [HttpDelete()]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteManyAsync([FromRoute] Guid id, bool isHardDeleted = false)
         {
             await _sender.Send(new DeleteStaffZoneScheduleCommand

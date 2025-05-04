@@ -10,7 +10,8 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Staffs.Queries.GetListS
         public string? FullName { get; set; }
         public string? Phone { get; set; }
         public string? Email { get; set; }
-        public string? StaffType { get; set; }
+        //public string? StaffType { get; set; }
+        public List<string>? StaffType { get; set; }
         public string? Status { get; set; }
     }
 }
