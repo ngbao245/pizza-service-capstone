@@ -59,7 +59,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             var existingSchedule = await _staffZoneScheduleRepository.GetSingleAsync(
                 x => x.StaffId == staffId && x.WorkingDate == workingDate && x.WorkingSlotId == workingSlotId && x.ZoneId == zoneId);
             if (existingSchedule != null)
-                throw new BusinessException($"Nhân viên đã được phân công vào khu vực {existingSchedule.ZoneName} cho ngày {workingDate:yyyy-MM-dd} khung giờ {workingSlot.ShiftStart}-{workingSlot.ShiftEnd}");
+                throw new BusinessException($"Nhân viên đã được phân công vào khu vực {existingSchedule.ZoneName} cho ngày {workingDate:yyyy-MM-dd} khung giờ {workingSlot.ShiftStart:HH\\:mm}-{workingSlot.ShiftEnd:HH\\:mm}");
 
             var staffZoneSchedule = new StaffZoneSchedule(Guid.NewGuid(), staff.FullName, zone.Name, workingDate, staffId, zoneId, workingSlotId);
             _staffZoneScheduleRepository.Add(staffZoneSchedule);
