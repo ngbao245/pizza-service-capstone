@@ -4,6 +4,8 @@
     {
         Staff,
         Manager,
-        Cheff
+        Cheff,
+        ScreenChef,
+        ScreenWaiter,
     }
 }
