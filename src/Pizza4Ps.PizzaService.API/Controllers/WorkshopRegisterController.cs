@@ -11,6 +11,8 @@ using Pizza4Ps.PizzaService.Application.UserCases.V1.WorkshopRegisters.Commands.
 using Pizza4Ps.PizzaService.Application.UserCases.V1.WorkshopRegisters.Queries.GetWorkshopRegisterByCode;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.WorkshopRegisters.Queries.GetWorkshopRegisterById;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.WorkshopRegisters.Queries.GetWorkShopRegisterList;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.WorkshopRegisters.Queries.GetWorkshopRegisterPizzaDetail;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.WorkshopRegisters.Queries.GetWorkshopRegisterPizzaSumary;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Workshops.Queries.GetWorkshopList;
 
 namespace Pizza4Ps.PizzaService.API.Controllers
@@ -76,6 +78,30 @@ namespace Pizza4Ps.PizzaService.API.Controllers
             await _sender.Send(request);
             return Ok(new ApiResponse
             {
+                Success = true,
+                Message = "check-in workshop successfully",
+                StatusCode = StatusCodes.Status201Created
+            });
+        }
+        [HttpGet("pizzas-summary/{workshopId}")]
+        public async Task<IActionResult> PizzaSummaryAsync([FromRoute] Guid workshopId)
+        {
+            var result = await _sender.Send(new GetWorkshopRegisterPizzaSumaryQuery { WorkshopId = workshopId });
+            return Ok(new ApiResponse
+            {
+                Result = result,
+                Success = true,
+                Message = "check-in workshop successfully",
+                StatusCode = StatusCodes.Status201Created
+            });
+        }
+        [HttpGet("pizzas-detail/{workshopId}")]
+        public async Task<IActionResult> PizzaDetailAsync([FromRoute] Guid workshopId)
+        {
+            var result = await _sender.Send(new GetWorkshopRegisterPizzaDetailQuery { WorkshopId = workshopId });
+            return Ok(new ApiResponse
+            {
+                Result = result,
                 Success = true,
                 Message = "check-in workshop successfully",
                 StatusCode = StatusCodes.Status201Created
