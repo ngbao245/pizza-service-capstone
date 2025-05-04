@@ -2,9 +2,9 @@
 {
     public enum StaffTypeEnum
     {
-        Waiter,
+        Staff,
         Manager,
-        Chef,
+        Cheff,
         ScreenChef,
         ScreenWaiter,
     }
