@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using Pizza4Ps.PizzaService.API.Constants;
 using Pizza4Ps.PizzaService.API.Models;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Workshops.Commands.CancelWorkshop;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Workshops.Commands.CloseWorkshop;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Workshops.Commands.CreateWorkshop;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Workshops.Commands.UpdateWorkshop;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Workshops.Queries.GetWorkshopById;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Workshops.Queries.GetWorkshopList;
 
@@ -58,6 +60,29 @@ namespace Pizza4Ps.PizzaService.API.Controllers
             return Ok(new ApiResponse
             {
                 Result = result,
+                Message = Message.GET_SUCCESS,
+                StatusCode = StatusCodes.Status200OK
+            });
+        }
+        [HttpPut("{workshopId}")]
+        public async Task<IActionResult> UpdateAsync([FromRoute] Guid workshopId, UpdateWorkshopCommand command)
+        {
+            command.Id = workshopId;
+            await _sender.Send(command);
+            return Ok(new ApiResponse
+            {
+                Success = true,
+                Message = Message.GET_SUCCESS,
+                StatusCode = StatusCodes.Status200OK
+            });
+        }
+        [HttpPut("close/{workshopId}")]
+        public async Task<IActionResult> CloseAsync([FromRoute] Guid workshopId)
+        {
+            var command = new CloseWorkshopCommand { Id = workshopId };
+            return Ok(new ApiResponse
+            {
+                Success = true,
                 Message = Message.GET_SUCCESS,
                 StatusCode = StatusCodes.Status200OK
             });
