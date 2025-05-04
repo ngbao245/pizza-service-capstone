@@ -5,7 +5,7 @@
         Staff,
         Manager,
         Cheff,
-        ScreénChef,
+        ScreenChef,
         ScreenWaiter,
     }
 }
