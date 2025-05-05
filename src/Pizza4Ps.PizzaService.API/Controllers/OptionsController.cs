@@ -6,9 +6,11 @@ using Pizza4Ps.PizzaService.Application.UserCases.V1.Options.Commands.CreateOpti
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Options.Commands.DeleteOption;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Options.Commands.RestoreOption;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Options.Commands.UpdateOption;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Options.Commands.UpdateOptionStatus;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Options.Queries.GetListOption;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Options.Queries.GetListOptionIgnoreQueryFilter;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.Options.Queries.GetOptionById;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Products.Commands.UpdateProductStatus;
 
 
 namespace Pizza4Ps.PizzaService.API.Controllers
@@ -105,6 +107,18 @@ namespace Pizza4Ps.PizzaService.API.Controllers
             });
         }
 
+        [HttpPut("update-status/{optionId}")]
+        public async Task<IActionResult> UpdateStatusProduct([FromRoute] Guid optionId, UpdateOptionStatusCommand request)
+        {
+            request.Id = optionId;
+            await _sender.Send(request);
+            return Ok(new ApiResponse
+            {
+                Success = true,
+                Message = Message.UPDATED_SUCCESS,
+                StatusCode = StatusCodes.Status201Created
+            });
+        }
         [HttpDelete()]
         public async Task<IActionResult> DeleteManyAsync(List<Guid> ids, bool isHardDeleted = false)
         {

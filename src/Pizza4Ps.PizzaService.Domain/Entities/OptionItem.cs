@@ -1,4 +1,5 @@
 ﻿using Pizza4Ps.PizzaService.Domain.Abstractions;
+using Pizza4Ps.PizzaService.Domain.Enums;
 
 namespace Pizza4Ps.PizzaService.Domain.Entities
 {
@@ -7,8 +8,8 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
 		public string Name { get; set; }
 		public decimal AdditionalPrice { get; set; }
 		public Guid OptionId { get; set; }
-
-		public virtual Option Option { get; set; }
+        public OptionItemStatus OptionItemStatus { get; set; }
+        public virtual Option Option { get; set; }
 
 		public OptionItem()
 		{
@@ -28,5 +29,9 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
 			AdditionalPrice = additionalPrice;
 			OptionId = optionId;
 		}
-	}
+        public void UpdateStatus(OptionItemStatus status)
+        {
+            OptionItemStatus = status;
+        }
+    }
 }

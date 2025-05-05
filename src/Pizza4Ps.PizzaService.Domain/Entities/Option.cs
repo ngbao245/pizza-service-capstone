@@ -1,4 +1,5 @@
 ﻿using Pizza4Ps.PizzaService.Domain.Abstractions;
+using Pizza4Ps.PizzaService.Domain.Enums;
 
 namespace Pizza4Ps.PizzaService.Domain.Entities
 {
@@ -7,6 +8,7 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         public string Name { get; set; }
         public string? Description { get; set; }
         public bool SelectMany { get; set; }
+        public OptionStatus OptionStatus { get; set; } 
         public virtual ICollection<OptionItem> OptionItems { get; set; } = new List<OptionItem>();
 
         public Option()
@@ -19,12 +21,17 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
             Name = name;
             Description = description;
             SelectMany = selectMany;
+            OptionStatus = OptionStatus.Available;
         }
 
         public void UpdateOption(string name, string description)
         {
             Name = name;
             Description = description;
+        }
+        public void UpdateStatus(OptionStatus status)
+        {
+            OptionStatus = status;
         }
     }
 }
