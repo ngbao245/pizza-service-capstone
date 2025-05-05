@@ -102,7 +102,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             if (entity == null) throw new ServerException(BussinessErrorConstants.OrderItemErrorConstant.ORDER_ITEM_NOT_FOUND);
             entity.setCancelled(reason);
             await _unitOfWork.SaveChangeAsync();
-            await _realTimeNotifier.UpdateOrderItemStatusAsync();
+            await _realTimeNotifier.UpdateOrderItemCancelledStatusAsync();
         }
     }
 }

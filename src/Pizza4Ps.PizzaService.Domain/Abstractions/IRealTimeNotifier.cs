@@ -6,6 +6,7 @@ namespace Pizza4Ps.PizzaService.Domain.Abstractions
     {
         Task NotifyAsync(Notification notification);
         Task UpdateOrderItemStatusAsync();
+        Task UpdateOrderItemCancelledStatusAsync();
         Task UpdateOrderItemDoneCookingAsync();
 
         Task CreatedReservationAsync(Reservation reservation);
