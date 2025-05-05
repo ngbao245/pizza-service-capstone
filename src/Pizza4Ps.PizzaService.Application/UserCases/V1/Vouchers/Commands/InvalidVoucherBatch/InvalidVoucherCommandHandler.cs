@@ -27,7 +27,10 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Vouchers.Commands.Inval
             {
                 foreach (var voucher in voucherBatch.Vouchers)
                 {
-                    voucher.SetInvalid();
+                    if (voucher.VoucherStatus != Domain.Enums.VoucherStatus.Used)
+                    {
+                        voucher.SetInvalid();
+                    }
                 }
             }
 
