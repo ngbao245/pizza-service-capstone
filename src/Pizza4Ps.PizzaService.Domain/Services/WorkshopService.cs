@@ -124,9 +124,13 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             var workshop = await _workshopRepository.GetSingleByIdAsync(workshopId);
             if (workshop != null)
             {
-                if (workshop.WorkshopStatus != Domain.Enums.WorkshopStatus.ClosedRegister)
+                //if (workshop.WorkshopStatus != Domain.Enums.WorkshopStatus.ClosedRegister)
+                //{
+                //    throw new BusinessException("Workshop không ở trạng thái đã đóng đăng ký");
+                //}
+                if (newEndRegisterDate >= workshop.WorkshopDate)
                 {
-                    throw new BusinessException("Workshop không ở trạng thái đã đóng đăng ký");
+                    throw new BusinessException("Thời gian đóng đăng ký không được lớn hơn thời gian tổ chức workshop");
                 }
                 workshop.ReOpenToRegister(newEndRegisterDate);
                 // Lập lịch job đóng đăng ký
@@ -142,7 +146,6 @@ namespace Pizza4Ps.PizzaService.Domain.Services
                 _workshopRepository.Update(workshop);
                 await _unitOfWork.SaveChangeAsync();
             }
-            throw new BusinessException("Workshop không tồn tại");
         }
         public async Task ForceOpenWorkshop(Guid workshopId)
         {
@@ -158,7 +161,6 @@ namespace Pizza4Ps.PizzaService.Domain.Services
                 _workshopRepository.Update(workshop);
                 await _unitOfWork.SaveChangeAsync();
             }
-            throw new BusinessException("Workshop không tồn tại");
         }
     }
 }
