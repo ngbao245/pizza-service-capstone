@@ -5,6 +5,7 @@ using Pizza4Ps.PizzaService.API.Models;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.VoucherBatchs.Commands.CreateVoucherBatch;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.VoucherBatchs.Queries.GetListVoucherBatch;
 using Pizza4Ps.PizzaService.Application.UserCases.V1.VoucherBatchs.Queries.GetVoucherBatchById;
+using Pizza4Ps.PizzaService.Application.UserCases.V1.Vouchers.Commands.InvalidVoucherBatch;
 
 namespace Pizza4Ps.PizzaService.API.Controllers
 {
@@ -57,5 +58,19 @@ namespace Pizza4Ps.PizzaService.API.Controllers
                 StatusCode = StatusCodes.Status200OK
             });
         }
+        [HttpPut("invalid-voucherbatch/{voucherBatchId}")]
+        [HttpPut]
+        public async Task<IActionResult> InvalidVoucherbatchAsync([FromRoute]Guid voucherBatchId , [FromBody] InvalidVoucherBatchCommand request)
+        {
+            request.VoucherBatchId = voucherBatchId;
+            await _sender.Send(request);
+            return Ok(new ApiResponse
+            {
+                Success = true,
+                Message = Message.CREATED_SUCCESS,
+                StatusCode = StatusCodes.Status201Created
+            });
+        }
+
     }
 }
