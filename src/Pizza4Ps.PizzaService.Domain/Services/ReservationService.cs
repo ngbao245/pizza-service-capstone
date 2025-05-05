@@ -267,6 +267,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
                 };
                 foreach (var table in existingTables)
                 {
+                    table.SetNullCurrentReservationId();
                     table.SetMergeTable(mergedGroup.Id,
                         mergedGroup.Name);
                     table.SetOpening();
@@ -279,6 +280,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             {
                 foreach (var table in existingTables)
                 {
+                    table.SetNullCurrentReservationId();
                     table.SetOpening();
                     _tableRepository.Update(table);
                 }

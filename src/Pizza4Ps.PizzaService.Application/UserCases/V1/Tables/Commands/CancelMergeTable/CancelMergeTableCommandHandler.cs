@@ -33,7 +33,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Tables.Commands.CancelM
             foreach (var table in tables)
             {
                 table.CancelMerge();
-                table.SetOpening();
+                table.SetClosing();
                 _tableRepository.Update(table);
             }
             var tableMerge = await _tableMergeRepository.GetSingleByIdAsync(request.TableMergeId);
