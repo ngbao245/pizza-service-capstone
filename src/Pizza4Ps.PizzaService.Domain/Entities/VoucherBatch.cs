@@ -52,6 +52,11 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
         //    TotalQuantity = ValidateTotalQuantity(totalQuantity);
         //}
 
+        public void SetInvalid()
+        {
+            IsValid = false;
+        }
+
         private int ValidateTotalQuantity(int totalQuantity)
         {
             if (totalQuantity <= 0)

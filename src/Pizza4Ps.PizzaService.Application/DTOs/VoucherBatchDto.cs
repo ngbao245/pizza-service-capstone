@@ -16,7 +16,7 @@ namespace Pizza4Ps.PizzaService.Application.DTOs
         public int RemainingQuantity { get; set; }
         public decimal DiscountValue { get; set; }   // Số voucher chưa được claim
         public string DiscountType { get; set; }
-
+        public bool IsValid { get; set; } = true; // Trạng thái của đợt voucher (còn hiệu lực hay không)
         // Quan hệ 1-n: Một đợt voucher có nhiều voucher
         public ICollection<VoucherDto> Vouchers { get; set; } = new List<VoucherDto>();
     }

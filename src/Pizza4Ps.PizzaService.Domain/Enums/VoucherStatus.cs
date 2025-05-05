@@ -4,6 +4,7 @@
     {
         Available,
         PendingPayment,
-        Used
+        Used,
+        Invalid
     }
 }

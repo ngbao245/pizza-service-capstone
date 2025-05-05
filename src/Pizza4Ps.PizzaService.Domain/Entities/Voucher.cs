@@ -39,6 +39,11 @@ namespace Pizza4Ps.PizzaService.Domain.Entities
             VoucherStatus = VoucherStatus.Used;
         }
 
+        public void SetInvalid()
+        {
+            VoucherStatus = VoucherStatus.Invalid;
+        }
+
         public void SetPendingPayment()
         {
             VoucherStatus = VoucherStatus.PendingPayment;

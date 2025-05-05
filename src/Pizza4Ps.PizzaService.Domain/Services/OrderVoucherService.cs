@@ -31,6 +31,11 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             {
                 throw new BusinessException("Voucher đã được sử dụng hoặc không hợp lệ");
             }
+            var order = await _orderVoucherRepository.GetListAsNoTracking(x => x.OrderId == orderId && x.VoucherId == voucherId).ToListAsync();
+            if (order.Any())
+            {
+                throw new BusinessException("Voucher đã được áp dụng cho đơn hàng này");
+            }
             var entity = new OrderVoucher(Guid.NewGuid(), orderId, voucherId);
             _orderVoucherRepository.Add(entity);
             await _unitOfWork.SaveChangeAsync();
