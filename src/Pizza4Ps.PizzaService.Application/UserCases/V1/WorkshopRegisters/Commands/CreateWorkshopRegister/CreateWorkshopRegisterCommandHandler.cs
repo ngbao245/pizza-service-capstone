@@ -48,10 +48,10 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.WorkshopRegisters.Comma
             {
                 throw new BusinessException("Customer is not found");
             }
-            if (customer.PhoneOtp != request.PhoneOtp)
-            {
-                throw new BusinessException("Phone OTP is not valid");
-            }
+            //if (customer.PhoneOtp != request.PhoneOtp)
+            //{
+            //    throw new BusinessException("Phone OTP is not valid");
+            //}
             var workshop = await _workshopRepository.GetSingleByIdAsync(request.WorkshopId, "WorkshopRegisters");
             if (workshop == null)
             {

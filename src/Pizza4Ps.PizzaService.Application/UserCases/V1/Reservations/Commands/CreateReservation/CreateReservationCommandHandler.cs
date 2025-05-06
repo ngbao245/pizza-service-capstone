@@ -32,10 +32,10 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Bookings.Commands.Creat
             {
                 throw new BusinessException("Không tìm thấy khách hàng");
             }
-            if (customer.PhoneOtp != request.PhoneOtp)
-            {
-                throw new BusinessException("Phone OTP is not valid");
-            }
+            //if (customer.PhoneOtp != request.PhoneOtp)
+            //{
+            //    throw new BusinessException("Phone OTP is not valid");
+            //}
             var result = await _bookingService.CreateAsync(
 				customerName: request.CustomerName,
 				phoneNumber: request.PhoneNumber,
