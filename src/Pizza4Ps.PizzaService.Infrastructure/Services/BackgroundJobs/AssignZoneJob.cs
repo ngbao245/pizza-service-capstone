@@ -140,7 +140,7 @@ public class AssignZoneJob
 
         foreach (var staff in fullTimeStaffs)
         {
-            if (staff.StaffType == StaffTypeEnum.Manager) continue;
+            if (staff.StaffType == StaffTypeEnum.Manager || staff.StaffType == StaffTypeEnum.ScreenChef || staff.StaffType == StaffTypeEnum.ScreenWaiter) continue;
 
             if (!assignedZones.ContainsKey(staff.Id))
             {
