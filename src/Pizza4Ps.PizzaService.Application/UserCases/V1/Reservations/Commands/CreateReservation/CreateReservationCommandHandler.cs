@@ -24,14 +24,14 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Bookings.Commands.Creat
 
 		public async Task<ResultDto<Guid>> Handle(CreateReservationCommand request, CancellationToken cancellationToken)
 		{
-            // Nếu hợp lệ, tạo booking
+            //// Nếu hợp lệ, tạo booking
 
-            var customer = await _customerRepository.GetSingleAsync(x => x.Phone == request.PhoneNumber);
+            //var customer = await _customerRepository.GetSingleAsync(x => x.Phone == request.PhoneNumber);
 
-            if (customer == null)
-            {
-                throw new BusinessException("Không tìm thấy khách hàng");
-            }
+            //if (customer == null)
+            //{
+            //    throw new BusinessException("Không tìm thấy khách hàng");
+            //}
             //if (customer.PhoneOtp != request.PhoneOtp)
             //{
             //    throw new BusinessException("Phone OTP is not valid");

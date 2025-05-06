@@ -4,8 +4,6 @@ using Pizza4Ps.PizzaService.Domain.Abstractions;
 using Pizza4Ps.PizzaService.Domain.Abstractions.Repositories;
 using Pizza4Ps.PizzaService.Domain.Entities;
 using Pizza4Ps.PizzaService.Domain.Exceptions;
-using Pizza4Ps.PizzaService.Persistence;
-using Pizza4Ps.PizzaService.Persistence.Repositories;
 
 namespace Pizza4Ps.PizzaService.Application.UserCases.V1.AuthCustomer.Commands.SendCodeVerifyPhone
 {
