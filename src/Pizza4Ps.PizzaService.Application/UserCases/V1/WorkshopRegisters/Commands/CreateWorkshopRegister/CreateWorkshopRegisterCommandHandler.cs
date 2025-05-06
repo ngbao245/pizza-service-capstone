@@ -43,11 +43,6 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.WorkshopRegisters.Comma
         }
         public async Task<ResultDto<Guid>> Handle(CreateWorkshopRegisterCommand request, CancellationToken cancellationToken)
         {
-            var customer = await _customerRepository.GetSingleAsync(x => x.Phone == request.PhoneNumber);
-            if (customer == null)
-            {
-                throw new BusinessException("Customer is not found");
-            }
             //if (customer.PhoneOtp != request.PhoneOtp)
             //{
             //    throw new BusinessException("Phone OTP is not valid");
@@ -120,7 +115,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.WorkshopRegisters.Comma
             }
             await _workshopRegisterService.RegisterAsync(workshopRegister, workshopPizzaRegisters, workshopPizzaRegisterDetails);
 
-            await _emailService.SendWorkshopRegisterEmail(request.Email, customer.FullName ?? "Quý khách", workshop.Name, workshopRegister.Code);
+            await _emailService.SendWorkshopRegisterEmail(request.Email, request.CustomerName ?? "Quý khách", workshop.Name, workshopRegister.Code);
 
             return new ResultDto<Guid>()
             {
