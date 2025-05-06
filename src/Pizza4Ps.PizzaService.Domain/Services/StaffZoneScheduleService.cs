@@ -215,7 +215,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
 
             foreach (var staff in fullTimeStaffs)
             {
-                if (staff.StaffType == StaffTypeEnum.Manager) continue;
+                if (staff.StaffType == StaffTypeEnum.Manager || staff.StaffType == StaffTypeEnum.ScreenChef || staff.StaffType == StaffTypeEnum.ScreenWaiter) continue;
 
                 if (existingSchedules.Any(x => x.StaffId == staff.Id && x.WorkingDate == workingDate))
                     continue;
