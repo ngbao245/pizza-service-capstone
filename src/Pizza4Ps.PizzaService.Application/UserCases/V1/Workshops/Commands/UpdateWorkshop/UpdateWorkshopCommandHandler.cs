@@ -26,6 +26,9 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Workshops.Commands.Upda
             workshop.Location = request.Location;
             workshop.Organizer = request.Organizer;
             workshop.HotLineContact = request.HotLineContact;
+            workshop.MaxRegister = request.MaxRegister;
+            workshop.MaxPizzaPerRegister = request.MaxPizzaPerRegister;
+            workshop.MaxParticipantPerRegister = request.MaxParticipantPerRegister;
             _workshopRepository.Update(workshop);
             await _unitOfWork.SaveChangeAsync(cancellationToken);
         }
