@@ -100,13 +100,9 @@ namespace Pizza4Ps.PizzaService.Domain.Services
         {
             var entity = await _orderitemRepository.GetSingleByIdAsync(id);
             if (entity == null) throw new ServerException(BussinessErrorConstants.OrderItemErrorConstant.ORDER_ITEM_NOT_FOUND);
-            if (entity.OrderItemStatus == OrderItemStatus.Cooking)
-            {
-                throw new BusinessException("Đầu bếp đã xác nhận nấu món ăn, không thể huỷ");
-            }
             entity.setCancelled(reason);
             await _unitOfWork.SaveChangeAsync();
-            await _realTimeNotifier.UpdateOrderItemStatusAsync();
+            await _realTimeNotifier.UpdateOrderItemCancelledStatusAsync(entity);
         }
     }
 }

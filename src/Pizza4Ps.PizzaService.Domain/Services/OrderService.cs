@@ -422,7 +422,17 @@ namespace Pizza4Ps.PizzaService.Domain.Services
                     _tableRepository.Update(table);
                 }
             }
+            foreach (var item in order.OrderItems)
+            {
+                if (item.OrderItemStatus == OrderItemStatus.Pending)
+                {
+                    item.setCancelled(note);
+                }
+                _orderItemRepository.Update(item);
+            }
             _orderRepository.Update(order);
+            await _realTimeNotifier.UpdateOrderItemStatusAsync();
+            await _realTimeNotifier.UpdateOrderItemDoneCookingAsync();
             await _unitOfWork.SaveChangeAsync();
         }
 

@@ -8,11 +8,13 @@ using Pizza4Ps.PizzaService.Domain.Constants;
 using Pizza4Ps.PizzaService.Domain.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using Net.payOS.Types;
+using Pizza4Ps.PizzaService.Domain.Abstractions.BackgroundJobs;
 
 namespace Pizza4Ps.PizzaService.Domain.Services
 {
     public class PaymentService : DomainService, IPaymentService
     {
+        private readonly IBackgroundJobService _backgroundJobService;
         private readonly IRealTimeNotifier _realTimeNotifier;
         private readonly ITableMergeRepository _tableMergeRepository;
         private readonly IVoucherRepository _voucherRepository;
@@ -30,8 +32,10 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             IPaymentRepository paymentRepository,
             ITableRepository tableRepository,
             IOrderVoucherRepository orderVoucherRepository,
-            IVoucherRepository voucherRepository, ITableMergeRepository tableMergeRepository, IRealTimeNotifier realTimeNotifier)
+            IVoucherRepository voucherRepository, ITableMergeRepository tableMergeRepository, IRealTimeNotifier realTimeNotifier,
+            IBackgroundJobService backgroundJobService)
         {
+            _backgroundJobService = backgroundJobService;
             _realTimeNotifier = realTimeNotifier;
             _tableMergeRepository = tableMergeRepository;
             _voucherRepository = voucherRepository;
@@ -71,9 +75,36 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             var result = await _payOsService.CreatePaymentLink(orderCode, (int)order.TotalPrice!, "Thanh toán đơn hàng");
             order.SetOrderCode(orderCode.ToString());
             _orderRepository.Update(order);
+            TimeSpan bookingDelay = TimeSpan.FromMinutes(2);
+            // Lập lịch job thoong baso
+            if (voucherUses != null)
+            {
+                string openRegisterJobId = _backgroundJobService.ScheduleJob<PaymentService>(
+                    service => service.ValidVoucherPending(voucherUses.Select(x => x.Voucher).ToList()), bookingDelay);
+            }
 
             await _unitOfWork.SaveChangeAsync();
+
+
             return result.qrCode;
+        }
+        // Các wrapper đồng bộ để sử dụng với Hangfire
+        public void ValidVoucherPending(List<Voucher> vouchers)
+        {
+            ValidVoucherPendingAsync(vouchers).GetAwaiter().GetResult();
+        }
+        public async Task ValidVoucherPendingAsync(List<Voucher> vouchers)
+        {
+            foreach (var voucher in vouchers)
+            {
+                if (voucher.VoucherStatus == VoucherStatus.PendingPayment)
+                {
+                    voucher.SetAvailable();
+                    _voucherRepository.Update(voucher);
+                }
+
+            }
+            await _unitOfWork.SaveChangeAsync();
         }
         public async Task CancelPaymentQRCode(Guid orderId)
         {
@@ -152,6 +183,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             _paymentRepository.Add(entity);
             _orderRepository.Update(order);
             await _unitOfWork.SaveChangeAsync();
+            await _realTimeNotifier.PaymentSuccess(order);
             return entity.Id;
         }
         public async Task<bool> ProcessWebhookData(WebhookType webhookData)
@@ -198,10 +230,10 @@ namespace Pizza4Ps.PizzaService.Domain.Services
                         foreach (var voucherUse in voucherUses)
                         {
                             var voucher = voucherUse.Voucher;
-                            if (voucher.VoucherStatus != VoucherStatus.PendingPayment)
-                            {
-                                throw new BusinessException("Voucher không hợp lệ");
-                            }
+                            //if (voucher.VoucherStatus != VoucherStatus.PendingPayment)
+                            //{
+                            //    throw new BusinessException("Voucher không hợp lệ");
+                            //}
                             voucher.SetUsed();
                             _voucherRepository.Update(voucher);
                         }

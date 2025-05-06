@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Pizza4Ps.PizzaService.Persistence;
 
@@ -11,9 +12,11 @@ using Pizza4Ps.PizzaService.Persistence;
 namespace Pizza4Ps.PizzaService.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20250505010309_update-invalid-voucher-batch")]
+    partial class updateinvalidvoucherbatch
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -856,9 +859,6 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("OptionStatus")
-                        .HasColumnType("int");
-
                     b.Property<bool>("SelectMany")
                         .HasColumnType("bit");
 
@@ -903,9 +903,6 @@ namespace Pizza4Ps.PizzaService.Persistence.Migrations
 
                     b.Property<Guid>("OptionId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("OptionItemStatus")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

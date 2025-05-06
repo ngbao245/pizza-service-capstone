@@ -170,15 +170,19 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             {
                 throw new BusinessException("Yêu cầu đặt bàn đã hoàn tất");
             }
-            var configTimePreviousBooking = await _configRepository.GetSingleAsync(x => x.ConfigType == ConfigType.BOOKING_DATE_PREVIOUS_NOTIFY);
-            double configTimePreviousBookingDouble = 30;
-            if (configTimePreviousBooking != null)
+            //var configTimePreviousBooking = await _configRepository.GetSingleAsync(x => x.ConfigType == ConfigType.BOOKING_DATE_PREVIOUS_NOTIFY);
+            //double configTimePreviousBookingDouble = 30;
+            //if (configTimePreviousBooking != null)
+            //{
+            //    configTimePreviousBookingDouble = double.Parse(configTimePreviousBooking.Value);
+            //}
+            //if (DateTime.Now < existingReservation.BookingTime.AddMinutes(-configTimePreviousBookingDouble))
+            //{
+            //    throw new BusinessException($"Bạn không thể sắp xếp bàn cho việc đặt bàn trước quá {configTimePreviousBookingDouble.ToString()} phút");
+            //}
+            if (DateTime.Now.Date != existingReservation.BookingTime.Date)
             {
-                configTimePreviousBookingDouble = double.Parse(configTimePreviousBooking.Value);
-            }
-            if (DateTime.Now < existingReservation.BookingTime.AddMinutes(-configTimePreviousBookingDouble))
-            {
-                throw new BusinessException($"Bạn không thể sắp xếp bàn cho việc đặt bàn trước quá {configTimePreviousBookingDouble.ToString()} phút");
+                throw new BusinessException("Bạn không thể sắp xếp bàn cho việc đặt bàn trước hoặc sau quá 1 ngày");
             }
             foreach (var table in existingTables)
             {
@@ -211,16 +215,16 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             {
                 throw new BusinessException("Yêu cầu đặt bàn đã hoàn tất");
             }
-            var configTimePreviousBooking = await _configRepository.GetSingleAsync(x => x.ConfigType == ConfigType.BOOKING_DATE_PREVIOUS_NOTIFY);
-            double configTimePreviousBookingDouble = 30;
-            if (configTimePreviousBooking != null)
-            {
-                configTimePreviousBookingDouble = double.Parse(configTimePreviousBooking.Value);
-            }
-            if (DateTime.Now < existingReservation.BookingTime.AddMinutes(-configTimePreviousBookingDouble))
-            {
-                throw new BusinessException($"Bạn không thể sắp xếp bàn cho việc đặt bàn trước quá {configTimePreviousBookingDouble.ToString()} phút");
-            }
+            //var configTimePreviousBooking = await _configRepository.GetSingleAsync(x => x.ConfigType == ConfigType.BOOKING_DATE_PREVIOUS_NOTIFY);
+            //double configTimePreviousBookingDouble = 30;
+            //if (configTimePreviousBooking != null)
+            //{
+            //    configTimePreviousBookingDouble = double.Parse(configTimePreviousBooking.Value);
+            //}
+            //if (DateTime.Now < existingReservation.BookingTime.AddMinutes(-configTimePreviousBookingDouble))
+            //{
+            //    throw new BusinessException($"Bạn không thể sắp xếp bàn cho việc đặt bàn trước quá {configTimePreviousBookingDouble.ToString()} phút");
+            //}
             foreach (var table in existingTables)
             {
                 var tableAssignReservation = await _tableAssignReservationRepository.GetSingleAsync(x => x.ReservationId == reservationId
@@ -253,6 +257,10 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             //{
             //    throw new BusinessException(BussinessErrorConstants.BookingErrorConstant.INVALID_BOOKING_STATUS);
             //}
+            if (DateTime.Now.Date != existingReservation.BookingTime.Date)
+            {
+                throw new BusinessException("Bạn không thể sắp xếp bàn cho việc đặt bàn trước hoặc sau quá 1 ngày");
+            }
             if (existingTables.Count > 1)
             {
                 if (existingTables.Any(t => t.TableMergeId != null))
@@ -267,6 +275,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
                 };
                 foreach (var table in existingTables)
                 {
+                    table.SetNullCurrentReservationId();
                     table.SetMergeTable(mergedGroup.Id,
                         mergedGroup.Name);
                     table.SetOpening();
@@ -279,6 +288,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             {
                 foreach (var table in existingTables)
                 {
+                    table.SetNullCurrentReservationId();
                     table.SetOpening();
                     _tableRepository.Update(table);
                 }

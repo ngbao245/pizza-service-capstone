@@ -17,5 +17,11 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Workshops.Commands.Upda
         public string Organizer { get; set; }
 
         public string HotLineContact { get; set; }
+
+        public int MaxRegister { get; set; }
+
+        public int MaxPizzaPerRegister { get; set; }
+
+        public int MaxParticipantPerRegister { get; set; }
     }
 }
