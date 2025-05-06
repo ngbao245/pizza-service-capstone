@@ -431,6 +431,8 @@ namespace Pizza4Ps.PizzaService.Domain.Services
                 _orderItemRepository.Update(item);
             }
             _orderRepository.Update(order);
+            await _realTimeNotifier.UpdateOrderItemStatusAsync();
+            await _realTimeNotifier.UpdateOrderItemDoneCookingAsync();
             await _unitOfWork.SaveChangeAsync();
         }
 
