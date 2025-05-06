@@ -59,7 +59,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.Workshops.Commands.Crea
                 endRegisterDate: request.EndRegisterDate,
                 totalFee: request.TotalFee,
                 maxRegister: request.MaxRegister,
-                maxParticipantPerRegister: request.MaxPizzaPerRegister,
+                maxParticipantPerRegister: request.MaxParticipantPerRegister,
                 maxPizzaPerRegister: request.MaxPizzaPerRegister,
                 zoneId: request.ZoneId, zoneName: zone.Name
                 );
