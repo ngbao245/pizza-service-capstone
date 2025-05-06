@@ -11,15 +11,18 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.AuthCustomer.Commands.S
 {
     public class SendOtpVerifyPhoneCommandHandler : IRequestHandler<SendOtpVerifyPhoneCommand>
     {
+        private readonly EsmsService _esmsService;
         private readonly IUnitOfWork _unitOfWork;
         private readonly TwilioSmsService _twilioSmsService;
         private readonly ICustomerRepository _customerRepository;
 
         public SendOtpVerifyPhoneCommandHandler(TwilioSmsService twilioSmsService,
             ICustomerRepository customerRepository,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork, 
+            EsmsService esmsService)
              
         {
+            _esmsService = esmsService;
             _unitOfWork = unitOfWork;
             _twilioSmsService = twilioSmsService;
             _customerRepository = customerRepository;
@@ -27,7 +30,15 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.AuthCustomer.Commands.S
         public async Task Handle(SendOtpVerifyPhoneCommand request, CancellationToken cancellationToken)
         {
             var code = RegistrationCodeGenerator.GenerateCode(6);
-            await _twilioSmsService.SendOtpAsync(request.PhoneNumber, code);
+            try
+            {
+                await _twilioSmsService.SendOtpAsync(request.PhoneNumber, code);
+            }
+            catch 
+            {
+                await _esmsService.SendTestOtpAsync(request.PhoneNumber, code);
+            }
+
             var customer = await _customerRepository.GetSingleAsync(x => x.Phone == request.PhoneNumber);
             if (customer == null)
             {

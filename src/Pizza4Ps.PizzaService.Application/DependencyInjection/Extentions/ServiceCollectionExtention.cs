@@ -40,7 +40,10 @@ namespace Pizza4Ps.PizzaService.Application.DependencyInjection.Extentions
         }
         public static void AddTwilioSMS(this IServiceCollection services)
         {
+            services.AddHttpClient();       // Đăng ký IHttpClientFactory + default HttpClient
+
             services.AddTransient<TwilioSmsService>();
+            services.AddTransient<EsmsService>();
         }
         public static IServiceCollection AddCloudinaryService(this IServiceCollection services)
         {
