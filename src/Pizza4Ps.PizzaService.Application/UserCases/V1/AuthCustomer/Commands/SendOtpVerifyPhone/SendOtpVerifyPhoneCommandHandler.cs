@@ -34,11 +34,14 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.AuthCustomer.Commands.S
             {
                 await _twilioSmsService.SendOtpAsync(request.PhoneNumber, code);
             }
-            catch 
+            catch
             {
-                await _esmsService.SendTestOtpAsync(request.PhoneNumber, code);
+                var result = await _esmsService.SendTestOtpAsync(request.PhoneNumber, code);
+                if (result.CodeResult != "100")
+                {
+                    throw new BusinessException("Gửi mã xác thực không thành công");
+                }
             }
-
             var customer = await _customerRepository.GetSingleAsync(x => x.Phone == request.PhoneNumber);
             if (customer == null)
             {
