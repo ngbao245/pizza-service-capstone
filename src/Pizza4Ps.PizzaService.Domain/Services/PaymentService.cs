@@ -183,6 +183,7 @@ namespace Pizza4Ps.PizzaService.Domain.Services
             _paymentRepository.Add(entity);
             _orderRepository.Update(order);
             await _unitOfWork.SaveChangeAsync();
+            await _realTimeNotifier.PaymentSuccess(order);
             return entity.Id;
         }
         public async Task<bool> ProcessWebhookData(WebhookType webhookData)
