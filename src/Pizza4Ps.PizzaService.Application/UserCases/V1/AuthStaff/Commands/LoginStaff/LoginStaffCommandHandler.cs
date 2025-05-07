@@ -64,7 +64,7 @@ namespace Pizza4Ps.PizzaService.Application.UserCases.V1.AuthStaff.Commands.Logi
             var jwtSettings = _configuration.GetSection("JwtSettings");
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["SecretKey"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-            var expiration = DateTime.UtcNow.AddHours(2);
+            var expiration = DateTime.UtcNow.AddDays(30);
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
