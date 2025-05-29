@@ -14,13 +14,16 @@ OpsLink là hệ thống thông minh hỗ trợ vận hành toàn diện cho nh�
 
 ## 🌐 Các hệ thống thành phần và demo
 
+
+
 | Thành phần | Miêu tả | Liên kết | Hình ảnh Demo |
 |-----------|---------|----------|----------------|
-| **Customer Web** | Web khách hàng quét mã QR, đặt món, theo dõi đơn hàng | [Customer](https://pizzacapstone.io.vn/) | *(Chèn hình tại đây)* |
-| **QR Scanner (Pizza Service)** | Dịch vụ QR scanner cho khách đặt món nhanh chóng | [Pizza Service QR](https://pizza-user.vercel.app/qr-scanner) | *(Chèn hình tại đây)* |
-| **Manager Web** | Giao diện quản lý menu, bàn ăn, khu vực và nhân sự | [Manager](https://pizza-manager-2025.vercel.app/) | *(Chèn hình tại đây)* |
-| **Chef Web** | Giao diện bếp xem món, đánh dấu hoàn tất | [Chef](https://service-chef.vercel.app/) | *(Chèn hình tại đây)* |
-| **Staff Mobile** | Ứng dụng di động cho nhân viên phục vụ | [Staff App (GitHub)](https://github.com/MeoKool/Capstone-project-order-pizza-staff) | *(Chèn hình tại đây)* |
+| **Customer Web** | Web khách hàng quét mã QR, đặt món, theo dõi đơn hàng | [Customer](https://user.pizzacapstone.shop/e26ed13b-ebf1-45ab-ac1a-df07adbf33b9) | ![image](https://github.com/user-attachments/assets/c3e2d6e6-1a9b-4625-a35f-a2291c89501c) |
+| **Landing Page** | Website thương hiệu, đặt bàn, đặt lịch tham gia workshop | [Landing Page](https://pizzacapstone.shop/) | ![image](https://github.com/user-attachments/assets/07eeb093-fd4c-4377-be7f-dc320ff656da) |
+| **Manager Web** | Giao diện quản lý menu, bàn ăn, khu vực và nhân sự | [Manager](https://capstone-project-order-pizza-manager.vercel.app/) | ![image](https://github.com/user-attachments/assets/2cd28354-5989-4f27-ae75-d749cb726c95) |
+| **Chef Web** | Giao diện bếp xem món, đánh dấu hoàn tất | [Chef](https://service-chef.vercel.app/) | ![image](https://github.com/user-attachments/assets/7faf0159-1a55-4d2d-9e16-3746efcbc589) |
+| **Staff Web** | Giao diện xem món, đánh dấu hoàn tất phục vụ cho nhân viên | [Staff](https://service-chef.vercel.app/) | ![image](https://github.com/user-attachments/assets/fdb0e8cd-1249-43d6-8cb6-c9745cd676ca) |
+| **Staff Mobile** | Ứng dụng di động cho nhân viên phục vụ | [Staff App (GitHub)](https://github.com/MeoKool/Capstone-project-order-pizza-staff) | ![image](https://github.com/user-attachments/assets/e20b9cfe-de1c-40f0-83d9-972bb4393a50) |
 
 ---
 
@@ -89,19 +92,22 @@ OpsLink là hệ thống thông minh hỗ trợ vận hành toàn diện cho nh�
 ## 📸 Demo hình ảnh
 
 ### 🔹 Customer Web
-*(Chèn ảnh tại đây)*
+*(comming soon)*
 
-### 🔹 QR Scanner
-*(Chèn ảnh tại đây)*
+### 🔹 Landing Page
+*(comming soon)*
 
 ### 🔹 Manager Web
-*(Chèn ảnh tại đây)*
+*(comming soon)*
 
 ### 🔹 Chef Web
-*(Chèn ảnh tại đây)*
+*(comming soon)*
 
-### 🔹 Staff Mobile
-*(Chèn ảnh tại đây)*
+### 🔹 Staff Web
+*(comming soon)*
+
+### 🔹 Staff Mobile App
+*(comming soon)*
 
 ---
 
