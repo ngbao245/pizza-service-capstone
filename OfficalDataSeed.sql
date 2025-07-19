@@ -20,7 +20,42 @@ BEGIN TRY
     -- END
 	--------------------------------------------
 	-- Code here
+	
+	IF EXISTS (SELECT 1 FROM StaffZone)
+	BEGIN
+		DELETE FROM StaffZone;
+		PRINT N'Đã xóa dữ liệu bảng StaffZone.';
+	END
 
+	IF EXISTS (SELECT 1 FROM StaffZoneSchedule)
+	BEGIN
+		DELETE FROM StaffZoneSchedule;
+		PRINT N'Đã xóa dữ liệu bảng StaffZoneSchedule.';
+	END
+
+	IF EXISTS (SELECT 1 FROM SwapWorkingSlot)
+	BEGIN
+		DELETE FROM SwapWorkingSlot;
+		PRINT N'Đã xóa dữ liệu bảng SwapWorkingSlot.';
+	END
+
+	IF EXISTS (SELECT 1 FROM WorkingSlotRegister)
+	BEGIN
+		DELETE FROM WorkingSlotRegister;
+		PRINT N'Đã xóa dữ liệu bảng WorkingSlotRegister.';
+	END
+	
+	IF EXISTS (SELECT 1 FROM Staff)
+	BEGIN
+		DELETE FROM Staff;
+		PRINT N'Đã xóa dữ liệu bảng Staff.';
+	END
+
+	IF EXISTS (SELECT 1 FROM AppUsers)
+		BEGIN
+		DELETE FROM AppUsers;
+		PRINT N'Đã xóa dữ liệu bảng AppUsers.';
+	END
     --------------------------------------------
     -- SEED DỮ LIỆU MỚI
     --------------------------------------------
@@ -33,7 +68,8 @@ BEGIN TRY
     -- (NEWID(), N'Viền Pizza', N'Chọn loại viền', GETDATE(), NULL, 'undefined', NULL, 0, NULL, NULL);
 	--------------------------------------------
 	-- Code here
-
+	delete from [dbo].[Table]
+	delete from Zone
 	delete from OptionItem
 	delete from [dbo].[Option]
 	delete from OrderItemDetail
@@ -240,14 +276,14 @@ BEGIN TRY
 	   (@ingThitBoKebab, N'Thịt bò Kebab', N'Thịt bò ướp gia vị cay kiểu Trung Đông, nướng lửa than', GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
 	   (@ingThitBoLat, N'Thịt bò lát', N'Thịt bò ướp gia vị cay kiểu Trung Đông, nướng lửa than', GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
 	   (@ingBoKho, N'Thịt bò Khi', N'Thịt bò ướp gia vị cay kiểu Trung Đông, nướng lửa than', GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
-	   (@ingCarotHam, N'Bé Cà Rốt Đảm Đang', N'Thịt bò ướp gia vị cay kiểu Trung Đông, nướng lửa than', GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
-	   (@ingKale, N'Cải nè', N'Cá hồi tươi lát mỏng', GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	   (@ingCarotHam, N'Cà Rốt Nấu chảy', N'Cà Rốt Nấu chảy', GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	   (@ingKale, N'Cải Xoăn', N'Cải Xoăn', GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
 	   (@ingCapers, N'Nụ Bạch Hoa', N'Tôm tươi bóc vỏ', GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
-	   (@ingOliveSauce, N'Dầu ớt trộn ô liu ', N'Mực cắt khoanh hấp dẫn', GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
-	   (@ingMushroomEnoki, N' Nấm mập', N'Mực cắt khoanh hấp dẫn', GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
-	   (@ingMushroomShiitake, N'Nấm to', N'Mực cắt khoanh hấp dẫn', GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
-	   (@ingMushroomButton, N'Nấm to hơn', N'Mực cắt khoanh hấp dẫn', GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
-	   (@ingMushroomPortobello, N'Nấm nhỏ xíu', N'Mực cắt khoanh hấp dẫn', GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	   (@ingOliveSauce, N'Dầu ớt trộn ô liu ', N'Dầu ớt trộn ô liu', GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	   (@ingMushroomEnoki, N' Nấm mập Enoki', N'Nấm mập Enoki', GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	   (@ingMushroomShiitake, N'Nấm to Shiitake', N'Nấm to Shiitake', GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	   (@ingMushroomButton, N'Nấm to hơn', N'Nấm to hơn', GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	   (@ingMushroomPortobello, N'Nấm nhỏ xíu', N'Nấm nhỏ xíu', GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
 	   (@ingBoLaLot, N'Bò nướng lá lốt', N'Thịt bò băm nướng gói trong lá lốt truyền thống Việt Nam', GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
 	   (@ingOtHiem, N'Ớt hiểm', N'Ớt hiểm cay nồng tăng hương vị đặc trưng', GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
 	   (@ingMoHanh, N'Mỡ hành', N'Mỡ hành béo thơm đậm chất Việt', GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
@@ -269,8 +305,7 @@ BEGIN TRY
 	(@dessertCategoryId, N'Món tráng miệng', N'Danh mục cho Món tráng miệng & các món ăn chính', GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
 	
 	-- @appetizersCategoryId
-
-    DECLARE @productId1 UNIQUEIDENTIFIER = NEWID();
+	    DECLARE @productId1 UNIQUEIDENTIFIER = NEWID();
 	INSERT INTO Product([Id], [Name], [Description], [Price], [Image], [ImageUrl], [ImagePublicId], [CategoryId], [ProductType], [CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy], [IsDeleted], [DeletedAt], [DeletedBy]) 
 	VALUES
 	(@productId1, N'Các loại phô mai nhà làm', N'Mô tả đang cập nhật', 109000, NULL, 'https://pizza4ps.com/wp-content/uploads/2023/07/BYO_Assorted-Cheese_L-2-scaled.jpg', NULL, @appetizersCategoryId, 0, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
@@ -1663,7 +1698,7 @@ VALUES
 	DECLARE @productId40 UNIQUEIDENTIFIER = NEWID();
 	INSERT INTO Product ([Id], [Name], [Description], [Price], [Image], [ImageUrl], [ImagePublicId], [CategoryId], [ProductType], [CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy], [IsDeleted], [DeletedAt], [DeletedBy])
 	VALUES
-	(@productId40, N'Pizza Cà ri gà cay xé quần', N'Mô tả đang cập nhật', 218000, NULL, 'https://pizza4ps.com/wp-content/uploads/2023/08/DSC04135.jpg', NULL, @pizzaCategoryId, 1, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+	(@productId40, N'Pizza Cà ri gà cay', N'Mô tả đang cập nhật', 218000, NULL, 'https://pizza4ps.com/wp-content/uploads/2023/08/DSC04135.jpg', NULL, @pizzaCategoryId, 1, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
 
 	DECLARE @optionId401 UNIQUEIDENTIFIER = NEWID();
 	DECLARE @optionId402 UNIQUEIDENTIFIER = NEWID();
@@ -2187,7 +2222,2060 @@ VALUES
 	(NEWID(), @productSizeIdM, @ingMamNemSauRieng, N'Mắm nêm sầu riêng', 6, 1.5, GETDATE(), N'Admin', 0),
 	(NEWID(), @productSizeIdM, @ingHanhPhi, N'Hành phi', 4, 1.5, GETDATE(), N'Admin', 0);
 
+		-- Create new category for Drinks
+	DECLARE @drinkCategoryId UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO Category ([Id], [Name], [Description], [CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy], [IsDeleted], [DeletedAt], [DeletedBy])
+	VALUES
+	(@drinkCategoryId, N'Thức uống', N'Danh mục cho các loại đồ uống', GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
 
+	-- Drink 1: Trà Vải Hồng Trà
+	DECLARE @productIdD1 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO Product ([Id], [Name], [Description], [Price], [Image], [ImageUrl], [ImagePublicId], [CategoryId], [ProductType], [CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy], [IsDeleted], [DeletedAt], [DeletedBy])
+	VALUES
+	(@productIdD1, N'Trà Vải Hồng Trà', N'Trà đen đậm vị kết hợp với vải tươi mát lạnh', 58000, NULL, NULL, NULL, @drinkCategoryId, 2, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	DECLARE @optionIdD11 UNIQUEIDENTIFIER = NEWID();
+	DECLARE @optionIdD12 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Option] ([Id], [Name], [Description], [ProductId], [CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy], [IsDeleted], [DeletedAt], [DeletedBy])
+	VALUES
+	(@optionIdD11, N'Chọn lượng đá', N'Tùy chỉnh lượng đá trong ly', @productIdD1, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(@optionIdD12, N'Chọn lượng đường', N'Tùy chỉnh độ ngọt của thức uống', @productIdD1, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	INSERT INTO OptionItem ([Id], [Name], [AdditionalPrice], [OptionId], [CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy], [IsDeleted], [DeletedAt], [DeletedBy])
+	VALUES
+	(NEWID(), N'Ít đá', 0, @optionIdD11, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Vừa đá', 0, @optionIdD11, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Nhiều đá', 0, @optionIdD11, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Không đường', 0, @optionIdD12, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Ít đường', 0, @optionIdD12, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Vừa ngọt', 0, @optionIdD12, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	-- Drink 2: Soda Chanh Dây
+	DECLARE @productIdD2 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO Product ([Id], [Name], [Description], [Price], [Image], [ImageUrl], [ImagePublicId], [CategoryId], [ProductType], [CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy], [IsDeleted], [DeletedAt], [DeletedBy])
+	VALUES
+	(@productIdD2, N'Soda Chanh Dây', N'Soda tươi kết hợp vị chanh dây chua ngọt tự nhiên', 52000, NULL, 'https://www.pjscoffee.com/uploads/green-tea-mojito.png', NULL, @drinkCategoryId, 2, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	DECLARE @optionIdD21 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Option] ([Id], [Name], [Description], [ProductId], [CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy], [IsDeleted], [DeletedAt], [DeletedBy])
+	VALUES
+	(@optionIdD21, N'Topping thêm', N'Thêm topping cho thức uống của bạn', @productIdD2, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	INSERT INTO OptionItem ([Id], [Name], [AdditionalPrice], [OptionId], [CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy], [IsDeleted], [DeletedAt], [DeletedBy])
+	VALUES
+	(NEWID(), N'Thêm trân châu trắng', 8000, @optionIdD21, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Thêm thạch nha đam', 7000, @optionIdD21, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Thêm thạch trái cây', 9000, @optionIdD21, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	-- Drink 3: Cold Brew Cà Phê Cam Sả
+DECLARE @productIdD3 UNIQUEIDENTIFIER = NEWID();
+INSERT INTO Product ([Id], [Name], [Description], [Price], [Image], [ImageUrl], [ImagePublicId], [CategoryId], [ProductType], [CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy], [IsDeleted], [DeletedAt], [DeletedBy])
+VALUES
+(@productIdD3, N'Cold Brew Cà Phê Cam Sả', N'Cà phê Cold Brew ủ lạnh cùng cam tươi và sả thơm dịu', 65000, NULL, 'https://www.pjscoffee.com/uploads/peach-palmer-tea_112900.png', NULL, @drinkCategoryId, 2, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+DECLARE @optionIdD31 UNIQUEIDENTIFIER = NEWID();
+DECLARE @optionIdD32 UNIQUEIDENTIFIER = NEWID();
+INSERT INTO [Option] ([Id], [Name], [Description], [ProductId], [CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy], [IsDeleted], [DeletedAt], [DeletedBy])
+VALUES
+(@optionIdD31, N'Độ đậm cà phê', N'Tùy chọn độ mạnh của cà phê', @productIdD3, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+(@optionIdD32, N'Thêm topping', N'Topping thêm vào thức uống của bạn', @productIdD3, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+INSERT INTO OptionItem ([Id], [Name], [AdditionalPrice], [OptionId], [CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy], [IsDeleted], [DeletedAt], [DeletedBy])
+VALUES
+(NEWID(), N'Vừa', 0, @optionIdD31, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+(NEWID(), N'Đậm', 0, @optionIdD31, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+(NEWID(), N'Rất đậm', 5000, @optionIdD31, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+(NEWID(), N'Thêm lát cam', 5000, @optionIdD32, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+(NEWID(), N'Thêm sả tươi', 3000, @optionIdD32, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	-- Drink 4: Matcha Sữa Đậu Nành
+	DECLARE @productIdD4 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO Product ([Id], [Name], [Description], [Price], [Image], [ImageUrl], [ImagePublicId], [CategoryId], [ProductType], [CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy], [IsDeleted], [DeletedAt], [DeletedBy])
+	VALUES
+	(@productIdD4, N'Matcha Sữa Đậu Nành', N'Matcha Nhật Bản kết hợp với sữa đậu nành nguyên chất', 62000, NULL, NULL, NULL, @drinkCategoryId, 2, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	DECLARE @optionIdD41 UNIQUEIDENTIFIER = NEWID();
+	DECLARE @optionIdD42 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Option] ([Id], [Name], [Description], [ProductId], [CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy], [IsDeleted], [DeletedAt], [DeletedBy])
+	VALUES
+	(@optionIdD41, N'Loại sữa', N'Chọn loại sữa cho món Matcha', @productIdD4, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(@optionIdD42, N'Độ ngọt', N'Chọn độ ngọt yêu thích', @productIdD4, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	INSERT INTO OptionItem ([Id], [Name], [AdditionalPrice], [OptionId], [CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy], [IsDeleted], [DeletedAt], [DeletedBy])
+	VALUES
+	(NEWID(), N'Sữa đậu nành nguyên chất', 0, @optionIdD41, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Sữa hạnh nhân', 8000, @optionIdD41, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Không đường', 0, @optionIdD42, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Ít ngọt', 0, @optionIdD42, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Ngọt vừa', 0, @optionIdD42, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	-- Pasta 1: Mì Ý bò bằm sốt cà chua
+	DECLARE @productIdP1 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO Product ([Id], [Name], [Description], [Price], [Image], [ImageUrl], [ImagePublicId], [CategoryId], [ProductType], [CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy], [IsDeleted], [DeletedAt], [DeletedBy])
+	VALUES
+	(@productIdP1, N'Mì Ý bò bằm sốt cà chua', N'Mì Ý truyền thống với sốt cà chua và thịt bò bằm', 168000, NULL, 'https://static.wixstatic.com/media/af2956_7d34fa50218148a8b46870e72084ebad~mv2.jpg/v1/fill/w_232,h_232,usm_1.20_1.00_0.01/file.webp', NULL, @pastaCategoryId, 1, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+	-- Option: Loại mì
+	DECLARE @optionId_PastaType UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Option] VALUES
+	(@optionId_PastaType, N'Loại mì', N'Chọn loại mì yêu thích', @productIdP1, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL, 0);
+
+	INSERT INTO OptionItem VALUES
+	(NEWID(), N'Spaghetti', 0, @optionId_PastaType, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Penne', 0, @optionId_PastaType, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Fettuccine', 0, @optionId_PastaType, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	-- Option: Khẩu phần
+	DECLARE @optionId_Portion UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Option] VALUES
+	(@optionId_Portion, N'Khẩu phần', N'Chọn khẩu phần phù hợp', @productIdP1, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL, 0);
+
+	INSERT INTO OptionItem VALUES
+	(NEWID(), N'1 người', 0, @optionId_Portion, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Gia đình', 65000, @optionId_Portion, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	-- Option: Món ăn kèm
+	DECLARE @optionId_SideDish UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Option] VALUES
+	(@optionId_SideDish, N'Món ăn kèm', N'Tùy chọn món ăn kèm với món chính', @productIdP1, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL, 1);
+
+	INSERT INTO OptionItem VALUES
+	(NEWID(), N'Không thêm món kèm', 0, @optionId_SideDish, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Bánh mì bơ tỏi', 18000, @optionId_SideDish, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Salad trộn nhỏ', 25000, @optionId_SideDish, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+
+
+	-- Pasta 2: Pasta kem nấm và phô mai
+	DECLARE @productIdP2 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO Product ([Id], [Name], [Description], [Price], [Image], [ImageUrl], [ImagePublicId], [CategoryId], [ProductType], [CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy], [IsDeleted], [DeletedAt], [DeletedBy])
+	VALUES
+	(@productIdP2, N'Pasta kem nấm và phô mai', N'Món ăn chay với sốt kem nấm béo nhẹ và phô mai Parmesan', 178000, NULL, 'https://static.wixstatic.com/media/af2956_f180c93e3d8f441792f99b9ba90076bc~mv2.jpg/v1/fill/w_232,h_232,usm_1.20_1.00_0.01/file.webp', NULL, @pastaCategoryId, 1, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+		-- Option: Loại mì
+	DECLARE @optionId_PastaType_P2 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Option] VALUES
+	(@optionId_PastaType_P2, N'Loại mì', N'Chọn loại mì phù hợp với món sốt kem nấm', @productIdP2, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL, 0);
+
+	INSERT INTO OptionItem VALUES
+	(NEWID(), N'Spaghetti', 0, @optionId_PastaType_P2, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Fettuccine', 0, @optionId_PastaType_P2, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Tagliatelle', 0, @optionId_PastaType_P2, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	-- Option: Khẩu phần
+	DECLARE @optionId_Portion_P2 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Option] VALUES
+	(@optionId_Portion_P2, N'Khẩu phần', N'Chọn khẩu phần theo nhu cầu', @productIdP2, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL, 0);
+
+	INSERT INTO OptionItem VALUES
+	(NEWID(), N'1 người', 0, @optionId_Portion_P2, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Gia đình', 68000, @optionId_Portion_P2, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	-- Option: Món ăn kèm
+	DECLARE @optionId_SideDish_P2 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Option] VALUES
+	(@optionId_SideDish_P2, N'Món ăn kèm', N'Chọn thêm món phụ nếu bạn muốn', @productIdP2, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL, 1);
+
+	INSERT INTO OptionItem VALUES
+	(NEWID(), N'Không thêm món kèm', 0, @optionId_SideDish_P2, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Bánh mì bơ tỏi', 18000, @optionId_SideDish_P2, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Salad trộn nhỏ', 25000, @optionId_SideDish_P2, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+
+	-- Pasta 3: Pasta gà Teriyaki xốt tiêu đen
+	DECLARE @productIdP3 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO Product ([Id], [Name], [Description], [Price], [Image], [ImageUrl], [ImagePublicId], [CategoryId], [ProductType], [CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy], [IsDeleted], [DeletedAt], [DeletedBy])
+	VALUES
+	(@productIdP3, N'Pasta gà Teriyaki xốt tiêu đen', N'Sự kết hợp giữa hương vị Á - Âu: gà Teriyaki và sốt tiêu đen', 185000, NULL, 'https://pizza4ps.com/wp-content/uploads/2023/07/20000057_2.jpg', NULL, @pastaCategoryId, 1, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+		-- Option: Loại mì
+	DECLARE @optionId_PastaType_P3 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Option] VALUES
+	(@optionId_PastaType_P3, N'Loại mì', N'Chọn loại mì phù hợp với món Teriyaki', @productIdP3, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL, 0);
+
+	INSERT INTO OptionItem VALUES
+	(NEWID(), N'Spaghetti', 0, @optionId_PastaType_P3, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Fettuccine', 0, @optionId_PastaType_P3, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Udon', 0, @optionId_PastaType_P3, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	-- Option: Khẩu phần
+	DECLARE @optionId_Portion_P3 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Option] VALUES
+	(@optionId_Portion_P3, N'Khẩu phần', N'Chọn khẩu phần theo nhu cầu', @productIdP3, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL, 0);
+
+	INSERT INTO OptionItem VALUES
+	(NEWID(), N'1 người', 0, @optionId_Portion_P3, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Gia đình', 70000, @optionId_Portion_P3, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	-- Option: Mức độ cay
+	DECLARE @optionId_SpiceLevel_P3 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Option] VALUES
+	(@optionId_SpiceLevel_P3, N'Mức độ cay', N'Tùy chỉnh độ cay theo khẩu vị', @productIdP3, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL, 0);
+
+	INSERT INTO OptionItem VALUES
+	(NEWID(), N'Không cay', 0, @optionId_SpiceLevel_P3, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Cay vừa', 0, @optionId_SpiceLevel_P3, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Cay nhiều', 0, @optionId_SpiceLevel_P3, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+
+
+	-- Pasta 4: Mì Ý chay rau củ Đà Lạt
+	DECLARE @productIdP4 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO Product ([Id], [Name], [Description], [Price], [Image], [ImageUrl], [ImagePublicId], [CategoryId], [ProductType], [CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy], [IsDeleted], [DeletedAt], [DeletedBy])
+	VALUES
+	(@productIdP4, N'Mì Ý chay rau củ Đà Lạt', N'Mì Ý với rau củ tươi từ Đà Lạt và sốt cà chua đặc biệt', 158000, NULL, 'https://pizza4ps.com/wp-content/uploads/2023/07/20200016_2.jpg', NULL, @pastaCategoryId, 1, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	-- Option: Loại mì
+	DECLARE @optionId_PastaType_P4 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Option] VALUES
+	(@optionId_PastaType_P4, N'Loại mì', N'Chọn loại mì phù hợp với rau củ Đà Lạt', @productIdP4, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL, 0);
+
+	INSERT INTO OptionItem VALUES
+	(NEWID(), N'Spaghetti', 0, @optionId_PastaType_P4, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Penne', 0, @optionId_PastaType_P4, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Fusilli', 0, @optionId_PastaType_P4, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	-- Option: Khẩu phần
+	DECLARE @optionId_Portion_P4 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Option] VALUES
+	(@optionId_Portion_P4, N'Khẩu phần', N'Chọn khẩu phần theo nhu cầu', @productIdP4, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL, 0);
+
+	INSERT INTO OptionItem VALUES
+	(NEWID(), N'1 người', 0, @optionId_Portion_P4, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Gia đình', 60000, @optionId_Portion_P4, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	-- Option: Món ăn kèm
+	DECLARE @optionId_SideDish_P4 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Option] VALUES
+	(@optionId_SideDish_P4, N'Món ăn kèm', N'Tùy chọn món phụ kèm theo món chay', @productIdP4, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL, 1);
+
+	INSERT INTO OptionItem VALUES
+	(NEWID(), N'Không thêm món kèm', 0, @optionId_SideDish_P4, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Bánh mì bơ tỏi', 18000, @optionId_SideDish_P4, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Salad trộn nhỏ', 25000, @optionId_SideDish_P4, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+
+	-- Pasta 5: Pasta Tôm Sốt Cay Kiểu Cajun
+	DECLARE @productIdP5 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO Product ([Id], [Name], [Description], [Price], [Image], [ImageUrl], [ImagePublicId], [CategoryId], [ProductType], [CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy], [IsDeleted], [DeletedAt], [DeletedBy])
+	VALUES
+	(@productIdP5, N'Pasta Tôm Sốt Cay Kiểu Cajun', N'Tôm tươi xào sốt cay Cajun, đậm đà và hấp dẫn', 198000, NULL, 'https://pizza4ps.com/wp-content/uploads/2023/07/20200001_2.jpg', NULL, @pastaCategoryId, 1, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	-- Option: Loại mì
+	DECLARE @optionId_PastaType_P5 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Option] VALUES
+	(@optionId_PastaType_P5, N'Loại mì', N'Chọn loại mì phù hợp với sốt Cajun', @productIdP5, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL, 0);
+
+	INSERT INTO OptionItem VALUES
+	(NEWID(), N'Fettuccine', 0, @optionId_PastaType_P5, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Penne', 0, @optionId_PastaType_P5, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Linguine', 0, @optionId_PastaType_P5, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	-- Option: Khẩu phần
+	DECLARE @optionId_Portion_P5 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Option] VALUES
+	(@optionId_Portion_P5, N'Khẩu phần', N'Chọn khẩu phần theo nhu cầu', @productIdP5, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL, 0);
+
+	INSERT INTO OptionItem VALUES
+	(NEWID(), N'1 người', 0, @optionId_Portion_P5, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Gia đình', 75000, @optionId_Portion_P5, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	-- Option: Mức độ cay
+	DECLARE @optionId_SpiceLevel_P5 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Option] VALUES
+	(@optionId_SpiceLevel_P5, N'Mức độ cay', N'Chọn độ cay phù hợp với khẩu vị', @productIdP5, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL, 0);
+
+	INSERT INTO OptionItem VALUES
+	(NEWID(), N'Ít cay', 0, @optionId_SpiceLevel_P5, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Cay vừa', 0, @optionId_SpiceLevel_P5, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Cay nhiều', 0, @optionId_SpiceLevel_P5, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	-- Pasta 6: Mì Ý Xốt Pesto Rau Húng Quế
+	DECLARE @productIdP6 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO Product ([Id], [Name], [Description], [Price], [Image], [ImageUrl], [ImagePublicId], [CategoryId], [ProductType], [CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy], [IsDeleted], [DeletedAt], [DeletedBy])
+	VALUES
+	(@productIdP6, N'Mì Ý Xốt Pesto Rau Húng Quế', N'Sốt pesto tươi kết hợp với phô mai Parmesan và hạt thông', 175000, NULL, 'https://pizza4ps.com/wp-content/uploads/2023/07/20200003_2.jpg', NULL, @pastaCategoryId, 1, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+
+	-- Option: Loại mì
+	DECLARE @optionId_PastaType_P6 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Option] VALUES
+	(@optionId_PastaType_P6, N'Loại mì', N'Chọn loại mì yêu thích cùng sốt pesto', @productIdP6, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL, 0);
+
+	INSERT INTO OptionItem VALUES
+	(NEWID(), N'Spaghetti', 0, @optionId_PastaType_P6, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Fusilli', 0, @optionId_PastaType_P6, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Linguine', 0, @optionId_PastaType_P6, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	-- Option: Khẩu phần
+	DECLARE @optionId_Portion_P6 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Option] VALUES
+	(@optionId_Portion_P6, N'Khẩu phần', N'Chọn khẩu phần theo nhu cầu', @productIdP6, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL, 0);
+
+	INSERT INTO OptionItem VALUES
+	(NEWID(), N'1 người', 0, @optionId_Portion_P6, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Gia đình', 68000, @optionId_Portion_P6, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	-- Option: Món ăn kèm
+	DECLARE @optionId_SideDish_P6 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Option] VALUES
+	(@optionId_SideDish_P6, N'Món ăn kèm', N'Tùy chọn món phụ kèm theo món pesto', @productIdP6, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL, 1);
+
+	INSERT INTO OptionItem VALUES
+	(NEWID(), N'Không thêm món kèm', 0, @optionId_SideDish_P6, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Bánh mì bơ tỏi', 18000, @optionId_SideDish_P6, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Salad trộn nhỏ', 25000, @optionId_SideDish_P6, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	-- Pasta 7: Pasta Hải Sản Xốt Kem Chanh
+	DECLARE @productIdP7 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO Product ([Id], [Name], [Description], [Price], [Image], [ImageUrl], [ImagePublicId], [CategoryId], [ProductType], [CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy], [IsDeleted], [DeletedAt], [DeletedBy])
+	VALUES
+	(@productIdP7, N'Pasta Hải Sản Xốt Kem Chanh', N'Tôm, mực và nghêu hòa quyện cùng sốt kem chanh tươi', 215000, NULL, 'https://pizza4ps.com/wp-content/uploads/2023/07/20200015_2.jpg', NULL, @pastaCategoryId, 1, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	-- Option: Loại mì
+	DECLARE @optionId_PastaType_P7 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Option] VALUES
+	(@optionId_PastaType_P7, N'Loại mì', N'Chọn loại mì phù hợp với sốt kem chanh', @productIdP7, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL, 0);
+
+	INSERT INTO OptionItem VALUES
+	(NEWID(), N'Spaghetti', 0, @optionId_PastaType_P7, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Tagliatelle', 0, @optionId_PastaType_P7, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Fettuccine', 0, @optionId_PastaType_P7, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	-- Option: Khẩu phần
+	DECLARE @optionId_Portion_P7 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Option] VALUES
+	(@optionId_Portion_P7, N'Khẩu phần', N'Chọn khẩu phần theo nhu cầu', @productIdP7, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL, 0);
+
+	INSERT INTO OptionItem VALUES
+	(NEWID(), N'1 người', 0, @optionId_Portion_P7, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Gia đình', 72000, @optionId_Portion_P7, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	-- Option: Món ăn kèm
+	DECLARE @optionId_SideDish_P7 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Option] VALUES
+	(@optionId_SideDish_P7, N'Món ăn kèm', N'Tùy chọn món phụ kèm theo món hải sản', @productIdP7, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL, 1);
+
+	INSERT INTO OptionItem VALUES
+	(NEWID(), N'Không thêm món kèm', 0, @optionId_SideDish_P7, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Bánh mì bơ tỏi', 18000, @optionId_SideDish_P7, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Salad trộn nhỏ', 25000, @optionId_SideDish_P7, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+
+	-- Pasta 8: Mì Ý Sốt Cà Chua Nướng & Phô Mai Burrata
+	DECLARE @productIdP8 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO Product ([Id], [Name], [Description], [Price], [Image], [ImageUrl], [ImagePublicId], [CategoryId], [ProductType], [CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy], [IsDeleted], [DeletedAt], [DeletedBy])
+	VALUES
+	(@productIdP8, N'Mì Ý Sốt Cà Chua Nướng & Phô Mai Burrata', N'Cà chua nướng thơm lừng cùng Burrata béo ngậy tan chảy', 205000, NULL, 'https://pizza4ps.com/wp-content/uploads/2023/08/Smoked-Burrata-Bolo-5.jpg', NULL, @pastaCategoryId, 1, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	-- Option: Loại mì
+	DECLARE @optionId_PastaType_P8 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Option] VALUES
+	(@optionId_PastaType_P8, N'Loại mì', N'Thử nghiệm các loại mì độc đáo cùng Burrata', @productIdP8, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL, 0);
+
+	INSERT INTO OptionItem VALUES
+	(NEWID(), N'Conchiglie (vỏ sò)', 0, @optionId_PastaType_P8, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Orecchiette (tai nhỏ)', 0, @optionId_PastaType_P8, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Trofie (xoắn)', 0, @optionId_PastaType_P8, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	-- Option: Khẩu phần
+	DECLARE @optionId_Portion_P8 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Option] VALUES
+	(@optionId_Portion_P8, N'Khẩu phần', N'Chọn khẩu phần theo nhu cầu', @productIdP8, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL, 0);
+
+	INSERT INTO OptionItem VALUES
+	(NEWID(), N'1 người', 0, @optionId_Portion_P8, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Gia đình', 72000, @optionId_Portion_P8, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	-- Option: Món ăn kèm
+	DECLARE @optionId_SideDish_P8 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Option] VALUES
+	(@optionId_SideDish_P8, N'Món ăn kèm', N'Tùy chọn món phụ kèm theo Burrata', @productIdP8, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL, 1);
+
+	INSERT INTO OptionItem VALUES
+	(NEWID(), N'Không thêm món kèm', 0, @optionId_SideDish_P8, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Bánh mì bơ tỏi', 18000, @optionId_SideDish_P8, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Salad trộn nhỏ', 25000, @optionId_SideDish_P8, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+-- Pasta: Bò Hun Khói Kiểu Texas & Sốt Kem Tỏi Đen
+	DECLARE @productIdPastaHeavy UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO Product ([Id], [Name], [Description], [Price], [Image], [ImageUrl], [ImagePublicId], [CategoryId], [ProductType],
+						 [CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy], [IsDeleted], [DeletedAt], [DeletedBy])
+	VALUES
+	(@productIdPastaHeavy, 
+	 N'Pasta Bò Hun Khói Kiểu Texas & Sốt Kem Tỏi Đen', 
+	 N'Bò hun khói kiểu Texas kết hợp với sốt kem tỏi đen đậm đà, phủ phô mai Parmesan và hành phi.', 
+	 198000, NULL, 'https://pizza4ps.com/wp-content/uploads/2023/07/20210013_2.jpg', NULL, @pastaCategoryId, 1, 
+	 GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	 -- Option: Loại mì
+	DECLARE @optionId_PastaType_Heavy UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Option] VALUES
+	(@optionId_PastaType_Heavy, N'Loại mì', N'Chọn loại mì phù hợp với sốt kem tỏi đen', @productIdPastaHeavy, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL, 0);
+
+	-- Option Items: Pasta Type
+	INSERT INTO OptionItem VALUES
+	(NEWID(), N'Rigatoni', 0, @optionId_PastaType_Heavy, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Pappardelle', 5000, @optionId_PastaType_Heavy, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Fusilli', 0, @optionId_PastaType_Heavy, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	-- Option: Khẩu phần
+	DECLARE @optionId_Portion_Heavy UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Option] VALUES
+	(@optionId_Portion_Heavy, N'Khẩu phần', N'Chọn khẩu phần theo nhu cầu', @productIdPastaHeavy, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL, 0);
+
+	-- Option Items: Portion Size
+	INSERT INTO OptionItem VALUES
+	(NEWID(), N'1 người', 0, @optionId_Portion_Heavy, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'2 người', 60000, @optionId_Portion_Heavy, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Gia đình', 120000, @optionId_Portion_Heavy, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	-- Option: Mức độ cay
+	DECLARE @optionId_Spice_Heavy UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Option] VALUES
+	(@optionId_Spice_Heavy, N'Mức độ cay', N'Lựa chọn độ cay theo khẩu vị', @productIdPastaHeavy, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL, 0);
+
+	-- Option Items: Spice Levels
+	INSERT INTO OptionItem VALUES
+	(NEWID(), N'Không cay', 0, @optionId_Spice_Heavy, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Cay nhẹ', 0, @optionId_Spice_Heavy, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Cay vừa', 0, @optionId_Spice_Heavy, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Cay nhiều', 0, @optionId_Spice_Heavy, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	-- Option: Topping thêm
+	DECLARE @optionId_Toppings_Heavy UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Option] VALUES
+	(@optionId_Toppings_Heavy, N'Topping thêm', N'Tùy chọn thêm topping để tăng hương vị', @productIdPastaHeavy, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL, 1);
+
+	-- Option Items: Extra Toppings
+	INSERT INTO OptionItem VALUES
+	(NEWID(), N'Phô mai Parmesan thêm', 15000, @optionId_Toppings_Heavy, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Thịt xông khói giòn', 20000, @optionId_Toppings_Heavy, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Hành phi giòn', 10000, @optionId_Toppings_Heavy, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Ớt Jalapeño', 10000, @optionId_Toppings_Heavy, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Nấm xào bơ tỏi', 15000, @optionId_Toppings_Heavy, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	-- Option: Món ăn kèm
+	DECLARE @optionId_SideDish_Heavy UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Option] VALUES
+	(@optionId_SideDish_Heavy, N'Món ăn kèm', N'Tùy chọn món phụ kèm theo pasta', @productIdPastaHeavy, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL, 1);
+
+	-- Option Items: Side Dishes
+	INSERT INTO OptionItem VALUES
+	(NEWID(), N'Không thêm món kèm', 0, @optionId_SideDish_Heavy, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Bánh mì bơ tỏi', 18000, @optionId_SideDish_Heavy, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Salad rocket & cà chua bi', 35000, @optionId_SideDish_Heavy, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Khoai tây đút lò phô mai', 38000, @optionId_SideDish_Heavy, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+
+		-- Trà Đào Cam Sả (Drink)
+	DECLARE @productId_TraDao UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO Product ([Id], [Name], [Description], [Price], [Image], [ImageUrl], [ImagePublicId], [CategoryId], [ProductType], 
+						 [CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy], [IsDeleted], [DeletedAt], [DeletedBy])
+	VALUES
+	(@productId_TraDao, N'Trà Đào Cam Sả', N'Trà đào cam sả tươi mát, giải nhiệt hoàn hảo', 49000, NULL, 'https://minio.thecoffeehouse.com/image/admin/1737356708_tra-den-macchiato_400x400.png', NULL, @drinkCategoryId, 0,
+	 GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	-- Options for Trà Đào Cam Sả
+	DECLARE @optionId_Size UNIQUEIDENTIFIER = NEWID();
+	DECLARE @optionId_Ice UNIQUEIDENTIFIER = NEWID();
+	DECLARE @optionId_Sugar UNIQUEIDENTIFIER = NEWID();
+
+	INSERT INTO [Option] ([Id], [Name], [Description], [ProductId], [CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy], [IsDeleted], [DeletedAt], [DeletedBy])
+	VALUES
+	(@optionId_Size, N'Chọn size', N'Chọn kích cỡ phù hợp với bạn', @productId_TraDao, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(@optionId_Ice, N'Chọn đá', N'Điều chỉnh lượng đá theo ý thích', @productId_TraDao, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(@optionId_Sugar, N'Chọn độ ngọt', N'Tùy chỉnh độ ngọt phù hợp khẩu vị', @productId_TraDao, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	-- Option Items for Size
+	INSERT INTO OptionItem ([Id], [Name], [AdditionalPrice], [OptionId], [CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy], [IsDeleted], [DeletedAt], [DeletedBy])
+	VALUES
+	(NEWID(), N'S (Nhỏ)', 0, @optionId_Size, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'M (Vừa)', 5000, @optionId_Size, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'L (Lớn)', 10000, @optionId_Size, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	-- Option Items for Ice
+	INSERT INTO OptionItem ([Id], [Name], [AdditionalPrice], [OptionId], [CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy], [IsDeleted], [DeletedAt], [DeletedBy])
+	VALUES
+	(NEWID(), N'Không đá', 0, @optionId_Ice, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Ít đá', 0, @optionId_Ice, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Nhiều đá', 0, @optionId_Ice, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	-- Option Items for Sugar
+	INSERT INTO OptionItem ([Id], [Name], [AdditionalPrice], [OptionId], [CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy], [IsDeleted], [DeletedAt], [DeletedBy])
+	VALUES
+	(NEWID(), N'0% đường', 0, @optionId_Sugar, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'50% đường', 0, @optionId_Sugar, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'100% đường', 0, @optionId_Sugar, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	-- Nước Ép Dứa Bạc Hà (Drink)
+	DECLARE @productId_PineappleMint UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO Product ([Id], [Name], [Description], [Price], [Image], [ImageUrl], [ImagePublicId], [CategoryId], [ProductType],
+						 [CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy], [IsDeleted], [DeletedAt], [DeletedBy])
+	VALUES
+	(@productId_PineappleMint, N'Nước Ép Dứa Bạc Hà', N'Nước ép dứa tươi mát kết hợp với bạc hà sảng khoái', 55000, NULL, 'https://minio.thecoffeehouse.com/image/admin/1737355612_tx-latte_400x400.png', NULL, @drinkCategoryId, 0,
+	 GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	-- Options for Nước Ép Dứa Bạc Hà
+	DECLARE @optionId_Size2 UNIQUEIDENTIFIER = NEWID();
+	DECLARE @optionId_Ice2 UNIQUEIDENTIFIER = NEWID();
+
+	INSERT INTO [Option] ([Id], [Name], [Description], [ProductId], [CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy], [IsDeleted], [DeletedAt], [DeletedBy])
+	VALUES
+	(@optionId_Size2, N'Chọn size', N'Chọn kích thước phù hợp', @productId_PineappleMint, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(@optionId_Ice2, N'Chọn lượng đá', N'Chọn theo sở thích của bạn', @productId_PineappleMint, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	-- Option Items for Size
+	INSERT INTO OptionItem ([Id], [Name], [AdditionalPrice], [OptionId], [CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy], [IsDeleted], [DeletedAt], [DeletedBy])
+	VALUES
+	(NEWID(), N'M (Vừa)', 0, @optionId_Size2, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'L (Lớn)', 7000, @optionId_Size2, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	-- Option Items for Ice
+	INSERT INTO OptionItem ([Id], [Name], [AdditionalPrice], [OptionId], [CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy], [IsDeleted], [DeletedAt], [DeletedBy])
+	VALUES
+	(NEWID(), N'Không đá', 0, @optionId_Ice2, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Ít đá', 0, @optionId_Ice2, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Bình thường', 0, @optionId_Ice2, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	-- Soda Việt Quất (Drink)
+	DECLARE @productId_BlueberrySoda UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO Product ([Id], [Name], [Description], [Price], [Image], [ImageUrl], [ImagePublicId], [CategoryId], [ProductType],
+						 [CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy], [IsDeleted], [DeletedAt], [DeletedBy])
+	VALUES
+	(@productId_BlueberrySoda, N'Soda Việt Quất', N'Nước soda mát lạnh kết hợp hương vị việt quất ngọt ngào', 59000, NULL, 'https://cdn.prod.website-files.com/63ec4e0b737eeedb47aa6170/64834a50e7f134164e1b4aff_Untitled%20design%20(49)-p-500.png', NULL, @drinkCategoryId, 0,
+	 GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	-- Options for Soda Việt Quất
+	DECLARE @optionId_Size3 UNIQUEIDENTIFIER = NEWID();
+	DECLARE @optionId_Ice3 UNIQUEIDENTIFIER = NEWID();
+
+	INSERT INTO [Option] ([Id], [Name], [Description], [ProductId], [CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy], [IsDeleted], [DeletedAt], [DeletedBy])
+	VALUES
+	(@optionId_Size3, N'Chọn size', N'Chọn dung tích phù hợp', @productId_BlueberrySoda, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(@optionId_Ice3, N'Chọn đá', N'Điều chỉnh lượng đá', @productId_BlueberrySoda, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	-- Option Items for Size
+	INSERT INTO OptionItem ([Id], [Name], [AdditionalPrice], [OptionId], [CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy], [IsDeleted], [DeletedAt], [DeletedBy])
+	VALUES
+	(NEWID(), N'M (Vừa)', 0, @optionId_Size3, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'L (Lớn)', 7000, @optionId_Size3, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	-- Option Items for Ice
+	INSERT INTO OptionItem ([Id], [Name], [AdditionalPrice], [OptionId], [CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy], [IsDeleted], [DeletedAt], [DeletedBy])
+	VALUES
+	(NEWID(), N'Không đá', 0, @optionId_Ice3, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Ít đá', 0, @optionId_Ice3, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Nhiều đá', 0, @optionId_Ice3, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	-- Trà Cam Mật Ong (Drink)
+	DECLARE @productId_HoneyLemonTea UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO Product ([Id], [Name], [Description], [Price], [Image], [ImageUrl], [ImagePublicId], [CategoryId], [ProductType],
+						 [CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy], [IsDeleted], [DeletedAt], [DeletedBy])
+	VALUES
+	(@productId_HoneyLemonTea, N'Trà Cam Mật Ong', N'Trà cam thơm mát hòa quyện cùng mật ong dịu ngọt', 53000, NULL, 'https://cdn.prod.website-files.com/63ec4e0b737eeedb47aa6170/64834a50e7f134164e1b4aff_Untitled%20design%20(49)-p-500.png', NULL, @drinkCategoryId, 0,
+	 GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	-- Options for Trà Cam Mật Ong
+	DECLARE @optionId_Size4 UNIQUEIDENTIFIER = NEWID();
+	DECLARE @optionId_Ice4 UNIQUEIDENTIFIER = NEWID();
+	DECLARE @optionId_Sugar4 UNIQUEIDENTIFIER = NEWID();
+
+	INSERT INTO [Option] ([Id], [Name], [Description], [ProductId], [CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy], [IsDeleted], [DeletedAt], [DeletedBy])
+	VALUES
+	(@optionId_Size4, N'Chọn size', N'Chọn kích cỡ phù hợp', @productId_HoneyLemonTea, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(@optionId_Ice4, N'Chọn đá', N'Tùy chỉnh lượng đá', @productId_HoneyLemonTea, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(@optionId_Sugar4, N'Chọn độ ngọt', N'Lựa chọn mức đường', @productId_HoneyLemonTea, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	-- Option Items for Size
+	INSERT INTO OptionItem ([Id], [Name], [AdditionalPrice], [OptionId], [CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy], [IsDeleted], [DeletedAt], [DeletedBy])
+	VALUES
+	(NEWID(), N'M (Vừa)', 0, @optionId_Size4, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'L (Lớn)', 8000, @optionId_Size4, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	-- Option Items for Ice
+	INSERT INTO OptionItem ([Id], [Name], [AdditionalPrice], [OptionId], [CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy], [IsDeleted], [DeletedAt], [DeletedBy])
+	VALUES
+	(NEWID(), N'Không đá', 0, @optionId_Ice4, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Ít đá', 0, @optionId_Ice4, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Bình thường', 0, @optionId_Ice4, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	-- Option Items for Sugar
+	INSERT INTO OptionItem ([Id], [Name], [AdditionalPrice], [OptionId], [CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy], [IsDeleted], [DeletedAt], [DeletedBy])
+	VALUES
+	(NEWID(), N'25% đường', 0, @optionId_Sugar4, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'50% đường', 0, @optionId_Sugar4, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'100% đường', 0, @optionId_Sugar4, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	-- Soda Chanh Dây (Drink)
+	DECLARE @productId_PassionSoda UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO Product ([Id], [Name], [Description], [Price], [Image], [ImageUrl], [ImagePublicId], [CategoryId], [ProductType],
+						 [CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy], [IsDeleted], [DeletedAt], [DeletedBy])
+	VALUES
+	(@productId_PassionSoda, N'Soda Chanh Dây', N'Soda chanh dây chua ngọt, có ga, mát lạnh sảng khoái', 57000, NULL, 'https://cdn.prod.website-files.com/63ec4e0b737eeedb47aa6170/648342cf7cc61c603f81ff46_Green%20Jasmin%20Iced%20Tea-p-500.png', NULL, @drinkCategoryId, 0,
+	 GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	-- Options for Soda Chanh Dây
+	DECLARE @optionId_Size5 UNIQUEIDENTIFIER = NEWID();
+	DECLARE @optionId_Ice5 UNIQUEIDENTIFIER = NEWID();
+	DECLARE @optionId_Sugar5 UNIQUEIDENTIFIER = NEWID();
+
+	INSERT INTO [Option] ([Id], [Name], [Description], [ProductId], [CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy], [IsDeleted], [DeletedAt], [DeletedBy])
+	VALUES
+	(@optionId_Size5, N'Chọn size', N'Chọn dung tích ly phù hợp', @productId_PassionSoda, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(@optionId_Ice5, N'Chọn lượng đá', N'Tùy chỉnh lượng đá cho đồ uống', @productId_PassionSoda, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(@optionId_Sugar5, N'Chọn độ ngọt', N'Lựa chọn độ ngọt mong muốn', @productId_PassionSoda, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	-- Option Items for Size
+	INSERT INTO OptionItem ([Id], [Name], [AdditionalPrice], [OptionId], [CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy], [IsDeleted], [DeletedAt], [DeletedBy])
+	VALUES
+	(NEWID(), N'M (Vừa)', 0, @optionId_Size5, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'L (Lớn)', 7000, @optionId_Size5, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	-- Option Items for Ice
+	INSERT INTO OptionItem ([Id], [Name], [AdditionalPrice], [OptionId], [CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy], [IsDeleted], [DeletedAt], [DeletedBy])
+	VALUES
+	(NEWID(), N'Không đá', 0, @optionId_Ice5, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Ít đá', 0, @optionId_Ice5, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Bình thường', 0, @optionId_Ice5, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	-- Option Items for Sugar
+	INSERT INTO OptionItem ([Id], [Name], [AdditionalPrice], [OptionId], [CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy], [IsDeleted], [DeletedAt], [DeletedBy])
+	VALUES
+	(NEWID(), N'25% đường', 0, @optionId_Sugar5, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'50% đường', 0, @optionId_Sugar5, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'100% đường', 0, @optionId_Sugar5, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	-- Soda Táo Quế (Drink)
+	DECLARE @productId_AppleCinnamonSoda UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO Product ([Id], [Name], [Description], [Price], [Image], [ImageUrl], [ImagePublicId], [CategoryId], [ProductType],
+						 [CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy], [IsDeleted], [DeletedAt], [DeletedBy])
+	VALUES
+	(@productId_AppleCinnamonSoda, N'Soda Táo Quế', N'Sự kết hợp giữa vị táo ngọt và hương quế nhẹ nhàng trong ly soda có ga mát lạnh', 60000, NULL, 'https://cdn.prod.website-files.com/63ec4e0b737eeedb47aa6170/648342ece4318572bd84cfef_Mango%20Passion%20Fruit%20Iced%20Tea-p-500.png', NULL, @drinkCategoryId, 0,
+	 GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	-- Options for Soda Táo Quế
+	DECLARE @optionId_Size6 UNIQUEIDENTIFIER = NEWID();
+	DECLARE @optionId_Ice6 UNIQUEIDENTIFIER = NEWID();
+	DECLARE @optionId_Sugar6 UNIQUEIDENTIFIER = NEWID();
+
+	INSERT INTO [Option] ([Id], [Name], [Description], [ProductId], [CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy], [IsDeleted], [DeletedAt], [DeletedBy])
+	VALUES
+	(@optionId_Size6, N'Chọn size', N'Chọn kích thước ly', @productId_AppleCinnamonSoda, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(@optionId_Ice6, N'Chọn đá', N'Tùy chỉnh đá theo khẩu vị', @productId_AppleCinnamonSoda, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(@optionId_Sugar6, N'Chọn độ ngọt', N'Điều chỉnh độ ngọt', @productId_AppleCinnamonSoda, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	-- Option Items for Size
+	INSERT INTO OptionItem ([Id], [Name], [AdditionalPrice], [OptionId], [CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy], [IsDeleted], [DeletedAt], [DeletedBy])
+	VALUES
+	(NEWID(), N'M (Vừa)', 0, @optionId_Size6, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'L (Lớn)', 8000, @optionId_Size6, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	-- Option Items for Ice
+	INSERT INTO OptionItem ([Id], [Name], [AdditionalPrice], [OptionId], [CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy], [IsDeleted], [DeletedAt], [DeletedBy])
+	VALUES
+	(NEWID(), N'Không đá', 0, @optionId_Ice6, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Ít đá', 0, @optionId_Ice6, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Nhiều đá', 0, @optionId_Ice6, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	-- Option Items for Sugar
+	INSERT INTO OptionItem ([Id], [Name], [AdditionalPrice], [OptionId], [CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy], [IsDeleted], [DeletedAt], [DeletedBy])
+	VALUES
+	(NEWID(), N'25% đường', 0, @optionId_Sugar6, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'50% đường', 0, @optionId_Sugar6, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'100% đường', 0, @optionId_Sugar6, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	-- Matcha Latte (Drink)
+	DECLARE @productId_MatchaLatte UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO Product ([Id], [Name], [Description], [Price], [Image], [ImageUrl], [ImagePublicId], [CategoryId], [ProductType],
+						 [CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy], [IsDeleted], [DeletedAt], [DeletedBy])
+	VALUES
+	(@productId_MatchaLatte, N'Matcha Latte', N'Matcha Nhật Bản thơm dịu hòa quyện cùng sữa, mang đến vị thanh mát, béo nhẹ', 62000, NULL, 'https://cdn.prod.website-files.com/63ec4e0b737eeedb47aa6170/63ec529dc182117bea82bbb0_Ice%20Matcha%20Latte-p-500.jpg', NULL, @drinkCategoryId, 0,
+	 GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	-- Options for Matcha Latte
+	DECLARE @optionId_Size7 UNIQUEIDENTIFIER = NEWID();
+	DECLARE @optionId_Ice7 UNIQUEIDENTIFIER = NEWID();
+	DECLARE @optionId_MilkType UNIQUEIDENTIFIER = NEWID();
+
+	INSERT INTO [Option] ([Id], [Name], [Description], [ProductId], [CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy], [IsDeleted], [DeletedAt], [DeletedBy])
+	VALUES
+	(@optionId_Size7, N'Chọn size', N'Chọn kích cỡ ly', @productId_MatchaLatte, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(@optionId_Ice7, N'Chọn đá', N'Chọn mức đá mong muốn', @productId_MatchaLatte, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(@optionId_MilkType, N'Loại sữa', N'Chọn loại sữa phù hợp với chế độ dinh dưỡng của bạn', @productId_MatchaLatte, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	-- Option Items for Size
+	INSERT INTO OptionItem ([Id], [Name], [AdditionalPrice], [OptionId], [CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy], [IsDeleted], [DeletedAt], [DeletedBy])
+	VALUES
+	(NEWID(), N'M (Vừa)', 0, @optionId_Size7, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'L (Lớn)', 8000, @optionId_Size7, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	-- Option Items for Ice
+	INSERT INTO OptionItem ([Id], [Name], [AdditionalPrice], [OptionId], [CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy], [IsDeleted], [DeletedAt], [DeletedBy])
+	VALUES
+	(NEWID(), N'Không đá', 0, @optionId_Ice7, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Ít đá', 0, @optionId_Ice7, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Nhiều đá', 0, @optionId_Ice7, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	-- Option Items for Milk Type
+	INSERT INTO OptionItem ([Id], [Name], [AdditionalPrice], [OptionId], [CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy], [IsDeleted], [DeletedAt], [DeletedBy])
+	VALUES
+	(NEWID(), N'Sữa tươi nguyên kem', 0, @optionId_MilkType, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Sữa hạt óc chó', 10000, @optionId_MilkType, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Sữa hạt hạnh nhân', 10000, @optionId_MilkType, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Sữa yến mạch', 12000, @optionId_MilkType, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Sữa đậu nành', 8000, @optionId_MilkType, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	-- Moët & Chandon Brut
+	DECLARE @productId_Moet UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO Product ([Id], [Name], [Description], [Price], [Image], [ImageUrl], [ImagePublicId], [CategoryId], [ProductType],
+						 [CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy], [IsDeleted], [DeletedAt], [DeletedBy])
+	VALUES
+	(@productId_Moet, N'Moët & Chandon Brut', N'Champagne cổ điển với hương vị tinh tế và thanh lịch', 290000, NULL, 'https://www.noburestaurants.com/assets/article-media-files/Nobu-Wine.jpg', NULL, @drinkCategoryId, 0,
+	 GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	DECLARE @optionId_Moet UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Option] ([Id], [Name], [Description], [ProductId], [CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy], [IsDeleted], [DeletedAt], [DeletedBy])
+	VALUES
+	(@optionId_Moet, N'Chọn khẩu phần', N'Chọn giữa 1 ly hoặc nguyên chai', @productId_Moet, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	INSERT INTO OptionItem ([Id], [Name], [AdditionalPrice], [OptionId], [CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy], [IsDeleted], [DeletedAt], [DeletedBy])
+	VALUES
+	(NEWID(), N'1 shot', 0, @optionId_Moet, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Nguyên chai', 1900000, @optionId_Moet, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	DECLARE @productId_Veuve UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO Product VALUES
+	(@productId_Veuve, N'Veuve Clicquot Yellow Label', N'Sự cân bằng tuyệt hảo giữa sự sống động và chiều sâu', 310000, NULL, NULL, NULL, @drinkCategoryId, 0,
+	 GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	DECLARE @optionId_Veuve UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Option] VALUES
+	(@optionId_Veuve, N'Chọn khẩu phần', N'Chọn giữa 1 ly hoặc nguyên chai', @productId_Veuve, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL, 0);
+
+	INSERT INTO OptionItem VALUES
+	(NEWID(), N'1 shot', 0, @optionId_Veuve, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Nguyên chai', 2100000, @optionId_Veuve, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+
+	DECLARE @productId_Dom UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO Product VALUES
+	(@productId_Dom, N'Dom Pérignon Vintage', N'Vị champagne biểu tượng với hương vị sang trọng, sâu lắng', 490000, NULL, NULL, NULL, @drinkCategoryId, 0,
+	 GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	DECLARE @optionId_Dom UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Option] VALUES
+	(@optionId_Dom, N'Chọn khẩu phần', N'Chọn giữa 1 ly hoặc nguyên chai', @productId_Dom, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL, 0);
+
+	INSERT INTO OptionItem VALUES
+	(NEWID(), N'1 shot', 0, @optionId_Dom, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Nguyên chai', 6500000, @optionId_Dom, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+
+	DECLARE @productId_Perrier UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO Product VALUES
+	(@productId_Perrier, N'Perrier-Jouët Grand Brut', N'Sự kết hợp của sự mềm mại và hương hoa tươi mới', 270000, NULL, NULL, NULL, @drinkCategoryId, 0,
+	 GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	DECLARE @optionId_Perrier UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Option] VALUES
+	(@optionId_Perrier, N'Chọn khẩu phần', N'Chọn giữa 1 ly hoặc nguyên chai', @productId_Perrier, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL, 0);
+
+	INSERT INTO OptionItem VALUES
+	(NEWID(), N'1 shot', 0, @optionId_Perrier, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Nguyên chai', 1850000, @optionId_Perrier, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+
+	DECLARE @productId_Ruinart UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO Product VALUES
+	(@productId_Ruinart, N'Ruinart Blanc de Blancs', N'Champagne từ nho Chardonnay 100%, thanh lịch và tươi sáng', 340000, NULL, NULL, NULL, @drinkCategoryId, 0,
+	 GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	DECLARE @optionId_Ruinart UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Option] VALUES
+	(@optionId_Ruinart, N'Chọn khẩu phần', N'Chọn giữa 1 ly hoặc nguyên chai', @productId_Ruinart, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL, 0);
+
+	INSERT INTO OptionItem VALUES
+	(NEWID(), N'1 shot', 0, @optionId_Ruinart, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Nguyên chai', 3100000, @optionId_Ruinart, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	-- Trà Hoa Cúc Mật Ong
+	DECLARE @productId_Chamomile UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO Product VALUES
+	(@productId_Chamomile, N'Trà Hoa Cúc Mật Ong', N'Trà hoa cúc dịu nhẹ kết hợp cùng mật ong thanh mát, giúp thư giãn tinh thần', 45000, NULL, NULL, NULL, @drinkCategoryId, 0,
+	 GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	DECLARE @optionId_Chamomile UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Option] VALUES
+	(@optionId_Chamomile, N'Chọn khẩu phần', N'Chọn giữa 1 ly hoặc nguyên ấm', @productId_Chamomile, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL, 0);
+
+	INSERT INTO OptionItem VALUES
+	(NEWID(), N'1 khẩu phần', 0, @optionId_Chamomile, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Nguyên ấm', 120000, @optionId_Chamomile, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	-- Trà Gừng Tươi
+	DECLARE @productId_GingerTea UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO Product VALUES
+	(@productId_GingerTea, N'Trà Gừng Tươi', N'Trà gừng ấm nóng, tốt cho sức khỏe và làm ấm cơ thể', 42000, NULL, NULL, NULL, @drinkCategoryId, 0,
+	 GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	DECLARE @optionId_GingerTea UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Option] VALUES
+	(@optionId_GingerTea, N'Chọn khẩu phần', N'Chọn giữa 1 ly hoặc nguyên ấm', @productId_GingerTea, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL, 0);
+
+	INSERT INTO OptionItem VALUES
+	(NEWID(), N'1 khẩu phần', 0, @optionId_GingerTea, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Nguyên ấm', 100000, @optionId_GingerTea, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	-- Trà Đào Hoa Hồng
+	DECLARE @productId_PeachRoseTea UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO Product VALUES
+	(@productId_PeachRoseTea, N'Trà Đào Hoa Hồng', N'Sự kết hợp giữa hương đào ngọt ngào và cánh hoa hồng thơm nhẹ', 49000, NULL, NULL, NULL, @drinkCategoryId, 0,
+	 GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	DECLARE @optionId_PeachRoseTea UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Option] VALUES
+	(@optionId_PeachRoseTea, N'Chọn khẩu phần', N'Chọn giữa 1 ly hoặc nguyên ấm', @productId_PeachRoseTea, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL, 0);
+
+	INSERT INTO OptionItem VALUES
+	(NEWID(), N'1 khẩu phần', 0, @optionId_PeachRoseTea, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Nguyên ấm', 130000, @optionId_PeachRoseTea, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	-- Trà Sen Tây Hồ
+	DECLARE @productId_LotusTea UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO Product VALUES
+	(@productId_LotusTea, N'Trà Sen Tây Hồ', N'Trà xanh ướp sen Tây Hồ truyền thống, thanh tao và tinh khiết', 49000, NULL, NULL, NULL, @drinkCategoryId, 0,
+	 GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	DECLARE @optionId_LotusTea UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Option] VALUES
+	(@optionId_LotusTea, N'Chọn khẩu phần', N'Chọn giữa 1 ly hoặc nguyên ấm', @productId_LotusTea, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL, 0);
+
+	INSERT INTO OptionItem VALUES
+	(NEWID(), N'1 khẩu phần', 0, @optionId_LotusTea, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Nguyên ấm', 140000, @optionId_LotusTea, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+
+	-- Trà Ô Long Mật Ong
+	DECLARE @productId_Oolong UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO Product VALUES
+	(@productId_Oolong, N'Trà Ô Long Mật Ong', N'Trà ô long thanh mát hòa quyện cùng vị ngọt tự nhiên của mật ong', 47000, NULL, NULL, NULL, @drinkCategoryId, 0,
+	 GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	DECLARE @optionId_Oolong UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Option] VALUES
+	(@optionId_Oolong, N'Chọn khẩu phần', N'Chọn giữa 1 ly hoặc nguyên ấm', @productId_Oolong, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL, 0);
+
+	INSERT INTO OptionItem VALUES
+	(NEWID(), N'1 khẩu phần', 0, @optionId_Oolong, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Nguyên ấm', 125000, @optionId_Oolong, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+
+	-- Trà Táo Quế Nóng
+	DECLARE @productId_AppleCinnamonTea UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO Product VALUES
+	(@productId_AppleCinnamonTea, N'Trà Táo Quế Nóng', N'Trà táo quế nóng, thơm dịu, hoàn hảo cho những ngày se lạnh', 52000, NULL, NULL, NULL, @drinkCategoryId, 0,
+	 GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	DECLARE @optionId_AppleCinnamonTea UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Option] VALUES
+	(@optionId_AppleCinnamonTea, N'Chọn khẩu phần', N'Chọn giữa 1 ly hoặc nguyên ấm', @productId_AppleCinnamonTea, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL, 0);
+
+	INSERT INTO OptionItem VALUES
+	(NEWID(), N'1 khẩu phần', 0, @optionId_AppleCinnamonTea, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Nguyên ấm', 135000, @optionId_AppleCinnamonTea, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	-- Bánh Phô Mai Nhật Bản
+	DECLARE @productId_JapanCheesecake UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO Product VALUES
+	(@productId_JapanCheesecake, N'Bánh Phô Mai Nhật Bản', N'Bánh phô mai Nhật mềm mịn, nhẹ và tan ngay trong miệng', 58000, NULL, 'https://pizza4ps.com/wp-content/uploads/2023/07/Double-Cheese-Cake_STY-2-scaled-e1713111064854.jpg', NULL, @dessertCategoryId, 0,
+	 GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	-- Option: Chọn khẩu phần
+	DECLARE @optionId_JapanCheesecake UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Option] VALUES
+	(@optionId_JapanCheesecake, N'Chọn khẩu phần', N'Chọn giữa 1 lát hoặc nguyên bánh', @productId_JapanCheesecake, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL, 0);
+
+	-- Option Items
+	INSERT INTO OptionItem VALUES
+	(NEWID(), N'1 lát', 0, @optionId_JapanCheesecake, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Nguyên bánh', 320000, @optionId_JapanCheesecake, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	-- Bánh Sô-cô-la Lava
+	DECLARE @productId_ChocolateLava UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO Product VALUES
+	(@productId_ChocolateLava, N'Bánh Sô-cô-la Lava', N'Bánh sô-cô-la mềm ấm, nhân tan chảy, ăn kèm kem lạnh là tuyệt vời', 62000, NULL, 'https://dessertgallery.com/cdn/shop/files/Mom_sChocolateCake_6inch-medium.jpg?v=1724605926&width=832', NULL, @dessertCategoryId, 0,
+	 GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	DECLARE @optionId_ChocolateLava UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Option] VALUES
+	(@optionId_ChocolateLava, N'Chọn khẩu phần', N'Chọn giữa 1 phần hoặc nguyên bánh', @productId_ChocolateLava, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL, 0);
+
+	INSERT INTO OptionItem VALUES
+	(NEWID(), N'1 lát', 0, @optionId_ChocolateLava, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Nguyên bánh', 350000, @optionId_ChocolateLava, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+
+	-- Bánh Dâu Kem Tươi
+	DECLARE @productId_StrawberryCream UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO Product VALUES
+	(@productId_StrawberryCream, N'Bánh Dâu Kem Tươi', N'Bánh bông lan mềm mịn với kem tươi và dâu tây tươi ngọt', 59000, NULL, 'https://dessertgallery.com/cdn/shop/files/LemonBlueberryCake_6inch-medium.jpg?v=1724605704&width=832', NULL, @dessertCategoryId, 0,
+	 GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	DECLARE @optionId_StrawberryCream UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Option] VALUES
+	(@optionId_StrawberryCream, N'Chọn khẩu phần', N'Chọn giữa 1 lát hoặc nguyên bánh', @productId_StrawberryCream, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL, 0);
+
+	INSERT INTO OptionItem VALUES
+	(NEWID(), N'1 lát', 0, @optionId_StrawberryCream, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Nguyên bánh', 300000, @optionId_StrawberryCream, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	-- Flan Caramel Nướng
+	DECLARE @productId_CaramelFlan UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO Product VALUES
+	(@productId_CaramelFlan, N'Flan Caramel Nướng', N'Bánh flan thơm béo với lớp caramel nướng đậm vị truyền thống', 45000, NULL, 'https://pizza4ps.com/wp-content/uploads/2023/07/30000303_2.jpg', NULL, @dessertCategoryId, 0,
+	 GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	DECLARE @optionId_CaramelFlan UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Option] VALUES
+	(@optionId_CaramelFlan, N'Chọn khẩu phần', N'Chọn giữa 1 phần hoặc nguyên khay', @productId_CaramelFlan, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL, 0);
+
+	INSERT INTO OptionItem VALUES
+	(NEWID(), N'1 khẩu phần', 0, @optionId_CaramelFlan, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Nguyên khay', 240000, @optionId_CaramelFlan, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	-- Tiramisu Cà Phê Ý
+	DECLARE @productId_Tiramisu UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO Product VALUES
+	(@productId_Tiramisu, N'Tiramisu Cà Phê Ý', N'Lớp bánh quy mềm ngấm cà phê espresso, xen lẫn kem mascarpone béo ngậy', 65000, NULL, 'https://pizza4ps.com/wp-content/uploads/2023/07/Kaizen-Tiramisu-scaled.jpg', NULL, @dessertCategoryId, 0,
+	 GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	DECLARE @optionId_Tiramisu UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Option] VALUES
+	(@optionId_Tiramisu, N'Chọn khẩu phần', N'Chọn giữa 1 phần hoặc nguyên bánh', @productId_Tiramisu, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL, 0);
+
+	INSERT INTO OptionItem VALUES
+	(NEWID(), N'1 khẩu phần', 0, @optionId_Tiramisu, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Nguyên bánh', 390000, @optionId_Tiramisu, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	-- Bánh Chuối Nướng
+	DECLARE @productId_BananaCake UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO Product VALUES
+	(@productId_BananaCake, N'Bánh Chuối Nướng', N'Bánh chuối truyền thống thơm bùi, ăn nóng hay lạnh đều ngon', 48000, NULL, 'https://dessertgallery.com/cdn/shop/files/RamadanMubarakCake_yellow.jpg?v=1739030513&width=832', NULL, @dessertCategoryId, 0,
+	 GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	DECLARE @optionId_BananaCake UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Option] VALUES
+	(@optionId_BananaCake, N'Chọn khẩu phần', N'Chọn giữa 1 lát hoặc nguyên bánh', @productId_BananaCake, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL, 0);
+
+	INSERT INTO OptionItem VALUES
+	(NEWID(), N'1 lát', 0, @optionId_BananaCake, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Nguyên bánh', 270000, @optionId_BananaCake, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	-- Bánh Dừa Nướng Giòn
+	DECLARE @productId_CoconutCrisp UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO Product VALUES
+	(@productId_CoconutCrisp, N'Bánh Dừa Nướng Giòn', N'Dừa tươi nướng giòn thơm, vị ngọt dịu và béo nhẹ đặc trưng', 40000, NULL, 'https://cdn.prod.website-files.com/649249d29a20bd6bc3deac48/65eba1161acef3a841275749_Milk%20Cream%20Bread%201.png', NULL, @dessertCategoryId, 0,
+	 GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	DECLARE @optionId_CoconutCrisp UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Option] VALUES
+	(@optionId_CoconutCrisp, N'Chọn khẩu phần', N'Chọn giữa 1 phần hoặc nguyên khay', @productId_CoconutCrisp, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL, 0);
+
+	INSERT INTO OptionItem VALUES
+	(NEWID(), N'1 khẩu phần', 0, @optionId_CoconutCrisp, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Nguyên khay', 220000, @optionId_CoconutCrisp, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	-- Panna Cotta Vani
+	DECLARE @productId_PannaCotta UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO Product VALUES
+	(@productId_PannaCotta, N'Panna Cotta Vani', N'Món tráng miệng kiểu Ý, mềm mịn vị vani, ăn kèm sốt dâu', 49000, NULL, NULL, NULL, @dessertCategoryId, 0,
+	 GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	 -- Brownie Sô-cô-la
+	DECLARE @productId_Brownie UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO Product VALUES
+	(@productId_Brownie, N'Brownie Sô-cô-la', N'Bánh brownie đặc sánh, đậm vị cacao, nướng vừa tới, ăn kèm hạnh nhân giòn', 45000, NULL, 'https://pizza4ps.com/wp-content/uploads/2023/07/30000006_2.jpg', NULL, @dessertCategoryId, 0,
+	 GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	 -- Cupcake Red Velvet
+	DECLARE @productId_RedVelvet UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO Product VALUES
+	(@productId_RedVelvet, N'Cupcake Red Velvet', N'Bánh cupcake đỏ đặc trưng, mềm mịn với kem phô mai béo nhẹ', 52000, NULL, 'https://cdn.prod.website-files.com/649249d29a20bd6bc3deac48/649249d29a20bd6bc3deadf1_Screenshot%25202023-05-15%2520at%252012.29.13%2520PM-p-500.png', NULL, @dessertCategoryId, 0,
+	 GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	 -- Chanh Dây Mousse
+	DECLARE @productId_PassionMousse UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO Product VALUES
+	(@productId_PassionMousse, N'Chanh Dây Mousse', N'Lớp mousse chanh dây chua ngọt dịu nhẹ, phủ lớp jelly trong veo', 48000, NULL, 'https://pizza4ps.com/wp-content/uploads/2023/07/30000031_2.jpg', NULL, @dessertCategoryId, 0,
+	 GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	 -- Rau Câu Dừa Tươi
+	DECLARE @productId_CoconutJelly UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO Product VALUES
+	(@productId_CoconutJelly, N'Rau Câu Dừa Tươi', N'Lớp rau câu trong suốt kết hợp nước dừa và cơm dừa non, thanh mát và tự nhiên', 39000, NULL, 'https://pizza4ps.com/wp-content/uploads/2023/07/Pudding_684x684_200924.png', NULL, @dessertCategoryId, 0,
+	 GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	 -- Kem Viên Tự Chọn
+	DECLARE @productId_IceCream UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO Product VALUES
+	(@productId_IceCream, N'Kem Viên Tự Chọn', N'Tự do chọn số lượng viên, hương vị và topping yêu thích của bạn', 45000, NULL, 'https://pizza4ps.com/wp-content/uploads/2023/07/30000304_2.jpg', NULL, @dessertCategoryId, 0,
+	 GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	-- Option: Số lượng viên
+	DECLARE @optionId_ScoopQty UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Option] VALUES
+	(@optionId_ScoopQty, N'Số lượng viên', N'Chọn số viên kem bạn muốn', @productId_IceCream, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL, 0);
+
+	-- Option Items for Quantity
+	INSERT INTO OptionItem VALUES
+	(NEWID(), N'1 viên', 0, @optionId_ScoopQty, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'2 viên', 10000, @optionId_ScoopQty, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'3 viên', 20000, @optionId_ScoopQty, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	-- Option: Topping
+	DECLARE @optionId_Toppings UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Option] VALUES
+	(@optionId_Toppings, N'Topping', N'Tùy chọn thêm topping yêu thích', @productId_IceCream, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL, 1);
+
+	-- Option Items for Topping
+	INSERT INTO OptionItem VALUES
+	(NEWID(), N'Hạt điều rang', 5000, @optionId_Toppings, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Chocolate chips', 5000, @optionId_Toppings, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Sốt caramel', 5000, @optionId_Toppings, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Sốt sô-cô-la', 5000, @optionId_Toppings, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Dừa sấy', 5000, @optionId_Toppings, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Kẹo marshmallow mini', 5000, @optionId_Toppings, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	-- Option: Hương vị kem
+	DECLARE @optionId_Flavours UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Option] VALUES
+	(@optionId_Flavours, N'Hương vị kem', N'Chọn hương vị yêu thích cho từng viên kem', @productId_IceCream, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL, 1);
+
+	-- Option Items for Flavours
+	INSERT INTO OptionItem VALUES
+	(NEWID(), N'Vani', 0, @optionId_Flavours, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Sô-cô-la', 0, @optionId_Flavours, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Dâu tây', 0, @optionId_Flavours, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Trà xanh', 0, @optionId_Flavours, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Xoài', 0, @optionId_Flavours, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Dừa', 0, @optionId_Flavours, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Phúc bồn tử', 0, @optionId_Flavours, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Việt quất', 0, @optionId_Flavours, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Cà phê', 0, @optionId_Flavours, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+	(NEWID(), N'Bạc hà sô-cô-la', 0, @optionId_Flavours, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+
+	-- ZONE 1
+	DECLARE @zoneId1 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Zone] (
+		[Id], [Name], [Description], [Type],
+		[CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy],
+		[IsDeleted], [DeletedAt], [DeletedBy]
+	)
+	VALUES (
+		@zoneId1, N'  A', N'Khu vực A', 0,
+		GETDATE(), NULL, N'Admin', NULL,
+		0, NULL, NULL
+	);
+
+	-- ZONE 2
+	DECLARE @zoneId2 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Zone] (
+		[Id], [Name], [Description], [Type],
+		[CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy],
+		[IsDeleted], [DeletedAt], [DeletedBy]
+	)
+	VALUES (
+		@zoneId2, N'  B', N'Khu vực B', 0,
+		GETDATE(), NULL, N'Admin', NULL,
+		0, NULL, NULL
+	);
+
+	-- ZONE 3
+	DECLARE @zoneId3 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Zone] (
+		[Id], [Name], [Description], [Type],
+		[CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy],
+		[IsDeleted], [DeletedAt], [DeletedBy]
+	)
+	VALUES (
+		@zoneId3, N'  C', N'Khu vực C', 0,
+		GETDATE(), NULL, N'Admin', NULL,
+		0, NULL, NULL
+	);
+
+	-- Zone 4
+		DECLARE @zoneId4 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Zone] (
+		[Id], [Name], [Description], [Type],
+		[CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy],
+		[IsDeleted], [DeletedAt], [DeletedBy]
+	)
+	VALUES (
+		@zoneId4, N'  D', N'Khu Vực D', 1,
+		GETDATE(), NULL, N'Admin', NULL,
+		0, NULL, NULL
+	);
+
+		-- Zone 5
+		DECLARE @zoneId5 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Zone] (
+		[Id], [Name], [Description], [Type],
+		[CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy],
+		[IsDeleted], [DeletedAt], [DeletedBy]
+	)
+	VALUES (
+		@zoneId5, N' Workshop', N'Khu vực Workshop', 2,
+		GETDATE(), NULL, N'Admin', NULL,
+		0, NULL, NULL
+	);
+			-- Zone 6
+		DECLARE @zoneId6 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Zone] (
+		[Id], [Name], [Description], [Type],
+		[CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy],
+		[IsDeleted], [DeletedAt], [DeletedBy]
+	)
+	VALUES (
+		@zoneId6, N' Workshop', N'Khu Vực Workshop', 1,
+		GETDATE(), NULL, N'Admin', NULL,
+		0, NULL, NULL
+	);
+
+
+
+	-- TABLES for ZONE 1
+	DECLARE @tableId1 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Table] (
+		[Id], [Code], [Capacity], [Status], [CurrentOrderId], [ZoneId],
+		[CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy],
+		[IsDeleted], [DeletedAt], [DeletedBy]
+	)
+	VALUES (
+		@tableId1, N' A01', 4, 0, NULL, @zoneId1,
+		GETDATE(), NULL, N'Admin', NULL,
+		0, NULL, NULL
+	);
+
+	DECLARE @tableId2 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Table] (
+		[Id], [Code], [Capacity], [Status], [CurrentOrderId], [ZoneId],
+		[CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy],
+		[IsDeleted], [DeletedAt], [DeletedBy]
+	)
+	VALUES (
+		@tableId2, N' A02', 4, 0, NULL, @zoneId1,
+		GETDATE(), NULL, N'Admin', NULL,
+		0, NULL, NULL
+	);
+
+	-- TABLES for ZONE 2
+	DECLARE @tableId3 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Table] (
+		[Id], [Code], [Capacity], [Status], [CurrentOrderId], [ZoneId],
+		[CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy],
+		[IsDeleted], [DeletedAt], [DeletedBy]
+	)
+	VALUES (
+		@tableId3, N' B01', 4, 0, NULL, @zoneId2,
+		GETDATE(), NULL, N'Admin', NULL,
+		0, NULL, NULL
+	);
+
+	DECLARE @tableId4 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Table] (
+		[Id], [Code], [Capacity], [Status], [CurrentOrderId], [ZoneId],
+		[CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy],
+		[IsDeleted], [DeletedAt], [DeletedBy]
+	)
+	VALUES (
+		@tableId4, N' B02', 4, 0, NULL, @zoneId2,
+		GETDATE(), NULL, N'Admin', NULL,
+		0, NULL, NULL
+	);
+
+	-- TABLES for ZONE 3
+	DECLARE @tableId5 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Table] (
+		[Id], [Code], [Capacity], [Status], [CurrentOrderId], [ZoneId],
+		[CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy],
+		[IsDeleted], [DeletedAt], [DeletedBy]
+	)
+	VALUES (
+		@tableId5, N' C01', 4, 0, NULL, @zoneId3,
+		GETDATE(), NULL, N'Admin', NULL,
+		0, NULL, NULL
+	);
+
+	DECLARE @tableId6 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Table] (
+		[Id], [Code], [Capacity], [Status], [CurrentOrderId], [ZoneId],
+		[CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy],
+		[IsDeleted], [DeletedAt], [DeletedBy]
+	)
+	VALUES (
+		@tableId6, N' C02', 4, 0, NULL, @zoneId3,
+		GETDATE(), NULL, N'Admin', NULL,
+		0, NULL, NULL
+	);
+
+		DECLARE @tableId7 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Table] (
+		[Id], [Code], [Capacity], [Status], [CurrentOrderId], [ZoneId],
+		[CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy],
+		[IsDeleted], [DeletedAt], [DeletedBy]
+	)
+	VALUES (
+		@tableId7, N' D01', 4, 0, NULL, @zoneId4,
+		GETDATE(), NULL, N'Admin', NULL,
+		0, NULL, NULL
+	);
+
+		DECLARE @tableId8 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Table] (
+		[Id], [Code], [Capacity], [Status], [CurrentOrderId], [ZoneId],
+		[CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy],
+		[IsDeleted], [DeletedAt], [DeletedBy]
+	)
+	VALUES (
+		@tableId8, N' D02', 5, 0, NULL, @zoneId4,
+		GETDATE(), NULL, N'Admin', NULL,
+		0, NULL, NULL
+	);
+
+		DECLARE @tableId9 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Table] (
+		[Id], [Code], [Capacity], [Status], [CurrentOrderId], [ZoneId],
+		[CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy],
+		[IsDeleted], [DeletedAt], [DeletedBy]
+	)
+	VALUES (
+		@tableId9, N' D03', 5, 0, NULL, @zoneId4,
+		GETDATE(), NULL, N'Admin', NULL,
+		0, NULL, NULL
+	);
+
+		DECLARE @tableId10 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Table] (
+		[Id], [Code], [Capacity], [Status], [CurrentOrderId], [ZoneId],
+		[CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy],
+		[IsDeleted], [DeletedAt], [DeletedBy]
+	)
+	VALUES (
+		@tableId10, N' D04', 2, 0, NULL, @zoneId4,
+		GETDATE(), NULL, N'Admin', NULL,
+		0, NULL, NULL
+	);
+
+
+		DECLARE @tableId11 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Table] (
+		[Id], [Code], [Capacity], [Status], [CurrentOrderId], [ZoneId],
+		[CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy],
+		[IsDeleted], [DeletedAt], [DeletedBy]
+	)
+	VALUES (
+		@tableId11, N' D05', 6, 0, NULL, @zoneId4,
+		GETDATE(), NULL, N'Admin', NULL,
+		0, NULL, NULL
+	);
+
+
+		DECLARE @tableId12 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Table] (
+		[Id], [Code], [Capacity], [Status], [CurrentOrderId], [ZoneId],
+		[CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy],
+		[IsDeleted], [DeletedAt], [DeletedBy]
+	)
+	VALUES (
+		@tableId12, N' D06', 8, 0, NULL, @zoneId4,
+		GETDATE(), NULL, N'Admin', NULL,
+		0, NULL, NULL
+	);
+
+
+		DECLARE @tableId13 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Table] (
+		[Id], [Code], [Capacity], [Status], [CurrentOrderId], [ZoneId],
+		[CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy],
+		[IsDeleted], [DeletedAt], [DeletedBy]
+	)
+	VALUES (
+		@tableId13, N' D07', 8, 0, NULL, @zoneId4,
+		GETDATE(), NULL, N'Admin', NULL,
+		0, NULL, NULL
+	);
+
+			DECLARE @tableId14 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Table] (
+		[Id], [Code], [Capacity], [Status], [CurrentOrderId], [ZoneId],
+		[CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy],
+		[IsDeleted], [DeletedAt], [DeletedBy]
+	)
+	VALUES (
+		@tableId14, N' W03', 10, 0, NULL, @zoneId5,
+		GETDATE(), NULL, N'Admin', NULL,
+		0, NULL, NULL
+	);
+
+			DECLARE @tableId15 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Table] (
+		[Id], [Code], [Capacity], [Status], [CurrentOrderId], [ZoneId],
+		[CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy],
+		[IsDeleted], [DeletedAt], [DeletedBy]
+	)
+	VALUES (
+		@tableId15, N' W04', 4, 0, NULL, @zoneId5,
+		GETDATE(), NULL, N'Admin', NULL,
+		0, NULL, NULL
+	);
+	-- WORKSHOP 1
+	DECLARE @workshopId1 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Workshop] (
+		[Id], [Name], [Header], [Description], [Location], [Organizer], [HotLineContact],
+		[WorkshopDate], [StartRegisterDate], [EndRegisterDate], [TotalFee],
+		[MaxRegister], [MaxPizzaPerRegister], [MaxParticipantPerRegister], [WorkshopStatus],
+		[totalRegisteredParticipant], [ZoneId], [ZoneName],
+		[CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy],
+		[IsDeleted], [DeletedAt], [DeletedBy]
+	)
+	VALUES (
+		@workshopId1, 
+		N'Pizza Lovers Unite',
+		N'Slice, Bake, Enjoy!',
+		N'Pizza Lovers Unite - Slice, Bake, Enjoy!',
+		N'Sẽ được cập nhật', N'Sẽ được cập nhật', N'Sẽ được cập nhật',
+		DATEADD(DAY, 5, GETDATE()), DATEADD(DAY, 1, GETDATE()), DATEADD(DAY, 3, GETDATE()), 265000,
+		3, 6, 2, 0,
+		0, @zoneId5, N'Workshop',
+		GETDATE(), NULL, N'Admin', NULL,
+		0, NULL, NULL
+	);
+
+	-- WORKSHOP FOOD DETAIL 1
+	DECLARE @workshopFoodDetailId1 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [WorkshopFoodDetail] (
+		[Id], [WorkshopId], [ProductId], [Name], [Price],
+		[CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy],
+		[IsDeleted], [DeletedAt], [DeletedBy]
+	)
+	VALUES (
+		@workshopFoodDetailId1,
+		@workshopId1,
+		@productId46,
+		N'Pizza 4 loại nấm',
+		185000,
+		GETDATE(), NULL, N'Admin', NULL,
+		0, NULL, NULL
+	);
+	-- WORKSHOP FOOD DETAIL 2
+	DECLARE @workshopFoodDetailId2 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [WorkshopFoodDetail] (
+		[Id], [WorkshopId], [ProductId], [Name], [Price],
+		[CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy],
+		[IsDeleted], [DeletedAt], [DeletedBy]
+	)
+	VALUES (
+		@workshopFoodDetailId2,
+		@workshopId1,
+		@productId38,
+		N'Pizza Bò với dầu tỏi',
+		190000,
+		GETDATE(), NULL, N'Admin', NULL,
+		0, NULL, NULL
+	);
+
+	-- WORKSHOP FOOD DETAIL 3
+	DECLARE @workshopFoodDetailId3 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [WorkshopFoodDetail] (
+		[Id], [WorkshopId], [ProductId], [Name], [Price],
+		[CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy],
+		[IsDeleted], [DeletedAt], [DeletedBy]
+	)
+	VALUES (
+		@workshopFoodDetailId3,
+		@workshopId1,
+		@productId29,
+		N'Pizza Phô mai Burrata Margherita với thịt nguội',
+		198000,
+		GETDATE(), NULL, N'Admin', NULL,
+		0, NULL, NULL
+	);
+
+	-- WORKSHOP 2
+	DECLARE @workshopId2 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Workshop] (
+		[Id], [Name], [Header], [Description], [Location], [Organizer], [HotLineContact],
+		[WorkshopDate], [StartRegisterDate], [EndRegisterDate], [TotalFee],
+		[MaxRegister], [MaxPizzaPerRegister], [MaxParticipantPerRegister], [WorkshopStatus],
+		[totalRegisteredParticipant], [ZoneId], [ZoneName],
+		[CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy],
+		[IsDeleted], [DeletedAt], [DeletedBy]
+	)
+	VALUES (
+		@workshopId2, 
+		N'Pizza & Chill',
+		N'Bake it ''til you make it!',
+		N'Pizza & Chill - Bake it ''til you make it!',
+		N'Sẽ được cập nhật', N'Sẽ được cập nhật', N'Sẽ được cập nhật',
+		DATEADD(DAY, 5, GETDATE()), DATEADD(DAY, 1, GETDATE()), DATEADD(DAY, 3, GETDATE()), 225000,
+		2, 4, 2, 0,
+		0, @zoneId5, N'Workshop',
+		GETDATE(), NULL, N'Admin', NULL,
+		0, NULL, NULL
+	);
+
+	-- WORKSHOP FOOD DETAIL 1 for WORKSHOP 2
+	DECLARE @workshopFoodDetailId4 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [WorkshopFoodDetail] (
+		[Id], [WorkshopId], [ProductId], [Name], [Price],
+		[CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy],
+		[IsDeleted], [DeletedAt], [DeletedBy]
+	)
+	VALUES (
+		@workshopFoodDetailId4,
+		@workshopId2,
+		@productId43,
+		N'Pizza Bò kho',
+		175000,
+		GETDATE(), NULL, N'Admin', NULL,
+		0, NULL, NULL
+	);
+
+	-- WORKSHOP FOOD DETAIL 2 for WORKSHOP 2
+	DECLARE @workshopFoodDetailId5 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [WorkshopFoodDetail] (
+		[Id], [WorkshopId], [ProductId], [Name], [Price],
+		[CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy],
+		[IsDeleted], [DeletedAt], [DeletedBy]
+	)
+	VALUES (
+		@workshopFoodDetailId5,
+		@workshopId2,
+		@productId34,
+		N'Pizza Sashimi cá hồi kèm phô mai Ricotta và xốt hành',
+		195000,
+		GETDATE(), NULL, N'Admin', NULL,
+		0, NULL, NULL
+	);
+
+	-- WORKSHOP FOOD DETAIL 3 for WORKSHOP 2
+	DECLARE @workshopFoodDetailId6 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [WorkshopFoodDetail] (
+		[Id], [WorkshopId], [ProductId], [Name], [Price],
+		[CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy],
+		[IsDeleted], [DeletedAt], [DeletedBy]
+	)
+	VALUES (
+		@workshopFoodDetailId6,
+		@workshopId2,
+		@productId27,
+		N'Pizza Thịt nguội Ý Parma và rau rocket với xốt cà chua',
+		180000,
+		GETDATE(), NULL, N'Admin', NULL,
+		0, NULL, NULL
+	);
+
+	-- WORKSHOP 3
+	DECLARE @workshopId3 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Workshop] (
+		[Id], [Name], [Header], [Description], [Location], [Organizer], [HotLineContact],
+		[WorkshopDate], [StartRegisterDate], [EndRegisterDate], [TotalFee],
+		[MaxRegister], [MaxPizzaPerRegister], [MaxParticipantPerRegister], [WorkshopStatus],
+		[totalRegisteredParticipant], [ZoneId], [ZoneName],
+		[CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy],
+		[IsDeleted], [DeletedAt], [DeletedBy]
+	)
+	VALUES (
+		@workshopId3, 
+		N'Pizza Craft Night',
+		N'Shape. Sauce. Share.',
+		N'Pizza Craft Night - Shape. Sauce. Share.',
+		N'Sẽ được cập nhật', N'Sẽ được cập nhật', N'Sẽ được cập nhật',
+		DATEADD(DAY, 5, GETDATE()), DATEADD(DAY, 1, GETDATE()), DATEADD(DAY, 3, GETDATE()), 295000,
+		4, 8, 2, 0,
+		0, @zoneId5, N'Workshop',
+		GETDATE(), NULL, N'Admin', NULL,
+		0, NULL, NULL
+	);
+
+	-- WORKSHOP FOOD DETAIL 1 for WORKSHOP 3
+	DECLARE @workshopFoodDetailId7 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [WorkshopFoodDetail] (
+		[Id], [WorkshopId], [ProductId], [Name], [Price],
+		[CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy],
+		[IsDeleted], [DeletedAt], [DeletedBy]
+	)
+	VALUES (
+		@workshopFoodDetailId7,
+		@workshopId3,
+		@productId30,
+		N'Pizza 3 loại phô mai nhà làm',
+		200000,
+		GETDATE(), NULL, N'Admin', NULL,
+		0, NULL, NULL
+	);
+
+	-- WORKSHOP FOOD DETAIL 2 for WORKSHOP 3
+	DECLARE @workshopFoodDetailId8 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [WorkshopFoodDetail] (
+		[Id], [WorkshopId], [ProductId], [Name], [Price],
+		[CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy],
+		[IsDeleted], [DeletedAt], [DeletedBy]
+	)
+	VALUES (
+		@workshopFoodDetailId8,
+		@workshopId3,
+		@productId36,
+		N'Pizza Tôm và xốt Mayonnaise',
+		185000,
+		GETDATE(), NULL, N'Admin', NULL,
+		0, NULL, NULL
+	);
+
+	-- WORKSHOP FOOD DETAIL 3 for WORKSHOP 3
+	DECLARE @workshopFoodDetailId9 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [WorkshopFoodDetail] (
+		[Id], [WorkshopId], [ProductId], [Name], [Price],
+		[CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy],
+		[IsDeleted], [DeletedAt], [DeletedBy]
+	)
+	VALUES (
+		@workshopFoodDetailId9,
+		@workshopId3,
+		@productId28,
+		N'Pizza Margherita với xúc xích Ý Milano và xúc xích cay Chorizo',
+		200000,
+		GETDATE(), NULL, N'Admin', NULL,
+		0, NULL, NULL
+	);
+
+	-- WORKSHOP 4
+	DECLARE @workshopId4 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Workshop] (
+		[Id], [Name], [Header], [Description], [Location], [Organizer], [HotLineContact],
+		[WorkshopDate], [StartRegisterDate], [EndRegisterDate], [TotalFee],
+		[MaxRegister], [MaxPizzaPerRegister], [MaxParticipantPerRegister], [WorkshopStatus],
+		[totalRegisteredParticipant], [ZoneId], [ZoneName],
+		[CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy],
+		[IsDeleted], [DeletedAt], [DeletedBy]
+	)
+	VALUES (
+		@workshopId4, 
+		N'Family Pizza Day',
+		N'Fun, Flour & Family!',
+		N'Family Pizza Day - Fun, Flour & Family!',
+		N'Sẽ được cập nhật', N'Sẽ được cập nhật', N'Sẽ được cập nhật',
+		DATEADD(DAY, 5, GETDATE()), DATEADD(DAY, 1, GETDATE()), DATEADD(DAY, 3, GETDATE()), 210000,
+		2, 4, 2, 0,
+		0, @zoneId5, N'Workshop',
+		GETDATE(), NULL, N'Admin', NULL,
+		0, NULL, NULL
+	);
+
+	-- WORKSHOP FOOD DETAIL 1 for WORKSHOP 4
+	DECLARE @workshopFoodDetailId10 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [WorkshopFoodDetail] (
+		[Id], [WorkshopId], [ProductId], [Name], [Price],
+		[CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy],
+		[IsDeleted], [DeletedAt], [DeletedBy]
+	)
+	VALUES (
+		@workshopFoodDetailId10,
+		@workshopId4,
+		@productId45,
+		N'Pizza 5 loại phô mai nhà làm',
+		180000,
+		GETDATE(), NULL, N'Admin', NULL,
+		0, NULL, NULL
+	);
+
+	-- WORKSHOP FOOD DETAIL 2 for WORKSHOP 4
+	DECLARE @workshopFoodDetailId11 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [WorkshopFoodDetail] (
+		[Id], [WorkshopId], [ProductId], [Name], [Price],
+		[CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy],
+		[IsDeleted], [DeletedAt], [DeletedBy]
+	)
+	VALUES (
+		@workshopFoodDetailId11,
+		@workshopId4,
+		@productId40,
+		N'Pizza Cà ri gà cay',
+		200000,
+		GETDATE(), NULL, N'Admin', NULL,
+		0, NULL, NULL
+	);
+
+	-- WORKSHOP FOOD DETAIL 3 for WORKSHOP 4
+	DECLARE @workshopFoodDetailId12 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [WorkshopFoodDetail] (
+		[Id], [WorkshopId], [ProductId], [Name], [Price],
+		[CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy],
+		[IsDeleted], [DeletedAt], [DeletedBy]
+	)
+	VALUES (
+		@workshopFoodDetailId12,
+		@workshopId4,
+		@productId32,
+		N'Pizza Hải sản xốt cà chua cay với phô mai hun khói',
+		190000,
+		GETDATE(), NULL, N'Admin', NULL,
+		0, NULL, NULL
+	);
+
+	-- WORKSHOP 5
+	DECLARE @workshopId5 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Workshop] (
+		[Id], [Name], [Header], [Description], [Location], [Organizer], [HotLineContact],
+		[WorkshopDate], [StartRegisterDate], [EndRegisterDate], [TotalFee],
+		[MaxRegister], [MaxPizzaPerRegister], [MaxParticipantPerRegister], [WorkshopStatus],
+		[totalRegisteredParticipant], [ZoneId], [ZoneName],
+		[CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy],
+		[IsDeleted], [DeletedAt], [DeletedBy]
+	)
+	VALUES (
+		@workshopId5, 
+		N'Pizza Pro Class',
+		N'From Dough to Wow!',
+		N'Pizza Pro Class - From Dough to Wow!',
+		N'Sẽ được cập nhật', N'Sẽ được cập nhật', N'Sẽ được cập nhật',
+		DATEADD(DAY, 5, GETDATE()), DATEADD(DAY, 1, GETDATE()), DATEADD(DAY, 3, GETDATE()), 275000,
+		3, 6, 2, 0,
+		0, @zoneId5, N'Workshop',
+		GETDATE(), NULL, N'Admin', NULL,
+		0, NULL, NULL
+	);
+
+	-- WORKSHOP FOOD DETAIL 1 for WORKSHOP 5
+	DECLARE @workshopFoodDetailId13 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [WorkshopFoodDetail] (
+		[Id], [WorkshopId], [ProductId], [Name], [Price],
+		[CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy],
+		[IsDeleted], [DeletedAt], [DeletedBy]
+	)
+	VALUES (
+		@workshopFoodDetailId13,
+		@workshopId5,
+		@productId35,
+		N'Pizza Cá hồi xốt kem miso',
+		195000,
+		GETDATE(), NULL, N'Admin', NULL,
+		0, NULL, NULL
+	);
+
+	-- WORKSHOP FOOD DETAIL 2 for WORKSHOP 5
+	DECLARE @workshopFoodDetailId14 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [WorkshopFoodDetail] (
+		[Id], [WorkshopId], [ProductId], [Name], [Price],
+		[CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy],
+		[IsDeleted], [DeletedAt], [DeletedBy]
+	)
+	VALUES (
+		@workshopFoodDetailId14,
+		@workshopId5,
+		@productId41,
+		N'Pizza Phô mai Camembert nhà làm và xốt nấm thịt nguội',
+		190000,
+		GETDATE(), NULL, N'Admin', NULL,
+		0, NULL, NULL
+	);
+
+	-- WORKSHOP FOOD DETAIL 3 for WORKSHOP 5
+	DECLARE @workshopFoodDetailId15 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [WorkshopFoodDetail] (
+		[Id], [WorkshopId], [ProductId], [Name], [Price],
+		[CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy],
+		[IsDeleted], [DeletedAt], [DeletedBy]
+	)
+	VALUES (
+		@workshopFoodDetailId15,
+		@workshopId5,
+		@productId27,
+		N'Pizza Thịt nguội Ý Parma và rau rocket với xốt cà chua',
+		178000,
+		GETDATE(), NULL, N'Admin', NULL,
+		0, NULL, NULL
+	);
+
+
+	-- WORKSHOP 6
+	DECLARE @workshopId6 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Workshop] (
+		[Id], [Name], [Header], [Description], [Location], [Organizer], [HotLineContact],
+		[WorkshopDate], [StartRegisterDate], [EndRegisterDate], [TotalFee],
+		[MaxRegister], [MaxPizzaPerRegister], [MaxParticipantPerRegister], [WorkshopStatus],
+		[totalRegisteredParticipant], [ZoneId], [ZoneName],
+		[CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy],
+		[IsDeleted], [DeletedAt], [DeletedBy]
+	)
+	VALUES (
+		@workshopId6, 
+		N'Artisan Pizza Lab',
+		N'Create. Bake. Celebrate.',
+		N'Artisan Pizza Lab - Create. Bake. Celebrate.',
+		N'Sẽ được cập nhật', N'Sẽ được cập nhật', N'Sẽ được cập nhật',
+		DATEADD(DAY, 5, GETDATE()), DATEADD(DAY, 1, GETDATE()), DATEADD(DAY, 3, GETDATE()), 250000,
+		3, 6, 2, 0,
+		0, @zoneId5, N'Workshop',
+		GETDATE(), NULL, N'Admin', NULL,
+		0, NULL, NULL
+	);
+
+	-- WORKSHOP FOOD DETAIL 1 for WORKSHOP 6
+	DECLARE @workshopFoodDetailId16 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [WorkshopFoodDetail] (
+		[Id], [WorkshopId], [ProductId], [Name], [Price],
+		[CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy],
+		[IsDeleted], [DeletedAt], [DeletedBy]
+	)
+	VALUES (
+		@workshopFoodDetailId16,
+		@workshopId6,
+		@productId44,
+		N'Pizza rau cải xoăn kèm phô mai Ricotta chanh nhà làm với xốt ô liu và nụ bạch hoa',
+		200000,
+		GETDATE(), NULL, N'Admin', NULL,
+		0, NULL, NULL
+	);
+
+	-- WORKSHOP 7
+	DECLARE @workshopId7 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Workshop] (
+		[Id], [Name], [Header], [Description], [Location], [Organizer], [HotLineContact],
+		[WorkshopDate], [StartRegisterDate], [EndRegisterDate], [TotalFee],
+		[MaxRegister], [MaxPizzaPerRegister], [MaxParticipantPerRegister], [WorkshopStatus],
+		[totalRegisteredParticipant], [ZoneId], [ZoneName],
+		[CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy],
+		[IsDeleted], [DeletedAt], [DeletedBy]
+	)
+	VALUES (
+		@workshopId7, 
+		N'Kids Pizza Party',
+		N'Little Hands, Big Pizzas!',
+		N'Kids Pizza Party - Little Hands, Big Pizzas!',
+		N'Sẽ được cập nhật', N'Sẽ được cập nhật', N'Sẽ được cập nhật',
+		DATEADD(DAY, 5, GETDATE()), DATEADD(DAY, 1, GETDATE()), DATEADD(DAY, 3, GETDATE()), 220000,
+		2, 4, 2, 0,
+		0, @zoneId5, N'Workshop',
+		GETDATE(), NULL, N'Admin', NULL,
+		0, NULL, NULL
+	);
+
+	-- WORKSHOP FOOD DETAIL 1 for WORKSHOP 7
+	DECLARE @workshopFoodDetailId17 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [WorkshopFoodDetail] (
+		[Id], [WorkshopId], [ProductId], [Name], [Price],
+		[CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy],
+		[IsDeleted], [DeletedAt], [DeletedBy]
+	)
+	VALUES (
+		@workshopFoodDetailId17,
+		@workshopId7,
+		@productId37,
+		N'Pizza Thịt bò cay kiểu Kebab',
+		175000,
+		GETDATE(), NULL, N'Admin', NULL,
+		0, NULL, NULL
+	);
+
+	-- WORKSHOP FOOD DETAIL 2 for WORKSHOP 7
+	DECLARE @workshopFoodDetailId18 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [WorkshopFoodDetail] (
+		[Id], [WorkshopId], [ProductId], [Name], [Price],
+		[CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy],
+		[IsDeleted], [DeletedAt], [DeletedBy]
+	)
+	VALUES (
+		@workshopFoodDetailId18,
+		@workshopId7,
+		@productId37,
+		N'Pizza Thịt bò cay kiểu Kebab',
+		180000,
+		GETDATE(), NULL, N'Admin', NULL,
+		0, NULL, NULL
+	);
+
+	-- WORKSHOP FOOD DETAIL 3 for WORKSHOP 7
+	DECLARE @workshopFoodDetailId19 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [WorkshopFoodDetail] (
+		[Id], [WorkshopId], [ProductId], [Name], [Price],
+		[CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy],
+		[IsDeleted], [DeletedAt], [DeletedBy]
+	)
+	VALUES (
+		@workshopFoodDetailId19,
+		@workshopId7,
+		@productId37,
+		N'Pizza Thịt bò cay kiểu Kebab',
+		170000,
+		GETDATE(), NULL, N'Admin', NULL,
+		0, NULL, NULL
+	);
+
+	-- WORKSHOP 8
+	DECLARE @workshopId8 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Workshop] (
+		[Id], [Name], [Header], [Description], [Location], [Organizer], [HotLineContact],
+		[WorkshopDate], [StartRegisterDate], [EndRegisterDate], [TotalFee],
+		[MaxRegister], [MaxPizzaPerRegister], [MaxParticipantPerRegister], [WorkshopStatus],
+		[totalRegisteredParticipant], [ZoneId], [ZoneName],
+		[CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy],
+		[IsDeleted], [DeletedAt], [DeletedBy]
+	)
+	VALUES (
+		@workshopId8, 
+		N'Evening Pizza Escape',
+		N'Unwind. Slice. Repeat.',
+		N'Evening Pizza Escape - Unwind. Slice. Repeat.',
+		N'Sẽ được cập nhật', N'Sẽ được cập nhật', N'Sẽ được cập nhật',
+		DATEADD(DAY, 5, GETDATE()), DATEADD(DAY, 1, GETDATE()), DATEADD(DAY, 3, GETDATE()), 240000,
+		3, 6, 2, 0,
+		0, @zoneId5, N'Workshop',
+		GETDATE(), NULL, N'Admin', NULL,
+		0, NULL, NULL
+	);
+
+	-- WORKSHOP FOOD DETAIL 1 for WORKSHOP 8
+	DECLARE @workshopFoodDetailId20 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [WorkshopFoodDetail] (
+		[Id], [WorkshopId], [ProductId], [Name], [Price],
+		[CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy],
+		[IsDeleted], [DeletedAt], [DeletedBy]
+	)
+	VALUES (
+		@workshopFoodDetailId20,
+		@workshopId8,
+		@productId37,
+		N'Pizza Thịt bò cay kiểu Kebab',
+		185000,
+		GETDATE(), NULL, N'Admin', NULL,
+		0, NULL, NULL
+	);
+
+	-- WORKSHOP 9
+	DECLARE @workshopId9 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Workshop] (
+		[Id], [Name], [Header], [Description], [Location], [Organizer], [HotLineContact],
+		[WorkshopDate], [StartRegisterDate], [EndRegisterDate], [TotalFee],
+		[MaxRegister], [MaxPizzaPerRegister], [MaxParticipantPerRegister], [WorkshopStatus],
+		[totalRegisteredParticipant], [ZoneId], [ZoneName],
+		[CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy],
+		[IsDeleted], [DeletedAt], [DeletedBy]
+	)
+	VALUES (
+		@workshopId9, 
+		N'Pizza Masters Session',
+		N'Master the Crust, Own the Oven',
+		N'Pizza Masters Session - Master the Crust, Own the Oven',
+		N'Sẽ được cập nhật', N'Sẽ được cập nhật', N'Sẽ được cập nhật',
+		DATEADD(DAY, 5, GETDATE()), DATEADD(DAY, 1, GETDATE()), DATEADD(DAY, 3, GETDATE()), 285000,
+		4, 8, 2, 0,
+		0, @zoneId3, N'Zone 3',
+		GETDATE(), NULL, N'Admin', NULL,
+		0, NULL, NULL
+	);
+
+	-- WORKSHOP FOOD DETAIL 1 for WORKSHOP 9
+	DECLARE @workshopFoodDetailId21 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [WorkshopFoodDetail] (
+		[Id], [WorkshopId], [ProductId], [Name], [Price],
+		[CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy],
+		[IsDeleted], [DeletedAt], [DeletedBy]
+	)
+	VALUES (
+		@workshopFoodDetailId21,
+		@workshopId9,
+		@productId32,
+		N'Pizza Hải sản xốt cà chua cay với phô mai hun khói',
+		190000,
+		GETDATE(), NULL, N'Admin', NULL,
+		0, NULL, NULL
+	);
+
+	-- WORKSHOP 10
+	DECLARE @workshopId10 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [Workshop] (
+		[Id], [Name], [Header], [Description], [Location], [Organizer], [HotLineContact],
+		[WorkshopDate], [StartRegisterDate], [EndRegisterDate], [TotalFee],
+		[MaxRegister], [MaxPizzaPerRegister], [MaxParticipantPerRegister], [WorkshopStatus],
+		[totalRegisteredParticipant], [ZoneId], [ZoneName],
+		[CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy],
+		[IsDeleted], [DeletedAt], [DeletedBy]
+	)
+	VALUES (
+		@workshopId10, 
+		N'Late Night Pizza Jam',
+		N'Knead. Top. Groove.',
+		N'Late Night Pizza Jam - Knead. Top. Groove.',
+		N'Sẽ được cập nhật', N'Sẽ được cập nhật', N'Sẽ được cập nhật',
+		DATEADD(DAY, 5, GETDATE()), DATEADD(DAY, 1, GETDATE()), DATEADD(DAY, 3, GETDATE()), 230000,
+		3, 6, 2, 0,
+		0, @zoneId6, N'Workshop',
+		GETDATE(), NULL, N'Admin', NULL,
+		0, NULL, NULL
+	);
+
+	-- WORKSHOP FOOD DETAIL 1 for WORKSHOP 10
+	DECLARE @workshopFoodDetailId22 UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO [WorkshopFoodDetail] (
+		[Id], [WorkshopId], [ProductId], [Name], [Price],
+		[CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy],
+		[IsDeleted], [DeletedAt], [DeletedBy]
+	)
+	VALUES (
+		@workshopFoodDetailId22,
+		@workshopId10,
+		@productId32,
+		N'Pizza Hải sản xốt cà chua cay với phô mai hun khói',
+		195000,
+		GETDATE(), NULL, N'Admin', NULL,
+		0, NULL, NULL
+	);
+
+	-- SHIFT SEEDS
+	DECLARE @morningShift UNIQUEIDENTIFIER = NEWID();
+	DECLARE @noonShift UNIQUEIDENTIFIER = NEWID();
+	DECLARE @eveningShift UNIQUEIDENTIFIER = NEWID();
+	INSERT INTO Shift 
+	 ([Id], [Name], [Description], [CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy], [IsDeleted], [DeletedAt], [DeletedBy]) 
+	 VALUES 
+     (@morningShift, N'Ca sáng', NULL, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+     (@noonShift, N'Ca trưa', NULL, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL),
+     (@eveningShift, N'Ca chiều', NULL, GETDATE(), NULL, N'Admin', NULL, 0, NULL, NULL);
+
+	-- WORKING SLOT SEEDS
+	DECLARE @MondayId UNIQUEIDENTIFIER = '478fcc2b-4839-4fc2-baff-db273aa9e0b4';
+	DECLARE @TuesdayId UNIQUEIDENTIFIER = 'f8dec225-dbb2-4961-9be6-9f11eac723ab';
+	DECLARE @WednesdayId UNIQUEIDENTIFIER = '24a0e861-15b0-4d60-ac54-adf5ee0f1ccd';
+	DECLARE @ThursdayId UNIQUEIDENTIFIER = '1afe24bd-4d62-480b-a501-692bdd375bcb';
+	DECLARE @FridayId UNIQUEIDENTIFIER = '93e1d6e5-b144-4099-be3c-833f7ef87fa3';
+	DECLARE @SaturdayId UNIQUEIDENTIFIER = '4c37288c-3a9c-4d6e-9565-4302a5a28669';
+	DECLARE @SundayId UNIQUEIDENTIFIER = 'c6f2594b-71f8-46ff-9584-c62c2e02151e';
+
+	DECLARE @ShiftStartMorning TIME = '08:00', @ShiftEndMorning TIME = '12:00';
+	DECLARE @ShiftStartNoon TIME = '12:00', @ShiftEndNoon TIME = '17:00';
+	DECLARE @ShiftStartEvening TIME = '17:00', @ShiftEndEvening TIME = '22:00';
+
+	DECLARE @DayId UNIQUEIDENTIFIER, @DayName NVARCHAR(50);
+	DECLARE day_cursor CURSOR FOR 
+	SELECT Id, Name FROM [dbo].[Day] WHERE IsDeleted = 0;
+	OPEN day_cursor;
+	FETCH NEXT FROM day_cursor INTO @DayId, @DayName;
+	
+	WHILE @@FETCH_STATUS = 0
+	BEGIN
+    -- Ca sáng
+    INSERT INTO WorkingSlot (Id, ShiftName, DayName, ShiftStart, ShiftEnd, Capacity, DayId, ShiftId, CreatedDate, CreatedBy, IsDeleted)
+    VALUES (NEWID(), N'Ca sáng', @DayName, @ShiftStartMorning, @ShiftEndMorning, 3, @DayId, @morningShift, GETDATE(), N'Admin', 0);
+    -- Ca trưa
+    INSERT INTO WorkingSlot (Id, ShiftName, DayName, ShiftStart, ShiftEnd, Capacity, DayId, ShiftId, CreatedDate, CreatedBy, IsDeleted)
+    VALUES (NEWID(), N'Ca trưa', @DayName, @ShiftStartNoon, @ShiftEndNoon, 3, @DayId, @noonShift, GETDATE(), N'Admin', 0);
+    -- Ca tối
+    INSERT INTO WorkingSlot (Id, ShiftName, DayName, ShiftStart, ShiftEnd, Capacity, DayId, ShiftId, CreatedDate, CreatedBy, IsDeleted)
+    VALUES (NEWID(), N'Ca tối', @DayName, @ShiftStartEvening, @ShiftEndEvening, 3, @DayId, @eveningShift, GETDATE(), N'Admin', 0);
+
+    FETCH NEXT FROM day_cursor INTO @DayId, @DayName;
+	END
+	CLOSE day_cursor;
+	DEALLOCATE day_cursor;
+
+	-- APPUSERS SEEDS
+	INSERT INTO AppUsers (Id, CreatedDate, ModifiedDate, CreatedBy, ModifiedBy, IsDeleted, DeletedAt, DeletedBy, UserName, NormalizedUserName, Email, NormalizedEmail, EmailConfirmed, PasswordHash, SecurityStamp, ConcurrencyStamp, PhoneNumber, PhoneNumberConfirmed, TwoFactorEnabled, LockoutEnd, LockoutEnabled, AccessFailedCount)
+	VALUES 
+	--Manager
+	('3674B44D-225E-4ADF-26F0-08DD759A0482', GETDATE(), NULL, 'Admin', NULL, 0, NULL, NULL, 'NhatHao', 'NHATHAO', '', '', 0, 'AQAAAAIAAYagAAAAEC0y9ulbDeQGS1fSV/sW7SIOi8ICExxgCDGn6+hgIZ8zJs++omzXBhSiFg1wdvbqiQ==', 'SYXK74OEKI2SCDPVBASBITBJU2QMO77M', '6dcf593c-ef1a-4e86-97fd-3f05d68cfa50', NULL, 0, 0, NULL, 1, 0),
+	('E8EEA46D-4BA6-4C07-26F1-08DD759A0482', GETDATE(), NULL, 'Admin', NULL, 0, NULL, NULL, 'HoangBao', 'HOANGBAO', '', '', 0, 'AQAAAAIAAYagAAAAEGegfCz2aZVCuV4ElP3pcUYbn3wAqFoQoS93sWXsY7x0DwsGEkbZ+S7bHENs7vh8ew==', 'RVQ5P2OGDKIMAIOMK3GCBZ3C3NJGP36Y', '06d3582a-6d31-4d51-bf25-6508d17a51c0', NULL, 0, 0, NULL, 1, 0),
+	('9AF63A0D-559A-4270-26F2-08DD759A0482', GETDATE(), NULL, 'Admin', NULL, 0, NULL, NULL, 'HungHao', 'HUNGHAO', '', '', 0, 'AQAAAAIAAYagAAAAEO/QUAQmkHhVZbg3i9E/ia6B+/FiA0mMFUbRLBhWcbsvcuJBEBlG+Jfc2I4pPndMJA==', 'WYCG4YWGZLYKK2T6JYFHXZLB6DNXOMBE', '343cbb3d-98f7-40c6-a6e2-806dbbe83f56', NULL, 0, 0, NULL, 1, 0),
+	('EBD4F98C-0FF5-4127-26F3-08DD759A0482', GETDATE(), NULL, 'Admin', NULL, 0, NULL, NULL, 'TruongThanh', 'TRUONGTHANH', '', '', 0, 'AQAAAAIAAYagAAAAELxXUOcrHKrrxv5h89zcsl9mwYPy4LIEUtNUkjZpWGBPhjv8YlweCTHVelpku3kshQ==', 'ORW4DXAR6QMKTVS7Z722DAYGIA6FGUYB', '81e66519-d3c7-4431-9fda-befa8644ffe0', NULL, 0, 0, NULL, 1, 0),
+	('EB1A0E6D-3475-4A30-26F4-08DD759A0482', GETDATE(), NULL, 'Admin', NULL, 0, NULL, NULL, 'SyQuang', 'SYQUANG', '', '', 0, 'AQAAAAIAAYagAAAAEH+hkizUUmBP1OkgzlHee7M/jcHgjSoT9XR5U8YZeqytYTK/I5IrzGgaVsuA4aLnNQ==', 'KLIHFUFXBL32CSAFXJIYBVF3FII6LKYX', 'c2e13722-7926-4236-93c0-abc56b4e84f6', NULL, 0, 0, NULL, 1, 0),
+	
+	--Staff FullTime
+	('58162CDE-E9ED-498D-26F5-08DD759A0482', GETDATE(), NULL, 'Admin', NULL, 0, NULL, NULL, 'StaffFT_1', 'STAFFFT_1', '', '', 0, 'AQAAAAIAAYagAAAAEOuPK76YGqG7sBBcqaciMi4zeYM1XvjOUFfaZYPwi/weib59WJkTHieujGc45dbP9A==', '7IDKI47BNICQAWZJLEATUQ5442XVG4HK', 'd625fb22-1230-4359-98bd-fdd1332edd4f', NULL, 0, 0, NULL, 1, 0),
+	('9F251669-2B22-4D5D-26F6-08DD759A0482', GETDATE(), NULL, 'Admin', NULL, 0, NULL, NULL, 'StaffFT_2', 'STAFFFT_2', '', '', 0, 'AQAAAAIAAYagAAAAENysnYKsFAksMpYvCad7M2tBRXXXrJ31uuyN5CbxqNEiVlTC1LcVGRjT+CxzIEIWxg==', 'YHD4HDWW7UBAJGKXELLWB7OC67MQXOZ6', '003dda6d-76dd-4ed8-b26f-ff5a8864ecde', NULL, 0, 0, NULL, 1, 0),
+	('44249BB9-490E-4475-26F7-08DD759A0482', GETDATE(), NULL, 'Admin', NULL, 0, NULL, NULL, 'StaffFT_3', 'STAFFFT_3', '', '', 0, 'AQAAAAIAAYagAAAAEMD/OjupXIIIjAbCHDtY19v4dqKEqyvK/JtlLMJDuaNi+lFYeRx1CDkM2Ya+8OstYw==', 'YFKFKC5DFXHABCWWABR7AE6I4YS6W3VH', '15f63763-2760-4bd8-9d99-5ca16ab0385f', NULL, 0, 0, NULL, 1, 0),
+	('FA4090B7-1798-4BF6-26F8-08DD759A0482', GETDATE(), NULL, 'Admin', NULL, 0, NULL, NULL, 'StaffFT_4', 'STAFFFT_4', '', '', 0, 'AQAAAAIAAYagAAAAEBhcgCm42viHCBVNpYsILEjXZ4rscoPkd1fGDZphrtEvyTsTH2vIWwZ1tgWcYNcQ3Q==', 'TZ6DVMWEPGDWNTPMTIRLZHVOQ2G5WRVE', '1fc1b978-b928-4185-8184-19b10178e3da', NULL, 0, 0, NULL, 1, 0),
+	('97E200FD-18C3-4A83-26F9-08DD759A0482', GETDATE(), NULL, 'Admin', NULL, 0, NULL, NULL, 'StaffFT_5', 'STAFFFT_5', '', '', 0, 'AQAAAAIAAYagAAAAEL4MgDHha3kSggen5J3VuxkbWmQrZ7YUy78A9WEcqWEb5OlrErqloOzEZ4OwLdw+kA==', 'YVS54F6HAX6Q5WAVLEO4TXO4FIALQ7GC', '4e13c9da-9500-482b-9339-13e2780b4d58', NULL, 0, 0, NULL, 1, 0),
+	('47EF30F4-D765-4B50-26FA-08DD759A0482', GETDATE(), NULL, 'Admin', NULL, 0, NULL, NULL, 'StaffFT_6', 'STAFFFT_6', '', '', 0, 'AQAAAAIAAYagAAAAEOhtFsZQNORyXL5kwR/oSjs/v/cGN5P18KKl+i2QOTmeB9ELdiu7LUNoPXOcmYePJA==', 'ULTG4AKY57YRNAFKPN4R3VMDYAMQSQAU', '7b32694a-bbf5-4b80-90f5-274cc3b70225', NULL, 0, 0, NULL, 1, 0),
+	('07E4FE0B-9E81-4207-26FB-08DD759A0482', GETDATE(), NULL, 'Admin', NULL, 0, NULL, NULL, 'StaffFT_7', 'STAFFFT_7', '', '', 0, 'AQAAAAIAAYagAAAAENAKlI+q2KIR68qTnbZ79+gX/2tKReNWGoMG6fMaKYRiwJd7kv72tEbj7i5h2sAVyA==', 'XPUQHBUZRHJOJONWO42DJZZTNR5C4WWL', 'df9b5510-8191-47fa-805a-58608f2499eb', NULL, 0, 0, NULL, 1, 0),
+	('F5805027-0058-4D29-26FC-08DD759A0482', GETDATE(), NULL, 'Admin', NULL, 0, NULL, NULL, 'StaffFT_8', 'STAFFFT_8', '', '', 0, 'AQAAAAIAAYagAAAAEHn/I5Mnq+9ml8rGvKtnOwY6VEeAnSBrg7RutY+fWS3etF+rn4d7wXMb7XE3ew5Gug==', 'KEBPNECA5BWUJFDQXPNGVJUJH27L3AO7', '3c44e7f7-c847-4d56-a54f-83216021201a', NULL, 0, 0, NULL, 1, 0),
+	('8088AF31-A752-4061-26FD-08DD759A0482', GETDATE(), NULL, 'Admin', NULL, 0, NULL, NULL, 'StaffFT_9', 'STAFFFT_9', '', '', 0, 'AQAAAAIAAYagAAAAEFVAgDfxjlKieXxMP8YaYiCMNpB5IEwoxr8HjkhvXQSneXFPZXQDV6QgIMBO/v13vg==', '7W7KOONCHAG2WLN4CZSIJY7OF763BZHN', 'a1a6c817-3e34-42e9-a45a-f4bee7f21cca', NULL, 0, 0, NULL, 1, 0),
+	('8E20D6DF-1440-4D5E-26FE-08DD759A0482', GETDATE(), NULL, 'Admin', NULL, 0, NULL, NULL, 'StaffFT_10', 'STAFFFT_10', '', '', 0, 'AQAAAAIAAYagAAAAEI+EKJ1pn5oKfJH0pZgD9K+MvefYp6HhYfrFERgfTpuAWQmRNeihvgc6peHE9B/nmA==', 'TKZBTIF5N3B5PMZFPUNCGQ2FARKDDIO4', '791711e2-a9a4-4a7b-a41e-9e80083d7978', NULL, 0, 0, NULL, 1, 0),
+	('8ACA2EF4-E611-4CD1-26FF-08DD759A0482', GETDATE(), NULL, 'Admin', NULL, 0, NULL, NULL, 'StaffFT_11', 'STAFFFT_11', '', '', 0, 'AQAAAAIAAYagAAAAEBr8Ox+OHkDkXZ6KmwDIjm/GGbOUHnvaf+w/zymrFWX5AJdHulJKlfU75TZ2U1BMXw==', 'MXGTRQ2FBL3CFA44UNTA7C4RZRQOYBAQ', '1afc26d5-a72d-417c-ba5a-c4a3e8472244', NULL, 0, 0, NULL, 1, 0),
+	('0CA7A9B7-2DE2-4988-2700-08DD759A0482', GETDATE(), NULL, 'Admin', NULL, 0, NULL, NULL, 'StaffFT_12', 'STAFFFT_12', '', '', 0, 'AQAAAAIAAYagAAAAEOGFruz192mid1OLj2eAKb47zQso7xzTxWcJ9UWhl9Ih7PdxoHp6HHj/yA9nQQMikg==', '43FEMEGS7UBY6XQ73S24X3LRAOCZUOCQ', 'bfc0eeaa-97bb-4efe-8789-9a114b1b9c35', NULL, 0, 0, NULL, 1, 0),
+	('461D0957-AA4D-4A05-2701-08DD759A0482', GETDATE(), NULL, 'Admin', NULL, 0, NULL, NULL, 'StaffFT_13', 'STAFFFT_13', '', '', 0, 'AQAAAAIAAYagAAAAEE53B5/5eSj2t21p2tVyWa4UCmGtBxPmz30o3oxEB7/8YXRN8F7mVF40LRl9pTOHUg==', '6L6U63KJDMGLVVHPMPOORCF63MASCDKP', '52c136f5-478b-4afe-8ede-a0fd8506f030', NULL, 0, 0, NULL, 1, 0),
+	('A301A7C0-C7E0-4FA9-2702-08DD759A0482', GETDATE(), NULL, 'Admin', NULL, 0, NULL, NULL, 'StaffFT_14', 'STAFFFT_14', '', '', 0, 'AQAAAAIAAYagAAAAEH5LM2D4+jEiGNUFATr7b8/90s8g6VX9kaH5ZDjwkhmk4KpfbKenar08mAQQUvZrxw==', 'YTZ2CTB6N2QXJQK5WOK5Q3WSCMQEOP7A', '5d76b817-08e5-4050-9fb3-5c0fdbde0482', NULL, 0, 0, NULL, 1, 0),
+	
+	--Staff PartTime
+	('8E8FFC7F-3EAA-4EA2-2703-08DD759A0482', GETDATE(), NULL, 'Admin', NULL, 0, NULL, NULL, 'StaffPT_1', 'STAFFPT_1', '', '', 0, 'AQAAAAIAAYagAAAAEIeprJSwvxNmTnKocWte4PUrSjEA6cIdaGJWQMgG0AJo48Z0uhPgfNuqUB9Pns5d8A==', 'GRFZFRCFUG5PUVXCRIBOLUKMXJWHLFQB', 'ea6a39d7-b83e-4e90-a6de-913e4996f5d8', NULL, 0, 0, NULL, 1, 0),
+	('3263F3B7-026F-45F9-2704-08DD759A0482', GETDATE(), NULL, 'Admin', NULL, 0, NULL, NULL, 'StaffPT_2', 'STAFFPT_2', '', '', 0, 'AQAAAAIAAYagAAAAEGQ06h0yCV0P58bGxVYPT0/1Tjt9Lvsx4pMbttHa8dcYutXKtB6o6NSbv+St9VrIlQ==', '3KD66ACTSJPRJ2IPHJVL6TQ3C362NUUX', '5cbdd629-1d64-4bbf-acdb-b9bb92a822e8', NULL, 0, 0, NULL, 1, 0),
+	('35651B8B-BC39-42BD-2705-08DD759A0482', GETDATE(), NULL, 'Admin', NULL, 0, NULL, NULL, 'StaffPT_3', 'STAFFPT_3', '', '', 0, 'AQAAAAIAAYagAAAAEPAyL38kum+CJslOQSMuLZUvthy4CwFRqrmobRbZpkNjX5tNumLb65AjgJdCXzH34g==', 'VZK6BOXKFAFB5ZHDQUPE2H7TN7ELKKP4', '93a7f2f0-2de5-411a-a82e-1ef297e045df', NULL, 0, 0, NULL, 1, 0),
+	('4DB79B84-DA2B-44C5-2706-08DD759A0482', GETDATE(), NULL, 'Admin', NULL, 0, NULL, NULL, 'StaffPT_4', 'STAFFPT_4', '', '', 0, 'AQAAAAIAAYagAAAAEFhjTJ2jrXTwWQofqRg3MXVvBYQYq5G+n05qttX4uyYRWlaVSvzwldqksjSmrpkCXQ==', 'MJEBPJDN67CGAC3T2C4364BMPKJT2AIC', 'ad2b6d66-a2c1-4660-8bb7-df3ba33dbd97', NULL, 0, 0, NULL, 1, 0),
+	('195810B5-0028-4629-DB36-08DD75BBA155', GETDATE(), NULL, 'Admin', NULL, 0, NULL, NULL, 'StaffPT_5', 'STAFFPT_5', '', '', 0, 'AQAAAAIAAYagAAAAEL2aZsvHDx6LXe2QCiOCotQudRBzUr6nArfREglCD7ASasKAQ+cIIY2N/xba117eDA==', '4F5D3TLOHX7MCS77JEUVGTJ6OZKYNXS6', '0035ccb5-0c33-452e-b341-ce843cf8a43b', NULL, 0, 0, NULL, 1, 0),
+	('44BA2CF7-060A-4DC0-DB37-08DD75BBA155', GETDATE(), NULL, 'Admin', NULL, 0, NULL, NULL, 'StaffPT_6', 'STAFFPT_6', '', '', 0, 'AQAAAAIAAYagAAAAEP0Mu/2lJmXwQIhnO0uToOkhLM7TEB4xK28dVg2tANhNNePONvjz4MGS44mMo/qAgQ==', 'ZYCHIFNIJWR2XX76LJ5Q6ELCSJ6C37V7', '5d229f74-003e-459c-973d-4e8b88a02f30', NULL, 0, 0, NULL, 1, 0),
+	
+	--Chef FullTime
+	('185A6348-240C-4999-2709-08DD759A0482', GETDATE(), NULL, 'Admin', NULL, 0, NULL, NULL, 'ChefFT_1', 'CHEFFT_1', '', '', 0, 'AQAAAAIAAYagAAAAEL1j4J5GNxN33TZ77iGR1+M7kx/4idez4g/nHXbO/3NB62ARFPejRDkVm9kEQ3/Ruw==', 'NVHOTL776N4TTYETNELVDP3WTJWXWGKE', '79e51646-6b1f-4c67-bd4a-4543baeb4d4e', NULL, 0, 0, NULL, 1, 0),
+	('5BCB3726-81B3-4CE2-270A-08DD759A0482', GETDATE(), NULL, 'Admin', NULL, 0, NULL, NULL, 'ChefFT_2', 'CHEFFT_2', '', '', 0, 'AQAAAAIAAYagAAAAEAjNY4rGzqoZwuwyujhTnQ8VV5RcKv6eRg45zIxf0sec3nMF3zjz0Y+8fkkEfi/zwA==', 'SGZUMZ323ZTRZSNQO52N5KTI2ZFU45KE', '6ad49c4d-9072-4270-9ee8-f2c5736b676b', NULL, 0, 0, NULL, 1, 0),
+	('8B0C94CA-1A98-4BA4-270B-08DD759A0482', GETDATE(), NULL, 'Admin', NULL, 0, NULL, NULL, 'ChefFT_3', 'CHEFFT_3', '', '', 0, 'AQAAAAIAAYagAAAAEH46+dnWXDoLNMb1JEkj8Fi5iZs1pQXM2jFljRD+FTTucZoCKrlmoDv6/f62hgK70w==', 'C3MREM6I37YYXN462TPRJYXXI3HT6D4J', '9b02fb5a-972c-41f8-87b1-fab1c9e06f49', NULL, 0, 0, NULL, 1, 0),
+	('90C673BF-F3FF-4137-270C-08DD759A0482', GETDATE(), NULL, 'Admin', NULL, 0, NULL, NULL, 'ChefFT_4', 'CHEFFT_4', '', '', 0, 'AQAAAAIAAYagAAAAEFBqE46EahJPusa0+WGOgabI4ReYkazwy5/2AWJCwv5hHU5Ynn1zWEl68H33zw7srw==', 'VGZFRVGFSN67HMTFRUGFMWJKPJ76IOMN', 'd565c1ee-3034-497f-9011-92fe8b7ffa4c', NULL, 0, 0, NULL, 1, 0),
+	('34871E55-F0DB-4BC8-270D-08DD759A0482', GETDATE(), NULL, 'Admin', NULL, 0, NULL, NULL, 'ChefFT_5', 'CHEFFT_5', '', '', 0, 'AQAAAAIAAYagAAAAELlksUj5cTWCYWQfvnoHIxpBGvDfr+0rT1EU5G85EJ324+3Q/ym1iiSHNHl9Poki3g==', 'LK7LOSO4NL5TPEP3J534W56A3Q4SBYST', '375ae416-146b-4059-939f-2dc62499e7b4', NULL, 0, 0, NULL, 1, 0),
+	('56138E89-3841-4038-270E-08DD759A0482', GETDATE(), NULL, 'Admin', NULL, 0, NULL, NULL, 'ChefFT_6', 'CHEFFT_6', '', '', 0, 'AQAAAAIAAYagAAAAEHw7e00x8L+joGVtTvl+rBdP1p8vu1d52L5qCMGAESkvEt9okWC98tZi6IpS4hBOHA==', 'RBC2AORR7EMUXOLOEWPALWAUXL5YWZC4', 'df209190-2ca5-4471-b75f-5b4780c7cb6d', NULL, 0, 0, NULL, 1, 0),
+	('2B891D0C-4E2A-4952-270F-08DD759A0482', GETDATE(), NULL, 'Admin', NULL, 0, NULL, NULL, 'ChefFT_7', 'CHEFFT_7', '', '', 0, 'AQAAAAIAAYagAAAAEKZDAabGvYqab02Fd6wcHk73INjGH/f8FZ+26c3ByG2jywY9DRW/BwKxDJfj6FFX/Q==', '67JLMLKPRFQGRARKTE33VXWJ7A5CKAII', '15c95255-b4d9-4eef-b1c7-d24b1da9ebd7', NULL, 0, 0, NULL, 1, 0),
+	
+	--Chef PartTime
+	('073CC470-FBDA-445A-2710-08DD759A0482', GETDATE(), NULL, 'Admin', NULL, 0, NULL, NULL, 'ChefPT_1', 'CHEFPT_1', '', '', 0, 'AQAAAAIAAYagAAAAEBtnm3NX9Qw70wOUTwoqkRx/zCyE60VgJpwJHf3QouzmwxaflZpXu8Ih4cs1rozVEQ==', 'FRSEOTTAJTTX5C2B6QAKJFFCZ422CXXN', '71674e85-47a1-43ec-8d46-5349afb6f6b3', NULL, 0, 0, NULL, 1, 0),
+	('25B0D6DF-6FF8-4B9B-2711-08DD759A0482', GETDATE(), NULL, 'Admin', NULL, 0, NULL, NULL, 'ChefPT_2', 'CHEFPT_2', '', '', 0, 'AQAAAAIAAYagAAAAEMlDNAzIeEn5LLjbZDWONZQm9NKn6UU3iSg8fJlzNHJ0wj6BygCYeuaI+efNfB+cmw==', 'WDDEOZZAWZM47AHVQBAJIPNGQLNTMSZJ', '0866ce5e-0324-4bea-a8d5-101b1c0b4bfa', NULL, 0, 0, NULL, 1, 0),
+	('A435ED4D-DBA9-44CA-2712-08DD759A0482', GETDATE(), NULL, 'Admin', NULL, 0, NULL, NULL, 'ChefPT_3', 'CHEFPT_3', '', '', 0, 'AQAAAAIAAYagAAAAEB7K8e+F86DBqzx6ijQtKVdK3Lsu4ldzANO21Lpsow8GmbUKV0bP7qXk/uByTvRRzg==', '7563KIG2GA4PWMMXZLK3BDK3XCPJPCGK', '988b5262-ab4d-4923-8493-c940554aa8bf', NULL, 0, 0, NULL, 1, 0);
+
+	-- STAFF SEEDS
+	INSERT INTO [dbo].[Staff] (Id, FullName, Phone, Email, StaffType, Status, CreatedDate, ModifiedDate, CreatedBy, ModifiedBy, IsDeleted, DeletedAt, DeletedBy, AppUserId) 
+	VALUES
+	--Manager
+	(NEWID(), N'Vũ Nhật Hào', '0379231040', 'haovnse161380@fpt.edu.vn', 1, 1, GETDATE(), NULL, 'Admin', NULL, 0, NULL, NULL, '3674B44D-225E-4ADF-26F0-08DD759A0482'),
+	(NEWID(), N'Nguyễn Hoàng Bảo', '0934140524', 'baonhse172266@fpt.edu.vn', 1, 1, GETDATE(), NULL, 'Admin', NULL, 0, NULL, NULL, 'E8EEA46D-4BA6-4C07-26F1-08DD759A0482'),
+	(NEWID(), N'Nguyễn Hưng Hảo', '0946000406', 'haonhse172788@fpt.edu.vn', 1, 1, GETDATE(), NULL, 'Admin', NULL, 0, NULL, NULL, '9AF63A0D-559A-4270-26F2-08DD759A0482'),
+	(NEWID(), N'Tống Trường Thanh', '0967992202', 'thanhttse160320@fpt.edu.vn', 1, 1, GETDATE(), NULL, 'Admin', NULL, 0, NULL, NULL, 'EBD4F98C-0FF5-4127-26F3-08DD759A0482'),
+	(NEWID(), N'Trương Sỹ Quảng', '0888509299', 'quangtsse160326@fpt.edu.vn', 1, 1, GETDATE(), NULL, 'Admin', NULL, 0, NULL, NULL, 'EB1A0E6D-3475-4A30-26F4-08DD759A0482'),
+
+	--Staff FullTime
+	(NEWID(), N'Nguyễn Văn An', '', '', 0, 1, GETDATE(), NULL, 'Admin', NULL, 0, NULL, NULL, '58162CDE-E9ED-498D-26F5-08DD759A0482'),
+	(NEWID(), N'Lê Thị Hoa', '', '', 0, 1, GETDATE(), NULL, 'Admin', NULL, 0, NULL, NULL, '9F251669-2B22-4D5D-26F6-08DD759A0482'),
+	(NEWID(), N'Trần Minh Tuấn', '', '', 0, 1, GETDATE(), NULL, 'Admin', NULL, 0, NULL, NULL, '44249BB9-490E-4475-26F7-08DD759A0482'),
+	(NEWID(), N'Phạm Thị Hương', '', '', 0, 1, GETDATE(), NULL, 'Admin', NULL, 0, NULL, NULL, 'FA4090B7-1798-4BF6-26F8-08DD759A0482'),
+	(NEWID(), N'Võ Thành Nhân', '', '', 0, 1, GETDATE(), NULL, 'Admin', NULL, 0, NULL, NULL, '97E200FD-18C3-4A83-26F9-08DD759A0482'),
+	(NEWID(), N'Đỗ Thị Mai', '', '', 0, 1, GETDATE(), NULL, 'Admin', NULL, 0, NULL, NULL, '47EF30F4-D765-4B50-26FA-08DD759A0482'),
+	(NEWID(), N'Hoàng Văn Dũng', '', '', 0, 1, GETDATE(), NULL, 'Admin', NULL, 0, NULL, NULL, '07E4FE0B-9E81-4207-26FB-08DD759A0482'),
+	(NEWID(), N'Bùi Thị Lan', '', '', 0, 1, GETDATE(), NULL, 'Admin', NULL, 0, NULL, NULL, 'F5805027-0058-4D29-26FC-08DD759A0482'),
+	(NEWID(), N'Tạ Minh Quân', '', '', 0, 1, GETDATE(), NULL, 'Admin', NULL, 0, NULL, NULL, '8088AF31-A752-4061-26FD-08DD759A0482'),
+	(NEWID(), N'Ngô Thị Kim', '', '', 0, 1, GETDATE(), NULL, 'Admin', NULL, 0, NULL, NULL, '8E20D6DF-1440-4D5E-26FE-08DD759A0482'),
+	(NEWID(), N'Huỳnh Văn Hòa', '', '', 0, 1, GETDATE(), NULL, 'Admin', NULL, 0, NULL, NULL, '8ACA2EF4-E611-4CD1-26FF-08DD759A0482'),
+	(NEWID(), N'Cao Thị Tuyết', '', '', 0, 1, GETDATE(), NULL, 'Admin', NULL, 0, NULL, NULL, '0CA7A9B7-2DE2-4988-2700-08DD759A0482'),
+	(NEWID(), N'Đinh Minh Khang', '', '', 0, 1, GETDATE(), NULL, 'Admin', NULL, 0, NULL, NULL, '461D0957-AA4D-4A05-2701-08DD759A0482'),
+	(NEWID(), N'Mai Thị Lệ', '', '', 0, 1, GETDATE(), NULL, 'Admin', NULL, 0, NULL, NULL, 'A301A7C0-C7E0-4FA9-2702-08DD759A0482'),
+
+	--Staff PartTime
+	(NEWID(), N'Trương Thị Ngọc', '', '', 1, 0, GETDATE(), NULL, 'Admin', NULL, 0, NULL, NULL, '8E8FFC7F-3EAA-4EA2-2703-08DD759A0482'),
+	(NEWID(), N'Lý Văn Khôi', '', '', 1, 0, GETDATE(), NULL, 'Admin', NULL, 0, NULL, NULL, '3263F3B7-026F-45F9-2704-08DD759A0482'),
+	(NEWID(), N'Huỳnh Thị Bích', '', '', 1, 0, GETDATE(), NULL, 'Admin', NULL, 0, NULL, NULL, '35651B8B-BC39-42BD-2705-08DD759A0482'),
+	(NEWID(), N'Nguyễn Minh Phúc', '', '', 1, 0, GETDATE(), NULL, 'Admin', NULL, 0, NULL, NULL, '4DB79B84-DA2B-44C5-2706-08DD759A0482'),
+	(NEWID(), N'Phan Thị Thảo', '', '', 1, 0, GETDATE(), NULL, 'Admin', NULL, 0, NULL, NULL, '195810B5-0028-4629-DB36-08DD75BBA155'),
+	(NEWID(), N'Vũ Đức Huy', '', '', 1, 0, GETDATE(), NULL, 'Admin', NULL, 0, NULL, NULL, '44BA2CF7-060A-4DC0-DB37-08DD75BBA155'),
+
+
+	--Chef FullTime
+	(NEWID(), N'Nguyễn Văn Cường', '', '', 2, 1, GETDATE(), NULL, 'Admin', NULL, 0, NULL, NULL, '185A6348-240C-4999-2709-08DD759A0482'),
+	(NEWID(), N'Trần Thị Mỹ Duyên', '', '', 2, 1, GETDATE(), NULL, 'Admin', NULL, 0, NULL, NULL, '5BCB3726-81B3-4CE2-270A-08DD759A0482'),
+	(NEWID(), N'Phạm Minh Khoa', '', '', 2, 1, GETDATE(), NULL, 'Admin', NULL, 0, NULL, NULL, '8B0C94CA-1A98-4BA4-270B-08DD759A0482'),
+	(NEWID(), N'Lê Thị Tuyết Mai', '', '', 2, 1, GETDATE(), NULL, 'Admin', NULL, 0, NULL, NULL, '90C673BF-F3FF-4137-270C-08DD759A0482'),
+	(NEWID(), N'Đoàn Văn Tài', '', '', 2, 1, GETDATE(), NULL, 'Admin', NULL, 0, NULL, NULL, '34871E55-F0DB-4BC8-270D-08DD759A0482'),
+	(NEWID(), N'Bùi Thị Thanh Tâm', '', '', 2, 1, GETDATE(), NULL, 'Admin', NULL, 0, NULL, NULL, '56138E89-3841-4038-270E-08DD759A0482'),
+	(NEWID(), N'Võ Hữu Lộc', '', '', 2, 1, GETDATE(), NULL, 'Admin', NULL, 0, NULL, NULL, '2B891D0C-4E2A-4952-270F-08DD759A0482'),
+
+
+	--Chef PartTime
+	(NEWID(), N'Tống Thị Nguyệt', '', '', 2, 0, GETDATE(), NULL, 'Admin', NULL, 0, NULL, NULL, '073CC470-FBDA-445A-2710-08DD759A0482'),
+	(NEWID(), N'Kiều Văn Lâm', '', '', 2, 0, GETDATE(), NULL, 'Admin', NULL, 0, NULL, NULL, '25B0D6DF-6FF8-4B9B-2711-08DD759A0482'),
+	(NEWID(), N'Đặng Thị Hồng Nhung', '', '', 2, 0, GETDATE(), NULL, 'Admin', NULL, 0, NULL, NULL, 'A435ED4D-DBA9-44CA-2712-08DD759A0482');
 
 	--INSERT INTO AdditionalFee 
 	--([Id], [Name], [Description], [Value], [OrderId], [CreatedDate], [ModifiedDate], [CreatedBy], [ModifiedBy], [IsDeleted], [DeletedAt], [DeletedBy]) 
